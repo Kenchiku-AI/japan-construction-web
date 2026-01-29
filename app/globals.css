@@ -3,8 +3,12 @@
 @plugin "daisyui";
 
 :root {
-  --background: #ffffff;
+  --background: #fdfdfd;
   --foreground: #171717;
+  --text-color-1: #23303b;
+  --text-color-2: #a4a9ae;
+  --button-color: #6fb37a;
+  --error-color: #ff6363;
 }
 
 @theme inline {
@@ -23,6 +27,14 @@
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-color-1);
+}
+
+input {
+  border-width: 0;
+  padding: 0 20px;
+  height: 50px;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 18px;
 }

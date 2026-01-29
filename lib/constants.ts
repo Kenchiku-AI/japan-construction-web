@@ -1,1 +1,14 @@
+// const host = '127.0.0.1:8000';
+const host = "10.0.2.2:8000";
+export const baseUrl = `http://${host}`;
+export const wsUrl = `ws://${host}`;
 export const authRoutes = ["/login", "/signup", "/forgot-password"];
+export const accessTokenKey = "access-token";
+export const refreshTokenKey = "refresh-token";
+export const bgColor = "#FDFDFD";
+export const buttonColor = "#6FB37A";
+export const fontColor1 = "#23303B";
+export const fontColor2 = "#A4A9AE";
+export const fontFamily = "KosugiMaru-Regular";
+export const errorColor = "#FF6363";
+export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

@@ -1,0 +1,36 @@
+.primaryContainer {
+  background-color: var(--button-color);
+  border-radius: 10px;
+  border-width: 0;
+  height: 50px;
+  width: 100%;
+}
+
+.primaryLabel {
+  color: white;
+  font-size: 18;
+}
+
+.secondaryContainer {
+  border-width: 1px;
+  border-radius: 10px;
+  height: 50px;
+  border-color: var(--button-color);
+}
+
+.secondaryLabel {
+  color: var(--button-color);
+  font-size: 18px;
+}
+
+.tertiaryContainer {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.tertiaryLabel {
+  color: var(--button-color);
+  font-size: 18px;
+}
