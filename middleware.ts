@@ -1,13 +1,14 @@
-// middleware.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { authRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
-  const accessToken = req.cookies.get("access_token");
-  const refreshToken = req.cookies.get("refresh_token");
+  const token = req.cookies.get("accessToken");
 
-  const isAuthRoute = req.nextUrl.pathname.startsWith("/login");
+  const { pathname } = req.nextUrl;
+  const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
 
-  if (!accessToken && !refreshToken && !isAuthRoute) {
+  if (!token && !isAuthRoute) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -15,5 +16,8 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    // Match all paths except API routes, Next.js static assets, images, favicon
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
 };

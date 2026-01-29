@@ -1,5 +1,4 @@
 import { Kosugi_Maru } from "next/font/google";
-import Sidebar from "./ui/Sidebar";
 import RootProvider from "./provider";
 import "./globals.css";
 
@@ -13,9 +12,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={kosugi.className}>
-        <RootProvider>
-          <Sidebar>{children}</Sidebar>
-        </RootProvider>
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   );
