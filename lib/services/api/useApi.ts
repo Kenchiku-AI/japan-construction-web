@@ -1,21 +1,20 @@
-import { useCallback, useEffect } from "react";
 import axios, { AxiosResponse } from "axios";
 
-import {
-  LoginRequest,
-  LoginResponse,
-  RefreshResponse,
-  SignupRequest,
-  SignupResponse,
-  CurrentUser,
-} from "../../../types";
+import { LoginRequest, SignupRequest, CurrentUser } from "../../../types";
 import { baseUrl } from "../../constants";
-// import { useAuthContext } from "../../context/auth/AuthContext";
+import { useAuthContext } from "../../context/auth/AuthContext";
 import { UnauthorizedError, UnknownError } from "./errors";
 
+export const http = axios.create({
+  baseURL: process.env.API_BASE_URL,
+  withCredentials: true,
+  headers: {
+    "X-Client-Type": "web",
+  },
+});
+
 export const useApi = () => {
-  // const { refreshToken, updateAccessToken, updateRefreshToken, logout } =
-  //   useAuthContext();
+  const { logout } = useAuthContext();
 
   const call = <T>(callback: () => Promise<AxiosResponse<T>>) => {
     try {
@@ -58,40 +57,30 @@ export const useApi = () => {
     }
   };
 
-  const refresh = useCallback(
-    async <T>(callback: () => Promise<T>) => {
-      try {
-        const url = `${baseUrl}/auth/refresh`;
-        const request = { refresh_token: "REFRESH_TOKEN_HERE" };
-        const { data, status } = await axios.post<RefreshResponse>(
-          url,
-          request,
-        );
+  const refresh = async <T>(callback: () => Promise<T>) => {
+    try {
+      const { status } = await http.post("auth/refresh");
 
-        handleError(status);
+      handleError(status);
 
-        // await updateAccessToken(data.access_token);
-        await callback();
-      } catch (err) {
-        // await logout();
-      }
-    },
-    [],
-    // [refreshToken, updateAccessToken, updateRefreshToken, logout],
-  );
+      await callback();
+    } catch (err) {
+      logout();
+    }
+  };
 
   return {
     async login(request: LoginRequest) {
       const url = `${baseUrl}/auth/login`;
-      return handleResponse(axios.post<LoginResponse>(url, request));
+      return handleResponse(http.post(url, request));
     },
     async signup(request: SignupRequest) {
       const url = `${baseUrl}/auth/signup`;
-      return handleResponse(axios.post<SignupResponse>(url, request));
+      return handleResponse(http.post(url, request));
     },
     async getCurrentUser() {
       const url = `${baseUrl}/users/me`;
-      return call(() => axios.get<CurrentUser>(url));
+      return call(() => http.get<CurrentUser>(url));
     },
   };
 };

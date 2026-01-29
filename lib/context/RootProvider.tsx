@@ -1,3 +1,5 @@
+"use client";
+
 import { FC, ReactNode } from "react";
 import { AuthProvider } from "./auth/AuthContext";
 import { I18nextProvider } from "react-i18next";

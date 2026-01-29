@@ -1,29 +1,20 @@
 import { useState } from "react";
 import { useApi } from "../../../lib/services/api/useApi";
-// import { useAuthContext } from "../../context/auth/AuthContext";
+import { useAuthContext } from "../../../lib/context/auth/AuthContext";
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
-  // const { updateAccessToken, updateRefreshToken, setCurrentUser } =
-  //   useAuthContext();
+  const { setCurrentUser } = useAuthContext();
   const api = useApi();
 
   const login = async (email: string, password: string) => {
     setLoading(true);
 
     try {
-      const { access_token, refresh_token } = await api.login({
-        email,
-        password,
-      });
-
-      // updateAccessToken(access_token);
-      // updateRefreshToken(refresh_token);
+      await api.login({ email, password });
 
       const user = await api.getCurrentUser();
-
-      console.log("user", user);
-      // setCurrentUser(user);
+      setCurrentUser(user);
     } catch (err) {}
 
     setLoading(false);

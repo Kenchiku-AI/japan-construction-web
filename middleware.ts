@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { authRoutes } from "./lib/constants";
+import { accessTokenKey, authRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get("accessToken");
+  const token = req.cookies.get(accessTokenKey);
 
   const { pathname } = req.nextUrl;
   const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));

@@ -29,7 +29,7 @@ export const Button: FC<ButtonProps> = ({
     <button
       onClick={onClick}
       style={{
-        opacity: disabled ? 0.5 : 1,
+        opacity: disabled ? 0.3 : 1,
       }}
       disabled={disabled}
       className={`btn ${containerStyle}`}

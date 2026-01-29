@@ -1,10 +1,8 @@
-import { Project } from './projects';
+import { Project } from "./projects";
 
-export type LoginRequest = {};
-
-export type LoginResponse = {
-  access_token: string;
-  refresh_token: string;
+export type LoginRequest = {
+  email: string;
+  password: string;
 };
 
 export type SignupRequest = {
@@ -13,17 +11,6 @@ export type SignupRequest = {
   email: string;
   password: string;
 };
-
-export type SignupResponse = {
-  access_token: string;
-  refresh_token: string;
-};
-
-export type RefreshRequest = {
-  refresh_token: string;
-};
-
-export type RefreshResponse = LoginResponse;
 
 export type CompanyResponse = {
   company_id: string;
