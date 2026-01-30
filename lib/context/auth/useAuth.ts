@@ -8,11 +8,7 @@ export const useAuth = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
   useEffect(() => {
-    const token = Cookies.get("accessToken");
-
-    if (token) {
-      getCurrentUser();
-    }
+    getCurrentUser();
   }, []);
 
   const logout = async () => {
@@ -26,8 +22,8 @@ export const useAuth = () => {
 
   const getCurrentUser = async () => {
     try {
-      const user = await api.getCurrentUser();
-      setCurrentUser(user);
+      const response = await api.getCurrentUser();
+      setCurrentUser(response);
     } catch {}
   };
 

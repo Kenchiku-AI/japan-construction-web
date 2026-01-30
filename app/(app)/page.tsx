@@ -1,3 +1,11 @@
+"use client";
+
+import { useAuthContext } from "@/lib/context/auth/AuthContext";
+
 export default function Home() {
-  return <div />;
+  const { currentUser } = useAuthContext();
+
+  console.log("CURRENT USER", currentUser);
+
+  return <div>{JSON.stringify(currentUser)}</div>;
 }

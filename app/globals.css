@@ -37,4 +37,5 @@ input {
   border-radius: 10px;
   width: 100%;
   font-size: 18px;
+  outline-color: var(--text-color-1);
 }
