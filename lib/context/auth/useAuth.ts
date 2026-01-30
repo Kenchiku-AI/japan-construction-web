@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { CurrentUser } from "../../../types";
 import { useApi } from "@/lib/services/api/useApi";
-import Cookies from "js-cookie";
 
 export const useAuth = () => {
   const api = useApi();
