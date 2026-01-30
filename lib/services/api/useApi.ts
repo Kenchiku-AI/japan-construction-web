@@ -72,11 +72,15 @@ export const useApi = () => {
   return {
     async login(request: LoginRequest) {
       const url = `${baseUrl}/auth/login`;
-      return handleResponse(http.post(url, request));
+      return handleResponse(http.post<CurrentUser>(url, request));
     },
     async signup(request: SignupRequest) {
       const url = `${baseUrl}/auth/signup`;
       return handleResponse(http.post(url, request));
+    },
+    async logout() {
+      const url = `${baseUrl}/auth/logout`;
+      return call(() => http.post(url));
     },
     async getCurrentUser() {
       const url = `${baseUrl}/users/me`;

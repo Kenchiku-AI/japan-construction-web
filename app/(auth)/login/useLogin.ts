@@ -11,13 +11,12 @@ export const useLogin = () => {
     setLoading(true);
 
     try {
-      await api.login({ email, password });
-
-      const user = await api.getCurrentUser();
+      const user = await api.login({ email, password });
       setCurrentUser(user);
-    } catch (err) {}
-
-    setLoading(false);
+      window.location.href = "/";
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
