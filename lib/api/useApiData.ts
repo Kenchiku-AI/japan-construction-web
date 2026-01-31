@@ -41,7 +41,7 @@ export const useApiData = () => {
       return await handleResponse(callback);
     } catch (err) {
       if ((err as AxiosError).status === 401) {
-        refresh(callback);
+        return await refresh(callback);
       } else {
         throw err;
       }
@@ -55,11 +55,10 @@ export const useApiData = () => {
     return data;
   };
 
-  const refresh = async <T>(callback: () => Promise<T>) => {
+  const refresh = async <T>(callback: () => Promise<AxiosResponse<T>>) => {
     try {
       await http.post("/auth/refresh");
-
-      await callback();
+      return await handleResponse(callback);
     } catch (err) {
       await logout();
     }
