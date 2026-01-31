@@ -1,3 +1,4 @@
+import { bgColor2, errorColor2 } from "@/lib/constants";
 import { FC, HTMLInputTypeAttribute } from "react";
 
 interface InputProps {
@@ -21,7 +22,7 @@ export const Input: FC<InputProps> = ({
       onChange?.(e.target.value);
     }}
     style={{
-      backgroundColor: error ? "#FF636326" : "#A4A9AE26",
+      backgroundColor: error ? errorColor2 : bgColor2,
     }}
   />
 );

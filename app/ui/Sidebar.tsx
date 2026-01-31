@@ -2,13 +2,14 @@
 
 import React, { FC, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
-import { useAuth } from "@/lib/context/auth/useAuth";
+import { useApi } from "../../lib/api/ApiContext";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
-  const { logout } = useAuth();
+  const { logout } = useApi();
+  const { currentUser } = useApi();
 
   return (
     <div className="drawer lg:drawer-open">
@@ -18,14 +19,18 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
         <ul className="menu bg-base-200 text-base-content min-h-full w-60 p-4 justify-between">
           <div className="space-y-2">
             <SidebarItem name={t("home")} path={"/"} />
+            <SidebarItem name={t("projects")} path={"/projects"} />
             <SidebarItem name={t("companies")} path={"/companies"} />
           </div>
           <div>
+            {currentUser && (
+              <div>{`${currentUser.first_name} ${currentUser.last_name}`}</div>
+            )}
             <Button
               variant="tertiary"
               label={t("logout")}
-              onClick={() => {
-                logout();
+              onClick={async () => {
+                await logout();
               }}
             />
           </div>
@@ -42,11 +47,18 @@ interface SidebarItemProps {
 
 const SidebarItem = ({ name, path }: SidebarItemProps) => {
   const currentPath = usePathname();
+  const router = useRouter();
   const style = currentPath === path ? "bg-base-300 rounded-md" : "";
 
   return (
     <li className={style}>
-      <a href={path}>{name}</a>
+      <a
+        onClick={() => {
+          router.push(path);
+        }}
+      >
+        {name}
+      </a>
     </li>
   );
 };

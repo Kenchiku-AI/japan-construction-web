@@ -1,5 +1,5 @@
 import { Kosugi_Maru } from "next/font/google";
-import RootProvider from "../lib/context/RootProvider";
+import RootProvider from "../lib/RootProvider";
 import "./globals.css";
 
 const kosugi = Kosugi_Maru({ weight: "400" });

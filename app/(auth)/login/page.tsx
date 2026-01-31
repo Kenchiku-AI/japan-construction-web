@@ -8,7 +8,7 @@ import { Input } from "@/app/ui/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
 
-const LoginScreen = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { loading, login } = useLogin();
@@ -60,4 +60,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default LoginPage;

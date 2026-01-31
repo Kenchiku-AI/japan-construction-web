@@ -1,14 +1,12 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useApi } from "../../../lib/services/api/useApi";
-import { useAuthContext } from "../../../lib/context/auth/AuthContext";
+import { useApi } from "../../../lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 
 export const useLogin = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { setCurrentUser } = useAuthContext();
   const api = useApi();
 
   const login = useCallback(
@@ -17,8 +15,8 @@ export const useLogin = () => {
 
       try {
         const user = await api.login({ email, password });
-        setCurrentUser(user);
-        router.replace("/");
+        api.setCurrentUser(user);
+        router.push("/");
       } finally {
         setLoading(false);
       }
