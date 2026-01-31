@@ -1,12 +1,11 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { LoginRequest, SignupRequest, CurrentUser } from "../../types";
-import { baseUrl } from "../constants";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export const http = axios.create({
-  baseURL: process.env.API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   withCredentials: true,
   headers: {
     "X-Client-Type": "web",
@@ -58,7 +57,7 @@ export const useApiData = () => {
 
   const refresh = async <T>(callback: () => Promise<T>) => {
     try {
-      await http.post("auth/refresh");
+      await http.post("/auth/refresh");
 
       await callback();
     } catch (err) {
@@ -68,19 +67,19 @@ export const useApiData = () => {
 
   const api = {
     async login(request: LoginRequest) {
-      const url = `${baseUrl}/auth/login`;
+      const url = "/auth/login";
       return handleResponse(() => http.post<CurrentUser>(url, request));
     },
     async signup(request: SignupRequest) {
-      const url = `${baseUrl}/auth/signup`;
+      const url = "/auth/signup";
       return handleResponse(() => http.post(url, request));
     },
     async logout() {
-      const url = `${baseUrl}/auth/logout`;
+      const url = "/auth/logout";
       return call(() => http.post(url));
     },
     async getCurrentUser() {
-      const url = `${baseUrl}/users/me`;
+      const url = "/users/me";
       return call(() => http.get<CurrentUser>(url));
     },
   };
