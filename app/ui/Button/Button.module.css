@@ -16,6 +16,7 @@
   border-radius: 10px;
   height: 50px;
   border-color: var(--button-color);
+  background-color: var(--background);
 }
 
 .secondaryLabel {

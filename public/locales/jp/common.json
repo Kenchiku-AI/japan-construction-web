@@ -1,6 +1,10 @@
 {
+  "create": "作成",
+  "create_company": "会社を作成",
+  "create_company_description": "新しい会社を作成するため、以下の項目を入力してください。",
   "companies": "企業",
   "confirm_password": "パスワード（確認）",
+  "corporate_number": "法人番号",
   "email": "メール",
   "first_name": "名",
   "forgot_password": "パスワードをお忘れですか",
@@ -9,10 +13,13 @@
   "login": "ログイン",
   "login_description": "ログインするには、メールアドレスとパスワードを入力してください。",
   "logout": "ログアウト",
+  "manager_email": "管理者メールアドレス",
+  "name": "名称",
   "password": "パスワード",
   "reports": "日報",
   "sign_up": "サインアップ",
   "sign_up_description": "登録するには、有効なメールアドレスと8文字以上のパスワードを入力してください。.",
   "sites": "現場",
-  "settings": "設定"
+  "settings": "設定",
+  "view": "表示"
 }

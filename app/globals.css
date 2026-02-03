@@ -39,3 +39,15 @@ input {
   font-size: 18px;
   outline-color: var(--text-color-1);
 }
+
+button:hover {
+  opacity: 0.8;
+}
+
+button:disabled {
+  opacity: 0.3;
+}
+
+dialog {
+  transition-duration: 5ms;
+}

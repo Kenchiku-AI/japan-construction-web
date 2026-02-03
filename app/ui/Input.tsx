@@ -3,6 +3,7 @@ import { FC, HTMLInputTypeAttribute } from "react";
 
 interface InputProps {
   placeholder?: string;
+  value?: string;
   onChange?: (text: string) => void;
   error?: boolean;
   type?: HTMLInputTypeAttribute;
@@ -10,6 +11,7 @@ interface InputProps {
 
 export const Input: FC<InputProps> = ({
   placeholder,
+  value,
   onChange,
   error,
   type,
@@ -18,6 +20,7 @@ export const Input: FC<InputProps> = ({
     placeholder={placeholder}
     type={type}
     className="input"
+    value={value}
     onChange={(e) => {
       onChange?.(e.target.value);
     }}

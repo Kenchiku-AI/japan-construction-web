@@ -6,6 +6,8 @@ interface ButtonProps {
   onClick: () => void;
   variant?: "primary" | "secondary" | "tertiary";
   disabled?: boolean;
+  iconLeft?: FC;
+  iconRight?: FC;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -13,7 +15,12 @@ export const Button: FC<ButtonProps> = ({
   variant,
   onClick,
   disabled,
+  iconLeft,
+  iconRight,
 }) => {
+  const IconLeft = iconLeft;
+  const IconRight = iconRight;
+
   const [containerStyle, labelStyle] = useMemo(() => {
     switch (variant) {
       case "secondary":
@@ -28,13 +35,12 @@ export const Button: FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      style={{
-        opacity: disabled ? 0.3 : 1,
-      }}
       disabled={disabled}
       className={`btn ${containerStyle}`}
     >
+      {IconLeft && <IconLeft />}
       <div className={labelStyle}>{label}</div>
+      {IconRight && <IconRight />}
     </button>
   );
 };

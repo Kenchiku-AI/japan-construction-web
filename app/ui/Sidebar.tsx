@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
+import { UserRole } from "@/types";
+import { User } from "./Icons";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
@@ -14,26 +16,35 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
     <div className="drawer lg:drawer-open">
       <input type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col p-16">{children}</div>
+      <div className="drawer-content flex flex-col p-16 max-w-5xl">
+        {children}
+      </div>
       <div className="drawer-side flex">
         <ul className="menu bg-base-200 text-base-content min-h-full w-60 p-4 justify-between">
-          <div className="space-y-2">
-            <SidebarItem name={t("home")} path={"/"} />
-            <SidebarItem name={t("projects")} path={"/projects"} />
-            <SidebarItem name={t("companies")} path={"/companies"} />
-          </div>
-          <div>
-            {currentUser && (
-              <div>{`${currentUser.first_name} ${currentUser.last_name}`}</div>
-            )}
-            <Button
-              variant="tertiary"
-              label={t("logout")}
-              onClick={async () => {
-                await logout();
-              }}
-            />
-          </div>
+          {currentUser && (
+            <>
+              <div className="space-y-2">
+                <SidebarItem name={t("home")} path={"/"} />
+                <SidebarItem name={t("sites")} path={"/projects"} />
+                {currentUser.role === UserRole.Admin && (
+                  <SidebarItem name={t("companies")} path={"/companies"} />
+                )}
+              </div>
+              <div>
+                <div className="flex gap-2 items-center">
+                  <User />
+                  <div>{`${currentUser.first_name} ${currentUser.last_name}`}</div>
+                </div>
+                <Button
+                  variant="tertiary"
+                  label={t("logout")}
+                  onClick={async () => {
+                    await logout();
+                  }}
+                />
+              </div>
+            </>
+          )}
         </ul>
       </div>
     </div>

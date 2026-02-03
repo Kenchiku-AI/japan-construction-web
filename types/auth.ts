@@ -15,7 +15,6 @@ export type SignupRequest = {
 export type CompanyResponse = {
   company_id: string;
   company_name: string;
-  role: string;
 };
 
 export type CurrentUser = {
@@ -24,4 +23,11 @@ export type CurrentUser = {
   last_name: string;
   email: string;
   projects: Project[];
+  role: UserRole;
 };
+
+export enum UserRole {
+  Admin = "admin",
+  Manager = "manager",
+  User = "user",
+}

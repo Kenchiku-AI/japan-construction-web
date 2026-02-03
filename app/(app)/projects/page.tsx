@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 const ProjectsPage = () => {
   const { t } = useTranslation();
 
-  return <Heading title={t("projects")} />;
+  return <Heading title={t("sites")} />;
 };
 
 export default ProjectsPage;
