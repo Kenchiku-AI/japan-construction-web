@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
-import { UserRole } from "@/types";
+import { CurrentUser, UserRole } from "@/types";
 import { User } from "./Icons";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
@@ -26,9 +26,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
               <div className="space-y-2">
                 <SidebarItem name={t("home")} path={"/"} />
                 <SidebarItem name={t("sites")} path={"/projects"} />
-                {currentUser.role === UserRole.Admin && (
-                  <SidebarItem name={t("companies")} path={"/companies"} />
-                )}
+                <CompanySidebarItem currentUser={currentUser} />
               </div>
               <div>
                 <div className="flex gap-2 items-center">
@@ -72,6 +70,29 @@ const SidebarItem = ({ name, path }: SidebarItemProps) => {
       </a>
     </li>
   );
+};
+
+interface CompanySidebarItemProps {
+  currentUser: CurrentUser;
+}
+
+const CompanySidebarItem: FC<CompanySidebarItemProps> = ({ currentUser }) => {
+  const { t } = useTranslation();
+
+  if (currentUser.role === UserRole.Admin) {
+    return <SidebarItem name={t("companies")} path={"/companies"} />;
+  }
+
+  if (currentUser.company) {
+    return (
+      <SidebarItem
+        name={t("company")}
+        path={`/companies/${currentUser.company.id}`}
+      />
+    );
+  }
+
+  return null;
 };
 
 export default Sidebar;

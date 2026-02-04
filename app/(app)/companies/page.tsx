@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -9,10 +9,19 @@ import { useCompanies } from "./useCompanies";
 import { Plus } from "@/app/ui/Icons";
 import { Company } from "@/types/companies";
 import styles from "./companies.module.css";
+import { useApi } from "@/lib/api/ApiContext";
+import { UserRole } from "@/types";
+import { redirect } from "next/navigation";
 
 const CompaniesPage = () => {
   const { t } = useTranslation();
   const { companies, createCompany } = useCompanies();
+  const { currentUser } = useApi();
+  const [showNewCompany, setShowNewCompany] = useState(false);
+
+  if (currentUser && currentUser.role !== UserRole.Admin) {
+    redirect("/");
+  }
 
   return (
     <>
@@ -23,8 +32,7 @@ const CompaniesPage = () => {
           label={t("create_company")}
           iconLeft={() => <Plus />}
           onClick={() => {
-            // @ts-expect-error
-            document.getElementById("create_company_modal").showModal();
+            setShowNewCompany(true);
           }}
         />
       </div>
@@ -40,7 +48,12 @@ const CompaniesPage = () => {
         ))}
       </div>
       <NewCompanyModal
-        onSubmit={async (request) => {
+        isOpen={showNewCompany}
+        onClose={() => {
+          setShowNewCompany(false);
+        }}
+        onSubmit={(request) => {
+          setShowNewCompany(false);
           createCompany(request);
         }}
       />
