@@ -4,18 +4,19 @@ import { FC, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
-import NewCompanyModal from "./NewCompanyModal";
+import CreateCompanyModal from "./CreateCompanyModal";
 import { useCompanies } from "./useCompanies";
 import { Plus } from "@/app/ui/Icons";
 import { Company } from "@/types/companies";
 import styles from "./companies.module.css";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 const CompaniesPage = () => {
   const { t } = useTranslation();
   const { companies, createCompany } = useCompanies();
+  const router = useRouter();
   const { currentUser } = useApi();
   const [showNewCompany, setShowNewCompany] = useState(false);
 
@@ -42,12 +43,14 @@ const CompaniesPage = () => {
           <CompanyListItem
             key={c.id}
             company={c}
-            onView={() => {}}
+            onView={() => {
+              router.push(`/companies/${c.id}?name=${c.name}`);
+            }}
             showDivider={i !== 0}
           />
         ))}
       </div>
-      <NewCompanyModal
+      <CreateCompanyModal
         isOpen={showNewCompany}
         onClose={() => {
           setShowNewCompany(false);

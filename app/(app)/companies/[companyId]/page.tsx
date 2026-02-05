@@ -1,4 +1,5 @@
 import { FC } from "react";
+import CompanyDashboard from "./CompanyDashBoard";
 
 interface CompanyPageProps {
   params: {
@@ -6,8 +7,10 @@ interface CompanyPageProps {
   };
 }
 
-const CompanyPage: FC<CompanyPageProps> = ({ params }) => {
-  return <div>Company ID: {params.companyId}</div>;
+const CompanyPage: FC<CompanyPageProps> = async ({ params }) => {
+  const { companyId } = await params;
+
+  return <CompanyDashboard companyId={companyId} />;
 };
 
 export default CompanyPage;

@@ -9,3 +9,9 @@ export type CreateCompanyRequest = {
   corporate_number: string;
   manager_email?: string;
 };
+
+export type InviteUserRequest = {
+  email: string;
+  company_id: string;
+  role: string;
+};

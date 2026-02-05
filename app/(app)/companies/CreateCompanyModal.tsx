@@ -3,17 +3,15 @@ import { Button } from "@/app/ui/Button/Button";
 import { CreateCompanyRequest } from "@/types/companies";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input";
-import { Heading } from "@/app/ui/Heading/Heading";
-import { Close } from "@/app/ui/Icons";
 import Modal from "@/app/ui/Modal";
 
-interface NewCompanyModalProps {
+interface CreateCompanyModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (request: CreateCompanyRequest) => void;
 }
 
-const NewCompanyModal: FC<NewCompanyModalProps> = ({
+const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
@@ -34,7 +32,10 @@ const NewCompanyModal: FC<NewCompanyModalProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        onClose();
+        resetFields();
+      }}
       title={t("create_company")}
       subtitle={t("create_company_description")}
     >
@@ -68,4 +69,4 @@ const NewCompanyModal: FC<NewCompanyModalProps> = ({
   );
 };
 
-export default NewCompanyModal;
+export default CreateCompanyModal;

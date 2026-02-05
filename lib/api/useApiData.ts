@@ -3,7 +3,11 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { LoginRequest, SignupRequest, CurrentUser } from "../../types";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Company, CreateCompanyRequest } from "@/types/companies";
+import {
+  Company,
+  CreateCompanyRequest,
+  InviteUserRequest,
+} from "@/types/companies";
 
 export const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -86,8 +90,16 @@ export const useApiData = () => {
       const url = "/companies";
       return call(() => http.get<Company[]>(url));
     },
+    async getCompany(companyId: string) {
+      const url = `/companies/${companyId}`;
+      return call(() => http.get<Company>(url));
+    },
     async createCompany(request: CreateCompanyRequest) {
       const url = "/companies";
+      return call(() => http.post(url, request));
+    },
+    async inviteUser(request: InviteUserRequest) {
+      const url = "/invitations";
       return call(() => http.post(url, request));
     },
   };
