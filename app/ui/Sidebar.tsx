@@ -16,7 +16,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
     <div className="drawer lg:drawer-open">
       <input type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col p-16 max-w-5xl">
+      <div className="drawer-content flex flex-col md:p-16 p-8 max-w-5xl">
         {children}
       </div>
       <div className="drawer-side flex">
@@ -78,16 +78,17 @@ interface CompanySidebarItemProps {
 
 const CompanySidebarItem: FC<CompanySidebarItemProps> = ({ currentUser }) => {
   const { t } = useTranslation();
+  const { role, company } = currentUser;
 
-  if (currentUser.role === UserRole.Admin) {
+  if (role === UserRole.Admin) {
     return <SidebarItem name={t("companies")} path={"/companies"} />;
   }
 
-  if (currentUser.company) {
+  if (company) {
     return (
       <SidebarItem
         name={t("company")}
-        path={`/companies/${currentUser.company.id}`}
+        path={`/companies/${company.id}?name=${company.name}`}
       />
     );
   }

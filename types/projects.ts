@@ -1,4 +1,3 @@
-import { Company } from "./companies";
 import { DailyReport } from "./reports";
 
 export type Project = {
@@ -6,4 +5,10 @@ export type Project = {
   name: string;
   description: string;
   todays_report?: DailyReport;
+};
+
+export type CreateProjectRequest = {
+  company_id: string;
+  name: string;
+  description?: string;
 };

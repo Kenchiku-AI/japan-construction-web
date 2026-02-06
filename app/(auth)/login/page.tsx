@@ -1,18 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "next/navigation";
 import { useLogin } from "./useLogin";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { Input } from "@/app/ui/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
+import { invitationTokenKey } from "@/lib/constants";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isInvited, setIsInvited] = useState(false);
   const { loading, login } = useLogin();
   const { t } = useTranslation();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const token = searchParams.get(invitationTokenKey);
+
+    if (token) {
+      setIsInvited(true);
+      sessionStorage.setItem(invitationTokenKey, token);
+    }
+  }, [searchParams]);
 
   return (
     <div className={styles.container}>
@@ -43,18 +56,17 @@ const LoginPage = () => {
           <Button
             variant="tertiary"
             label={t("forgot_password")}
-            onClick={() => {
-              // navigation.navigate("ForgotPasswordScreen");
-            }}
+            onClick={() => {}}
           />
-          <Button
-            variant="tertiary"
-            label={t("sign_up")}
-            onClick={() => {
-              // navigation.navigate("SignUpScreen");
-            }}
-          />
+          <Button variant="tertiary" label={t("sign_up")} onClick={() => {}} />
         </div>
+        {isInvited && (
+          <div className="toast toast-start">
+            <div role="alert" className="alert alert-warning alert-soft">
+              {t("invitation_token_description")}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -10,6 +10,9 @@ import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
 import { Plus } from "@/app/ui/Icons";
 import InviteUserModal from "./InviteUserModal";
+import CompanyUsersList from "./CompanyUsersList";
+import CreateProjectModal from "./CreateProjectModal";
+import CompanyProjectsList from "./CompanyProjectsList";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -22,6 +25,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showInviteUser, setShowInviteUser] = useState(false);
+  const [showCreateProject, setShowCreateProject] = useState(false);
 
   const shouldRedirect =
     currentUser &&
@@ -35,17 +39,43 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   return (
     <>
       <Heading title={company?.name ?? searchParams.get("name") ?? ""} />
-      <div className="flex justify-between items-center mt-6">
-        <div className="text-xl">{t("users")}</div>
-        <Button
-          variant="secondary"
-          label={t("invite_user")}
-          iconLeft={() => <Plus />}
-          onClick={() => {
-            setShowInviteUser(true);
-          }}
-        />
-      </div>
+      {company && (
+        <>
+          <div className="flex justify-between mt-8">
+            <div className="text-2xl self-end">{t("projects")}</div>
+            {currentUser?.role === UserRole.Admin && (
+              <Button
+                variant="secondary"
+                label={t("create_project")}
+                iconLeft={() => <Plus />}
+                onClick={() => {
+                  setShowCreateProject(true);
+                }}
+                style={{ height: 40 }}
+              />
+            )}
+          </div>
+          <div className="divider divider-neutral my-1 opacity-30" />
+          <CompanyProjectsList projects={company.projects} />
+          <div className="flex justify-between mt-8">
+            <div className="text-2xl self-end">{t("users")}</div>
+            {(currentUser?.role === UserRole.Admin ||
+              currentUser?.role === UserRole.Manager) && (
+              <Button
+                variant="secondary"
+                label={t("invite_user")}
+                iconLeft={() => <Plus />}
+                onClick={() => {
+                  setShowInviteUser(true);
+                }}
+                style={{ height: 40 }}
+              />
+            )}
+          </div>
+          <div className="divider divider-neutral my-1 opacity-30" />
+          <CompanyUsersList users={company.users} />
+        </>
+      )}
       <InviteUserModal
         isOpen={showInviteUser}
         onClose={() => {
@@ -60,9 +90,19 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               role,
               company_id: companyId,
             });
-          } catch (err) {
-            console.log("error:", err);
-          }
+          } catch (err) {}
+        }}
+      />
+      <CreateProjectModal
+        isOpen={showCreateProject}
+        onClose={() => {
+          setShowCreateProject(false);
+        }}
+        onSubmit={async (email, role) => {
+          setShowCreateProject(false);
+
+          try {
+          } catch (err) {}
         }}
       />
     </>

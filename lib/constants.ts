@@ -4,6 +4,7 @@ export const wsUrl = `ws://${host}`;
 export const authRoutes = ["/login", "/signup", "/forgot-password"];
 export const accessTokenKey = "accessToken";
 export const refreshTokenKey = "refreshToken";
+export const invitationTokenKey = "invitationToken";
 export const bgColor1 = "#FDFDFD";
 export const bgColor2 = "#F2F2F3";
 export const bgColor3 = "rgba(164, 169, 174, 0.05)";

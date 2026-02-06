@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import { useApi } from "../../../lib/api/ApiContext";
 import { useRouter } from "next/navigation";
+import { invitationTokenKey } from "@/lib/constants";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -15,10 +16,18 @@ export const useLogin = () => {
 
       try {
         const user = await api.login({ email, password });
+
+        const invitationToken = sessionStorage.getItem(invitationTokenKey);
+        if (invitationToken) {
+          await api.acceptInvitation(invitationToken);
+          await api.getCurrentUser();
+        }
+
         api.setCurrentUser(user);
         router.push("/");
       } finally {
         setLoading(false);
+        sessionStorage.removeItem(invitationTokenKey);
       }
     },
     [router],

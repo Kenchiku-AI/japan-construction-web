@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, CSSProperties } from "react";
 import styles from "./Button.module.css";
 
 interface ButtonProps {
@@ -8,6 +8,7 @@ interface ButtonProps {
   disabled?: boolean;
   iconLeft?: FC;
   iconRight?: FC;
+  style?: CSSProperties;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -17,6 +18,7 @@ export const Button: FC<ButtonProps> = ({
   disabled,
   iconLeft,
   iconRight,
+  style,
 }) => {
   const IconLeft = iconLeft;
   const IconRight = iconRight;
@@ -37,6 +39,7 @@ export const Button: FC<ButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       className={`btn ${containerStyle}`}
+      style={style}
     >
       {IconLeft && <IconLeft />}
       <div className={labelStyle}>{label}</div>

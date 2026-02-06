@@ -1,13 +1,19 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { LoginRequest, SignupRequest, CurrentUser } from "../../types";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import {
+  LoginRequest,
+  SignupRequest,
+  CurrentUser,
+  CreateProjectRequest,
+} from "../../types";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import {
   Company,
   CreateCompanyRequest,
   InviteUserRequest,
 } from "@/types/companies";
+import { authRoutes } from "../constants";
 
 export const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -19,6 +25,7 @@ export const http = axios.create({
 
 export const useApiData = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
   useEffect(() => {
@@ -32,14 +39,19 @@ export const useApiData = () => {
     } catch {}
   };
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await api.logout();
     } finally {
       setCurrentUser(undefined);
-      router.push("/login");
+
+      const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
+
+      if (!isAuthRoute) {
+        router.push("/login");
+      }
     }
-  };
+  }, [pathname]);
 
   const call = async <T>(callback: () => Promise<AxiosResponse<T>>) => {
     try {
@@ -98,9 +110,17 @@ export const useApiData = () => {
       const url = "/companies";
       return call(() => http.post(url, request));
     },
+    async createProject(request: CreateProjectRequest) {
+      const url = "/projects";
+      return call(() => http.post(url, request));
+    },
     async inviteUser(request: InviteUserRequest) {
       const url = "/invitations";
       return call(() => http.post(url, request));
+    },
+    async acceptInvitation(token: string) {
+      const url = `/invitations/accept/${token}`;
+      return call(() => http.post(url));
     },
   };
 
