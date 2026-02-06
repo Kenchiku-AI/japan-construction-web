@@ -7,6 +7,7 @@ interface InputProps {
   onChange?: (text: string) => void;
   error?: boolean;
   type?: HTMLInputTypeAttribute;
+  disabled?: boolean;
 }
 
 export const Input: FC<InputProps> = ({
@@ -15,6 +16,7 @@ export const Input: FC<InputProps> = ({
   onChange,
   error,
   type,
+  disabled,
 }) => (
   <input
     placeholder={placeholder}
@@ -27,5 +29,6 @@ export const Input: FC<InputProps> = ({
     style={{
       backgroundColor: error ? errorColor2 : bgColor2,
     }}
+    disabled={disabled}
   />
 );

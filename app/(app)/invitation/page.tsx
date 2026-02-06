@@ -24,9 +24,13 @@ const InvitationPage = () => {
     if (!!currentUser.company) {
       router.replace("/");
       showModal({
-        title: t("invitation_existing_company_error_title"),
-        subtitle: t("invitation_existing_company_error_body"),
-        children: <Button label={t("ok")} onClick={onClose} />,
+        title: t("invitation_existing_company_error"),
+        subtitle: t("invitation_existing_company_error_description"),
+        children: (
+          <div className="mt-10">
+            <Button label={t("ok")} onClick={onClose} />
+          </div>
+        ),
       });
       return;
     }
@@ -43,9 +47,13 @@ const InvitationPage = () => {
           setCurrentUser(response);
         } catch (err) {
           showModal({
-            title: t("invitation_accept_failed_error_title"),
-            subtitle: t("invitation_accept_failed_error_body"),
-            children: <Button label={t("ok")} onClick={onClose} />,
+            title: t("accept_invitation_failed"),
+            subtitle: t("accept_invitation_failed_description"),
+            children: (
+              <div className="mt-10">
+                <Button label={t("ok")} onClick={onClose} />
+              </div>
+            ),
           });
         } finally {
           router.replace("/");

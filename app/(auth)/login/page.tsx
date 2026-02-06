@@ -9,13 +9,15 @@ import { Input } from "@/app/ui/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
 import { invitationTokenKey } from "@/lib/constants";
+import { useModal } from "@/lib/modal/ModalContext";
+import { Loader } from "@/app/ui/Loader";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isInvited, setIsInvited] = useState(false);
   const router = useRouter();
-  const { loading, login } = useLogin();
+  const { loading, login, error } = useLogin();
+  const { showModal, onClose } = useModal();
   const { t } = useTranslation();
   const searchParams = useSearchParams();
 
@@ -23,7 +25,15 @@ const LoginPage = () => {
     const token = searchParams.get(invitationTokenKey);
 
     if (token) {
-      setIsInvited(true);
+      showModal({
+        title: t("invitation_accepted"),
+        subtitle: t("invitation_accepted_description"),
+        children: (
+          <div className="mt-10">
+            <Button label={t("ok")} onClick={onClose} />
+          </div>
+        ),
+      });
       sessionStorage.setItem(invitationTokenKey, token);
     }
   }, [searchParams]);
@@ -32,6 +42,7 @@ const LoginPage = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <Heading title={t("login")} subtitle={t("login_description")} />
+        {error && <div className={styles.error}>{error}</div>}
         <div className={styles.fields}>
           <Input
             placeholder={t("email")}
@@ -39,11 +50,13 @@ const LoginPage = () => {
               setEmail(t);
             }}
             type="email"
+            disabled={loading}
           />
           <Input
             placeholder={t("password")}
             onChange={(t) => setPassword(t)}
             type="password"
+            disabled={loading}
           />
         </div>
         <Button
@@ -51,7 +64,7 @@ const LoginPage = () => {
           onClick={() => {
             login(email, password);
           }}
-          disabled={!email || !password}
+          disabled={!email || !password || loading}
         />
         <div className={styles.buttons}>
           <Button
@@ -67,14 +80,8 @@ const LoginPage = () => {
             }}
           />
         </div>
-        {isInvited && (
-          <div className="toast toast-start">
-            <div role="alert" className="alert alert-warning alert-soft">
-              {t("invitation_token_description")}
-            </div>
-          </div>
-        )}
       </div>
+      {loading && <Loader />}
     </div>
   );
 };

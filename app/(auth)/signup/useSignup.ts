@@ -1,13 +1,17 @@
 import { useApi } from "@/lib/api/ApiContext";
 import { invitationTokenKey } from "@/lib/constants";
 import { CurrentUser } from "@/types";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const useSignup = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const api = useApi();
+  const { t } = useTranslation();
 
   const signup = useCallback(
     async (
@@ -36,10 +40,17 @@ export const useSignup = () => {
         }
 
         router.push("/");
-      } finally {
+      } catch (err) {
         setLoading(false);
-        sessionStorage.removeItem(invitationTokenKey);
+
+        if ((err as AxiosError).status === 400) {
+          setError(t("email_registered"));
+        } else {
+          setError(t("sign_up_error"));
+        }
       }
+
+      sessionStorage.removeItem(invitationTokenKey);
     },
     [router],
   );
@@ -47,8 +58,6 @@ export const useSignup = () => {
   return {
     loading,
     signup,
+    error,
   };
 };
-function setCurrentUser(response: CurrentUser | undefined) {
-  throw new Error("Function not implemented.");
-}
