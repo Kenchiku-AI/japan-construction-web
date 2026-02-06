@@ -24,7 +24,7 @@ export type CurrentUser = {
   last_name: string;
   email: string;
   role: UserRole;
-  company: UserCompany;
+  company?: UserCompany;
   projects: Project[];
 };
 

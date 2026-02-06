@@ -12,6 +12,8 @@ import styles from "./companies.module.css";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { redirect, useRouter } from "next/navigation";
+import Divider from "@/app/ui/Divider";
+import { fontColor2 } from "@/lib/constants";
 
 const CompaniesPage = () => {
   const { t } = useTranslation();
@@ -39,14 +41,13 @@ const CompaniesPage = () => {
       </div>
       <div className="flex flex-col mt-10">
         {companies?.length === 0 && <div></div>}
-        {companies?.map((c, i) => (
+        {companies?.map((c) => (
           <CompanyListItem
             key={c.id}
             company={c}
             onView={() => {
               router.push(`/companies/${c.id}?name=${c.name}`);
             }}
-            showDivider={i !== 0}
           />
         ))}
       </div>
@@ -67,27 +68,22 @@ const CompaniesPage = () => {
 interface CompanyListItemProps {
   company: Company;
   onView: () => void;
-  showDivider?: boolean;
 }
 
-const CompanyListItem: FC<CompanyListItemProps> = ({
-  company,
-  onView,
-  showDivider,
-}) => {
+const CompanyListItem: FC<CompanyListItemProps> = ({ company, onView }) => {
   const { name, corporate_number } = company;
   const { t } = useTranslation();
 
   return (
     <>
-      {showDivider && <div className="divider"></div>}
-      <div className="flex justify-between items-center h-">
+      <div className="flex justify-between items-center h-20">
         <div>
-          <div className={styles.name}>{name}</div>
+          <div className="text-xl">{name}</div>
           <div className={styles.corporateNumber}>{corporate_number}</div>
         </div>
         <Button variant="tertiary" label={t("view")} onClick={onView} />
       </div>
+      <Divider color={fontColor2} />
     </>
   );
 };

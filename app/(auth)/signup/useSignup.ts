@@ -1,22 +1,30 @@
-"use client";
-
-import { useCallback, useState } from "react";
-import { useApi } from "../../../lib/api/ApiContext";
-import { useRouter } from "next/navigation";
+import { useApi } from "@/lib/api/ApiContext";
 import { invitationTokenKey } from "@/lib/constants";
 import { CurrentUser } from "@/types";
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
 
-export const useLogin = () => {
+export const useSignup = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const api = useApi();
 
-  const login = useCallback(
-    async (email: string, password: string) => {
+  const signup = useCallback(
+    async (
+      first_name: string,
+      last_name: string,
+      email: string,
+      password: string,
+    ) => {
       setLoading(true);
 
       try {
-        const user = await api.login({ email, password });
+        const user = await api.signup({
+          first_name,
+          last_name,
+          email,
+          password,
+        });
         api.setCurrentUser(user);
 
         const invitationToken = sessionStorage.getItem(invitationTokenKey);
@@ -38,7 +46,7 @@ export const useLogin = () => {
 
   return {
     loading,
-    login,
+    signup,
   };
 };
 function setCurrentUser(response: CurrentUser | undefined) {

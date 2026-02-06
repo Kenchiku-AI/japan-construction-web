@@ -1,5 +1,4 @@
-import { CSSProperties, FC } from "react";
-// import { fontColor1, fontColor2, fontFamily } from "../../constants";
+import { FC } from "react";
 import styles from "./Heading.module.css";
 
 interface HeadingProps {
@@ -9,7 +8,7 @@ interface HeadingProps {
 
 export const Heading: FC<HeadingProps> = ({ title, subtitle }) => {
   return (
-    <div style={styles.container}>
+    <div className={styles.container}>
       <div className={styles.title}>{title}</div>
       {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
     </div>

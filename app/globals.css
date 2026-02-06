@@ -41,6 +41,15 @@ input,
   outline-color: var(--text-color-1);
 }
 
+textarea {
+  border-width: 0;
+  padding: 16px 20px;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 18px;
+  outline-color: var(--text-color-1);
+}
+
 button:hover {
   opacity: 0.8;
 }

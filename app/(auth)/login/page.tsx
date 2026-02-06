@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLogin } from "./useLogin";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { Input } from "@/app/ui/Input";
@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isInvited, setIsInvited] = useState(false);
+  const router = useRouter();
   const { loading, login } = useLogin();
   const { t } = useTranslation();
   const searchParams = useSearchParams();
@@ -58,7 +59,13 @@ const LoginPage = () => {
             label={t("forgot_password")}
             onClick={() => {}}
           />
-          <Button variant="tertiary" label={t("sign_up")} onClick={() => {}} />
+          <Button
+            variant="tertiary"
+            label={t("sign_up")}
+            onClick={() => {
+              router.push("/signup");
+            }}
+          />
         </div>
         {isInvited && (
           <div className="toast toast-start">

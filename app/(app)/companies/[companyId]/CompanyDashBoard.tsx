@@ -13,6 +13,7 @@ import InviteUserModal from "./InviteUserModal";
 import CompanyUsersList from "./CompanyUsersList";
 import CreateProjectModal from "./CreateProjectModal";
 import CompanyProjectsList from "./CompanyProjectsList";
+import Divider from "@/app/ui/Divider";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -55,7 +56,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               />
             )}
           </div>
-          <div className="divider divider-neutral my-1 opacity-30" />
+          <Divider />
           <CompanyProjectsList projects={company.projects} />
           <div className="flex justify-between mt-8">
             <div className="text-2xl self-end">{t("users")}</div>
@@ -72,7 +73,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               />
             )}
           </div>
-          <div className="divider divider-neutral my-1 opacity-30" />
+          <Divider />
           <CompanyUsersList users={company.users} />
         </>
       )}
