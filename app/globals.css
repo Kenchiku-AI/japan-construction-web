@@ -31,6 +31,7 @@ body {
 }
 
 input,
+.input,
 .select {
   border-width: 0;
   padding: 0 20px;
@@ -61,4 +62,13 @@ button:disabled {
 
 dialog {
   transition-duration: 5ms;
+}
+
+.react-day-picker .rdp-today:not(.rdp-outside) .rdp-day_button {
+  background: var(--text-color-2);
+  color: white;
+}
+
+.react-day-picker .rdp-selected > button {
+  background: black !important;
 }

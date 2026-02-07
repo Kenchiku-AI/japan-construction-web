@@ -1,3 +1,4 @@
+import { bgColor2, errorColor2 } from "@/lib/constants";
 import { FC } from "react";
 import { DayPicker } from "react-day-picker";
 import { useTranslation } from "react-i18next";
@@ -5,9 +6,10 @@ import { useTranslation } from "react-i18next";
 interface DatepickerProps {
   date?: Date;
   onSelect: (date?: Date) => void;
+  error?: boolean;
 }
 
-export const Datepicker: FC<DatepickerProps> = ({ date, onSelect }) => {
+export const Datepicker: FC<DatepickerProps> = ({ date, onSelect, error }) => {
   const { t } = useTranslation();
 
   return (
@@ -15,7 +17,10 @@ export const Datepicker: FC<DatepickerProps> = ({ date, onSelect }) => {
       <button
         popoverTarget="rdp-popover"
         className="input input-border"
-        style={{ anchorName: "--rdp" } as React.CSSProperties}
+        style={{
+          anchorName: "--rdp",
+          backgroundColor: error ? errorColor2 : bgColor2,
+        }}
       >
         {date ? date.toLocaleDateString() : t("date")}
       </button>
@@ -23,7 +28,7 @@ export const Datepicker: FC<DatepickerProps> = ({ date, onSelect }) => {
         popover="auto"
         id="rdp-popover"
         className="dropdown"
-        style={{ positionAnchor: "--rdp" } as React.CSSProperties}
+        style={{ positionAnchor: "--rdp" }}
       >
         <DayPicker
           className="react-day-picker"

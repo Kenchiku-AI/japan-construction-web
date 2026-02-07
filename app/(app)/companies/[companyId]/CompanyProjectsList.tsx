@@ -24,11 +24,9 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
   return projects.map((p) => (
     <div className="md:ml-10 ml-6 mt-4" key={p.id}>
       <div className="flex items-center justify-between mb-8">
-        <div className="flex gap-6">
+        <div className="flex items-center gap-6">
           <Hardhat />
-          <div className="flex flex-col">
-            <div className="text-xl">{p.name}</div>
-          </div>
+          <div className="text-xl">{p.name}</div>
         </div>
         <ViewProjectButton project={p} />
       </div>

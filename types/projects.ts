@@ -4,7 +4,6 @@ export type Project = {
   id: string;
   name: string;
   description: string;
-  todays_report?: DailyReport;
   daily_reports?: DailyReport[];
   status: ProjectStatus;
 };

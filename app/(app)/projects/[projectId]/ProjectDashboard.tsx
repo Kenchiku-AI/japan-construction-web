@@ -44,7 +44,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             )}
           </div>
           <Divider />
-          <ProjectReportsList reports={project.daily_reports} />
+          <ProjectReportsList reports={project.daily_reports ?? []} />
         </>
       )}
       <CreateReportModal

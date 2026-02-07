@@ -16,7 +16,6 @@ export const TextArea: FC<TextAreaProps> = ({
 }) => (
   <textarea
     placeholder={placeholder}
-    className="input"
     value={value}
     onChange={(e) => {
       onChange?.(e.target.value);
