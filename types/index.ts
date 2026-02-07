@@ -7,5 +7,5 @@ export * from "./projects";
 export type ModalContent = {
   title?: string;
   subtitle?: string;
-  children: ReactNode;
+  children?: ReactNode;
 };

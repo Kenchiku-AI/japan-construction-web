@@ -6,7 +6,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import CreateCompanyModal from "./CreateCompanyModal";
 import { useCompanies } from "./useCompanies";
-import { Plus } from "@/app/ui/Icons";
+import { Users, Plus } from "@/app/ui/Icons";
 import { Company } from "@/types/companies";
 import styles from "./companies.module.css";
 import { useApi } from "@/lib/api/ApiContext";
@@ -76,10 +76,13 @@ const CompanyListItem: FC<CompanyListItemProps> = ({ company, onView }) => {
 
   return (
     <>
-      <div className="flex justify-between items-center h-20">
-        <div>
-          <div className="text-xl">{name}</div>
-          <div className={styles.corporateNumber}>{corporate_number}</div>
+      <div className="flex justify-between items-center h-20 pr-8">
+        <div className="flex gap-6">
+          <Users />
+          <div className="flex flex-col justify-center">
+            <div className="text-xl">{name}</div>
+            <div className={styles.corporateNumber}>{corporate_number}</div>
+          </div>
         </div>
         <Button variant="tertiary" label={t("view")} onClick={onView} />
       </div>

@@ -28,11 +28,6 @@ const LoginPage = () => {
       showModal({
         title: t("invitation_accepted"),
         subtitle: t("invitation_accepted_description"),
-        children: (
-          <div className="mt-10">
-            <Button label={t("ok")} onClick={onClose} />
-          </div>
-        ),
       });
       sessionStorage.setItem(invitationTokenKey, token);
     }

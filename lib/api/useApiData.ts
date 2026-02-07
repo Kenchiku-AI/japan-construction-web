@@ -5,6 +5,7 @@ import {
   SignupRequest,
   CurrentUser,
   CreateProjectRequest,
+  Project,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -110,9 +111,13 @@ export const useApiData = () => {
       const url = "/companies";
       return call(() => http.post(url, request));
     },
+    async getProject(projectId: string) {
+      const url = `/projects/${projectId}`;
+      return call(() => http.get<Project>(url));
+    },
     async createProject(request: CreateProjectRequest) {
       const url = "/projects";
-      return call(() => http.post(url, request));
+      return call(() => http.post<Project>(url, request));
     },
     async inviteUser(request: InviteUserRequest) {
       const url = "/invitations";

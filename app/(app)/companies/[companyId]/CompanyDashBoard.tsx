@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -14,6 +14,7 @@ import CompanyUsersList from "./CompanyUsersList";
 import CreateProjectModal from "./CreateProjectModal";
 import CompanyProjectsList from "./CompanyProjectsList";
 import Divider from "@/app/ui/Divider";
+import { useModal } from "@/lib/modal/ModalContext";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -22,11 +23,12 @@ interface CompanyDashboardProps {
 const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const { currentUser, inviteUser } = useApi();
   const { t } = useTranslation();
-  const { company } = useCompany(companyId);
+  const { company, createProject } = useCompany(companyId);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showCreateProject, setShowCreateProject] = useState(false);
+  const { showModal } = useModal();
 
   const shouldRedirect =
     currentUser &&
@@ -58,6 +60,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           </div>
           <Divider />
           <CompanyProjectsList projects={company.projects} />
+
           <div className="flex justify-between mt-8">
             <div className="text-2xl self-end">{t("users")}</div>
             {(currentUser?.role === UserRole.Admin ||
@@ -91,7 +94,16 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               role,
               company_id: companyId,
             });
-          } catch (err) {}
+            showModal({
+              title: t("invitation_sent"),
+              subtitle: t("invitation_sent_description"),
+            });
+          } catch (err) {
+            showModal({
+              title: t("error"),
+              subtitle: t("invitation_send_error_description"),
+            });
+          }
         }}
       />
       <CreateProjectModal
@@ -99,10 +111,11 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onClose={() => {
           setShowCreateProject(false);
         }}
-        onSubmit={async (email, role) => {
+        onSubmit={async (name, description) => {
           setShowCreateProject(false);
 
           try {
+            await createProject(name, description);
           } catch (err) {}
         }}
       />

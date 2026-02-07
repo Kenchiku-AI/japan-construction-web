@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/app/ui/Button/Button";
 import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -26,11 +25,6 @@ const InvitationPage = () => {
       showModal({
         title: t("invitation_existing_company_error"),
         subtitle: t("invitation_existing_company_error_description"),
-        children: (
-          <div className="mt-10">
-            <Button label={t("ok")} onClick={onClose} />
-          </div>
-        ),
       });
       return;
     }
@@ -49,11 +43,6 @@ const InvitationPage = () => {
           showModal({
             title: t("accept_invitation_failed"),
             subtitle: t("accept_invitation_failed_description"),
-            children: (
-              <div className="mt-10">
-                <Button label={t("ok")} onClick={onClose} />
-              </div>
-            ),
           });
         } finally {
           router.replace("/");

@@ -2,12 +2,19 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
-import { Company, CreateCompanyRequest } from "@/types/companies";
+import { Company } from "@/types/companies";
+import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
+import { useModal } from "@/lib/modal/ModalContext";
 
 export const useCompany = (companyId: string) => {
   const [loading, setLoading] = useState(false);
   const [company, setCompany] = useState<Company>();
+  const [error, setError] = useState("");
+  const { t } = useTranslation();
+  const router = useRouter();
   const api = useApi();
+  const { showModal } = useModal();
 
   useEffect(() => {
     getCompany(companyId);
@@ -27,8 +34,36 @@ export const useCompany = (companyId: string) => {
     [setCompany],
   );
 
+  const createProject = useCallback(
+    async (name: string, description?: string) => {
+      if (!company) return;
+
+      setLoading(true);
+
+      try {
+        const request = { name, description, company_id: company.id };
+        const response = await api.createProject(request);
+
+        if (!response) {
+          throw Error();
+        }
+
+        router.push(`/projects/${response.id}?name=${response.name}`);
+      } catch (err) {
+        setLoading(false);
+        showModal({
+          title: t("error"),
+          subtitle: t("create_project_error_description"),
+        });
+      }
+    },
+    [company],
+  );
+
   return {
     loading,
     company,
+    createProject,
+    error,
   };
 };

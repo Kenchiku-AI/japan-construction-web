@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
-import { InviteUserRequest } from "@/types/companies";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input";
 import Modal from "@/app/ui/Modal";
