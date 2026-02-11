@@ -17,12 +17,17 @@ export type ReportField = {
   value: string;
 };
 
-export type CreateReportRequest = {};
+export type CreateReportRequest = {
+  template_id: string;
+  parent_id: string;
+  name: string;
+};
 
 export type ReportTemplate = {
   id: string;
   name: string;
   description: string;
+  parent_type: ReportParentType;
   unique_by: ReportUniqueBy;
   fields: ReportTemplateField[];
 };

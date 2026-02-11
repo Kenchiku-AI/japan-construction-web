@@ -21,7 +21,7 @@ const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
   const [managerEmail, setManagerEmail] = useState<string>();
   const { t } = useTranslation();
 
-  const resetFields = () => {
+  const reset = () => {
     setTimeout(() => {
       setName("");
       setCorporateNumber("");
@@ -34,7 +34,7 @@ const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
       isOpen={isOpen}
       onClose={() => {
         onClose();
-        resetFields();
+        reset();
       }}
       title={t("create_company")}
       subtitle={t("create_company_description")}
@@ -62,7 +62,7 @@ const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
             manager_email: managerEmail,
           });
 
-          resetFields();
+          reset();
         }}
       />
     </Modal>

@@ -35,7 +35,7 @@ const ReportsPage = () => {
       <Heading title={t("reports")} />
       <div className="flex justify-between mt-8">
         <div className="text-2xl self-end">{t("recent_reports")}</div>
-        {canEdit && (
+        {currentUser?.role == UserRole.Manager && (
           <Button
             variant="secondary"
             label={t("create_project")}
@@ -50,6 +50,7 @@ const ReportsPage = () => {
       <Divider />
       <ReportsList reports={reports ?? []} />
       <CreateReportModal
+        templates={reportTemplates ?? []}
         isOpen={showCreateReport}
         onClose={() => {
           setShowCreateReport(false);
@@ -58,7 +59,6 @@ const ReportsPage = () => {
           setShowCreateReport(false);
           createReport(request);
         }}
-        templates={reportTemplates ?? []}
       />
 
       {canEdit && (

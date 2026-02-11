@@ -34,7 +34,7 @@
   "invitation_existing_company_error": "あなたはすでに会社に所属しています。",
   "invitation_existing_company_error_description": "複数の会社から招待を受けることはできません。",
   "invitation_sent": "招待を送信しました",
-  "invitation_sent_description": "招待が正常に送信されました",
+  "invitation_sent_description": "招待が正常に送信されました。",
   "invitation_send_error_description": "招待の送信中にエラーが発生しました",
   "invite": "招待する",
   "invite_user": "ユーザーを招待",

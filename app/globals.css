@@ -60,6 +60,10 @@ button:disabled {
   opacity: 0.3;
 }
 
+option:disabled::checkmark {
+  content: "";
+}
+
 dialog {
   transition-duration: 5ms;
 }

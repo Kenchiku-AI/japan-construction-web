@@ -1,5 +1,5 @@
 import { bgColor2, errorColor2, fontColor1, fontColor2 } from "@/lib/constants";
-import { CSSProperties, FC, useEffect, useState } from "react";
+import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 
 interface SelectOption {
   value?: string | number;
@@ -11,6 +11,7 @@ interface SelectProps {
   value?: string | number;
   onChange?: (value?: string | number) => void;
   placeholder?: string;
+  hidePlaceholder?: boolean;
   error?: boolean;
   style?: CSSProperties;
 }
@@ -20,10 +21,22 @@ const Select: FC<SelectProps> = ({
   value,
   onChange,
   placeholder,
+  hidePlaceholder,
   error,
   style,
 }) => {
-  const [isUnselected, setIsUnselected] = useState(!options[0]?.value);
+  const [isUnselected, setIsUnselected] = useState(
+    placeholder || !options[0]?.value,
+  );
+  const valueRef = useRef(value);
+
+  useEffect(() => {
+    if (valueRef.current && !value) {
+      setIsUnselected(true);
+    }
+
+    valueRef.current = value;
+  }, [value]);
 
   return (
     <select
@@ -44,7 +57,11 @@ const Select: FC<SelectProps> = ({
       }}
     >
       {placeholder && (
-        <option value="" disabled>
+        <option
+          value=""
+          disabled
+          style={{ display: hidePlaceholder ? "none" : "flex" }}
+        >
           {placeholder}
         </option>
       )}

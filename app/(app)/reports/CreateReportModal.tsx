@@ -3,11 +3,18 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input";
 import Modal from "@/app/ui/Modal";
-import { CreateReportRequest, ReportTemplate } from "@/types";
+import {
+  CreateReportRequest,
+  Project,
+  ReportParentType,
+  ReportTemplate,
+} from "@/types";
 import Select from "@/app/ui/Select";
+import { useApi } from "@/lib/api/ApiContext";
 
 interface CreateReportModalProps {
   templates: ReportTemplate[];
+  forceProjectId?: string;
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (request: CreateReportRequest) => void;
@@ -15,63 +22,111 @@ interface CreateReportModalProps {
 
 const CreateReportModal: FC<CreateReportModalProps> = ({
   templates,
+  forceProjectId,
   isOpen,
   onClose,
   onSubmit,
 }) => {
+  const { currentUser } = useApi();
   const [templateId, setTemplateId] = useState("");
+  const [projectId, setProjectId] = useState("");
+  const [requireProjectId, setRequireProjectId] = useState(false);
   const [name, setName] = useState("");
   const hasEditedName = useRef(false);
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (templateId && (!name || !hasEditedName.current)) {
-      const template = templates.find((t) => t.id === templateId);
+    const template = templates.find((t) => t.id === templateId);
+    if (!template) return;
 
-      if (template) {
-        const today = new Date();
-        setName(`${template.name} (${today.toLocaleDateString("en-US")})`);
-      }
+    if (!name || !hasEditedName.current) {
+      const today = new Date();
+      setName(`${template.name} (${today.toLocaleDateString("en-US")})`);
+    }
+
+    const isProjectType = template.parent_type === ReportParentType.Project;
+    setRequireProjectId(isProjectType);
+
+    if (!isProjectType) {
+      setProjectId("");
     }
   }, [templateId, templates]);
 
-  const resetFields = () => {
+  const reset = () => {
     setTimeout(() => {
       setName("");
       setTemplateId("");
+      setProjectId("");
+      setRequireProjectId(false);
       hasEditedName.current = false;
     }, 500);
   };
 
   const templateOptions = useMemo(
     () =>
-      templates.map((t) => ({
-        label: t.name,
-        value: t.id,
-      })),
+      templates
+        .filter((t) =>
+          !forceProjectId ? true : t.parent_type === ReportParentType.Project,
+        )
+        .map((t) => ({
+          label: t.name,
+          value: t.id,
+        })),
     [templates],
   );
+
+  const projectOptions = useMemo(
+    () =>
+      currentUser?.projects.map((p) => ({
+        label: p.name,
+        value: p.id,
+      })) ?? [],
+    [currentUser?.projects],
+  );
+
+  const parentId = useMemo(() => {
+    if (forceProjectId) return forceProjectId;
+    if (requireProjectId) return projectId;
+    return currentUser?.company?.id;
+  }, [forceProjectId, requireProjectId, projectId, currentUser?.company]);
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={() => {
         onClose();
-        resetFields();
+        reset();
       }}
       title={t("create_report")}
       subtitle={t("create_report_description")}
     >
-      <div className="my-8 flex flex-col">
-        <div className="flex justify-between items-center mb-8">
+      <div className="my-8 flex flex-col gap-4">
+        <div className="flex justify-between items-center">
           <div className="text-xl">{t("type")}</div>
           <Select
             options={templateOptions}
-            placeholder={t("template")}
+            value={templateId}
+            placeholder={t("select_template")}
+            hidePlaceholder
             onChange={(id) => setTemplateId(id as string)}
             style={{ width: "auto", paddingRight: 40 }}
           />
         </div>
+        {requireProjectId && !forceProjectId && (
+          <div className="flex justify-between items-center">
+            <div className="text-xl">{t("project")}</div>
+            <Select
+              options={projectOptions}
+              value={projectId}
+              placeholder={t("select_project")}
+              hidePlaceholder
+              onChange={(id) => setProjectId(id as string)}
+              style={{ width: "auto", paddingRight: 40 }}
+            />
+          </div>
+        )}
+      </div>
+      <div className="mb-8 flex flex-col gap-4">
         <Input
           value={name}
           placeholder={t("name")}
@@ -82,14 +137,16 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
         />
       </div>
       <Button
-        disabled={!templateId}
+        disabled={!templateId || !parentId}
         label={t("create")}
         onClick={() => {
           onSubmit({
+            template_id: templateId,
+            parent_id: parentId!,
             name,
           });
 
-          resetFields();
+          reset();
         }}
       />
     </Modal>

@@ -36,7 +36,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
   const [fields, setFields] = useState<Field[]>([]);
   const { t } = useTranslation();
 
-  const resetFields = () => {
+  const reset = () => {
     setTimeout(() => {
       setName("");
       setDescription("");
@@ -68,7 +68,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
       isOpen={isOpen}
       onClose={() => {
         onClose();
-        resetFields();
+        reset();
       }}
       title={t("create_report_template")}
       subtitle={t("create_report_template_description")}
@@ -84,7 +84,6 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
           <div className="text-xl">{t("type")}</div>
           <Select
             options={parentTypeOptions}
-            placeholder={t("parent_type")}
             onChange={(pt) => {
               setParentType(pt as ReportParentType);
             }}
@@ -95,7 +94,6 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
           <div className="text-xl">{t("unique_by")}</div>
           <Select
             options={uniqueByOptions}
-            placeholder={t("unique_by")}
             onChange={(ub) => {
               setUniqueBy(ub as ReportUniqueBy);
             }}
@@ -156,7 +154,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
             parent_type: parentType,
           });
 
-          resetFields();
+          reset();
         }}
         style={{ marginTop: 8 }}
       />

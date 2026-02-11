@@ -23,7 +23,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
   const [description, setDescription] = useState("");
   const { t } = useTranslation();
 
-  const resetFields = () => {
+  const reset = () => {
     setTimeout(() => {
       setName("");
       setDescription("");
@@ -35,7 +35,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
       isOpen={isOpen}
       onClose={() => {
         onClose();
-        resetFields();
+        reset();
       }}
       title={t("create_project")}
       subtitle={t("create_project_description")}
@@ -52,7 +52,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
         disabled={!name}
         label={t("create")}
         onClick={() => {
-          resetFields();
+          reset();
           onSubmit(name, description);
         }}
       />

@@ -21,7 +21,7 @@ const NewCompanyModal: FC<InviteUserModalProps> = ({
   const [role, setRole] = useState<UserRole>(UserRole.User);
   const { t } = useTranslation();
 
-  const resetFields = () => {
+  const reset = () => {
     setTimeout(() => {
       setEmail("");
       setRole(UserRole.User);
@@ -33,7 +33,7 @@ const NewCompanyModal: FC<InviteUserModalProps> = ({
       isOpen={isOpen}
       onClose={() => {
         onClose();
-        resetFields();
+        reset();
       }}
       title={t("invite_user")}
       subtitle={t("invite_user_description")}
@@ -56,7 +56,7 @@ const NewCompanyModal: FC<InviteUserModalProps> = ({
         disabled={!email || !role}
         label={t("invite")}
         onClick={() => {
-          resetFields();
+          reset();
           onSubmit(email, role);
         }}
       />

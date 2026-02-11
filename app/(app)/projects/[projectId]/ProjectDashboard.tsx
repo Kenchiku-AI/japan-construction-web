@@ -12,13 +12,15 @@ import { Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import ProjectReportsList from "./ProjectReportsList";
 import CreateReportModal from "../../reports/CreateReportModal";
+import { useReports } from "../../reports/useReports";
 
 interface ProjectDashboardProps {
   projectId: string;
 }
 
 const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
-  const { currentUser, inviteUser } = useApi();
+  const { currentUser } = useApi();
+  const { reportTemplates } = useReports();
   const { t } = useTranslation();
   const { project } = useProject(projectId);
   const searchParams = useSearchParams();
@@ -48,12 +50,13 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         </>
       )}
       <CreateReportModal
-        templates={[]}
+        templates={reportTemplates ?? []}
+        forceProjectId={projectId}
         isOpen={showCreateReport}
         onClose={() => {
           setShowCreateReport(false);
         }}
-        onSubmit={(date) => {
+        onSubmit={() => {
           setShowCreateReport(false);
 
           try {
