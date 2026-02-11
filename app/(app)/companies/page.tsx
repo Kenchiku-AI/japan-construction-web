@@ -8,7 +8,7 @@ import CreateCompanyModal from "./CreateCompanyModal";
 import { useCompanies } from "./useCompanies";
 import { Users, Plus } from "@/app/ui/Icons";
 import { Company } from "@/types/companies";
-import styles from "./companies.module.css";
+import styles from "./page.module.css";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { redirect, useRouter } from "next/navigation";
@@ -20,7 +20,7 @@ const CompaniesPage = () => {
   const { companies, createCompany } = useCompanies();
   const router = useRouter();
   const { currentUser } = useApi();
-  const [showNewCompany, setShowNewCompany] = useState(false);
+  const [showCreateCompany, setShowCreateCompany] = useState(false);
 
   if (currentUser && currentUser.role !== UserRole.Admin) {
     redirect("/");
@@ -35,7 +35,7 @@ const CompaniesPage = () => {
           label={t("create_company")}
           iconLeft={() => <Plus />}
           onClick={() => {
-            setShowNewCompany(true);
+            setShowCreateCompany(true);
           }}
         />
       </div>
@@ -52,12 +52,12 @@ const CompaniesPage = () => {
         ))}
       </div>
       <CreateCompanyModal
-        isOpen={showNewCompany}
+        isOpen={showCreateCompany}
         onClose={() => {
-          setShowNewCompany(false);
+          setShowCreateCompany(false);
         }}
         onSubmit={(request) => {
-          setShowNewCompany(false);
+          setShowCreateCompany(false);
           createCompany(request);
         }}
       />

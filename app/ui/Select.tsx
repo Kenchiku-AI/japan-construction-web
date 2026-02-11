@@ -1,17 +1,18 @@
-import { bgColor2, errorColor2 } from "@/lib/constants";
-import { FC } from "react";
+import { bgColor2, errorColor2, fontColor1, fontColor2 } from "@/lib/constants";
+import { CSSProperties, FC, useEffect, useState } from "react";
 
 interface SelectOption {
-  value: string | number;
+  value?: string | number;
   label: string;
 }
 
 interface SelectProps {
   options: SelectOption[];
   value?: string | number;
-  onChange?: (value: string) => void;
+  onChange?: (value?: string | number) => void;
   placeholder?: string;
   error?: boolean;
+  style?: CSSProperties;
 }
 
 const Select: FC<SelectProps> = ({
@@ -20,16 +21,26 @@ const Select: FC<SelectProps> = ({
   onChange,
   placeholder,
   error,
+  style,
 }) => {
+  const [isUnselected, setIsUnselected] = useState(!options[0]?.value);
+
   return (
     <select
       className="select"
       value={value}
       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-        onChange?.(e.target.value);
+        const { value } = e.target;
+        const option = options.find((o) => o.value === value);
+        onChange?.(option?.value);
+        setIsUnselected(!option?.value);
       }}
       style={{
         backgroundColor: error ? errorColor2 : bgColor2,
+        backgroundImage:
+          "linear-gradient(45deg, #0000 50%, #23303B 50%), linear-gradient(135deg, #23303B 50%, #0000 50%)",
+        color: isUnselected ? fontColor2 : fontColor1,
+        ...style,
       }}
     >
       {placeholder && (
@@ -37,8 +48,12 @@ const Select: FC<SelectProps> = ({
           {placeholder}
         </option>
       )}
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
+      {options.map((option, index) => (
+        <option
+          key={option.value ?? `select_option_${index}`}
+          value={option.value}
+          style={{ color: option.value ? fontColor1 : fontColor2 }}
+        >
           {option.label}
         </option>
       ))}

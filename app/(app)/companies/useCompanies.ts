@@ -2,11 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useApi } from "../../../lib/api/ApiContext";
-import { useRouter } from "next/navigation";
 import { Company, CreateCompanyRequest } from "@/types/companies";
 
 export const useCompanies = () => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [companies, setCompanies] = useState<Company[]>();
   const api = useApi();

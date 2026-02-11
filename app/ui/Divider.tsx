@@ -1,10 +1,11 @@
-import { FC } from "react";
+import { CSSProperties, FC } from "react";
 
 interface DividerProps {
   color?: string;
+  style?: CSSProperties;
 }
 
-const Divider: FC<DividerProps> = ({ color }) => {
+const Divider: FC<DividerProps> = ({ color, style }) => {
   return (
     <div
       style={{
@@ -12,6 +13,7 @@ const Divider: FC<DividerProps> = ({ color }) => {
         width: "100%",
         background: color ?? "black",
         margin: "16px 0",
+        ...style,
       }}
     />
   );

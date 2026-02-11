@@ -6,12 +6,12 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import CreateReportModal from "./CreateReportModal";
 import ProjectReportsList from "./ProjectReportsList";
+import CreateReportModal from "../../reports/CreateReportModal";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -48,11 +48,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         </>
       )}
       <CreateReportModal
+        templates={[]}
         isOpen={showCreateReport}
         onClose={() => {
           setShowCreateReport(false);
         }}
-        onSubmit={async (date) => {
+        onSubmit={(date) => {
           setShowCreateReport(false);
 
           try {

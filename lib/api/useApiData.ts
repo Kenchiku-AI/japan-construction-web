@@ -13,7 +13,11 @@ import {
   Company,
   CreateCompanyRequest,
   InviteUserRequest,
-} from "@/types/companies";
+  Report,
+  CreateReportRequest,
+  ReportTemplate,
+  CreateReportTemplateRequest,
+} from "@/types";
 import { authRoutes } from "../constants";
 
 export const http = axios.create({
@@ -118,6 +122,22 @@ export const useApiData = () => {
     async createProject(request: CreateProjectRequest) {
       const url = "/projects";
       return call(() => http.post<Project>(url, request));
+    },
+    async getReports() {
+      const url = `/reports`;
+      return call(() => http.get<Report[]>(url));
+    },
+    async createReport(request: CreateReportRequest) {
+      const url = "/reports";
+      return call(() => http.post<Report>(url, request));
+    },
+    async getReportTemplates() {
+      const url = `/reports/templates`;
+      return call(() => http.get<ReportTemplate[]>(url));
+    },
+    async createReportTemplate(request: CreateReportTemplateRequest) {
+      const url = "/reports/templates";
+      return call(() => http.post<ReportTemplate>(url, request));
     },
     async inviteUser(request: InviteUserRequest) {
       const url = "/invitations";

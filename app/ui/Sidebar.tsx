@@ -26,6 +26,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
               <div className="space-y-2">
                 <SidebarItem name={t("home")} path={"/"} />
                 <SidebarItem name={t("sites")} path={"/projects"} />
+                <SidebarItem name={t("reports")} path={"/reports"} />
                 <CompanySidebarItem currentUser={currentUser} />
               </div>
               <div>

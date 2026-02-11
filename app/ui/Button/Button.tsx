@@ -39,7 +39,11 @@ export const Button: FC<ButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       className={`btn ${containerStyle}`}
-      style={style}
+      style={{
+        paddingLeft: iconLeft ? 8 : 16,
+        paddingRight: iconRight ? 8 : 16,
+        ...style,
+      }}
     >
       {IconLeft && <IconLeft />}
       <div className={labelStyle}>{label}</div>
