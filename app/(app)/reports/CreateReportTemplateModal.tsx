@@ -1,19 +1,14 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import {
   CreateReportTemplateRequest,
-  ReportFieldType,
   ReportParentType,
   ReportUniqueBy,
 } from "@/types";
 import Select from "@/app/ui/Select";
-import { Plus, Trash } from "@/app/ui/Icons";
-import Divider from "@/app/ui/Divider";
-import { fontColor2 } from "@/lib/constants";
-import styles from "./page.module.css";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportTemplateFields, {
   ReportTemplateFieldInfo,

@@ -27,7 +27,9 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 <SidebarItem name={t("home")} path={"/"} />
                 <SidebarItem name={t("sites")} path={"/projects"} />
                 <SidebarItem name={t("reports")} path={"/reports"} />
-                <CompanySidebarItem currentUser={currentUser} />
+                {currentUser.role === UserRole.Admin && (
+                  <SidebarItem name={t("companies")} path={"/companies"} />
+                )}
               </div>
               <div>
                 <div className="flex gap-2 items-center">
@@ -73,28 +75,28 @@ const SidebarItem = ({ name, path }: SidebarItemProps) => {
   );
 };
 
-interface CompanySidebarItemProps {
-  currentUser: CurrentUser;
-}
+// interface CompanySidebarItemProps {
+//   currentUser: CurrentUser;
+// }
 
-const CompanySidebarItem: FC<CompanySidebarItemProps> = ({ currentUser }) => {
-  const { t } = useTranslation();
-  const { role, company } = currentUser;
+// const CompanySidebarItem: FC<CompanySidebarItemProps> = ({ currentUser }) => {
+//   const { t } = useTranslation();
+//   const { role, company } = currentUser;
 
-  if (role === UserRole.Admin) {
-    return <SidebarItem name={t("companies")} path={"/companies"} />;
-  }
+//   if (role === UserRole.Admin) {
+//     return <SidebarItem name={t("companies")} path={"/companies"} />;
+//   }
 
-  if (company) {
-    return (
-      <SidebarItem
-        name={t("company")}
-        path={`/companies/${company.id}?name=${company.name}`}
-      />
-    );
-  }
+//   if (company) {
+//     return (
+//       <SidebarItem
+//         name={t("company")}
+//         path={`/companies/${company.id}?name=${company.name}`}
+//       />
+//     );
+//   }
 
-  return null;
-};
+//   return null;
+// };
 
 export default Sidebar;

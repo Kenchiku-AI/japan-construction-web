@@ -10,7 +10,7 @@ interface ReportPageProps {
 const ReportTemplatePage: FC<ReportPageProps> = async ({ params }) => {
   const { reportTemplateId } = await params;
 
-  return <ReportTemplateDashboard reportId={reportTemplateId} />;
+  return <ReportTemplateDashboard reportTemplateId={reportTemplateId} />;
 };
 
 export default ReportTemplatePage;

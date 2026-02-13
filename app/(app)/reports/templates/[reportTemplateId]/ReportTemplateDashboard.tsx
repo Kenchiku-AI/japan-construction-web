@@ -2,13 +2,16 @@
 
 import { useApi } from "@/lib/api/ApiContext";
 import { redirect, useSearchParams } from "next/navigation";
-import { FC, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReportTemplate } from "./useReportTemplate";
 import { ReportField, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
+import ReportTemplateFields, {
+  ReportTemplateFieldInfo,
+} from "../../ReportTemplateFields";
 
 interface ReportTemplateDashboardProps {
   reportTemplateId: string;
@@ -20,8 +23,21 @@ const ReportDashboard: FC<ReportTemplateDashboardProps> = ({
   const { currentUser } = useApi();
   const { t } = useTranslation();
   const { reportTemplate } = useReportTemplate(reportTemplateId);
+  const [fields, setFields] = useState<ReportTemplateFieldInfo[]>([]);
   const searchParams = useSearchParams();
   const [hasChanged, setHasChanged] = useState(false);
+  const isLoaded = useRef(false);
+
+  useEffect(() => {
+    if (isLoaded.current || !reportTemplate) return;
+
+    const newFields = reportTemplate.fields.map((f) => ({
+      name: f.name,
+      description: f.description,
+      type: f.type,
+    }));
+    setFields(newFields);
+  }, [reportTemplate]);
 
   if (currentUser?.role == UserRole.User) {
     redirect("/");
@@ -30,31 +46,28 @@ const ReportDashboard: FC<ReportTemplateDashboardProps> = ({
   return (
     <>
       <Heading
-        title={report?.name ?? searchParams.get("name") ?? ""}
+        title={reportTemplate?.name ?? searchParams.get("name") ?? ""}
         topLabel={t("report_template")}
         placeholder={t("report_template_name")}
         onEdit={(t) => {}}
-        isEditable
+        isEditable={!!reportTemplate}
       />
-      <div className="flex flex-col mt-12 mb-8 gap-4">
-        {report?.fields.map((field) => (
-          <ReportFieldRow
-            key={field.id}
-            field={field}
-            onChange={(t) => {
-              setHasChanged(true);
-            }}
+      {!!reportTemplate && (
+        <>
+          <ReportTemplateFields
+            fields={fields}
+            onChange={(f) => setFields(f)}
           />
-        ))}
-      </div>
-      <div className="flex">
-        <Button
-          label={t("update_report_template")}
-          onClick={() => {}}
-          style={{ width: "50%" }}
-          disabled={!hasChanged}
-        />
-      </div>
+          <div className="flex">
+            <Button
+              label={t("update_report_template")}
+              onClick={() => {}}
+              style={{ width: "50%" }}
+              disabled={!hasChanged}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };
