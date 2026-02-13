@@ -10,7 +10,6 @@ import { useModal } from "@/lib/modal/ModalContext";
 export const useProject = (projectId: string) => {
   const [loading, setLoading] = useState(false);
   const [project, setProject] = useState<Project>();
-  const [error, setError] = useState("");
   const router = useRouter();
   const { t } = useTranslation();
   const { showModal } = useModal();
@@ -47,6 +46,5 @@ export const useProject = (projectId: string) => {
   return {
     loading,
     project,
-    error,
   };
 };

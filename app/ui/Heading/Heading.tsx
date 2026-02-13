@@ -1,16 +1,87 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./Heading.module.css";
+import { Input } from "../Input/Input";
+import { Check, Close, Edit } from "../Icons";
+import { errorColor1 } from "@/lib/constants";
 
 interface HeadingProps {
   title: string;
   subtitle?: string;
+  topLabel?: string;
+  placeholder?: string;
+  isEditable?: boolean;
+  onEdit?: (value: string) => void;
 }
 
-export const Heading: FC<HeadingProps> = ({ title, subtitle }) => {
+export const Heading: FC<HeadingProps> = ({
+  title,
+  subtitle,
+  topLabel,
+  placeholder,
+  isEditable,
+  onEdit,
+}) => {
+  const [showEdit, setShowEdit] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(title);
+  const [displayTitle, setDisplayTitle] = useState(title);
+
+  useEffect(() => {
+    setDisplayTitle(title);
+  }, [title]);
+
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>{title}</div>
+    <>
+      <div className={styles.topLabel}>{topLabel}</div>
+      {showEdit ? (
+        <div className="flex gap-4" style={{ marginTop: -2 }}>
+          <Input
+            placeholder={placeholder}
+            value={editedTitle}
+            onChange={(t) => setEditedTitle(t)}
+            autoFocus
+            hideLabel
+          />
+          <div className="flex justify-end items-center gap-2">
+            <div
+              className={displayTitle ? "cursor-pointer" : ""}
+              onClick={() => {
+                if (!displayTitle) return;
+
+                setShowEdit(false);
+                setDisplayTitle(editedTitle);
+                onEdit?.(editedTitle);
+              }}
+              style={{ opacity: displayTitle ? 1 : 0.4 }}
+            >
+              <Check size={36} />
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                setShowEdit(false);
+              }}
+            >
+              <Close color={errorColor1} size={36} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center gap-4">
+          <div className={styles.title}>{displayTitle}</div>
+          {isEditable && (
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                setEditedTitle(displayTitle);
+                setShowEdit(true);
+              }}
+            >
+              <Edit />
+            </div>
+          )}
+        </div>
+      )}
       {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
-    </div>
+    </>
   );
 };

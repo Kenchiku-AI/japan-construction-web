@@ -127,6 +127,10 @@ export const useApiData = () => {
       const url = `/reports`;
       return call(() => http.get<Report[]>(url));
     },
+    async getReport(reportId: string) {
+      const url = `/reports/${reportId}`;
+      return call(() => http.get<Report>(url));
+    },
     async createReport(request: CreateReportRequest) {
       const url = "/reports";
       return call(() => http.post<Report>(url, request));
@@ -134,6 +138,10 @@ export const useApiData = () => {
     async getReportTemplates() {
       const url = `/reports/templates`;
       return call(() => http.get<ReportTemplate[]>(url));
+    },
+    async getReportTemplate(reportTemplateId: string) {
+      const url = `/reports/templates/${reportTemplateId}`;
+      return call(() => http.get<ReportTemplate>(url));
     },
     async createReportTemplate(request: CreateReportTemplateRequest) {
       const url = "/reports/templates";

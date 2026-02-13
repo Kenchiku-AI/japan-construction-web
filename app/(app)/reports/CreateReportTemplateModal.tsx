@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
-import { Input } from "@/app/ui/Input";
+import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import {
   CreateReportTemplateRequest,
@@ -14,7 +14,10 @@ import { Plus, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { fontColor2 } from "@/lib/constants";
 import styles from "./page.module.css";
-import { TextArea } from "@/app/ui/TextArea";
+import { TextArea } from "@/app/ui/TextArea/TextArea";
+import ReportTemplateFields, {
+  ReportTemplateFieldInfo,
+} from "./ReportTemplateFields";
 
 interface CreateReportTemplateModalProps {
   isOpen: boolean;
@@ -33,7 +36,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
     ReportParentType.Project,
   );
   const [uniqueBy, setUniqueBy] = useState<ReportUniqueBy>();
-  const [fields, setFields] = useState<Field[]>([]);
+  const [fields, setFields] = useState<ReportTemplateFieldInfo[]>([]);
   const { t } = useTranslation();
 
   const reset = () => {
@@ -101,48 +104,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
           />
         </div>
       </div>
-      <div className="flex justify-between mt-8">
-        <div className="text-xl self-end">{t("fields")}</div>
-        <Button
-          variant="tertiary"
-          onClick={() => {
-            const newField = {
-              name: "",
-              description: "",
-              type: ReportFieldType.String,
-            };
-            setFields([...fields, newField]);
-          }}
-          label={t("add_field")}
-          iconLeft={() => <Plus />}
-          style={{ padding: 0, height: 28 }}
-        />
-      </div>
-      <Divider style={{ margin: "8px 0" }} />
-      {!fields.length && (
-        <div className={styles.empty} style={{ height: 80 }}>
-          {t("empty_reports_description")}
-        </div>
-      )}
-      {fields.map((field, index) => (
-        <FieldCell
-          key={`create_report_template_field_${index}`}
-          field={field}
-          index={index}
-          onChange={(f) => {
-            setFields((prev) => {
-              const newFields = [...prev];
-              newFields[index] = f;
-              return newFields;
-            });
-          }}
-          onRemove={() => {
-            setFields((prev) => {
-              return prev.filter((_, i) => i !== index);
-            });
-          }}
-        />
-      ))}
+      <ReportTemplateFields fields={fields} onChange={(f) => setFields(f)} />
       <Button
         disabled={isSubmitDisabled}
         label={t("create")}
@@ -152,6 +114,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
             description,
             fields,
             parent_type: parentType,
+            unique_by: uniqueBy,
           });
 
           reset();
@@ -159,79 +122,6 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
         style={{ marginTop: 8 }}
       />
     </Modal>
-  );
-};
-
-type Field = {
-  name: string;
-  description: string;
-  type: ReportFieldType;
-};
-
-interface FieldProps {
-  field: Field;
-  index: number;
-  onChange: (field: Field) => void;
-  onRemove: () => void;
-}
-
-const FieldCell: FC<FieldProps> = ({ field, index, onChange, onRemove }) => {
-  const { t } = useTranslation();
-  const { name, description, type } = field;
-
-  const typeOptions = [
-    {
-      label: t("text"),
-      value: ReportFieldType.String,
-    },
-    {
-      label: t("number"),
-      value: ReportFieldType.Number,
-    },
-    {
-      label: t("boolean"),
-      value: ReportFieldType.Boolean,
-    },
-    {
-      label: t("date"),
-      value: ReportFieldType.Date,
-    },
-  ];
-
-  return (
-    <div
-      key={`create_report_template_field_${index}`}
-      className="flex flex-col ml-4 my-4"
-    >
-      <div className="flex justify-between" style={{ alignItems: "flex-end" }}>
-        <div className={styles.subtitle}>{`${t("field")} ${index + 1}`}</div>
-        <div className="cursor-pointer" onClick={onRemove}>
-          <Trash />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2 mt-3 mb-6">
-        <Input
-          placeholder={t("name")}
-          onChange={(n) => {
-            onChange({ ...field, name: n });
-          }}
-        />
-        <Input
-          placeholder={t("description")}
-          onChange={(d) => {
-            onChange({ ...field, description: d });
-          }}
-        />
-        <Select
-          placeholder={t("type")}
-          options={typeOptions}
-          onChange={(t) => {
-            onChange({ ...field, type: t as ReportFieldType });
-          }}
-        />
-      </div>
-      <Divider color={fontColor2} style={{ margin: 0 }} />
-    </div>
   );
 };
 

@@ -10,7 +10,7 @@ const InvitationPage = () => {
   const { currentUser, setCurrentUser, acceptInvitation, getCurrentUser } =
     useApi();
   const router = useRouter();
-  const { showModal, onClose } = useModal();
+  const { showModal } = useModal();
   const searchParams = useSearchParams();
   const { t } = useTranslation();
   const accepted = useRef(false);

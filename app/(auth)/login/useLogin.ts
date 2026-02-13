@@ -4,7 +4,6 @@ import { useCallback, useState } from "react";
 import { useApi } from "../../../lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import { invitationTokenKey } from "@/lib/constants";
-import { CurrentUser } from "@/types";
 import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 

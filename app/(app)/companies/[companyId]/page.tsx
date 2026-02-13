@@ -1,5 +1,5 @@
 import { FC } from "react";
-import CompanyDashboard from "./CompanyDashBoard";
+import CompanyDashboard from "./CompanyDashboard";
 
 interface CompanyPageProps {
   params: {

@@ -24,7 +24,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const { currentUser, inviteUser } = useApi();
   const { t } = useTranslation();
   const { company, createProject } = useCompany(companyId);
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showCreateProject, setShowCreateProject] = useState(false);
@@ -41,7 +40,13 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
 
   return (
     <>
-      <Heading title={company?.name ?? searchParams.get("name") ?? ""} />
+      <Heading
+        title={company?.name ?? searchParams.get("name") ?? ""}
+        topLabel={t("company")}
+        placeholder={t("company_name")}
+        isEditable={currentUser?.role === UserRole.Admin}
+        onEdit={(n) => {}}
+      />
       {company && (
         <>
           <div className="flex justify-between mt-8">

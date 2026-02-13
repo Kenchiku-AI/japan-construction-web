@@ -4,6 +4,7 @@ export type Report = {
   template_id: string;
   parent_type: ReportParentType;
   parent_id: string;
+  company_id?: string;
   fields: ReportField[];
   created_at: string;
   updated_at: string;
@@ -14,6 +15,7 @@ export type ReportField = {
   report_id: string;
   template_field_id: string;
   type: ReportFieldType;
+  name: string;
   value: string;
 };
 
@@ -45,6 +47,7 @@ export type CreateReportTemplateRequest = {
   description?: string;
   fields: CreateReportTemplateRequestField[];
   parent_type: ReportParentType;
+  unique_by?: ReportUniqueBy;
   company_id?: string;
 };
 

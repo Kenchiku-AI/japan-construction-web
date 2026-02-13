@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSignup } from "./useSignup";
 import { Heading } from "@/app/ui/Heading/Heading";
-import { Input } from "@/app/ui/Input";
+import { Input } from "@/app/ui/Input/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
 import { emailRegex } from "@/lib/constants";

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLogin } from "./useLogin";
 import { Heading } from "@/app/ui/Heading/Heading";
-import { Input } from "@/app/ui/Input";
+import { Input } from "@/app/ui/Input/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
 import { invitationTokenKey } from "@/lib/constants";
@@ -46,12 +46,14 @@ const LoginPage = () => {
             }}
             type="email"
             disabled={loading}
+            hideLabel
           />
           <Input
             placeholder={t("password")}
             onChange={(t) => setPassword(t)}
             type="password"
             disabled={loading}
+            hideLabel
           />
         </div>
         <Button

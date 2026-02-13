@@ -10,7 +10,6 @@ import { useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import ProjectReportsList from "./ProjectReportsList";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReports } from "../../reports/useReports";
 
@@ -28,7 +27,16 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
 
   return (
     <>
-      <Heading title={project?.name ?? searchParams.get("name") ?? ""} />
+      <Heading
+        title={project?.name ?? searchParams.get("name") ?? ""}
+        topLabel={t("project")}
+        placeholder={t("project_name")}
+        isEditable={
+          currentUser?.role === UserRole.Admin ||
+          currentUser?.role === UserRole.Manager
+        }
+        onEdit={(n) => {}}
+      />
       {project && (
         <>
           <div className="flex justify-between mt-8">
@@ -46,7 +54,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             )}
           </div>
           <Divider />
-          <ProjectReportsList reports={project.daily_reports ?? []} />
         </>
       )}
       <CreateReportModal

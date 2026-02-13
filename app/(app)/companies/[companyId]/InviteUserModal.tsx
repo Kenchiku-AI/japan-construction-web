@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
-import { Input } from "@/app/ui/Input";
+import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import Select from "@/app/ui/Select";
 import { UserRole } from "@/types";

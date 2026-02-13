@@ -10,7 +10,6 @@ import { useModal } from "@/lib/modal/ModalContext";
 export const useCompany = (companyId: string) => {
   const [loading, setLoading] = useState(false);
   const [company, setCompany] = useState<Company>();
-  const [error, setError] = useState("");
   const { t } = useTranslation();
   const router = useRouter();
   const api = useApi();
@@ -64,6 +63,5 @@ export const useCompany = (companyId: string) => {
     loading,
     company,
     createProject,
-    error,
   };
 };

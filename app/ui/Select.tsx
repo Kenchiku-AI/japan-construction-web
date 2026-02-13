@@ -9,6 +9,7 @@ interface SelectOption {
 interface SelectProps {
   options: SelectOption[];
   value?: string | number;
+  defaultValue?: string | number;
   onChange?: (value?: string | number) => void;
   placeholder?: string;
   hidePlaceholder?: boolean;
@@ -19,6 +20,7 @@ interface SelectProps {
 const Select: FC<SelectProps> = ({
   options,
   value,
+  defaultValue,
   onChange,
   placeholder,
   hidePlaceholder,
@@ -42,6 +44,7 @@ const Select: FC<SelectProps> = ({
     <select
       className="select"
       value={value}
+      defaultValue={defaultValue}
       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
         const { value } = e.target;
         const option = options.find((o) => o.value === value);

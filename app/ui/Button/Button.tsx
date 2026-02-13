@@ -40,8 +40,8 @@ export const Button: FC<ButtonProps> = ({
       disabled={disabled}
       className={`btn ${containerStyle}`}
       style={{
-        paddingLeft: iconLeft ? 8 : 16,
-        paddingRight: iconRight ? 8 : 16,
+        paddingLeft: variant === "tertiary" ? 0 : iconLeft ? 8 : 16,
+        paddingRight: variant === "tertiary" ? 0 : iconRight ? 8 : 16,
         ...style,
       }}
     >

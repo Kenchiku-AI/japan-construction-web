@@ -1,16 +1,12 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
-import { Input } from "@/app/ui/Input";
+import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
-import {
-  CreateReportRequest,
-  Project,
-  ReportParentType,
-  ReportTemplate,
-} from "@/types";
+import { CreateReportRequest, ReportParentType, ReportTemplate } from "@/types";
 import Select from "@/app/ui/Select";
 import { useApi } from "@/lib/api/ApiContext";
+import styles from "./page.module.css";
 
 interface CreateReportModalProps {
   templates: ReportTemplate[];
@@ -34,6 +30,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
   const [name, setName] = useState("");
   const hasEditedName = useRef(false);
   const { t } = useTranslation();
+  const showProjectSelect = requireProjectId && !forceProjectId;
 
   useEffect(() => {
     const template = templates.find((t) => t.id === templateId);
@@ -42,6 +39,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
     if (!name || !hasEditedName.current) {
       const today = new Date();
       setName(`${template.name} (${today.toLocaleDateString("en-US")})`);
+      hasEditedName.current = false;
     }
 
     const isProjectType = template.parent_type === ReportParentType.Project;
@@ -100,7 +98,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
       title={t("create_report")}
       subtitle={t("create_report_description")}
     >
-      <div className="my-8 flex flex-col gap-4">
+      <div className="mt-8 flex flex-col">
         <div className="flex justify-between items-center">
           <div className="text-xl">{t("type")}</div>
           <Select
@@ -112,8 +110,16 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
             style={{ width: "auto", paddingRight: 40 }}
           />
         </div>
-        {requireProjectId && !forceProjectId && (
-          <div className="flex justify-between items-center">
+        <div
+          className="flex items-end"
+          style={{
+            height: showProjectSelect ? 66 : 0,
+            opacity: showProjectSelect ? 1 : 0,
+            pointerEvents: showProjectSelect ? undefined : "none",
+            transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
+          }}
+        >
+          <div className="flex flex-1 justify-between items-center">
             <div className="text-xl">{t("project")}</div>
             <Select
               options={projectOptions}
@@ -124,9 +130,9 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
               style={{ width: "auto", paddingRight: 40 }}
             />
           </div>
-        )}
+        </div>
       </div>
-      <div className="mb-8 flex flex-col gap-4">
+      <div className="mt-4 mb-8 flex flex-col gap-4">
         <Input
           value={name}
           placeholder={t("name")}

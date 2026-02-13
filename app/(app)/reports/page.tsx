@@ -48,7 +48,7 @@ const ReportsPage = () => {
         )}
       </div>
       <Divider />
-      <ReportsList reports={reports ?? []} />
+      <ReportsList reports={reports ?? []} isCollapsible />
       <CreateReportModal
         templates={reportTemplates ?? []}
         isOpen={showCreateReport}
@@ -76,7 +76,10 @@ const ReportsPage = () => {
             />
           </div>
           <Divider />
-          <ReportTemplatesList templates={reportTemplates ?? []} />
+          <ReportTemplatesList
+            templates={reportTemplates ?? []}
+            isCollapsible
+          />
           <CreateReportTemplateModal
             isOpen={showCreateReportTemplate}
             onClose={() => {

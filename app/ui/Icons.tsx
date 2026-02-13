@@ -1,12 +1,18 @@
-import { errorColor1 } from "@/lib/constants";
+import { buttonColor, errorColor1 } from "@/lib/constants";
 
-export const Close = () => (
+interface IconProps {
+  size?: number;
+  color?: string;
+}
+
+export const Close = ({ size, color }: IconProps) => (
   <svg
     fill="none"
     viewBox="0 0 24 24"
     strokeWidth={1.5}
-    stroke="#6fb37a"
-    className="size-6"
+    width={size ?? 24}
+    height={size ?? 24}
+    stroke={color ?? buttonColor}
   >
     <path
       strokeLinecap="round"
@@ -21,13 +27,37 @@ export const Plus = () => (
     fill="none"
     viewBox="0 0 24 24"
     strokeWidth={1.5}
-    stroke="#6fb37a"
+    stroke={buttonColor}
     className="size-6"
   >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
       d="M12 4.5v15m7.5-7.5h-15"
+    />
+  </svg>
+);
+
+export const Check = ({ size }: IconProps) => (
+  <svg viewBox="0 0 24 24" fill="none" width={size ?? 24} height={size ?? 24}>
+    <path
+      d="M20 6L9 17L4 12"
+      stroke={buttonColor}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const Edit = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M2.87601 18.1156C2.92195 17.7021 2.94493 17.4954 3.00748 17.3022C3.06298 17.1307 3.1414 16.9676 3.24061 16.8171C3.35242 16.6475 3.49952 16.5005 3.7937 16.2063L17 3C18.1046 1.89543 19.8954 1.89543 21 3C22.1046 4.10457 22.1046 5.89543 21 7L7.7937 20.2063C7.49951 20.5005 7.35242 20.6475 7.18286 20.7594C7.03242 20.8586 6.86926 20.937 6.69782 20.9925C6.50457 21.055 6.29783 21.078 5.88434 21.124L2.49997 21.5L2.87601 18.1156Z"
+      stroke={buttonColor}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -87,6 +117,15 @@ export const Papers = () => (
       strokeWidth={0}
       d="M46,39h-10c-.55,0-1,.45-1,1s.45,1,1,1h10c.55,0,1-.45,1-1s-.45-1-1-1Z"
     />
+  </svg>
+);
+
+export const Paper = () => (
+  <svg viewBox="0 0 64 64" x="0px" y="0px" width={36}>
+    <path d="M50.92,16.62c-.05-.12-.12-.23-.22-.33l-11-11c-.09-.09-.2-.17-.33-.22-.12-.05-.25-.08-.38-.08h-23c-1.65,0-3,1.35-3,3v48c0,1.65,1.35,3,3,3h32c1.65,0,3-1.35,3-3V17c0-.13-.03-.26-.08-.38ZM40,8.41l7.59,7.59h-6.59c-.55,0-1-.45-1-1v-6.59ZM48,57H16c-.55,0-1-.45-1-1V8c0-.55.45-1,1-1h22v8c0,1.65,1.35,3,3,3h8v38c0,.55-.45,1-1,1Z" />
+    <path d="M18.87,28h26c.55,0,1-.45,1-1s-.45-1-1-1h-26c-.55,0-1,.45-1,1s.45,1,1,1Z" />
+    <path d="M45.13,42h-26.25c-.55,0-1,.45-1,1s.45,1,1,1h26.25c.55,0,1-.45,1-1s-.45-1-1-1Z" />
+    <path d="M18.87,36h26.13c.55,0,1-.45,1-1s-.45-1-1-1h-26.13c-.55,0-1,.45-1,1s.45,1,1,1Z" />
   </svg>
 );
 
