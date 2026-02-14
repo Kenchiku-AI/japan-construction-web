@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
-import { CurrentUser, UserRole } from "@/types";
-import { User } from "./Icons";
+import { UserRole } from "@/types";
+import { Hardhat, Home, Paper, Papers, User, Users } from "./Icons";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
@@ -24,11 +24,32 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
           {currentUser && (
             <>
               <div className="space-y-2">
-                <SidebarItem name={t("home")} path={"/"} />
-                <SidebarItem name={t("sites")} path={"/projects"} />
-                <SidebarItem name={t("reports")} path={"/reports"} />
+                <SidebarItem
+                  name={t("home")}
+                  icon={() => <Home size={24} />}
+                  path={"/"}
+                />
+                <SidebarItem
+                  name={t("sites")}
+                  icon={() => <Hardhat size={24} />}
+                  path={"/projects"}
+                />
+                <SidebarItem
+                  name={t("reports")}
+                  icon={() => <Paper size={24} />}
+                  path={"/reports"}
+                />
+                <SidebarItem
+                  name={t("templates")}
+                  icon={() => <Papers size={24} />}
+                  path={"/templates"}
+                />
                 {currentUser.role === UserRole.Admin && (
-                  <SidebarItem name={t("companies")} path={"/companies"} />
+                  <SidebarItem
+                    name={t("companies")}
+                    icon={() => <Users />}
+                    path={"/companies"}
+                  />
                 )}
               </div>
               <div>
@@ -54,12 +75,14 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
 
 interface SidebarItemProps {
   name: string;
+  icon: FC;
   path: string;
 }
 
-const SidebarItem = ({ name, path }: SidebarItemProps) => {
+const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
   const currentPath = usePathname();
   const router = useRouter();
+  const Icon = icon;
   const style = currentPath === path ? "bg-base-300 rounded-md" : "";
 
   return (
@@ -68,35 +91,13 @@ const SidebarItem = ({ name, path }: SidebarItemProps) => {
         onClick={() => {
           router.push(path);
         }}
+        className="gap-3"
       >
+        <Icon />
         {name}
       </a>
     </li>
   );
 };
-
-// interface CompanySidebarItemProps {
-//   currentUser: CurrentUser;
-// }
-
-// const CompanySidebarItem: FC<CompanySidebarItemProps> = ({ currentUser }) => {
-//   const { t } = useTranslation();
-//   const { role, company } = currentUser;
-
-//   if (role === UserRole.Admin) {
-//     return <SidebarItem name={t("companies")} path={"/companies"} />;
-//   }
-
-//   if (company) {
-//     return (
-//       <SidebarItem
-//         name={t("company")}
-//         path={`/companies/${company.id}?name=${company.name}`}
-//       />
-//     );
-//   }
-
-//   return null;
-// };
 
 export default Sidebar;
