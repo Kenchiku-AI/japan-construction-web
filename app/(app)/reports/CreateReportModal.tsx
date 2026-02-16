@@ -6,7 +6,6 @@ import Modal from "@/app/ui/Modal";
 import { CreateReportRequest, ReportParentType, ReportTemplate } from "@/types";
 import Select from "@/app/ui/Select/Select";
 import { useApi } from "@/lib/api/ApiContext";
-import styles from "./page.module.css";
 
 interface CreateReportModalProps {
   templates: ReportTemplate[];
@@ -108,12 +107,13 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
             hidePlaceholder
             onChange={(id) => setTemplateId(id as string)}
             style={{ width: "auto", paddingRight: 40 }}
+            hideLabel
           />
         </div>
         <div
           className="flex items-end"
           style={{
-            height: showProjectSelect ? 66 : 0,
+            height: showProjectSelect ? 76 : 0,
             opacity: showProjectSelect ? 1 : 0,
             pointerEvents: showProjectSelect ? undefined : "none",
             transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
@@ -128,6 +128,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
               hidePlaceholder
               onChange={(id) => setProjectId(id as string)}
               style={{ width: "auto", paddingRight: 40 }}
+              hideLabel
             />
           </div>
         </div>

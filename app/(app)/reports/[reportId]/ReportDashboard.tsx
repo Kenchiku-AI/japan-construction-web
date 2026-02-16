@@ -42,43 +42,24 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         onEdit={(t) => {}}
         isEditable
       />
-      <div className="flex flex-col mt-12 mb-8 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 my-8">
         {report?.fields.map((field) => (
-          <ReportFieldRow
+          <Input
             key={field.id}
-            field={field}
-            onChange={(t) => {
-              setHasChanged(true);
-            }}
+            placeholder={field.name}
+            defaultValue={field.value}
+            onChange={(t) => setHasChanged(true)}
           />
         ))}
       </div>
-      <div className="flex">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Button
           label={t("update_report")}
           onClick={() => {}}
-          style={{ width: "50%" }}
           disabled={!hasChanged}
         />
       </div>
     </>
-  );
-};
-
-interface ReportFieldRowProps {
-  field: ReportField;
-  onChange: (value: string) => void;
-}
-
-const ReportFieldRow: FC<ReportFieldRowProps> = ({ field, onChange }) => {
-  return (
-    <div style={{ width: "50%" }}>
-      <Input
-        placeholder={field.name}
-        defaultValue={field.value}
-        onChange={(t) => onChange(t)}
-      />
-    </div>
   );
 };
 

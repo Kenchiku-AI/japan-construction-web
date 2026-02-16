@@ -1,5 +1,12 @@
 import { bgColor2, errorColor2 } from "@/lib/constants";
-import { FC, HTMLInputTypeAttribute, useEffect, useState } from "react";
+import {
+  CSSProperties,
+  FC,
+  HTMLInputTypeAttribute,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "./Input.module.css";
 
 interface InputProps {
@@ -12,6 +19,7 @@ interface InputProps {
   disabled?: boolean;
   autoFocus?: boolean;
   hideLabel?: boolean;
+  style?: CSSProperties;
 }
 
 export const Input: FC<InputProps> = ({
@@ -24,12 +32,24 @@ export const Input: FC<InputProps> = ({
   disabled,
   autoFocus,
   hideLabel,
+  style,
 }) => {
   const [isEmpty, setIsEmpty] = useState(!value && !defaultValue);
   const labelShown = !hideLabel && !isEmpty;
+  const valueRef = useRef(value);
+
+  useEffect(() => {
+    if (value) {
+      setIsEmpty(false);
+    } else if (!!valueRef.current) {
+      setIsEmpty(true);
+    }
+
+    valueRef.current = value;
+  }, [value]);
 
   return (
-    <div className="relative flex">
+    <div className="relative flex flex-1">
       <div className={styles.label} style={{ opacity: labelShown ? 1 : 0 }}>
         {placeholder}
       </div>
@@ -46,7 +66,7 @@ export const Input: FC<InputProps> = ({
         style={{
           backgroundColor: error ? errorColor2 : bgColor2,
           paddingTop: labelShown ? 16 : undefined,
-          height: labelShown ? 60 : 50,
+          ...style,
         }}
         disabled={disabled}
         autoFocus={autoFocus}

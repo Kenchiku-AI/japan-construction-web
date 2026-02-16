@@ -35,12 +35,12 @@ input,
 .select {
   border-width: 0;
   padding: 0 20px;
-  height: 50px;
+  height: 60px;
   border-radius: 10px;
   width: 100%;
   font-size: 18px;
   outline-color: var(--text-color-1);
-  transition: height 0.075s ease-in-out;
+  transition: padding-top 0.075s ease-in-out;
 }
 
 textarea {
@@ -51,7 +51,7 @@ textarea {
   font-size: 18px;
   height: 100px;
   outline-color: var(--text-color-1);
-  transition: height 0.075s ease-in-out;
+  transition: padding-top 0.075s ease-in-out;
 }
 
 button:hover {

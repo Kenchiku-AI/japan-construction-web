@@ -31,7 +31,8 @@ const Select: FC<SelectProps> = ({
   style,
 }) => {
   const [isUnselected, setIsUnselected] = useState(!options[0]?.value);
-  const labelShown = !hideLabel && !isUnselected;
+  const [isEmpty, setIsEmpty] = useState(false);
+  const labelShown = !hideLabel && !isEmpty;
   const valueRef = useRef(value);
 
   useEffect(() => {
@@ -39,11 +40,17 @@ const Select: FC<SelectProps> = ({
       setIsUnselected(true);
     }
 
+    if (value) {
+      setIsEmpty(false);
+    } else if (!!valueRef.current) {
+      setIsEmpty(true);
+    }
+
     valueRef.current = value;
   }, [value]);
 
   return (
-    <div className="relative flex flex-1">
+    <div className="relative flex">
       <div className={styles.label} style={{ opacity: labelShown ? 1 : 0 }}>
         {placeholder}
       </div>
@@ -63,7 +70,6 @@ const Select: FC<SelectProps> = ({
             "linear-gradient(45deg, #0000 50%, #23303B 50%), linear-gradient(135deg, #23303B 50%, #0000 50%)",
           color: isUnselected ? fontColor2 : fontColor1,
           paddingTop: labelShown ? 16 : undefined,
-          height: labelShown ? 60 : 50,
           ...style,
         }}
       >

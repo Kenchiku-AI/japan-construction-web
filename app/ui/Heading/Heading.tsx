@@ -24,6 +24,7 @@ export const Heading: FC<HeadingProps> = ({
   const [showEdit, setShowEdit] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
   const [displayTitle, setDisplayTitle] = useState(title);
+  const isUpdateNameEnabled = editedTitle && editedTitle !== displayTitle;
 
   useEffect(() => {
     setDisplayTitle(title);
@@ -38,20 +39,23 @@ export const Heading: FC<HeadingProps> = ({
             placeholder={placeholder}
             value={editedTitle}
             onChange={(t) => setEditedTitle(t)}
+            style={{ fontSize: 24, height: 50, padding: 12 }}
             autoFocus
             hideLabel
           />
           <div className="flex justify-end items-center gap-2">
             <div
-              className={displayTitle ? "cursor-pointer" : ""}
+              className={isUpdateNameEnabled ? "cursor-pointer" : ""}
               onClick={() => {
-                if (!displayTitle) return;
+                if (!isUpdateNameEnabled) return;
 
                 setShowEdit(false);
                 setDisplayTitle(editedTitle);
                 onEdit?.(editedTitle);
               }}
-              style={{ opacity: displayTitle ? 1 : 0.4 }}
+              style={{
+                opacity: isUpdateNameEnabled ? 1 : 0.4,
+              }}
             >
               <Check size={36} />
             </div>

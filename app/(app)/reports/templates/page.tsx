@@ -4,18 +4,18 @@ import { useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
-import CreateReportTemplateModal from "../CreateReportTemplateModal";
-import { useReports } from "../useReports";
+import CreateReportTemplateModal from "./CreateReportTemplateModal";
+import { useReportTemplates } from "./useReportTemplates";
 import { Plus } from "@/app/ui/Icons";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
-import ReportTemplatesList from "../ReportTemplatesList";
+import ReportTemplatesList from "./ReportTemplatesList";
 import { redirect } from "next/navigation";
 
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const { reportTemplates, createReportTemplate } = useReports();
+  const { reportTemplates, createReportTemplate } = useReportTemplates();
   const [showCreateReportTemplate, setShowCreateReportTemplate] =
     useState(false);
 

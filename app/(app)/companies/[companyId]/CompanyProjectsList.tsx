@@ -33,14 +33,13 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
         }}
       >
         {projects.map((p, i) => (
-          <>
+          <div key={p.id}>
             {i !== 0 && <Divider color={fontColor2} />}
             <div
               onClick={() => {
                 router.push(`/projects/${p.id}?name=${p.name}`);
               }}
               className="hover:opacity-50 cursor-pointer"
-              key={p.id}
             >
               <div className="flex items-center justify-between mx-4">
                 <div style={{ height: 68 }} className="flex items-center gap-4">
@@ -50,7 +49,7 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
                 <StatusLabel project={p} />
               </div>
             </div>
-          </>
+          </div>
         ))}
       </div>
       {projects.length > 5 && (

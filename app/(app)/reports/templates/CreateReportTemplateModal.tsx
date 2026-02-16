@@ -13,6 +13,8 @@ import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportTemplateFields, {
   ReportTemplateFieldInfo,
 } from "./ReportTemplateFields";
+import { useReportTemplate } from "./[reportTemplateId]/useReportTemplate";
+import { useReportTemplates } from "./useReportTemplates";
 
 interface CreateReportTemplateModalProps {
   isOpen: boolean;
@@ -33,11 +35,14 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
   const [uniqueBy, setUniqueBy] = useState<ReportUniqueBy>();
   const [fields, setFields] = useState<ReportTemplateFieldInfo[]>([]);
   const { t } = useTranslation();
+  const { parentTypeOptions, uniqueByOptions } = useReportTemplates();
 
   const reset = () => {
     setTimeout(() => {
       setName("");
       setDescription("");
+      setUniqueBy(undefined);
+      setParentType(ReportParentType.Project);
       setFields([]);
     }, 500);
   };
@@ -48,30 +53,17 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
     return fields.some((f) => !f.name || !f.description);
   }, [name, fields]);
 
-  const parentTypeOptions = [
-    { label: t("project"), value: "projects" },
-    { label: t("company"), value: "company" },
-  ];
-
-  const uniqueByOptions = [
-    { label: t("none") },
-    { label: t("day"), value: "day" },
-    { label: t("week"), value: "week" },
-    { label: t("month"), value: "month" },
-    { label: t("year"), value: "year" },
-  ];
-
   return (
     <Modal
       isOpen={isOpen}
       onClose={() => {
-        onClose();
         reset();
+        onClose();
       }}
       title={t("create_report_template")}
       subtitle={t("create_report_template_description")}
     >
-      <div className="mt-8 mb-16 flex flex-col gap-3">
+      <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("report_name")} onChange={setName} />
         <TextArea
           value={description}
@@ -82,24 +74,32 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
           <div className="text-xl">{t("type")}</div>
           <Select
             options={parentTypeOptions}
+            value={parentType}
             onChange={(pt) => {
               setParentType(pt as ReportParentType);
             }}
             style={{ width: "auto", paddingRight: 40 }}
+            hideLabel
           />
         </div>
         <div className="flex justify-between items-center">
           <div className="text-xl">{t("unique_by")}</div>
           <Select
             options={uniqueByOptions}
+            value={uniqueBy}
             onChange={(ub) => {
               setUniqueBy(ub as ReportUniqueBy);
             }}
             style={{ width: "auto", paddingRight: 40 }}
+            hideLabel
           />
         </div>
       </div>
-      <ReportTemplateFields fields={fields} onChange={(f) => setFields(f)} />
+      <ReportTemplateFields
+        fields={fields}
+        onChange={(f) => setFields(f)}
+        fullWidth
+      />
       <Button
         disabled={isSubmitDisabled}
         label={t("create")}
@@ -114,7 +114,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
 
           reset();
         }}
-        style={{ marginTop: 8 }}
+        style={{ marginTop: 24 }}
       />
     </Modal>
   );
