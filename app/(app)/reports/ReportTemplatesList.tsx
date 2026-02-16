@@ -38,22 +38,22 @@ const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {templates.map((tp) => (
-          <div className="md:ml-10 ml-6" key={tp.id}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6 my-4">
-                <Papers />
-                <div className="text-xl">{tp.name}</div>
+        {templates.map((tp, i) => (
+          <div key={tp.id}>
+            {i !== 0 && <Divider color={fontColor2} />}
+            <div
+              className="hover:opacity-50 cursor-pointer mx-4"
+              onClick={() =>
+                router.push(`/reports/templates/${tp.id}?name=${tp.name}`)
+              }
+            >
+              <div className="flex items-center justify-between">
+                <div style={{ height: 68 }} className="flex items-center gap-6">
+                  <Papers />
+                  <div className="text-xl">{tp.name}</div>
+                </div>
               </div>
-              <Button
-                variant="tertiary"
-                label={t("view")}
-                onClick={() => {
-                  router.push(`/reports/templates/${tp.id}?name=${tp.name}`);
-                }}
-              />
             </div>
-            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

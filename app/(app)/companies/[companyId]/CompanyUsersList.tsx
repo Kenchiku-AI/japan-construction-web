@@ -7,6 +7,7 @@ import { User } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { fontColor2 } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
+import { useRouter } from "next/navigation";
 
 interface CompanyUsersListProps {
   users: CompanyUser[];
@@ -14,6 +15,7 @@ interface CompanyUsersListProps {
 
 const CompanyUsersList: FC<CompanyUsersListProps> = ({ users }) => {
   const { t } = useTranslation();
+  const router = useRouter();
   const [showAll, setShowAll] = useState(false);
 
   if (!users.length) {
@@ -29,21 +31,30 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users }) => {
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {users.map((u) => (
-          <div className="md:ml-10 ml-6" key={u.id}>
-            <div className="flex items-center justify-between">
-              <div style={{ height: 68 }} className="flex items-center gap-6">
-                <User />
-                <div className="flex flex-col">
-                  <div className="text-xl">{`${u.first_name} ${u.last_name}`}</div>
-                  <div className={styles.subtitle}>{u.email}</div>
+        {users.map((u, i) => (
+          <div key={u.id}>
+            {i !== 0 && <Divider color={fontColor2} />}
+            <div
+              onClick={() => {
+                router.push(
+                  `/users/${u.id}?name=${u.first_name} ${u.last_name}`,
+                );
+              }}
+              className="hover:opacity-50 cursor-pointer mx-4"
+            >
+              <div className="flex items-center justify-between">
+                <div style={{ height: 68 }} className="flex items-center gap-4">
+                  <User />
+                  <div className="flex flex-col">
+                    <div className="text-xl">{`${u.first_name} ${u.last_name}`}</div>
+                    <div className={styles.subtitle}>{u.email}</div>
+                  </div>
                 </div>
+                {u.role === UserRole.Manager && (
+                  <div className={styles.subtitle}>{t("manager")}</div>
+                )}
               </div>
-              {u.role === UserRole.Manager && (
-                <div className={`${styles.subtitle} mr-8`}>{t("manager")}</div>
-              )}
             </div>
-            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

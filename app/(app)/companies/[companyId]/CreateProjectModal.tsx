@@ -4,7 +4,7 @@ import { InviteUserRequest } from "@/types/companies";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
-import Select from "@/app/ui/Select";
+import Select from "@/app/ui/Select/Select";
 import { UserRole } from "@/types";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 

@@ -3,7 +3,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import { ReportFieldType } from "@/types";
-import Select from "@/app/ui/Select";
+import Select from "@/app/ui/Select/Select";
 import { Plus, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { fontColor2 } from "@/lib/constants";
@@ -45,22 +45,25 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
           {t("empty_report_template_fields_description")}
         </div>
       )}
-      {fields.map((field, index) => (
-        <ReportTemplateFieldCell
-          key={`create_report_template_field_${index}`}
-          field={field}
-          index={index}
-          onChange={(f) => {
-            const newFields = [...fields];
-            newFields[index] = f;
-            onChange(newFields);
-          }}
-          onRemove={() => {
-            const newFields = fields.filter((_, i) => i !== index);
-            onChange(newFields);
-          }}
-        />
-      ))}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {fields.map((field, index) => (
+          <ReportTemplateFieldCell
+            key={`create_report_template_field_${index}_${field.name}`}
+            field={field}
+            index={index}
+            onChange={(f) => {
+              const newFields = [...fields];
+              newFields[index] = f;
+              onChange(newFields);
+            }}
+            onRemove={() => {
+              const newFields = fields.filter((_, i) => i !== index);
+              console.log("new fields", newFields);
+              onChange(newFields);
+            }}
+          />
+        ))}
+      </div>
     </>
   );
 };
@@ -109,7 +112,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
   return (
     <div
       key={`create_report_template_field_${index}`}
-      className="flex flex-col ml-4 my-4"
+      className="flex flex-col mt-2"
     >
       <div className="flex justify-between" style={{ alignItems: "flex-end" }}>
         <div className={styles.subtitle}>{`${t("field")} ${index + 1}`}</div>
@@ -117,7 +120,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
           <Trash />
         </div>
       </div>
-      <div className="flex flex-col gap-2 mt-3 mb-6">
+      <div className="flex flex-col gap-2 mt-3 mb-6" style={{ height: 194 }}>
         <Input
           defaultValue={name}
           placeholder={t("name")}

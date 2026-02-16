@@ -40,9 +40,9 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                   path={"/reports"}
                 />
                 <SidebarItem
-                  name={t("templates")}
+                  name={t("report_templates")}
                   icon={() => <Papers size={24} />}
-                  path={"/templates"}
+                  path={"/reports/templates"}
                 />
                 {currentUser.role === UserRole.Admin && (
                   <SidebarItem

@@ -8,7 +8,7 @@ import {
   ReportParentType,
   ReportUniqueBy,
 } from "@/types";
-import Select from "@/app/ui/Select";
+import Select from "@/app/ui/Select/Select";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportTemplateFields, {
   ReportTemplateFieldInfo,

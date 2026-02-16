@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { CreateReportRequest, ReportParentType, ReportTemplate } from "@/types";
-import Select from "@/app/ui/Select";
+import Select from "@/app/ui/Select/Select";
 import { useApi } from "@/lib/api/ApiContext";
 import styles from "./page.module.css";
 

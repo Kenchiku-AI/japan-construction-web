@@ -58,11 +58,10 @@ const ReportDashboard: FC<ReportTemplateDashboardProps> = ({
             fields={fields}
             onChange={(f) => setFields(f)}
           />
-          <div className="flex">
+          <div className="flex w-full lg:w-1/2 mt-8">
             <Button
               label={t("update_report_template")}
               onClick={() => {}}
-              style={{ width: "50%" }}
               disabled={!hasChanged}
             />
           </div>

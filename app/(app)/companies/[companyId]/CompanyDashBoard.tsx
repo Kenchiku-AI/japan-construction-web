@@ -48,42 +48,45 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onEdit={(n) => {}}
       />
       {company && (
-        <>
-          <div className="flex justify-between mt-8">
-            <div className="text-2xl self-end">{t("projects")}</div>
-            {currentUser?.role === UserRole.Admin && (
-              <Button
-                variant="secondary"
-                label={t("create_project")}
-                iconLeft={() => <Plus />}
-                onClick={() => {
-                  setShowCreateProject(true);
-                }}
-                style={{ height: 40 }}
-              />
-            )}
+        <div className="flex flex-col gap-12">
+          <div>
+            <div className="flex justify-between mt-8">
+              <div className="text-2xl self-end">{t("projects")}</div>
+              {currentUser?.role === UserRole.Admin && (
+                <Button
+                  variant="secondary"
+                  label={t("create_project")}
+                  iconLeft={() => <Plus />}
+                  onClick={() => {
+                    setShowCreateProject(true);
+                  }}
+                  style={{ height: 40 }}
+                />
+              )}
+            </div>
+            <Divider />
+            <CompanyProjectsList projects={company.projects} />
           </div>
-          <Divider />
-          <CompanyProjectsList projects={company.projects} />
-
-          <div className="flex justify-between mt-8">
-            <div className="text-2xl self-end">{t("users")}</div>
-            {(currentUser?.role === UserRole.Admin ||
-              currentUser?.role === UserRole.Manager) && (
-              <Button
-                variant="secondary"
-                label={t("invite_user")}
-                iconLeft={() => <Plus />}
-                onClick={() => {
-                  setShowInviteUser(true);
-                }}
-                style={{ height: 40 }}
-              />
-            )}
+          <div>
+            <div className="flex justify-between">
+              <div className="text-2xl self-end">{t("users")}</div>
+              {(currentUser?.role === UserRole.Admin ||
+                currentUser?.role === UserRole.Manager) && (
+                <Button
+                  variant="secondary"
+                  label={t("invite_user")}
+                  iconLeft={() => <Plus />}
+                  onClick={() => {
+                    setShowInviteUser(true);
+                  }}
+                  style={{ height: 40 }}
+                />
+              )}
+            </div>
+            <Divider />
+            <CompanyUsersList users={company.users} />
           </div>
-          <Divider />
-          <CompanyUsersList users={company.users} />
-        </>
+        </div>
       )}
       <InviteUserModal
         isOpen={showInviteUser}

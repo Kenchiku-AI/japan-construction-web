@@ -28,12 +28,8 @@ export const Input: FC<InputProps> = ({
   const [isEmpty, setIsEmpty] = useState(!value && !defaultValue);
   const labelShown = !hideLabel && !isEmpty;
 
-  useEffect(() => {
-    setIsEmpty(!value);
-  }, [value]);
-
   return (
-    <div className="relative flex flex-1">
+    <div className="relative flex">
       <div className={styles.label} style={{ opacity: labelShown ? 1 : 0 }}>
         {placeholder}
       </div>

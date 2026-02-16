@@ -31,6 +31,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     redirect("/");
   }
 
+  console.log("report fields", report?.fields);
+
   return (
     <>
       <Heading

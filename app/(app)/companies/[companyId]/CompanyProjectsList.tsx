@@ -14,6 +14,7 @@ interface CompanyProjectsListProps {
 
 const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
   const { t } = useTranslation();
+  const router = useRouter();
   const [showAll, setShowAll] = useState(false);
 
   if (!projects.length) {
@@ -31,17 +32,25 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {projects.map((p) => (
-          <div className="md:ml-10 ml-6" key={p.id}>
-            <div className="flex items-center justify-between mr-8">
-              <div style={{ height: 68 }} className="flex items-center gap-6">
-                <Hardhat />
-                <div className="text-xl">{p.name}</div>
+        {projects.map((p, i) => (
+          <>
+            {i !== 0 && <Divider color={fontColor2} />}
+            <div
+              onClick={() => {
+                router.push(`/projects/${p.id}?name=${p.name}`);
+              }}
+              className="hover:opacity-50 cursor-pointer"
+              key={p.id}
+            >
+              <div className="flex items-center justify-between mx-4">
+                <div style={{ height: 68 }} className="flex items-center gap-4">
+                  <Hardhat />
+                  <div className="text-xl">{p.name}</div>
+                </div>
+                <StatusLabel project={p} />
               </div>
-              <ViewProjectButton project={p} />
             </div>
-            <Divider color={fontColor2} />
-          </div>
+          </>
         ))}
       </div>
       {projects.length > 5 && (
@@ -58,9 +67,8 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
   );
 };
 
-const ViewProjectButton: FC<{ project: Project }> = ({ project }) => {
+const StatusLabel: FC<{ project: Project }> = ({ project }) => {
   const { t } = useTranslation();
-  const router = useRouter();
 
   if (project.status === ProjectStatus.Requested) {
     return <div className={`${styles.subtitle} mr-8`}>{t("requested")}</div>;
@@ -70,15 +78,7 @@ const ViewProjectButton: FC<{ project: Project }> = ({ project }) => {
     return <div className={`${styles.subtitle} mr-8`}>{t("completed")}</div>;
   }
 
-  return (
-    <Button
-      variant="tertiary"
-      label={t("view")}
-      onClick={() => {
-        router.push(`/projects/${project.id}?name=${project.name}`);
-      }}
-    />
-  );
+  return null;
 };
 
 export default CompanyProjectsList;

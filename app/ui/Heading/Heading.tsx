@@ -30,7 +30,7 @@ export const Heading: FC<HeadingProps> = ({
   }, [title]);
 
   return (
-    <>
+    <div>
       <div className={styles.topLabel}>{topLabel}</div>
       {showEdit ? (
         <div className="flex gap-4" style={{ marginTop: -2 }}>
@@ -82,6 +82,6 @@ export const Heading: FC<HeadingProps> = ({
         </div>
       )}
       {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
-    </>
+    </div>
   );
 };
