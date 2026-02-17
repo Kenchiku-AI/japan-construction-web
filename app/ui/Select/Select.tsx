@@ -46,7 +46,7 @@ const Select: FC<SelectProps> = ({
   const valueRef = useRef(value);
 
   const backgroundColor = useMemo(() => {
-    if (open) return bgColor1;
+    // if (open) return bgColor1;
     if (error) return errorColor2;
     if (disabled) return bgColor3;
 

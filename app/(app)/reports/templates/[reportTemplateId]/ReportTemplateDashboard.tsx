@@ -16,7 +16,6 @@ import Select from "@/app/ui/Select/Select";
 import { useReportTemplates } from "../useReportTemplates";
 import { Plus } from "@/app/ui/Icons";
 import ShareReportTemplateModal from "./ShareReportTemplateModal";
-import { useModal } from "@/lib/modal/ModalContext";
 
 interface ReportTemplateDashboardProps {
   reportTemplateId: string;
@@ -25,10 +24,10 @@ interface ReportTemplateDashboardProps {
 const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
   reportTemplateId,
 }) => {
-  const { currentUser, updateReportTemplate, shareReportTemplate } = useApi();
+  const { currentUser } = useApi();
   const { t } = useTranslation();
-  const { showModal } = useModal();
-  const { reportTemplate } = useReportTemplate(reportTemplateId);
+  const { reportTemplate, updateReportTemplate, shareReportTemplate, loading } =
+    useReportTemplate(reportTemplateId);
   const { parentTypeOptions, uniqueByOptions } = useReportTemplates();
   const [fields, setFields] = useState<ReportTemplateFieldInfo[]>([]);
   const fieldsRef = useRef<ReportTemplateFieldInfo[]>([]);
@@ -36,7 +35,6 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
   const [parentType, setParentType] = useState<ReportParentType>();
   const [uniqueBy, setUniqueBy] = useState<ReportUniqueBy>();
   const [showShare, setShowShare] = useState(false);
-  const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const isLoaded = useRef(false);
   const canShare =
@@ -90,7 +88,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
         topLabel={t("report_template")}
         placeholder={t("report_template_name")}
         onEdit={(name) => {
-          updateReportTemplate(reportTemplateId, { name });
+          updateReportTemplate({ name }, true);
         }}
         isEditable={!!reportTemplate && canEdit}
       />
@@ -143,25 +141,13 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
               <Button
                 label={t("update_report_template")}
                 onClick={async () => {
-                  setLoading(true);
-
                   const request = {
                     description,
                     parent_type: parentType,
                     unique_by: uniqueBy,
                     fields,
                   };
-
-                  try {
-                    await updateReportTemplate(reportTemplateId, request);
-                  } catch (err) {
-                    showModal({
-                      title: t("error"),
-                      subtitle: t("update_report_template_error_description"),
-                    });
-                  } finally {
-                    setLoading(false);
-                  }
+                  updateReportTemplate(request);
                 }}
                 disabled={isDisabled}
                 loading={loading}
@@ -178,21 +164,10 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
           }}
           onShare={async (companyId) => {
             setShowShare(false);
-            setLoading(true);
-
-            try {
-              await shareReportTemplate({
-                company_id: companyId,
-                template_id: reportTemplateId,
-              });
-            } catch (err) {
-              showModal({
-                title: t("error"),
-                subtitle: t("share_report_template_error_description"),
-              });
-            } finally {
-              setLoading(false);
-            }
+            shareReportTemplate({
+              company_id: companyId,
+              template_id: reportTemplateId,
+            });
           }}
         />
       )}

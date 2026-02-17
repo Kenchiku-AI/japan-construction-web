@@ -7,6 +7,7 @@ import {
   CreateProjectRequest,
   Project,
   ShareReportTemplateRequest,
+  ReportRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -139,6 +140,10 @@ export const useApiData = () => {
     async createReport(request: CreateReportRequest) {
       const url = "/reports";
       return call(() => http.post<Report>(url, request));
+    },
+    async updateReport(reportId: string, request: ReportRequest) {
+      const url = `/reports/${reportId}`;
+      return call(() => http.patch<Report>(url, request));
     },
     async getReportTemplates() {
       const url = `/reports/templates`;

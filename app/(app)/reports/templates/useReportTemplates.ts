@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
-import { CreateReportTemplateRequest, ReportTemplate } from "@/types/reports";
+import { ReportTemplateRequest, ReportTemplate } from "@/types/reports";
 import { UserRole } from "@/types";
 import { useTranslation } from "react-i18next";
 
@@ -33,7 +33,7 @@ export const useReportTemplates = () => {
   }, [setReportTemplates]);
 
   const createReportTemplate = useCallback(
-    async (request: CreateReportTemplateRequest) => {
+    async (request: ReportTemplateRequest) => {
       setLoading(true);
 
       try {

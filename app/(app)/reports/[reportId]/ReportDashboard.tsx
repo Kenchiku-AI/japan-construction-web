@@ -2,10 +2,10 @@
 
 import { useApi } from "@/lib/api/ApiContext";
 import { redirect, useSearchParams } from "next/navigation";
-import { FC, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReport } from "./useReport";
-import { UserRole } from "@/types";
+import { ReportFieldValues, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
@@ -17,9 +17,29 @@ interface ReportDashboardProps {
 const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const { currentUser } = useApi();
   const { t } = useTranslation();
-  const { report } = useReport(reportId);
+  const { report, updateReport, loading } = useReport(reportId);
   const searchParams = useSearchParams();
-  const [hasChanged, setHasChanged] = useState(false);
+  const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
+
+  useEffect(() => {
+    const newValues: ReportFieldValues = {};
+
+    report?.fields.forEach((f) => {
+      newValues[f.id] = f.value;
+    });
+
+    setFieldValues(newValues);
+  }, [report]);
+
+  const isDisabled = useMemo(() => {
+    if (!fieldValues || !report) return true;
+
+    const missingField = report.fields.some((f) => !fieldValues[f.id]);
+    if (missingField) return true;
+
+    const isChanged = report.fields.some((f) => f.value !== fieldValues[f.id]);
+    return !isChanged;
+  }, [report, fieldValues]);
 
   const shouldRedirect =
     currentUser?.company &&
@@ -37,7 +57,9 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         title={report?.name ?? searchParams.get("name") ?? ""}
         topLabel={t("report")}
         placeholder={t("report_name")}
-        onEdit={(t) => {}}
+        onEdit={(name) => {
+          updateReport({ name }, true);
+        }}
         isEditable
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 my-8">
@@ -46,15 +68,24 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             key={field.id}
             placeholder={field.name}
             defaultValue={field.value}
-            onChange={(t) => setHasChanged(true)}
+            onChange={(value) => {
+              setFieldValues((prev) => {
+                const newValues = { ...prev };
+                newValues[field.id] = value;
+                return newValues;
+              });
+            }}
           />
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Button
           label={t("update_report")}
-          onClick={() => {}}
-          disabled={!hasChanged}
+          onClick={() => {
+            updateReport({ field_values: fieldValues });
+          }}
+          disabled={isDisabled}
+          loading={loading}
         />
       </div>
     </>

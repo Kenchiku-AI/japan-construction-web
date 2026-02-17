@@ -25,6 +25,13 @@ export type CreateReportRequest = {
   name: string;
 };
 
+export type ReportRequest = {
+  name?: string;
+  field_values?: ReportFieldValues;
+};
+
+export type ReportFieldValues = { [key: string]: string };
+
 export type ReportTemplate = {
   id: string;
   name: string;
