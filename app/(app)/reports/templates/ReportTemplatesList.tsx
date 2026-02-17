@@ -11,17 +11,19 @@ import { Button } from "@/app/ui/Button/Button";
 interface ReportTemplatesListProps {
   templates: ReportTemplate[];
   isCollapsible?: boolean;
+  isEmpty?: boolean;
 }
 
 const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
   templates,
   isCollapsible,
+  isEmpty,
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [showAll, setShowAll] = useState(!isCollapsible);
 
-  if (!templates.length) {
+  if (isEmpty) {
     return (
       <div className={styles.empty}>
         {t("empty_report_templates_description")}

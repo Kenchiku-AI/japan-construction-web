@@ -15,7 +15,7 @@ import { UserRole } from "@/types";
 const ReportsPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const { reports, createReport } = useReports();
+  const { reports, createReport, loading } = useReports();
   const { reportTemplates } = useReportTemplates();
   const [showCreateReport, setShowCreateReport] = useState(false);
 
@@ -39,7 +39,10 @@ const ReportsPage = () => {
           }}
         />
       </div>
-      <ReportsList reports={reports ?? []} />
+      <ReportsList
+        reports={reports ?? []}
+        isEmpty={!loading && reports?.length === 0}
+      />
       <CreateReportModal
         templates={reportTemplates ?? []}
         isOpen={showCreateReport}

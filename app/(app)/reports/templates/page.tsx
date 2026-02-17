@@ -15,7 +15,8 @@ import { redirect } from "next/navigation";
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const { reportTemplates, createReportTemplate } = useReportTemplates();
+  const { reportTemplates, createReportTemplate, loading } =
+    useReportTemplates();
   const [showCreateReportTemplate, setShowCreateReportTemplate] =
     useState(false);
 
@@ -36,7 +37,10 @@ const ReportTemplatesPage = () => {
           }}
         />
       </div>
-      <ReportTemplatesList templates={reportTemplates ?? []} />
+      <ReportTemplatesList
+        templates={reportTemplates ?? []}
+        isEmpty={!loading && reportTemplates?.length === 0}
+      />
       <CreateReportTemplateModal
         isOpen={showCreateReportTemplate}
         onClose={() => {
