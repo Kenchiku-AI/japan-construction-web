@@ -13,12 +13,14 @@ interface ReportTemplateFieldsProps {
   fields: ReportTemplateFieldInfo[];
   onChange: (fields: ReportTemplateFieldInfo[]) => void;
   fullWidth?: boolean;
+  disabled?: boolean;
 }
 
 const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
   fields,
   onChange,
   fullWidth,
+  disabled,
 }) => {
   const { t } = useTranslation();
 
@@ -26,21 +28,23 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
     <>
       <div className="flex justify-between">
         <div className="text-xl self-end">{t("fields")}</div>
-        <Button
-          variant="tertiary"
-          onClick={() => {
-            const newField = {
-              id: crypto.randomUUID(),
-              name: "",
-              description: "",
-              type: ReportFieldType.String,
-            };
-            onChange([...fields, newField]);
-          }}
-          label={t("add_field")}
-          iconLeft={() => <Plus />}
-          style={{ height: 28 }}
-        />
+        {!disabled && (
+          <Button
+            variant="tertiary"
+            onClick={() => {
+              const newField = {
+                id: crypto.randomUUID(),
+                name: "",
+                description: "",
+                type: ReportFieldType.String,
+              };
+              onChange([...fields, newField]);
+            }}
+            label={t("add_field")}
+            iconLeft={() => <Plus />}
+            style={{ height: 28 }}
+          />
+        )}
       </div>
       <Divider style={{ margin: "8px 0" }} />
       {!fields.length && (
@@ -63,9 +67,9 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
             }}
             onRemove={() => {
               const newFields = fields.filter((_, i) => i !== index);
-              console.log("new fields", newFields);
               onChange(newFields);
             }}
+            disabled={disabled}
           />
         ))}
       </div>
@@ -85,6 +89,7 @@ interface ReportTemplateFieldCellProps {
   index: number;
   onChange: (field: ReportTemplateFieldInfo) => void;
   onRemove: () => void;
+  disabled?: boolean;
 }
 
 const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
@@ -92,6 +97,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
   index,
   onChange,
   onRemove,
+  disabled,
 }) => {
   const { t } = useTranslation();
   const { name, description, type } = field;
@@ -126,9 +132,11 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
           style={{ alignItems: "flex-end" }}
         >
           <div className={styles.subtitle}>{`${t("field")} ${index + 1}`}</div>
-          <div className="cursor-pointer" onClick={onRemove}>
-            <Trash />
-          </div>
+          {!disabled && (
+            <div className="cursor-pointer" onClick={onRemove}>
+              <Trash />
+            </div>
+          )}
         </div>
         <div className="flex flex-col gap-2 mt-3 mb-6">
           <Input
@@ -137,6 +145,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
             onChange={(n) => {
               onChange({ ...field, name: n });
             }}
+            disabled={disabled}
           />
           <Input
             defaultValue={description}
@@ -144,6 +153,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
             onChange={(d) => {
               onChange({ ...field, description: d });
             }}
+            disabled={disabled}
           />
           <Select
             defaultValue={type}
@@ -152,6 +162,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
             onChange={(t) => {
               onChange({ ...field, type: t as ReportFieldType });
             }}
+            disabled={disabled}
           />
         </div>
       </div>

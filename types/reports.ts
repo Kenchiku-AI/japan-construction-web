@@ -32,6 +32,7 @@ export type ReportTemplate = {
   parent_type: ReportParentType;
   unique_by: ReportUniqueBy;
   fields: ReportTemplateField[];
+  is_global: boolean;
 };
 
 export type ReportTemplateField = {
@@ -42,19 +43,23 @@ export type ReportTemplateField = {
   type: ReportFieldType;
 };
 
-export type CreateReportTemplateRequest = {
-  name: string;
+export type ReportTemplateRequest = {
+  name?: string;
   description?: string;
-  fields: CreateReportTemplateRequestField[];
-  parent_type: ReportParentType;
+  fields?: ReportTemplateRequestField[];
+  parent_type?: ReportParentType;
   unique_by?: ReportUniqueBy;
-  company_id?: string;
 };
 
-export type CreateReportTemplateRequestField = {
+export type ReportTemplateRequestField = {
   name: string;
   description: string;
   type: ReportFieldType;
+};
+
+export type ShareReportTemplateRequest = {
+  company_id: string;
+  template_id: string;
 };
 
 export enum ReportParentType {

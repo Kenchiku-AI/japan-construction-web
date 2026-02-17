@@ -6,6 +6,7 @@ import {
   CurrentUser,
   CreateProjectRequest,
   Project,
+  ShareReportTemplateRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -16,7 +17,7 @@ import {
   Report,
   CreateReportRequest,
   ReportTemplate,
-  CreateReportTemplateRequest,
+  ReportTemplateRequest,
 } from "@/types";
 import { authRoutes } from "../constants";
 
@@ -107,6 +108,10 @@ export const useApiData = () => {
       const url = "/companies";
       return call(() => http.get<Company[]>(url));
     },
+    async searchCompanies(query: string) {
+      const url = `/companies/search?q=${query}`;
+      return call(() => http.get<Company[]>(url));
+    },
     async getCompany(companyId: string) {
       const url = `/companies/${companyId}`;
       return call(() => http.get<Company>(url));
@@ -143,9 +148,20 @@ export const useApiData = () => {
       const url = `/reports/templates/${reportTemplateId}`;
       return call(() => http.get<ReportTemplate>(url));
     },
-    async createReportTemplate(request: CreateReportTemplateRequest) {
+    async createReportTemplate(request: ReportTemplateRequest) {
       const url = "/reports/templates";
       return call(() => http.post<ReportTemplate>(url, request));
+    },
+    async updateReportTemplate(
+      reportTemplateId: string,
+      request: ReportTemplateRequest,
+    ) {
+      const url = `/reports/templates/${reportTemplateId}`;
+      return call(() => http.patch<ReportTemplate>(url, request));
+    },
+    async shareReportTemplate(request: ReportTemplateRequest) {
+      const url = "/reports/templates/share";
+      return call(() => http.post<ShareReportTemplateRequest>(url, request));
     },
     async inviteUser(request: InviteUserRequest) {
       const url = "/invitations";

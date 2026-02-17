@@ -1,4 +1,4 @@
-import { bgColor2, errorColor2 } from "@/lib/constants";
+import { bgColor2, bgColor3, errorColor2 } from "@/lib/constants";
 import { FC, useEffect, useRef, useState } from "react";
 import styles from "./TextArea.module.css";
 
@@ -8,6 +8,7 @@ interface TextAreaProps {
   defaultValue?: string;
   onChange?: (text: string) => void;
   error?: boolean;
+  disabled?: boolean;
 }
 
 export const TextArea: FC<TextAreaProps> = ({
@@ -16,6 +17,7 @@ export const TextArea: FC<TextAreaProps> = ({
   defaultValue,
   onChange,
   error,
+  disabled,
 }) => {
   const [isEmpty, setIsEmpty] = useState(!value && !defaultValue);
   const valueRef = useRef(value);
@@ -42,8 +44,9 @@ export const TextArea: FC<TextAreaProps> = ({
           onChange?.(e.target.value);
         }}
         style={{
-          backgroundColor: error ? errorColor2 : bgColor2,
+          backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,
           paddingTop: isEmpty ? undefined : 26,
+          pointerEvents: disabled ? "none" : undefined,
         }}
       />
     </div>

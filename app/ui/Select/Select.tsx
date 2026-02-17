@@ -1,4 +1,10 @@
-import { bgColor2, errorColor2, fontColor1, fontColor2 } from "@/lib/constants";
+import {
+  bgColor2,
+  bgColor3,
+  errorColor2,
+  fontColor1,
+  fontColor2,
+} from "@/lib/constants";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 import styles from "./Select.module.css";
 
@@ -17,6 +23,7 @@ interface SelectProps {
   hideLabel?: boolean;
   error?: boolean;
   style?: CSSProperties;
+  disabled?: boolean;
 }
 
 const Select: FC<SelectProps> = ({
@@ -29,6 +36,7 @@ const Select: FC<SelectProps> = ({
   hideLabel,
   error,
   style,
+  disabled,
 }) => {
   const [isUnselected, setIsUnselected] = useState(!options[0]?.value);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -65,11 +73,13 @@ const Select: FC<SelectProps> = ({
           setIsUnselected(!option?.value);
         }}
         style={{
-          backgroundColor: error ? errorColor2 : bgColor2,
-          backgroundImage:
-            "linear-gradient(45deg, #0000 50%, #23303B 50%), linear-gradient(135deg, #23303B 50%, #0000 50%)",
+          backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,
+          backgroundImage: disabled
+            ? "none"
+            : "linear-gradient(45deg, #0000 50%, #23303B 50%), linear-gradient(135deg, #23303B 50%, #0000 50%)",
           color: isUnselected ? fontColor2 : fontColor1,
           paddingTop: labelShown ? 16 : undefined,
+          pointerEvents: disabled ? "none" : undefined,
           ...style,
         }}
       >

@@ -44,10 +44,7 @@ const ReportTemplatesPage = () => {
         }}
         onSubmit={(request) => {
           setShowCreateReportTemplate(false);
-          createReportTemplate({
-            ...request,
-            company_id: currentUser?.company?.id,
-          });
+          createReportTemplate(request);
         }}
       />
     </>

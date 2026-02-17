@@ -1,4 +1,4 @@
-import { bgColor2, errorColor2 } from "@/lib/constants";
+import { bgColor2, bgColor3, errorColor2 } from "@/lib/constants";
 import {
   CSSProperties,
   FC,
@@ -64,11 +64,11 @@ export const Input: FC<InputProps> = ({
           setIsEmpty(!e.target.value);
         }}
         style={{
-          backgroundColor: error ? errorColor2 : bgColor2,
+          backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,
           paddingTop: labelShown ? 16 : undefined,
+          pointerEvents: disabled ? "none" : undefined,
           ...style,
         }}
-        disabled={disabled}
         autoFocus={autoFocus}
       />
     </div>

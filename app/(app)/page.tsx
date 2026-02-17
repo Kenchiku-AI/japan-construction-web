@@ -1,6 +1,5 @@
 "use client";
 
-import { UserRole } from "@/types";
 import { useApi } from "../../lib/api/ApiContext";
 import CompanyDashboard from "./companies/[companyId]/CompanyDashboard";
 

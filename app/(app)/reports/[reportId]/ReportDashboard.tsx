@@ -5,7 +5,7 @@ import { redirect, useSearchParams } from "next/navigation";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReport } from "./useReport";
-import { ReportField, UserRole } from "@/types";
+import { UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
@@ -30,8 +30,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   if (shouldRedirect) {
     redirect("/");
   }
-
-  console.log("report fields", report?.fields);
 
   return (
     <>
