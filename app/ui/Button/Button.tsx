@@ -1,5 +1,6 @@
 import { FC, useMemo, CSSProperties } from "react";
 import styles from "./Button.module.css";
+import { buttonColor } from "@/lib/constants";
 
 interface ButtonProps {
   label: string;
@@ -9,6 +10,7 @@ interface ButtonProps {
   iconLeft?: FC;
   iconRight?: FC;
   style?: CSSProperties;
+  loading?: boolean;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -19,6 +21,7 @@ export const Button: FC<ButtonProps> = ({
   iconLeft,
   iconRight,
   style,
+  loading,
 }) => {
   const IconLeft = iconLeft;
   const IconRight = iconRight;
@@ -35,19 +38,39 @@ export const Button: FC<ButtonProps> = ({
   }, [variant]);
 
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`btn ${containerStyle}`}
-      style={{
-        paddingLeft: variant === "tertiary" ? 0 : iconLeft ? 8 : 16,
-        paddingRight: variant === "tertiary" ? 0 : iconRight ? 8 : 16,
-        ...style,
-      }}
-    >
-      {IconLeft && <IconLeft />}
-      <div className={labelStyle}>{label}</div>
-      {IconRight && <IconRight />}
-    </button>
+    <>
+      <button
+        onClick={onClick}
+        disabled={disabled || loading}
+        className={`btn ${containerStyle}`}
+        style={{
+          paddingLeft: variant === "tertiary" ? 0 : iconLeft ? 8 : 16,
+          paddingRight: variant === "tertiary" ? 0 : iconRight ? 8 : 16,
+          ...style,
+        }}
+      >
+        {loading && (
+          <span
+            className={`loading loading-spinner absolute ${labelStyle}`}
+          ></span>
+        )}
+        {IconLeft && (
+          <div style={{ opacity: loading ? 0 : undefined }}>
+            <IconLeft />
+          </div>
+        )}
+        <div
+          className={labelStyle}
+          style={{ opacity: loading ? 0 : undefined }}
+        >
+          {label}
+        </div>
+        {IconRight && (
+          <div style={{ opacity: loading ? 0 : undefined }}>
+            <IconRight />
+          </div>
+        )}
+      </button>
+    </>
   );
 };

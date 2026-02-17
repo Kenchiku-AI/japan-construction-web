@@ -1,11 +1,12 @@
 import {
+  bgColor1,
   bgColor2,
   bgColor3,
   errorColor2,
   fontColor1,
   fontColor2,
 } from "@/lib/constants";
-import { CSSProperties, FC, useEffect, useRef, useState } from "react";
+import { CSSProperties, FC, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Select.module.css";
 
 interface SelectOption {
@@ -40,8 +41,17 @@ const Select: FC<SelectProps> = ({
 }) => {
   const [isUnselected, setIsUnselected] = useState(!options[0]?.value);
   const [isEmpty, setIsEmpty] = useState(false);
+  const [open, setOpen] = useState(false);
   const labelShown = !hideLabel && !isEmpty;
   const valueRef = useRef(value);
+
+  const backgroundColor = useMemo(() => {
+    if (open) return bgColor1;
+    if (error) return errorColor2;
+    if (disabled) return bgColor3;
+
+    return bgColor2;
+  }, [error, disabled, open]);
 
   useEffect(() => {
     if (valueRef.current && !value) {
@@ -63,9 +73,11 @@ const Select: FC<SelectProps> = ({
         {placeholder}
       </div>
       <select
-        className="select"
+        className="select cursor-pointer"
         value={value}
         defaultValue={defaultValue}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           const { value } = e.target;
           const option = options.find((o) => o.value === value);
@@ -73,7 +85,7 @@ const Select: FC<SelectProps> = ({
           setIsUnselected(!option?.value);
         }}
         style={{
-          backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,
+          backgroundColor,
           backgroundImage: disabled
             ? "none"
             : "linear-gradient(45deg, #0000 50%, #23303B 50%), linear-gradient(135deg, #23303B 50%, #0000 50%)",

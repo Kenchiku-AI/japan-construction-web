@@ -159,9 +159,9 @@ export const useApiData = () => {
       const url = `/reports/templates/${reportTemplateId}`;
       return call(() => http.patch<ReportTemplate>(url, request));
     },
-    async shareReportTemplate(request: ReportTemplateRequest) {
+    async shareReportTemplate(request: ShareReportTemplateRequest) {
       const url = "/reports/templates/share";
-      return call(() => http.post<ShareReportTemplateRequest>(url, request));
+      return call(() => http.post(url, request));
     },
     async inviteUser(request: InviteUserRequest) {
       const url = "/invitations";

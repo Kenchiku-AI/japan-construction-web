@@ -81,7 +81,9 @@ const ShareReportTemplateModal: FC<ShareReportTemplateModalProps> = ({
       </div>
       <div className="mt-6 mb-2">
         {!companies.length && (
-          <div className={styles.empty}>{t("empty_companies_description")}</div>
+          <div className={styles.empty}>
+            {t("empty_companies_search_description")}
+          </div>
         )}
         {companies.map((c, i) => (
           <div key={c.id}>
@@ -96,6 +98,7 @@ const ShareReportTemplateModal: FC<ShareReportTemplateModalProps> = ({
             >
               <div className="flex items-center justify-between">
                 <div style={{ height: 68 }} className="flex items-center gap-4">
+                  <Users />
                   <div className="flex flex-col">
                     <div className="text-xl">{c.name}</div>
                     <div className={styles.subtitle}>{c.corporate_number}</div>

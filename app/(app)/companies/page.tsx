@@ -40,15 +40,31 @@ const CompaniesPage = () => {
         />
       </div>
       <div className="flex flex-col mt-10">
-        {companies?.length === 0 && <div></div>}
-        {companies?.map((c) => (
-          <CompanyListItem
-            key={c.id}
-            company={c}
-            onView={() => {
-              router.push(`/companies/${c.id}?name=${c.name}`);
-            }}
-          />
+        {companies?.length === 0 && (
+          <div className={styles.empty}>{t("empty_companies_description")}</div>
+        )}
+        {companies?.map((c, i) => (
+          <div key={c.id}>
+            {i !== 0 && <Divider color={fontColor2} />}
+            <div
+              className="hover:opacity-50 cursor-pointer mx-4"
+              onClick={() => {
+                router.push(`/companies/${c.id}?name=${c.name}`);
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div style={{ height: 68 }} className="flex items-center gap-6">
+                  <Users />
+                  <div>
+                    <div className="text-xl">{c.name}</div>
+                    <div className={styles.corporateNumber}>
+                      {c.corporate_number}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
       <CreateCompanyModal
@@ -61,32 +77,6 @@ const CompaniesPage = () => {
           createCompany(request);
         }}
       />
-    </>
-  );
-};
-
-interface CompanyListItemProps {
-  company: Company;
-  onView: () => void;
-}
-
-const CompanyListItem: FC<CompanyListItemProps> = ({ company, onView }) => {
-  const { name, corporate_number } = company;
-  const { t } = useTranslation();
-
-  return (
-    <>
-      <div className="flex justify-between items-center h-20 pr-8">
-        <div className="flex gap-6">
-          <Users />
-          <div className="flex flex-col justify-center">
-            <div className="text-xl">{name}</div>
-            <div className={styles.corporateNumber}>{corporate_number}</div>
-          </div>
-        </div>
-        <Button variant="tertiary" label={t("view")} onClick={onView} />
-      </div>
-      <Divider color={fontColor2} />
     </>
   );
 };
