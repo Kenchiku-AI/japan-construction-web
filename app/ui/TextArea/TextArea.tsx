@@ -39,6 +39,7 @@ export const TextArea: FC<TextAreaProps> = ({
       </div>
       <textarea
         placeholder={placeholder}
+        defaultValue={defaultValue}
         value={value}
         onChange={(e) => {
           onChange?.(e.target.value);

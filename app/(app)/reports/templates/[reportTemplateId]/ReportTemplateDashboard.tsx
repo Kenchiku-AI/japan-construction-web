@@ -45,6 +45,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
   useEffect(() => {
     if (isLoaded.current || !reportTemplate) return;
 
+    isLoaded.current = true;
     setDescription(reportTemplate.description);
     setParentType(reportTemplate.parent_type);
     setUniqueBy(reportTemplate.unique_by);
@@ -60,7 +61,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
   }, [reportTemplate]);
 
   const isDisabled = useMemo(() => {
-    if (!isLoaded) return true;
+    if (!isLoaded.current) return true;
 
     const missingField = fields.some(
       (f) => !f.name || !f.description || !f.type,
@@ -75,7 +76,14 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
       fields === fieldsRef.current;
 
     return isUnchanged;
-  }, [isLoaded, reportTemplate, description, parentType, uniqueBy, fields]);
+  }, [
+    isLoaded.current,
+    reportTemplate,
+    description,
+    parentType,
+    uniqueBy,
+    fields,
+  ]);
 
   if (currentUser?.role == UserRole.User) {
     redirect("/");
@@ -110,7 +118,9 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
           <div className={`${canShare ? "mb-8" : "my-8"} flex flex-col gap-4`}>
             <TextArea
               placeholder={t("description")}
-              value={description}
+              value={
+                !isLoaded.current ? reportTemplate.description : description
+              }
               onChange={setDescription}
               disabled={!canEdit}
             />
