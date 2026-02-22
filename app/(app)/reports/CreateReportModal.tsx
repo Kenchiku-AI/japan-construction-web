@@ -144,7 +144,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
         />
       </div>
       <Button
-        disabled={!templateId || !parentId}
+        disabled={!templateId || !parentId || !name}
         label={t("create")}
         onClick={() => {
           onSubmit({

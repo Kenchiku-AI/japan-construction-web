@@ -1,5 +1,5 @@
 import {
-  bgColor1,
+  // bgColor1,
   bgColor2,
   bgColor3,
   errorColor2,

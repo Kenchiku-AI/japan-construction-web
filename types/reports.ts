@@ -14,7 +14,6 @@ export type ReportField = {
   id: string;
   report_id: string;
   template_field_id: string;
-  type: ReportFieldType;
   name: string;
   value: string;
 };
@@ -47,7 +46,6 @@ export type ReportTemplateField = {
   name: string;
   description: string;
   template_id: string;
-  type: ReportFieldType;
 };
 
 export type ReportTemplateRequest = {
@@ -61,7 +59,6 @@ export type ReportTemplateRequest = {
 export type ReportTemplateRequestField = {
   name: string;
   description: string;
-  type: ReportFieldType;
 };
 
 export type ShareReportTemplateRequest = {
@@ -72,13 +69,6 @@ export type ShareReportTemplateRequest = {
 export enum ReportParentType {
   Company = "company",
   Project = "project",
-}
-
-export enum ReportFieldType {
-  String = "string",
-  Number = "number",
-  Boolean = "boolean",
-  Date = "date",
 }
 
 export enum ReportUniqueBy {
