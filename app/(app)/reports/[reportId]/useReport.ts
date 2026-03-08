@@ -49,13 +49,6 @@ export const useReport = (reportId: string) => {
       try {
         const response = await api.updateReport(reportId, request);
         setReport(response);
-
-        if (!silent) {
-          showModal({
-            title: t("report_updated"),
-            subtitle: t("report_updated_description"),
-          });
-        }
       } catch (err) {
         if (!silent) {
           showModal({
