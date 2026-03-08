@@ -23,6 +23,7 @@
   "date": "日付",
   "day": "日",
   "description": "説明",
+  "drag_to_reorder": "ドラッグして並び替え",
   "email": "メール",
   "email_registered": "そのメールアドレスは既に登録されています。",
   "empty_companies_description": "会社がまだありません。",

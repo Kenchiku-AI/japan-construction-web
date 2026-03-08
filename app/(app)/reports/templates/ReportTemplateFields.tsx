@@ -1,11 +1,18 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
+import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { CSS as DndCSS } from "@dnd-kit/utilities";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
-import Select from "@/app/ui/Select/Select";
 import { Plus, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { fontColor2 } from "@/lib/constants";
+import { bgColor1, fontColor2 } from "@/lib/constants";
 import styles from "./page.module.css";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 
@@ -24,10 +31,63 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
 }) => {
   const { t } = useTranslation();
 
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+
+      if (!over || active.id === over.id) return;
+
+      const oldIndex = fields.findIndex((f) => f.id === active.id);
+      const newIndex = fields.findIndex((f) => f.id === over.id);
+
+      const newFields = arrayMove(fields, oldIndex, newIndex).map((f, i) => ({
+        ...f,
+        order: i,
+      }));
+
+      onChange(newFields);
+    },
+    [fields],
+  );
+
   return (
     <>
       <div className="flex justify-between">
         <div className="text-xl self-end">{t("fields")}</div>
+        <div style={{ color: fontColor2 }}>{t("drag_to_reorder")}</div>
+      </div>
+      <Divider style={{ margin: "0" }} />
+      <div
+        className={`${fullWidth ? "flex flex-col" : "grid grid-cols-1 lg:grid-cols-2"}`}
+      >
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={fields.map((f) => f.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {fields.map((field, index) => (
+              <ReportTemplateFieldCell
+                key={field.id}
+                field={field}
+                index={index}
+                onChange={(updatedField) => {
+                  const newFields = fields.map((f) =>
+                    f.id === updatedField.id ? updatedField : f,
+                  );
+                  onChange(newFields);
+                }}
+                onRemove={() => {
+                  const newFields = fields.filter((f) => f.id !== field.id);
+                  onChange(newFields);
+                }}
+                disabled={disabled}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
         {!disabled && (
           <Button
             variant="tertiary"
@@ -41,36 +101,9 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
             }}
             label={t("add_field")}
             iconLeft={() => <Plus />}
-            style={{ height: 28 }}
+            style={{ height: 60, justifyContent: "center" }}
           />
         )}
-      </div>
-      <Divider style={{ margin: "8px 0 16px" }} />
-      {!fields.length && (
-        <div className={styles.empty} style={{ height: 80 }}>
-          {t("empty_report_template_fields_description")}
-        </div>
-      )}
-      <div
-        className={`${fullWidth ? "flex flex-col" : "grid grid-cols-1 lg:grid-cols-2"} gap-4`}
-      >
-        {fields.map((field, index) => (
-          <ReportTemplateFieldCell
-            key={field.id}
-            field={field}
-            index={index}
-            onChange={(f) => {
-              const newFields = [...fields];
-              newFields[index] = f;
-              onChange(newFields);
-            }}
-            onRemove={() => {
-              const newFields = fields.filter((_, i) => i !== index);
-              onChange(newFields);
-            }}
-            disabled={disabled}
-          />
-        ))}
       </div>
     </>
   );
@@ -99,13 +132,22 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
 }) => {
   const { t } = useTranslation();
   const { name, description } = field;
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: field.id });
 
   return (
     <div
-      key={`create_report_template_field_${index}`}
       className="flex flex-col"
+      ref={setNodeRef}
+      style={{
+        transform: DndCSS.Transform.toString(transform),
+        cursor: "grab",
+        background: "white",
+      }}
+      {...attributes}
+      {...listeners}
     >
-      <div className="px-4">
+      <div className="px-4 mt-3 mb-6">
         <div
           className="flex justify-between"
           style={{ alignItems: "flex-end" }}
@@ -117,9 +159,9 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
             </div>
           )}
         </div>
-        <div className="flex flex-col gap-2 mt-3 mb-6">
+        <div className="flex flex-col gap-2 mt-3">
           <Input
-            defaultValue={name}
+            value={name}
             placeholder={t("name")}
             onChange={(n) => {
               onChange({ ...field, name: n });
@@ -127,7 +169,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
             disabled={disabled}
           />
           <TextArea
-            defaultValue={description}
+            value={description}
             placeholder={t("description")}
             onChange={(d) => {
               onChange({ ...field, description: d });
