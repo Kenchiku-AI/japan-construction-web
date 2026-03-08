@@ -16,11 +16,11 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
     <div className="drawer drawer-open">
       <input type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col md:p-16 p-8 max-w-5xl">
+      <div className="drawer-content flex flex-col md:px-16 px-4 py-16 max-w-5xl">
         {children}
       </div>
       <div className="drawer-side flex">
-        <ul className="menu bg-base-200 text-base-content min-h-full p-4 justify-between">
+        <ul className="menu bg-base-200 text-base-content min-h-full py-6 md:px-4 px-1 justify-between">
           {currentUser && (
             <>
               <div className="space-y-2">
@@ -100,7 +100,7 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
   const style = currentPath === path ? "bg-base-300 rounded-md" : "";
 
   return (
-    <li className={style}>
+    <li className={`mb-5 ${style}`}>
       <a
         onClick={() => {
           router.push(path);

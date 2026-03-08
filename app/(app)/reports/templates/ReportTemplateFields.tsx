@@ -126,9 +126,10 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
 }) => {
   const { t } = useTranslation();
   const { name, description } = field;
-  const { attributes, listeners, setNodeRef, transform } = useSortable({
-    id: field.id,
-  });
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useSortable({
+      id: field.id,
+    });
 
   return (
     <>
@@ -140,6 +141,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
           transform: DndCSS.Transform.toString(transform),
           background: "white",
         }}
+        className={isDragging ? "shadow z-500" : ""}
       >
         <div>
           <div

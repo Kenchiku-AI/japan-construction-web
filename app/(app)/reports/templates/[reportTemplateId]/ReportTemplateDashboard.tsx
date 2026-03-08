@@ -29,8 +29,13 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
 }) => {
   const { currentUser } = useApi();
   const { t } = useTranslation();
-  const { reportTemplate, updateReportTemplate, shareReportTemplate, loading } =
-    useReportTemplate(reportTemplateId);
+  const {
+    reportTemplate,
+    setReportTemplate,
+    updateReportTemplate,
+    shareReportTemplate,
+    loading,
+  } = useReportTemplate(reportTemplateId);
   const { parentTypeOptions, uniqueByOptions } = useReportTemplates();
   const [fields, setFields] = useState<ReportTemplateFieldInfo[]>([]);
   const fieldsRef = useRef<ReportTemplateFieldInfo[]>([]);
@@ -53,28 +58,40 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
     setParentType(reportTemplate.parent_type);
     setUniqueBy(reportTemplate.unique_by);
 
-    const initialFields = reportTemplate.fields.map((f) => ({
+    const initialFields = reportTemplate.fields.map((f, i) => ({
       id: f.id,
       name: f.name,
       description: f.description,
-      order: f.order,
+      order: f.order ?? i,
     }));
     fieldsRef.current = initialFields;
     setFields(initialFields);
   }, [reportTemplate]);
 
-  const isDisabled = useMemo(() => {
+  const isUpdateDisabled = useMemo(() => {
     if (!isLoaded.current) return true;
 
     const missingField = fields.some((f) => !f.name || !f.description);
 
     if (missingField) return true;
 
+    const fieldsUnchanged =
+      fieldsRef.current.length === fields.length &&
+      fields.every((f) => {
+        const field = fieldsRef.current.find((fr) => fr.name === f.name);
+
+        return (
+          field?.name === f.name &&
+          field.description === f.description &&
+          field.order === f.order
+        );
+      });
+
     const isUnchanged =
       reportTemplate?.description === description &&
       reportTemplate?.parent_type === parentType &&
       reportTemplate?.unique_by === uniqueBy &&
-      fields === fieldsRef.current;
+      fieldsUnchanged;
 
     return isUnchanged;
   }, [
@@ -158,9 +175,15 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
                     unique_by: uniqueBy,
                     fields,
                   };
-                  updateReportTemplate(request);
+
+                  const response = await updateReportTemplate(request);
+
+                  if (response) {
+                    fieldsRef.current = response.fields;
+                    setReportTemplate(response);
+                  }
                 }}
-                disabled={isDisabled}
+                disabled={isUpdateDisabled}
                 loading={loading}
               />
             </div>

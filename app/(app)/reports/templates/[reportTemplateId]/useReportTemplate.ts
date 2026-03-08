@@ -50,19 +50,11 @@ export const useReportTemplate = (reportTemplateId: string) => {
         setLoading(true);
       }
 
-      try {
-        const response = await api.updateReportTemplate(
-          reportTemplateId,
-          request,
-        );
-        setReportTemplate(response);
+      let response;
 
-        if (!silent) {
-          showModal({
-            title: t("report_template_updated"),
-            subtitle: t("report_template_updated_description"),
-          });
-        }
+      try {
+        response = await api.updateReportTemplate(reportTemplateId, request);
+        setReportTemplate(response);
       } catch (err) {
         if (!silent) {
           showModal({
@@ -73,6 +65,8 @@ export const useReportTemplate = (reportTemplateId: string) => {
       }
 
       setLoading(false);
+
+      return response;
     },
     [setReportTemplate, reportTemplateId],
   );
@@ -102,6 +96,7 @@ export const useReportTemplate = (reportTemplateId: string) => {
   return {
     loading,
     reportTemplate,
+    setReportTemplate,
     updateReportTemplate,
     shareReportTemplate,
   };
