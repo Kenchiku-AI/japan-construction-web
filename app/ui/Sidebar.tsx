@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { Hardhat, Home, Paper, Papers, User, Users } from "./Icons";
+import { Hardhat, Home, Paper, Papers, User, Users, Logout } from "./Icons";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
@@ -14,13 +14,13 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { currentUser } = useApi();
 
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer drawer-open">
       <input type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col md:p-16 p-8 max-w-5xl">
         {children}
       </div>
       <div className="drawer-side flex">
-        <ul className="menu bg-base-200 text-base-content min-h-full w-60 p-4 justify-between">
+        <ul className="menu bg-base-200 text-base-content min-h-full p-4 justify-between">
           {currentUser && (
             <>
               <div className="space-y-2">
@@ -53,17 +53,31 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 )}
               </div>
               <div>
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center max-lg:hidden mb-2">
                   <User />
                   <div>{`${currentUser.first_name} ${currentUser.last_name}`}</div>
                 </div>
-                <Button
-                  variant="tertiary"
-                  label={t("logout")}
-                  onClick={async () => {
-                    await logout();
-                  }}
-                />
+                <span className="min-lg:hidden">
+                  <Button
+                    variant="tertiary"
+                    onClick={async () => {
+                      await logout();
+                    }}
+                    iconLeft={() => <Logout />}
+                    style={{ width: "100%" }}
+                  />
+                </span>
+                <span className="max-lg:hidden">
+                  <Button
+                    variant="tertiary"
+                    label={t("logout")}
+                    onClick={async () => {
+                      await logout();
+                    }}
+                    iconLeft={() => <Logout />}
+                    style={{ width: "100%" }}
+                  />
+                </span>
               </div>
             </>
           )}
@@ -94,7 +108,7 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
         className="gap-3"
       >
         <Icon />
-        {name}
+        <span className="max-lg:hidden">{name}</span>
       </a>
     </li>
   );

@@ -5,12 +5,15 @@ import { redirect, useSearchParams } from "next/navigation";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReportTemplate } from "./useReportTemplate";
-import { ReportParentType, ReportUniqueBy, UserRole } from "@/types";
+import {
+  ReportParentType,
+  ReportTemplateFieldInfo,
+  ReportUniqueBy,
+  UserRole,
+} from "@/types";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
-import ReportTemplateFields, {
-  ReportTemplateFieldInfo,
-} from "../ReportTemplateFields";
+import ReportTemplateFields from "../ReportTemplateFields";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Select from "@/app/ui/Select/Select";
 import { useReportTemplates } from "../useReportTemplates";
@@ -54,7 +57,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
       id: f.id,
       name: f.name,
       description: f.description,
-      type: f.type,
+      order: f.order,
     }));
     fieldsRef.current = initialFields;
     setFields(initialFields);
@@ -63,9 +66,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
   const isDisabled = useMemo(() => {
     if (!isLoaded.current) return true;
 
-    const missingField = fields.some(
-      (f) => !f.name || !f.description || !f.type,
-    );
+    const missingField = fields.some((f) => !f.name || !f.description);
 
     if (missingField) return true;
 

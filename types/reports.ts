@@ -24,6 +24,21 @@ export type CreateReportRequest = {
   name: string;
 };
 
+export type ReportTemplateFieldInfo = {
+  id: string;
+  name: string;
+  description: string;
+  order: number;
+};
+
+export type CreateReportTemplateRequest = {
+  name: string;
+  description: string;
+  fields: ReportTemplateFieldInfo[];
+  parent_type: ReportParentType;
+  unique_by?: ReportUniqueBy;
+};
+
 export type ReportRequest = {
   name?: string;
   field_values?: ReportFieldValues;
@@ -45,6 +60,7 @@ export type ReportTemplateField = {
   id: string;
   name: string;
   description: string;
+  order: number;
   template_id: string;
 };
 

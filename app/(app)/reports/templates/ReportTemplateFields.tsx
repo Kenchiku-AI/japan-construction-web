@@ -12,21 +12,20 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import { Plus, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { bgColor1, fontColor2 } from "@/lib/constants";
+import { fontColor2 } from "@/lib/constants";
 import styles from "./page.module.css";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
+import { ReportTemplateFieldInfo } from "@/types";
 
 interface ReportTemplateFieldsProps {
   fields: ReportTemplateFieldInfo[];
   onChange: (fields: ReportTemplateFieldInfo[]) => void;
-  fullWidth?: boolean;
   disabled?: boolean;
 }
 
 const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
   fields,
   onChange,
-  fullWidth,
   disabled,
 }) => {
   const { t } = useTranslation();
@@ -54,12 +53,12 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
     <>
       <div className="flex justify-between">
         <div className="text-xl self-end">{t("fields")}</div>
-        <div style={{ color: fontColor2 }}>{t("drag_to_reorder")}</div>
+        {!disabled && (
+          <div style={{ color: fontColor2 }}>{t("drag_to_reorder")}</div>
+        )}
       </div>
       <Divider style={{ margin: "8px 0 0" }} />
-      <div
-        className={`${fullWidth ? "flex flex-col" : "grid grid-cols-1 lg:grid-cols-2"}`}
-      >
+      <div className={"flex flex-col"}>
         <DndContext
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
@@ -96,6 +95,7 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
                 id: crypto.randomUUID(),
                 name: "",
                 description: "",
+                order: fields.length,
               };
               onChange([...fields, newField]);
             }}
@@ -107,12 +107,6 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
       </div>
     </>
   );
-};
-
-export type ReportTemplateFieldInfo = {
-  id: string;
-  name: string;
-  description: string;
 };
 
 interface ReportTemplateFieldCellProps {
@@ -139,7 +133,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
   return (
     <>
       <div
-        ref={setNodeRef}
+        ref={disabled ? null : setNodeRef}
         style={{
           padding: "0 16px",
           position: "relative",
@@ -151,7 +145,9 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
           <div
             {...attributes}
             {...listeners}
-            className="cursor-grab active:cursor-grabbing mt-4"
+            className={
+              disabled ? "mt-5" : "cursor-grab active:cursor-grabbing mt-5"
+            }
           >
             <div>
               <div

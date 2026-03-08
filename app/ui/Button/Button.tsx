@@ -1,9 +1,8 @@
 import { FC, useMemo, CSSProperties } from "react";
 import styles from "./Button.module.css";
-import { buttonColor } from "@/lib/constants";
 
 interface ButtonProps {
-  label: string;
+  label?: string;
   onClick: () => void;
   variant?: "primary" | "secondary" | "tertiary";
   disabled?: boolean;
@@ -46,6 +45,7 @@ export const Button: FC<ButtonProps> = ({
         style={{
           paddingLeft: variant === "tertiary" ? 0 : iconLeft ? 8 : 16,
           paddingRight: variant === "tertiary" ? 0 : iconRight ? 8 : 16,
+          alignItems: "center",
           ...style,
         }}
       >
@@ -59,12 +59,14 @@ export const Button: FC<ButtonProps> = ({
             <IconLeft />
           </div>
         )}
-        <div
-          className={labelStyle}
-          style={{ opacity: loading ? 0 : undefined }}
-        >
-          {label}
-        </div>
+        {label && (
+          <div
+            className={labelStyle}
+            style={{ opacity: loading ? 0 : undefined }}
+          >
+            {label}
+          </div>
+        )}
         {IconRight && (
           <div style={{ opacity: loading ? 0 : undefined }}>
             <IconRight />

@@ -6,14 +6,12 @@ import Modal from "@/app/ui/Modal";
 import {
   CreateReportTemplateRequest,
   ReportParentType,
+  ReportTemplateFieldInfo,
   ReportUniqueBy,
 } from "@/types";
 import Select from "@/app/ui/Select/Select";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
-import ReportTemplateFields, {
-  ReportTemplateFieldInfo,
-} from "./ReportTemplateFields";
-import { useReportTemplate } from "./[reportTemplateId]/useReportTemplate";
+import ReportTemplateFields from "./ReportTemplateFields";
 import { useReportTemplates } from "./useReportTemplates";
 
 interface CreateReportTemplateModalProps {
@@ -95,11 +93,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
           />
         </div>
       </div>
-      <ReportTemplateFields
-        fields={fields}
-        onChange={(f) => setFields(f)}
-        fullWidth
-      />
+      <ReportTemplateFields fields={fields} onChange={(f) => setFields(f)} />
       <Button
         disabled={isSubmitDisabled}
         label={t("create")}
