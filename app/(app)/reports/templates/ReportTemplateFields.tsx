@@ -56,7 +56,7 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
         <div className="text-xl self-end">{t("fields")}</div>
         <div style={{ color: fontColor2 }}>{t("drag_to_reorder")}</div>
       </div>
-      <Divider style={{ margin: "0" }} />
+      <Divider style={{ margin: "8px 0 0" }} />
       <div
         className={`${fullWidth ? "flex flex-col" : "grid grid-cols-1 lg:grid-cols-2"}`}
       >
@@ -137,52 +137,67 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
   });
 
   return (
-    <div
-      ref={setNodeRef}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        cursor: "grab",
-        marginBottom: 4,
-        transform: DndCSS.Transform.toString(transform),
-      }}
-    >
-      <div>
-        <div {...attributes} {...listeners}>
-          <div>
+    <>
+      <div
+        ref={setNodeRef}
+        style={{
+          padding: "0 16px",
+          position: "relative",
+          transform: DndCSS.Transform.toString(transform),
+          background: "white",
+        }}
+      >
+        <div>
+          <div
+            {...attributes}
+            {...listeners}
+            className="cursor-grab active:cursor-grabbing mt-4"
+          >
+            <div>
+              <div
+                className={styles.subtitle}
+              >{`${t("field")} ${index + 1}`}</div>
+            </div>
+          </div>
+          {!disabled && (
             <div
-              className={styles.subtitle}
-            >{`${t("field")} ${index + 1}`}</div>
+              style={{
+                cursor: "pointer",
+                position: "absolute",
+                top: 0,
+                right: 16,
+                display: "flex",
+                alignItems: "center",
+                height: 58,
+              }}
+              onClick={onRemove}
+            >
+              <Trash />
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2 mt-3 mb-6">
+            <Input
+              value={name}
+              placeholder={t("name")}
+              onChange={(n) => {
+                onChange({ ...field, name: n });
+              }}
+              disabled={disabled}
+            />
+            <TextArea
+              value={description}
+              placeholder={t("description")}
+              onChange={(d) => {
+                onChange({ ...field, description: d });
+              }}
+              disabled={disabled}
+            />
           </div>
         </div>
-        {!disabled && (
-          <div className="cursor-pointer" onClick={onRemove}>
-            <Trash />
-          </div>
-        )}
-
-        <div className="flex flex-col gap-2 mt-3">
-          <Input
-            value={name}
-            placeholder={t("name")}
-            onChange={(n) => {
-              onChange({ ...field, name: n });
-            }}
-            disabled={disabled}
-          />
-          <TextArea
-            value={description}
-            placeholder={t("description")}
-            onChange={(d) => {
-              onChange({ ...field, description: d });
-            }}
-            disabled={disabled}
-          />
-        </div>
-
-        <Divider color={fontColor2} style={{ margin: 0 }} />
       </div>
-    </div>
+      <Divider color={fontColor2} style={{ margin: "0" }} />
+    </>
   );
 };
 
