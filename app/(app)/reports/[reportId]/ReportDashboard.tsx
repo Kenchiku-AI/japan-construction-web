@@ -34,9 +34,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const isDisabled = useMemo(() => {
     if (!fieldValues || !report) return true;
 
-    const missingField = report.fields.some((f) => !fieldValues[f.id]);
-    if (missingField) return true;
-
     const isChanged = report.fields.some((f) => f.value !== fieldValues[f.id]);
     return !isChanged;
   }, [report, fieldValues]);
@@ -62,7 +59,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         }}
         isEditable
       />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 my-8">
+      <div className="flex flex-col w-1/2 gap-4 my-8">
         {report?.fields.map((field) => (
           <Input
             key={field.id}
@@ -78,7 +75,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           />
         ))}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="w-1/2 mt-1">
         <Button
           label={t("update_report")}
           onClick={() => {
