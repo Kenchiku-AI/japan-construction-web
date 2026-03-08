@@ -132,33 +132,35 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
 }) => {
   const { t } = useTranslation();
   const { name, description } = field;
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: field.id });
+  const { attributes, listeners, setNodeRef, transform } = useSortable({
+    id: field.id,
+  });
 
   return (
     <div
-      className="flex flex-col"
       ref={setNodeRef}
       style={{
-        transform: DndCSS.Transform.toString(transform),
+        display: "flex",
+        alignItems: "center",
         cursor: "grab",
-        background: "white",
+        marginBottom: 4,
+        transform: DndCSS.Transform.toString(transform),
       }}
-      {...attributes}
-      {...listeners}
     >
-      <div className="px-4 mt-3 mb-6">
-        <div
-          className="flex justify-between"
-          style={{ alignItems: "flex-end" }}
-        >
-          <div className={styles.subtitle}>{`${t("field")} ${index + 1}`}</div>
-          {!disabled && (
-            <div className="cursor-pointer" onClick={onRemove}>
-              <Trash />
-            </div>
-          )}
+      <div>
+        <div {...attributes} {...listeners}>
+          <div>
+            <div
+              className={styles.subtitle}
+            >{`${t("field")} ${index + 1}`}</div>
+          </div>
         </div>
+        {!disabled && (
+          <div className="cursor-pointer" onClick={onRemove}>
+            <Trash />
+          </div>
+        )}
+
         <div className="flex flex-col gap-2 mt-3">
           <Input
             value={name}
@@ -177,8 +179,9 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
             disabled={disabled}
           />
         </div>
+
+        <Divider color={fontColor2} style={{ margin: 0 }} />
       </div>
-      <Divider color={fontColor2} style={{ margin: 0 }} />
     </div>
   );
 };
