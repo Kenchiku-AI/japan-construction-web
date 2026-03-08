@@ -64,7 +64,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         }}
         isEditable
       />
-      <div className="flex flex-col w-1/2 gap-4 my-8">
+      <div className="flex flex-col w-full lg:w-2/3 gap-4 my-8">
         {sortedFields?.map((field) => (
           <Input
             key={field.id}
@@ -80,7 +80,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           />
         ))}
       </div>
-      <div className="w-1/2 mt-1">
+      <div className="w-full lg:w-2/3 mt-1">
         <Button
           label={t("update_report")}
           onClick={() => {
