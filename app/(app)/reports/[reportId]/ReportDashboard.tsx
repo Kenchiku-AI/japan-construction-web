@@ -38,6 +38,11 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     return !isChanged;
   }, [report, fieldValues]);
 
+  const sortedFields = useMemo(
+    () => report?.fields.sort((a, b) => a.order - b.order),
+    [report?.fields],
+  );
+
   const shouldRedirect =
     currentUser?.company &&
     report?.company_id &&
@@ -60,7 +65,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         isEditable
       />
       <div className="flex flex-col w-1/2 gap-4 my-8">
-        {report?.fields.map((field) => (
+        {sortedFields?.map((field) => (
           <Input
             key={field.id}
             placeholder={field.name}

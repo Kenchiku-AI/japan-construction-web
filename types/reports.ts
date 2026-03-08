@@ -13,9 +13,9 @@ export type Report = {
 export type ReportField = {
   id: string;
   report_id: string;
-  template_field_id: string;
   name: string;
   value: string;
+  order: number;
 };
 
 export type CreateReportRequest = {
