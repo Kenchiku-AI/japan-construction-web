@@ -100,12 +100,12 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
   const style = currentPath === path ? "bg-base-300 rounded-md" : "";
 
   return (
-    <li className={`mb-5 ${style}`}>
+    <li className={`mb-4 ${style}`}>
       <a
         onClick={() => {
           router.push(path);
         }}
-        className="gap-3"
+        className={`active:bg-base-300 active:opacity-40 active:text-black gap-3`}
       >
         <Icon />
         <span className="max-lg:hidden">{name}</span>
