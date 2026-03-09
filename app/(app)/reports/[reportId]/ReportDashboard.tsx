@@ -9,6 +9,9 @@ import { ReportFieldValues, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
+import { errorColor1 } from "@/lib/constants";
+import DeleteReportModal from "./DeleteReportModal";
+import { Loader } from "@/app/ui/Loader";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -17,9 +20,11 @@ interface ReportDashboardProps {
 const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const { currentUser } = useApi();
   const { t } = useTranslation();
-  const { report, updateReport, loading } = useReport(reportId);
+  const { report, loading, updateReport, deleteReport, updateLoading } =
+    useReport(reportId);
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
+  const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
 
   useEffect(() => {
     const newValues: ReportFieldValues = {};
@@ -64,32 +69,59 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         }}
         isEditable
       />
-      <div className="flex flex-col w-full lg:w-2/3 gap-4 my-8">
-        {sortedFields?.map((field) => (
-          <Input
-            key={field.id}
-            placeholder={field.name}
-            defaultValue={field.value}
-            onChange={(value) => {
-              setFieldValues((prev) => {
-                const newValues = { ...prev };
-                newValues[field.id] = value;
-                return newValues;
-              });
-            }}
-          />
-        ))}
-      </div>
-      <div className="w-full lg:w-2/3 mt-1">
-        <Button
-          label={t("update_report")}
-          onClick={() => {
-            updateReport({ field_values: fieldValues });
-          }}
-          disabled={isDisabled}
-          loading={loading}
-        />
-      </div>
+      {!!sortedFields && (
+        <>
+          <div className="flex flex-col w-full lg:w-3/4 gap-4 my-8">
+            {sortedFields?.map((field) => (
+              <Input
+                key={field.id}
+                placeholder={field.name}
+                defaultValue={field.value}
+                onChange={(value) => {
+                  setFieldValues((prev) => {
+                    const newValues = { ...prev };
+                    newValues[field.id] = value;
+                    return newValues;
+                  });
+                }}
+              />
+            ))}
+          </div>
+          <div className="w-full lg:w-3/4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <Button
+              label={t("update_report")}
+              onClick={() => {
+                updateReport({ field_values: fieldValues });
+              }}
+              disabled={isDisabled}
+              loading={updateLoading}
+            />
+            <Button
+              variant="secondary"
+              label={t("delete_report")}
+              onClick={() => {
+                setIsDeleteModalShown(true);
+              }}
+              style={{
+                height: 60,
+                borderColor: errorColor1,
+              }}
+              textStyle={{
+                color: errorColor1,
+              }}
+            />
+          </div>
+        </>
+      )}
+      <DeleteReportModal
+        isOpen={isDeleteModalShown}
+        onClose={() => setIsDeleteModalShown(false)}
+        onDelete={() => {
+          setIsDeleteModalShown(false);
+          deleteReport();
+        }}
+      />
+      {loading && <Loader />}
     </>
   );
 };

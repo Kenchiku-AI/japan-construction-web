@@ -70,8 +70,10 @@ export const Heading: FC<HeadingProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex items-center gap-4">
-          <div className={styles.title}>{displayTitle}</div>
+        <div className="flex text-ellipsis items-center gap-4">
+          <div className="text-ellipsis text-2xl lg:text-3xl">
+            {displayTitle}
+          </div>
           {isEditable && (
             <div
               className="cursor-pointer"

@@ -17,7 +17,7 @@ import ReportTemplateFields from "../ReportTemplateFields";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Select from "@/app/ui/Select/Select";
 import { useReportTemplates } from "../useReportTemplates";
-import { Plus } from "@/app/ui/Icons";
+import { Plus, Share } from "@/app/ui/Icons";
 import ShareReportTemplateModal from "./ShareReportTemplateModal";
 
 interface ReportTemplateDashboardProps {
@@ -119,11 +119,15 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
         isEditable={!!reportTemplate && canEdit}
       />
       {canShare && (
-        <div className="my-4 flex justify-end">
+        <div className="mb-4 mt-8 flex justify-end">
           <Button
             variant="secondary"
             label={t("share_report_template")}
-            iconLeft={() => <Plus />}
+            iconLeft={() => (
+              <div className="mr-1">
+                <Share />
+              </div>
+            )}
             onClick={() => {
               setShowShare(true);
             }}

@@ -96,6 +96,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
       }}
       title={t("create_report")}
       subtitle={t("create_report_description")}
+      size="xl"
     >
       <div className="mt-8 flex flex-col">
         <div className="flex justify-between items-center">

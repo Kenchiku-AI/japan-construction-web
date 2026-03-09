@@ -9,6 +9,7 @@ import { useModal } from "@/lib/modal/ModalContext";
 
 export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
   const [report, setReport] = useState<Report>();
   const { t } = useTranslation();
   const router = useRouter();
@@ -43,7 +44,7 @@ export const useReport = (reportId: string) => {
   const updateReport = useCallback(
     async (request: ReportRequest, silent: boolean = false) => {
       if (!silent) {
-        setLoading(true);
+        setUpdateLoading(true);
       }
 
       try {
@@ -58,14 +59,32 @@ export const useReport = (reportId: string) => {
         }
       }
 
-      setLoading(false);
+      setUpdateLoading(false);
     },
     [setReport, reportId],
   );
 
+  const deleteReport = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      await api.deleteReport(reportId);
+      router.replace("/reports");
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("delete_report_error"),
+      });
+    }
+
+    setLoading(false);
+  }, [reportId]);
+
   return {
     loading,
+    updateLoading,
     report,
     updateReport,
+    deleteReport,
   };
 };

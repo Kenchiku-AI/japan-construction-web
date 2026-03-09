@@ -46,14 +46,12 @@ const LoginPage = () => {
             }}
             type="email"
             disabled={loading}
-            hideLabel
           />
           <Input
             placeholder={t("password")}
             onChange={(t) => setPassword(t)}
             type="password"
             disabled={loading}
-            hideLabel
           />
         </div>
         <Button

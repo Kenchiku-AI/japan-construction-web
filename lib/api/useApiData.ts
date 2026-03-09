@@ -145,6 +145,10 @@ export const useApiData = () => {
       const url = `/reports/${reportId}`;
       return call(() => http.patch<Report>(url, request));
     },
+    async deleteReport(reportId: string) {
+      const url = `/reports/${reportId}`;
+      return call(() => http.delete(url));
+    },
     async getReportTemplates() {
       const url = `/reports/templates`;
       return call(() => http.get<ReportTemplate[]>(url));

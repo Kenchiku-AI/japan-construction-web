@@ -40,9 +40,8 @@ const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {templates.map((tp, i) => (
+        {templates.map((tp) => (
           <div key={tp.id}>
-            {i !== 0 && <Divider color={fontColor2} />}
             <div
               className="hover:opacity-50 cursor-pointer mx-4"
               onClick={() =>
@@ -56,6 +55,7 @@ const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
                 </div>
               </div>
             </div>
+            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

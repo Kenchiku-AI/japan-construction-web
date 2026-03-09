@@ -36,9 +36,8 @@ const ReportsList: FC<ReportsListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {reports.map((r, i) => (
+        {reports.map((r) => (
           <div key={r.id}>
-            {i !== 0 && <Divider color={fontColor2} />}
             <div
               className="hover:opacity-50 cursor-pointer mx-4"
               onClick={() => {
@@ -52,6 +51,7 @@ const ReportsList: FC<ReportsListProps> = ({
                 </div>
               </div>
             </div>
+            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

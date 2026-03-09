@@ -32,9 +32,8 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {projects.map((p, i) => (
+        {projects.map((p) => (
           <div key={p.id}>
-            {i !== 0 && <Divider color={fontColor2} />}
             <div
               onClick={() => {
                 router.push(`/projects/${p.id}?name=${p.name}`);
@@ -49,6 +48,7 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
                 <StatusLabel project={p} />
               </div>
             </div>
+            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

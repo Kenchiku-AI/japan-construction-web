@@ -85,9 +85,8 @@ const ShareReportTemplateModal: FC<ShareReportTemplateModalProps> = ({
             {t("empty_companies_search_description")}
           </div>
         )}
-        {companies.map((c, i) => (
+        {companies.map((c) => (
           <div key={c.id}>
-            {i !== 0 && <Divider color={fontColor2} />}
             <div
               onClick={() => {
                 onShare(c.id);
@@ -106,6 +105,7 @@ const ShareReportTemplateModal: FC<ShareReportTemplateModalProps> = ({
                 </div>
               </div>
             </div>
+            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

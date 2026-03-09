@@ -9,6 +9,7 @@ interface ButtonProps {
   iconLeft?: FC;
   iconRight?: FC;
   style?: CSSProperties;
+  textStyle?: CSSProperties;
   loading?: boolean;
 }
 
@@ -20,6 +21,7 @@ export const Button: FC<ButtonProps> = ({
   iconLeft,
   iconRight,
   style,
+  textStyle,
   loading,
 }) => {
   const IconLeft = iconLeft;
@@ -62,7 +64,7 @@ export const Button: FC<ButtonProps> = ({
         {label && (
           <div
             className={labelStyle}
-            style={{ opacity: loading ? 0 : undefined }}
+            style={{ opacity: loading ? 0 : undefined, ...textStyle }}
           >
             {label}
           </div>

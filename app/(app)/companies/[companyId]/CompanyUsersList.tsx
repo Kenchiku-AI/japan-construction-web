@@ -31,9 +31,8 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users }) => {
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {users.map((u, i) => (
+        {users.map((u) => (
           <div key={u.id}>
-            {i !== 0 && <Divider color={fontColor2} />}
             <div
               onClick={() => {
                 router.push(
@@ -55,6 +54,7 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users }) => {
                 )}
               </div>
             </div>
+            <Divider color={fontColor2} />
           </div>
         ))}
       </div>
