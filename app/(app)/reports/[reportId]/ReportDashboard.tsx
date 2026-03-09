@@ -12,6 +12,9 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { errorColor1 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
+import { Plus, Share, Trash } from "@/app/ui/Icons";
+import Divider from "@/app/ui/Divider";
+import styles from "./page.module.css";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -69,9 +72,40 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         }}
         isEditable
       />
+      <div className="mt-5 flex flex-col w-full lg:w-3/4 lg:flex-row gap-2 lg:gap-8">
+        <Button
+          variant="tertiary"
+          label={t("export")}
+          iconLeft={() => <Share />}
+          onClick={() => {}}
+          style={{
+            borderColor: errorColor1,
+            alignSelf: "flex-end",
+          }}
+          textStyle={{
+            fontWeight: "300",
+          }}
+        />
+        <Button
+          variant="tertiary"
+          label={t("delete")}
+          iconLeft={() => <Trash />}
+          onClick={() => {
+            setIsDeleteModalShown(true);
+          }}
+          style={{
+            borderColor: errorColor1,
+            alignSelf: "flex-end",
+          }}
+          textStyle={{
+            fontWeight: "300",
+            color: errorColor1,
+          }}
+        />
+      </div>
       {!!sortedFields && (
         <>
-          <div className="flex flex-col w-full lg:w-3/4 gap-4 my-8">
+          <div className="flex flex-col w-full lg:w-3/4 gap-4 mt-5 mb-8">
             {sortedFields?.map((field) => (
               <Input
                 key={field.id}
@@ -87,6 +121,21 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               />
             ))}
           </div>
+          <div className="mb-12 w-full lg:w-3/4">
+            <div className="flex justify-between items-end">
+              <div>{t("photos")}</div>
+              <Button
+                label={t("upload_photo")}
+                iconLeft={() => <Plus />}
+                variant="tertiary"
+                onClick={() => {}}
+                style={{ height: "auto" }}
+                textStyle={{ fontSize: 16, fontWeight: 100 }}
+              />
+            </div>
+            <Divider style={{ marginTop: 10 }} />
+            <div className={styles.empty}>{t("empty_photos_description")}</div>
+          </div>
           <div className="w-full lg:w-3/4 grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Button
               label={t("update_report")}
@@ -95,20 +144,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               }}
               disabled={isDisabled}
               loading={updateLoading}
-            />
-            <Button
-              variant="secondary"
-              label={t("delete_report")}
-              onClick={() => {
-                setIsDeleteModalShown(true);
-              }}
-              style={{
-                height: 60,
-                borderColor: errorColor1,
-              }}
-              textStyle={{
-                color: errorColor1,
-              }}
             />
           </div>
         </>

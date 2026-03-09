@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import CreateCompanyModal from "./CreateCompanyModal";
 import { useCompanies } from "./useCompanies";
 import { Users, Plus } from "@/app/ui/Icons";
-import { Company } from "@/types/companies";
 import styles from "./page.module.css";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";

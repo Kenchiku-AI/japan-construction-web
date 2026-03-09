@@ -17,7 +17,7 @@ import ReportTemplateFields from "../ReportTemplateFields";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Select from "@/app/ui/Select/Select";
 import { useReportTemplates } from "../useReportTemplates";
-import { Plus, Share } from "@/app/ui/Icons";
+import { AddUser, Plus, Share } from "@/app/ui/Icons";
 import ShareReportTemplateModal from "./ShareReportTemplateModal";
 
 interface ReportTemplateDashboardProps {
@@ -125,7 +125,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
             label={t("share_report_template")}
             iconLeft={() => (
               <div className="mr-1">
-                <Share />
+                <AddUser />
               </div>
             )}
             onClick={() => {

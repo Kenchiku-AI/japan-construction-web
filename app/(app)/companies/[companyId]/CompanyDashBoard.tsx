@@ -8,7 +8,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
-import { Plus } from "@/app/ui/Icons";
+import { AddUser, Plus } from "@/app/ui/Icons";
 import InviteUserModal from "./InviteUserModal";
 import CompanyUsersList from "./CompanyUsersList";
 import CreateProjectModal from "./CreateProjectModal";
@@ -75,7 +75,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 <Button
                   variant="secondary"
                   label={t("invite_user")}
-                  iconLeft={() => <Plus />}
+                  iconLeft={() => <AddUser />}
                   onClick={() => {
                     setShowInviteUser(true);
                   }}

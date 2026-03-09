@@ -2,13 +2,18 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
-import { CreateReportRequest, Report, ReportTemplate } from "@/types/reports";
-import { UserRole } from "@/types";
+import { CreateReportRequest, Report } from "@/types/reports";
+import { useRouter } from "next/navigation";
+import { useModal } from "@/lib/modal/ModalContext";
+import { useTranslation } from "react-i18next";
 
 export const useReports = () => {
   const [loading, setLoading] = useState(false);
   const [reports, setReports] = useState<Report[]>();
   const { currentUser, ...api } = useApi();
+  const router = useRouter();
+  const { showModal } = useModal();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!currentUser) return;
@@ -32,11 +37,19 @@ export const useReports = () => {
       setLoading(true);
 
       try {
-        await api.createReport(request);
-        await getReports();
-      } finally {
-        setLoading(false);
+        const response = await api.createReport(request);
+
+        if (response) {
+          router.push(`reports/${response.id}?name=${response.name}`);
+        }
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("create_report_error_description"),
+        });
       }
+
+      setLoading(false);
     },
     [getReports],
   );
