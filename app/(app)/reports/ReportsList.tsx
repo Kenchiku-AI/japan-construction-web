@@ -46,7 +46,7 @@ const ReportsList: FC<ReportsListProps> = ({
             >
               <div className="flex items-center justify-between">
                 <div style={{ height: 68 }} className="flex items-center gap-6">
-                  <Paper />
+                  <Paper size={30} />
                   <div className="text-xl">{r.name}</div>
                 </div>
               </div>
