@@ -51,7 +51,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         <div className="flex flex-col gap-12">
           <div>
             <div className="flex justify-between mt-8">
-              <div className="text-2xl self-end">{t("projects")}</div>
+              <div className="text-xl self-end">{t("projects")}</div>
               {currentUser?.role === UserRole.Admin && (
                 <Button
                   variant="secondary"
@@ -64,12 +64,12 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 />
               )}
             </div>
-            <Divider />
+            <Divider style={{ marginTop: "12px" }} />
             <CompanyProjectsList projects={company.projects} />
           </div>
           <div>
             <div className="flex justify-between">
-              <div className="text-2xl self-end">{t("users")}</div>
+              <div className="text-xl self-end">{t("users")}</div>
               {(currentUser?.role === UserRole.Admin ||
                 currentUser?.role === UserRole.Manager) && (
                 <Button
@@ -83,7 +83,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 />
               )}
             </div>
-            <Divider />
+            <Divider style={{ marginTop: "12px" }} />
             <CompanyUsersList users={company.users} />
           </div>
         </div>
