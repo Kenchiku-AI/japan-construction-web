@@ -6,7 +6,16 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { Hardhat, Home, Paper, Papers, User, Users, Logout } from "./Icons";
+import {
+  Hardhat,
+  Home,
+  Paper,
+  Papers,
+  User,
+  Users,
+  Logout,
+  Tag,
+} from "./Icons";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
@@ -16,7 +25,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
     <div className="drawer drawer-open">
       <input type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col md:px-16 px-4 py-16 max-w-5xl">
+      <div className="drawer-content flex flex-col md:px-16 px-4 py-16 max-w-4xl">
         {children}
       </div>
       <div className="drawer-side flex">
@@ -44,11 +53,17 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                   icon={() => <Papers size={24} />}
                   path={"/reports/templates"}
                 />
-                {currentUser.role === UserRole.Admin && (
+                {currentUser.role === UserRole.Admin ? (
                   <SidebarItem
                     name={t("companies")}
                     icon={() => <Users size={24} />}
                     path={"/companies"}
+                  />
+                ) : (
+                  <SidebarItem
+                    name={t("tags")}
+                    icon={() => <Tag size={22} />}
+                    path={"/tags"}
                   />
                 )}
               </div>

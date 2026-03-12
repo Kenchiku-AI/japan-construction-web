@@ -119,9 +119,9 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
         isEditable={!!reportTemplate && canEdit}
       />
       {canShare && (
-        <div className="mb-4 mt-8 flex justify-end">
+        <div className="mb-2 mt-8 flex justify-end">
           <Button
-            variant="secondary"
+            variant="tertiary"
             label={t("share_report_template")}
             iconLeft={() => (
               <div className="mr-1">

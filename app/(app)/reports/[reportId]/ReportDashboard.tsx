@@ -72,16 +72,12 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         }}
         isEditable
       />
-      <div className="mt-5 flex flex-col w-full lg:w-3/4 lg:flex-row gap-2 lg:gap-8">
+      <div className="mt-8 flex flex-col w-full lg:flex-row items-end lg:justify-end gap-2 lg:gap-8">
         <Button
           variant="tertiary"
           label={t("export")}
           iconLeft={() => <Share />}
           onClick={() => {}}
-          style={{
-            borderColor: errorColor1,
-            alignSelf: "flex-end",
-          }}
           textStyle={{
             fontWeight: "300",
           }}
@@ -93,10 +89,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           onClick={() => {
             setIsDeleteModalShown(true);
           }}
-          style={{
-            borderColor: errorColor1,
-            alignSelf: "flex-end",
-          }}
           textStyle={{
             fontWeight: "300",
             color: errorColor1,
@@ -105,7 +97,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       </div>
       {!!sortedFields && (
         <>
-          <div className="flex flex-col w-full lg:w-3/4 gap-4 mt-5 mb-8">
+          <div className="flex flex-col w-full gap-4 mt-2 mb-12">
             {sortedFields?.map((field) => (
               <Input
                 key={field.id}
@@ -121,7 +113,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               />
             ))}
           </div>
-          <div className="mb-12 w-full lg:w-3/4">
+          <div className="mb-12 w-full">
             <div className="flex justify-between items-end">
               <div>{t("photos")}</div>
               <Button
@@ -136,7 +128,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             <Divider style={{ marginTop: 10 }} />
             <div className={styles.empty}>{t("empty_photos_description")}</div>
           </div>
-          <div className="w-full lg:w-3/4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Button
               label={t("update_report")}
               onClick={() => {

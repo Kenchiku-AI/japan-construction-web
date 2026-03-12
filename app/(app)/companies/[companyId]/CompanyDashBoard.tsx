@@ -6,9 +6,9 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
-import { AddUser, Plus } from "@/app/ui/Icons";
+import { Plus } from "@/app/ui/Icons";
 import InviteUserModal from "./InviteUserModal";
 import CompanyUsersList from "./CompanyUsersList";
 import CreateProjectModal from "./CreateProjectModal";
@@ -54,13 +54,13 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               <div className="text-xl self-end">{t("projects")}</div>
               {currentUser?.role === UserRole.Admin && (
                 <Button
-                  variant="secondary"
+                  variant="tertiary"
                   label={t("create_project")}
                   iconLeft={() => <Plus />}
                   onClick={() => {
                     setShowCreateProject(true);
                   }}
-                  style={{ height: 40 }}
+                  style={{ height: 30 }}
                 />
               )}
             </div>
@@ -73,13 +73,13 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               {(currentUser?.role === UserRole.Admin ||
                 currentUser?.role === UserRole.Manager) && (
                 <Button
-                  variant="secondary"
+                  variant="tertiary"
                   label={t("invite_user")}
-                  iconLeft={() => <AddUser />}
+                  iconLeft={() => <Plus />}
                   onClick={() => {
                     setShowInviteUser(true);
                   }}
-                  style={{ height: 40 }}
+                  style={{ height: 30 }}
                 />
               )}
             </div>

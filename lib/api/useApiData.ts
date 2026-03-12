@@ -8,6 +8,8 @@ import {
   Project,
   ShareReportTemplateRequest,
   ReportRequest,
+  ReportImageTag,
+  ReportImageTagRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -120,6 +122,22 @@ export const useApiData = () => {
     async createCompany(request: CreateCompanyRequest) {
       const url = "/companies";
       return call(() => http.post(url, request));
+    },
+    async getTags(companyId: string) {
+      const url = `/companies/${companyId}/tags`;
+      return call(() => http.get<ReportImageTag[]>(url));
+    },
+    async createTag(companyId: string, request: ReportImageTagRequest) {
+      const url = `/companies/${companyId}/tags`;
+      return call(() => http.post<ReportImageTag>(url, request));
+    },
+    async updateTag(
+      companyId: string,
+      tagId: string,
+      request: ReportImageTagRequest,
+    ) {
+      const url = `/companies/${companyId}/tags/${tagId}`;
+      return call(() => http.patch<ReportImageTag>(url, request));
     },
     async getProject(projectId: string) {
       const url = `/projects/${projectId}`;

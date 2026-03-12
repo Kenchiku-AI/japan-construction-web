@@ -5,13 +5,13 @@ import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 
-interface CreateProjectModalProps {
+interface CreateTagModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (name: string, description?: string) => void;
+  onSubmit: (name: string, description: string) => void;
 }
 
-const CreateProjectModal: FC<CreateProjectModalProps> = ({
+const CreateTagModal: FC<CreateTagModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
@@ -34,8 +34,8 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
         onClose();
         reset();
       }}
-      title={t("create_project")}
-      subtitle={t("create_project_description")}
+      title={t("create_tag")}
+      subtitle={t("create_tag_description")}
     >
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("name")} onChange={setName} />
@@ -46,7 +46,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
         />
       </div>
       <Button
-        disabled={!name}
+        disabled={!name || !description}
         label={t("create")}
         onClick={() => {
           reset();
@@ -57,4 +57,4 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
   );
 };
 
-export default CreateProjectModal;
+export default CreateTagModal;

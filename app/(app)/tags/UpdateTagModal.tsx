@@ -1,24 +1,34 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
+import { ReportImageTag } from "@/types";
 
-interface CreateProjectModalProps {
+interface UpdateTagModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (name: string, description?: string) => void;
+  tag?: ReportImageTag;
+  onSubmit: (name?: string, description?: string) => void;
 }
 
-const CreateProjectModal: FC<CreateProjectModalProps> = ({
+const UpdateTagModal: FC<UpdateTagModalProps> = ({
   isOpen,
   onClose,
+  tag,
   onSubmit,
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!tag) return;
+
+    setName(tag.name);
+    setDescription(tag.description);
+  }, [tag]);
 
   const reset = () => {
     setTimeout(() => {
@@ -34,8 +44,8 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
         onClose();
         reset();
       }}
-      title={t("create_project")}
-      subtitle={t("create_project_description")}
+      title={t("update_tag")}
+      subtitle={t("update_tag_description")}
     >
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("name")} onChange={setName} />
@@ -46,8 +56,8 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
         />
       </div>
       <Button
-        disabled={!name}
-        label={t("create")}
+        disabled={!name || !description}
+        label={t("update")}
         onClick={() => {
           reset();
           onSubmit(name, description);
@@ -57,4 +67,4 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
   );
 };
 
-export default CreateProjectModal;
+export default UpdateTagModal;

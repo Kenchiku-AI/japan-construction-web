@@ -93,3 +93,14 @@ export enum ReportUniqueBy {
   Month = "month",
   Year = "year",
 }
+
+export type ReportImageTag = {
+  id: string;
+  name: string;
+  description: string;
+};
+
+export type ReportImageTagRequest = {
+  name?: string;
+  description?: string;
+};
