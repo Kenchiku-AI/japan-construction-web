@@ -80,10 +80,33 @@ export const useTags = () => {
     [currentUser],
   );
 
+  const deleteTag = useCallback(
+    async (tagId: string) => {
+      const companyId = currentUser?.company?.id;
+      if (!companyId) return;
+
+      setLoading(true);
+
+      try {
+        await api.deleteTag(companyId, tagId);
+        await getTags();
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("delete_tag_error"),
+        });
+      }
+
+      setLoading(false);
+    },
+    [currentUser],
+  );
+
   return {
     loading,
     tags,
     createTag,
     updateTag,
+    deleteTag,
   };
 };

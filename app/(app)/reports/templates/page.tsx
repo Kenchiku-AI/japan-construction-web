@@ -26,7 +26,7 @@ const ReportTemplatesPage = () => {
 
   return (
     <>
-      <div className="flex justify-between mb-10">
+      <div className="flex justify-between items-center mb-10">
         <Heading title={t("report_templates")} />
         <Button
           variant="secondary"

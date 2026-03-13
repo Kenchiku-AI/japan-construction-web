@@ -139,6 +139,10 @@ export const useApiData = () => {
       const url = `/companies/${companyId}/tags/${tagId}`;
       return call(() => http.patch<ReportImageTag>(url, request));
     },
+    async deleteTag(companyId: string, tagId: string) {
+      const url = `/companies/${companyId}/tags/${tagId}`;
+      return call(() => http.delete(url));
+    },
     async getProject(projectId: string) {
       const url = `/projects/${projectId}`;
       return call(() => http.get<Project>(url));

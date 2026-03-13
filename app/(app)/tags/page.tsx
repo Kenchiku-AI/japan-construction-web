@@ -12,13 +12,15 @@ import { redirect } from "next/navigation";
 import { useTags } from "./useTags";
 import CreateTagModal from "./CreateTagModal";
 import UpdateTagModal from "./UpdateTagModal";
+import DeleteTagModal from "./DeleteTagModal";
 
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const { tags, updateTag, createTag, loading } = useTags();
+  const { tags, updateTag, createTag, deleteTag, loading } = useTags();
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
-  const [editTag, setEditTag] = useState<ReportImageTag>();
+  const [editingTag, setEditingTag] = useState<ReportImageTag>();
+  const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
 
   if (currentUser?.role === UserRole.User) {
     redirect("/");
@@ -26,7 +28,7 @@ const ReportTemplatesPage = () => {
 
   return (
     <>
-      <div className="flex justify-between mb-10">
+      <div className="flex justify-between items-center mb-10">
         <Heading title={t("tags")} />
         <Button
           variant="secondary"
@@ -40,7 +42,8 @@ const ReportTemplatesPage = () => {
       <TagsList
         tags={tags ?? []}
         isEmpty={!loading && tags?.length === 0}
-        onEdit={(t) => setEditTag(t)}
+        onEdit={(t) => setEditingTag(t)}
+        onDelete={(t) => setDeletingTag(t)}
       />
       <CreateTagModal
         isOpen={isCreateTagModalShown}
@@ -53,13 +56,33 @@ const ReportTemplatesPage = () => {
         }}
       />
       <UpdateTagModal
-        isOpen={!!editTag}
-        tag={editTag}
+        isOpen={!!editingTag}
+        tag={editingTag}
         onClose={() => {
-          setEditTag(undefined);
+          setEditingTag(undefined);
         }}
-        onSubmit={() => {
-          setEditTag(undefined);
+        onSubmit={(name, description) => {
+          if (!editingTag) return;
+
+          const tagId = editingTag.id;
+          setEditingTag(undefined);
+          updateTag(tagId, {
+            name,
+            description,
+          });
+        }}
+      />
+      <DeleteTagModal
+        isOpen={!!deletingTag}
+        onClose={() => {
+          setDeletingTag(undefined);
+        }}
+        onDelete={() => {
+          if (!deletingTag) return;
+
+          const tagId = deletingTag.id;
+          setDeletingTag(undefined);
+          deleteTag(tagId);
         }}
       />
     </>

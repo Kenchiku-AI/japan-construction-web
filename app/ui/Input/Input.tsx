@@ -20,6 +20,7 @@ interface InputProps {
   autoFocus?: boolean;
   hideLabel?: boolean;
   style?: CSSProperties;
+  animationDisabled?: boolean;
 }
 
 export const Input: FC<InputProps> = ({
@@ -33,6 +34,7 @@ export const Input: FC<InputProps> = ({
   autoFocus,
   hideLabel,
   style,
+  animationDisabled,
 }) => {
   const [isEmpty, setIsEmpty] = useState(!value && !defaultValue);
   const labelShown = !hideLabel && !isEmpty;
@@ -50,7 +52,13 @@ export const Input: FC<InputProps> = ({
 
   return (
     <div className="relative flex flex-1">
-      <div className={styles.label} style={{ opacity: labelShown ? 1 : 0 }}>
+      <div
+        className={styles.label}
+        style={{
+          opacity: labelShown ? 1 : 0,
+          transition: animationDisabled ? "none" : "opacity 0.075s ease-in-out",
+        }}
+      >
         {placeholder}
       </div>
       <input
@@ -67,6 +75,9 @@ export const Input: FC<InputProps> = ({
           backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,
           paddingTop: labelShown ? 16 : undefined,
           pointerEvents: disabled ? "none" : undefined,
+          transition: animationDisabled
+            ? "none"
+            : "padding-top 0.075s ease-in-out",
           ...style,
         }}
         autoFocus={autoFocus}

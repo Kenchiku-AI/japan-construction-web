@@ -20,11 +20,18 @@ const UpdateTagModal: FC<UpdateTagModalProps> = ({
   onSubmit,
 }) => {
   const [name, setName] = useState("");
+  const [isShowing, setIsShowing] = useState(false);
   const [description, setDescription] = useState("");
   const { t } = useTranslation();
 
   useEffect(() => {
     if (!tag) return;
+
+    setIsShowing(true);
+
+    setTimeout(() => {
+      setIsShowing(false);
+    }, 500);
 
     setName(tag.name);
     setDescription(tag.description);
@@ -48,11 +55,17 @@ const UpdateTagModal: FC<UpdateTagModalProps> = ({
       subtitle={t("update_tag_description")}
     >
       <div className="my-8 flex flex-col gap-3">
-        <Input value={name} placeholder={t("name")} onChange={setName} />
+        <Input
+          value={name}
+          placeholder={t("name")}
+          onChange={setName}
+          animationDisabled={isShowing}
+        />
         <TextArea
           value={description}
           placeholder={t("description")}
           onChange={setDescription}
+          animationDisabled={isShowing}
         />
       </div>
       <Button

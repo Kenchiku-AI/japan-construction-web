@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ReportImageTag } from "@/types";
 import styles from "./page.module.css";
-import { Edit, Tag } from "@/app/ui/Icons";
+import { Edit, Tag, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { fontColor1, fontColor2 } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
@@ -12,6 +12,7 @@ interface TagsListProps {
   isEmpty?: boolean;
   isCollapsible?: boolean;
   onEdit?: (tag: ReportImageTag) => void;
+  onDelete?: (tag: ReportImageTag) => void;
 }
 
 const TagsList: FC<TagsListProps> = ({
@@ -19,6 +20,7 @@ const TagsList: FC<TagsListProps> = ({
   isEmpty,
   isCollapsible,
   onEdit,
+  onDelete,
 }) => {
   const { t } = useTranslation();
   const [showAll, setShowAll] = useState(!isCollapsible);
@@ -51,11 +53,21 @@ const TagsList: FC<TagsListProps> = ({
                     </div>
                   </div>
                 </div>
-                {onEdit && (
-                  <div className="cursor-pointer" onClick={() => onEdit(t)}>
-                    <Edit />
-                  </div>
-                )}
+                <div className="flex gap-3 items-center">
+                  {onEdit && (
+                    <div
+                      className="cursor-pointer pb-1"
+                      onClick={() => onEdit(t)}
+                    >
+                      <Edit />
+                    </div>
+                  )}
+                  {onDelete && (
+                    <div className="cursor-pointer" onClick={() => onDelete(t)}>
+                      <Trash />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <Divider color={fontColor2} />
