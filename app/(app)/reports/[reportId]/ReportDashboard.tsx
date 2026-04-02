@@ -15,6 +15,8 @@ import { Loader } from "@/app/ui/Loader";
 import { Plus, Share, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
+import { ReportPDF } from "./ReportPDF";
+import { pdf } from "@react-pdf/renderer";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -77,7 +79,27 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           variant="tertiary"
           label={t("export")}
           iconLeft={() => <Share />}
-          onClick={() => {}}
+          onClick={async () => {
+            if (!report || !currentUser?.company) return;
+
+            const blob = await pdf(
+              <ReportPDF
+                report={report}
+                companyName={currentUser.company.name}
+              />,
+            ).toBlob();
+
+            const fileUrl = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = fileUrl;
+            a.download = `${report.name.replace(" ", "_")}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            URL.revokeObjectURL(fileUrl);
+          }}
           textStyle={{
             fontWeight: "300",
           }}
