@@ -120,7 +120,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       </div>
       {!!sortedFields && (
         <>
-          <div className="flex flex-col w-full gap-2 mt-4 mb-12">
+          <div className="flex flex-col w-full gap-2 mt-3 mb-12">
             {sortedFields?.map((field) => (
               <Input
                 key={field.id}

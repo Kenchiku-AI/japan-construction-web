@@ -19,6 +19,7 @@ import Select from "@/app/ui/Select/Select";
 import { useReportTemplates } from "../useReportTemplates";
 import { AddUser, Plus, Share } from "@/app/ui/Icons";
 import ShareReportTemplateModal from "./ShareReportTemplateModal";
+import Divider from "@/app/ui/Divider";
 
 interface ReportTemplateDashboardProps {
   reportTemplateId: string;
@@ -118,16 +119,13 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
         }}
         isEditable={!!reportTemplate && canEdit}
       />
+      <Divider />
       {canShare && (
-        <div className="mb-2 mt-8 flex justify-end">
+        <div className="mb-3">
           <Button
             variant="tertiary"
             label={t("share_report_template")}
-            iconLeft={() => (
-              <div className="mr-1">
-                <AddUser />
-              </div>
-            )}
+            iconLeft={() => <AddUser />}
             onClick={() => {
               setShowShare(true);
             }}
@@ -137,7 +135,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
       )}
       {!!reportTemplate && (
         <>
-          <div className={`${canShare ? "mb-8" : "my-8"} flex flex-col gap-2`}>
+          <div className="flex flex-col gap-2">
             <TextArea
               placeholder={t("description")}
               value={
@@ -161,13 +159,15 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
               />
             </div>
           </div>
-          <ReportTemplateFields
-            fields={fields}
-            onChange={(f) => {
-              setFields(f);
-            }}
-            disabled={!canEdit}
-          />
+          <div className="mt-12">
+            <ReportTemplateFields
+              fields={fields}
+              onChange={(f) => {
+                setFields(f);
+              }}
+              disabled={!canEdit}
+            />
+          </div>
           {canEdit && (
             <div className="mt-8 flex w-full lg:w-1/2">
               <Button

@@ -148,7 +148,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
             {...attributes}
             {...listeners}
             className={
-              disabled ? "mt-5" : "cursor-grab active:cursor-grabbing mt-5"
+              disabled ? "mt-4" : "cursor-grab active:cursor-grabbing mt-4"
             }
           >
             <div>
