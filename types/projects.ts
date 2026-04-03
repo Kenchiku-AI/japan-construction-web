@@ -1,10 +1,10 @@
-import { DailyReport } from "./reports";
+import { Report } from "./reports";
 
 export type Project = {
   id: string;
   name: string;
   description: string;
-  daily_reports?: DailyReport[];
+  reports?: Report[];
   status: ProjectStatus;
 };
 
@@ -17,5 +17,10 @@ export enum ProjectStatus {
 export type CreateProjectRequest = {
   company_id: string;
   name: string;
+  description?: string;
+};
+
+export type UpdateProjectRequest = {
+  name?: string;
   description?: string;
 };

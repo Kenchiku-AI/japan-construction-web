@@ -28,13 +28,14 @@
 body {
   background: var(--background);
   color: var(--text-color-1);
+  font-size: 18px;
 }
 
 input,
 .input,
 .select {
   border-width: 0;
-  padding: 0 20px;
+  padding: 0 16px;
   height: 60px;
   border-radius: 10px;
   width: 100%;

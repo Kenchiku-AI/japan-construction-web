@@ -43,7 +43,7 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
               <div className="flex items-center justify-between mx-4">
                 <div style={{ height: 68 }} className="flex items-center gap-4">
                   <Hardhat />
-                  <div className="text-xl">{p.name}</div>
+                  <div>{p.name}</div>
                 </div>
                 <StatusLabel project={p} />
               </div>

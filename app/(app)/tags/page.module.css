@@ -4,6 +4,7 @@
 
 .subtitle {
   color: var(--text-color-2);
+  font-size: 16px;
 }
 
 .empty {
@@ -11,5 +12,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 140px;
+  height: 80px;
 }

@@ -13,6 +13,7 @@ import { useTags } from "./useTags";
 import CreateTagModal from "./CreateTagModal";
 import UpdateTagModal from "./UpdateTagModal";
 import DeleteTagModal from "./DeleteTagModal";
+import Divider from "@/app/ui/Divider";
 
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
@@ -28,10 +29,11 @@ const ReportTemplatesPage = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex justify-between items-end">
         <Heading title={t("tags")} />
         <Button
-          variant="secondary"
+          variant="tertiary"
+          style={{ height: "auto" }}
           label={t("create_tag")}
           iconLeft={() => <Plus />}
           onClick={() => {
@@ -39,6 +41,7 @@ const ReportTemplatesPage = () => {
           }}
         />
       </div>
+      <Divider />
       <TagsList
         tags={tags ?? []}
         isEmpty={!loading && tags?.length === 0}

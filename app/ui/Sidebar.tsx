@@ -25,11 +25,11 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
     <div className="drawer drawer-open">
       <input type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col md:px-16 px-4 py-16 max-w-4xl">
+      <div className="drawer-content flex flex-col md:px-24 px-4 md:py-12 max-w-4xl">
         {children}
       </div>
       <div className="drawer-side flex">
-        <ul className="menu bg-base-200 text-base-content min-h-full py-6 md:px-4 px-1 justify-between">
+        <ul className="menu bg-base-200 lg:w-48 min-w-14 sm:min-w-20 text-base-content min-h-full py-6 md:px-4 px-1 justify-between">
           {currentUser && (
             <>
               <div className="space-y-2">
@@ -39,7 +39,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                   path={"/"}
                 />
                 <SidebarItem
-                  name={t("sites")}
+                  name={t("projects")}
                   icon={() => <Hardhat size={24} />}
                   path={"/projects"}
                 />

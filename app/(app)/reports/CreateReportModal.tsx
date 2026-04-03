@@ -100,7 +100,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
     >
       <div className="mt-8 flex flex-col">
         <div className="flex justify-between items-center">
-          <div className="text-xl">{t("type")}</div>
+          <div>{t("type")}</div>
           <Select
             options={templateOptions}
             value={templateId}
@@ -121,7 +121,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
           }}
         >
           <div className="flex flex-1 justify-between items-center">
-            <div className="text-xl">{t("project")}</div>
+            <div>{t("project")}</div>
             <Select
               options={projectOptions}
               value={projectId}
@@ -134,7 +134,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
           </div>
         </div>
       </div>
-      <div className="mt-4 mb-8 flex flex-col gap-4">
+      <div className="mt-4 mb-8 flex flex-col gap-2">
         <Input
           value={name}
           placeholder={t("name")}

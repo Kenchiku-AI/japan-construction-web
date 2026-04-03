@@ -99,7 +99,7 @@ const ShareReportTemplateModal: FC<ShareReportTemplateModalProps> = ({
                 <div style={{ height: 68 }} className="flex items-center gap-4">
                   <Users />
                   <div className="flex flex-col">
-                    <div className="text-xl">{c.name}</div>
+                    <div>{c.name}</div>
                     <div className={styles.subtitle}>{c.corporate_number}</div>
                   </div>
                 </div>

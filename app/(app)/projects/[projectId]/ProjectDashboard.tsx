@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -11,7 +11,9 @@ import { useProject } from "./useProject";
 import { Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import CreateReportModal from "../../reports/CreateReportModal";
-import { useReports } from "../../reports/useReports";
+import { useReportTemplates } from "../../reports/templates/useReportTemplates";
+import { TextArea } from "@/app/ui/TextArea/TextArea";
+import ReportsList from "../../reports/ReportsList";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -19,11 +21,20 @@ interface ProjectDashboardProps {
 
 const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const { currentUser } = useApi();
-  const { reportTemplates } = useReports();
+  const { reportTemplates } = useReportTemplates();
   const { t } = useTranslation();
-  const { project } = useProject(projectId);
+  const { project, updateProject } = useProject(projectId);
+  const isLoaded = useRef(false);
   const searchParams = useSearchParams();
   const [showCreateReport, setShowCreateReport] = useState(false);
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (isLoaded.current || !project) return;
+
+    isLoaded.current = true;
+    setDescription(project.description);
+  }, [project]);
 
   return (
     <>
@@ -35,25 +46,35 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           currentUser?.role === UserRole.Admin ||
           currentUser?.role === UserRole.Manager
         }
-        onEdit={(n) => {}}
+        onEdit={(name) => {
+          updateProject({ name });
+        }}
       />
+      <Divider />
       {project && (
         <>
-          <div className="flex justify-between mt-8">
-            <div className="text-2xl self-end">{t("reports")}</div>
-            {currentUser?.role === UserRole.Admin && (
-              <Button
-                variant="secondary"
-                label={t("create_report")}
-                iconLeft={() => <Plus />}
-                onClick={() => {
-                  setShowCreateReport(true);
-                }}
-                style={{ height: 40 }}
-              />
-            )}
+          <TextArea
+            value={description}
+            placeholder={t("description")}
+            onChange={setDescription}
+          />
+          <div className="flex justify-between mt-12">
+            <div className="self-end">{t("reports")}</div>
+            <Button
+              variant="tertiary"
+              label={t("create_report")}
+              iconLeft={() => <Plus />}
+              onClick={() => {
+                setShowCreateReport(true);
+              }}
+              style={{ height: "auto" }}
+            />
           </div>
           <Divider />
+          <ReportsList
+            reports={project.reports ?? []}
+            isEmpty={project.reports?.length === 0}
+          />
         </>
       )}
       <CreateReportModal

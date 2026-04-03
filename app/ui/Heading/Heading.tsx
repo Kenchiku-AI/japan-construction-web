@@ -34,12 +34,12 @@ export const Heading: FC<HeadingProps> = ({
     <div>
       <div className={styles.topLabel}>{topLabel}</div>
       {showEdit ? (
-        <div className="flex gap-4" style={{ marginTop: -2 }}>
+        <div className="flex gap-4">
           <Input
             placeholder={placeholder}
             value={editedTitle}
             onChange={(t) => setEditedTitle(t)}
-            style={{ fontSize: 24, height: 50, padding: 12 }}
+            style={{ fontSize: 18, height: 36, padding: 12 }}
             autoFocus
             hideLabel
           />
@@ -70,10 +70,11 @@ export const Heading: FC<HeadingProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex text-ellipsis items-center gap-4">
-          <div className="text-ellipsis text-2xl lg:text-3xl">
-            {displayTitle}
-          </div>
+        <div
+          className="flex text-ellipsis items-center gap-4"
+          style={{ minHeight: 36 }}
+        >
+          <div className="text-ellipsis text-2xl">{displayTitle}</div>
           {isEditable && (
             <div
               className="cursor-pointer"

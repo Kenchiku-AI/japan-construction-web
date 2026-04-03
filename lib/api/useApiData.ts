@@ -10,6 +10,7 @@ import {
   ReportRequest,
   ReportImageTag,
   ReportImageTagRequest,
+  UpdateProjectRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -143,9 +144,17 @@ export const useApiData = () => {
       const url = `/companies/${companyId}/tags/${tagId}`;
       return call(() => http.delete(url));
     },
+    async getProjects() {
+      const url = `/projects`;
+      return call(() => http.get<Project[]>(url));
+    },
     async getProject(projectId: string) {
       const url = `/projects/${projectId}`;
       return call(() => http.get<Project>(url));
+    },
+    async updateProject(projectId: string, request: UpdateProjectRequest) {
+      const url = `/projects/${projectId}`;
+      return call(() => http.patch<Project>(url, request));
     },
     async createProject(request: CreateProjectRequest) {
       const url = "/projects";

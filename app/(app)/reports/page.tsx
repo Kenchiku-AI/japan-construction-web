@@ -11,6 +11,7 @@ import { Plus } from "@/app/ui/Icons";
 import ReportsList from "./ReportsList";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
+import Divider from "@/app/ui/Divider";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
@@ -28,10 +29,11 @@ const ReportsPage = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex justify-between items-end">
         <Heading title={t("reports")} />
         <Button
-          variant="secondary"
+          variant="tertiary"
+          style={{ height: "auto" }}
           label={t("create_report")}
           iconLeft={() => <Plus />}
           onClick={() => {
@@ -39,6 +41,7 @@ const ReportsPage = () => {
           }}
         />
       </div>
+      <Divider />
       <ReportsList
         reports={reports ?? []}
         isEmpty={!loading && reports?.length === 0}

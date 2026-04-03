@@ -27,10 +27,11 @@ const CompaniesPage = () => {
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-end">
         <Heading title={t("companies")} />
         <Button
-          variant="secondary"
+          variant="tertiary"
+          style={{ height: "auto" }}
           label={t("create_company")}
           iconLeft={() => <Plus />}
           onClick={() => {
@@ -38,7 +39,8 @@ const CompaniesPage = () => {
           }}
         />
       </div>
-      <div className="flex flex-col mt-10">
+      <Divider />
+      <div className="flex flex-col">
         {companies?.length === 0 && (
           <div className={styles.empty}>{t("empty_companies_description")}</div>
         )}
@@ -54,7 +56,7 @@ const CompaniesPage = () => {
                 <div style={{ height: 68 }} className="flex items-center gap-6">
                   <Users />
                   <div>
-                    <div className="text-xl">{c.name}</div>
+                    <div>{c.name}</div>
                     <div className={styles.corporateNumber}>
                       {c.corporate_number}
                     </div>

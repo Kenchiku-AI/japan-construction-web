@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
 import { Report, Company } from "@/types";
-import { bgColor1, bgColor2, fontColor1, fontColor2 } from "@/lib/constants";
+import { bgColor2, fontColor1, fontColor2 } from "@/lib/constants";
 
 interface ReportPDFProps {
   report: Report;
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     color: fontColor1,
     marginBottom: 12,
   },

@@ -74,7 +74,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         }}
         isEditable
       />
-      <div className="mt-8 flex flex-col w-full lg:flex-row items-end lg:justify-end gap-2 lg:gap-8">
+      <Divider />
+      <div className="flex w-full flex-row justify-between gap-2 lg:gap-8">
         <Button
           variant="tertiary"
           label={t("export")}
@@ -119,7 +120,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       </div>
       {!!sortedFields && (
         <>
-          <div className="flex flex-col w-full gap-4 mt-2 mb-12">
+          <div className="flex flex-col w-full gap-2 mt-4 mb-12">
             {sortedFields?.map((field) => (
               <Input
                 key={field.id}
@@ -144,10 +145,9 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                 variant="tertiary"
                 onClick={() => {}}
                 style={{ height: "auto" }}
-                textStyle={{ fontSize: 16, fontWeight: 100 }}
               />
             </div>
-            <Divider style={{ marginTop: 10 }} />
+            <Divider />
             <div className={styles.empty}>{t("empty_photos_description")}</div>
           </div>
           <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">

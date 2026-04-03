@@ -137,7 +137,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
       )}
       {!!reportTemplate && (
         <>
-          <div className={`${canShare ? "mb-8" : "my-8"} flex flex-col gap-4`}>
+          <div className={`${canShare ? "mb-8" : "my-8"} flex flex-col gap-2`}>
             <TextArea
               placeholder={t("description")}
               value={
@@ -146,7 +146,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
               onChange={setDescription}
               disabled={!canEdit}
             />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
               <Select
                 placeholder={t("type")}
                 options={parentTypeOptions}

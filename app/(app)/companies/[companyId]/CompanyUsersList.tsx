@@ -33,19 +33,14 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users }) => {
       >
         {users.map((u) => (
           <div key={u.id}>
-            <div
-              onClick={() => {
-                router.push(
-                  `/users/${u.id}?name=${u.first_name} ${u.last_name}`,
-                );
-              }}
-              className="hover:opacity-50 cursor-pointer mx-4"
-            >
+            <div className=" mx-4">
               <div className="flex items-center justify-between">
                 <div style={{ height: 68 }} className="flex items-center gap-4">
-                  <User />
+                  <User color={fontColor2} />
                   <div className="flex flex-col">
-                    <div className="text-xl">{`${u.first_name} ${u.last_name}`}</div>
+                    <div style={{ opacity: 0.6 }}>
+                      {`${u.first_name} ${u.last_name}`}
+                    </div>
                     <div className={styles.subtitle}>{u.email}</div>
                   </div>
                 </div>

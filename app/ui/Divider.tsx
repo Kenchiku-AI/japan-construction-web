@@ -12,7 +12,7 @@ const Divider: FC<DividerProps> = ({ color, style }) => {
         height: 1,
         width: "100%",
         background: color ?? "black",
-        margin: "16px 0",
+        margin: "12px 0",
         ...style,
       }}
     />

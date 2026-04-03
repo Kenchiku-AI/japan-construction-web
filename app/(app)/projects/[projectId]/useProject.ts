@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Project, UserRole } from "@/types";
+import { Project, UpdateProjectRequest, UserRole } from "@/types";
 import { useModal } from "@/lib/modal/ModalContext";
 
 export const useProject = (projectId: string) => {
@@ -43,8 +43,35 @@ export const useProject = (projectId: string) => {
     [setProject, currentUser],
   );
 
+  const updateProject = useCallback(
+    async (request: UpdateProjectRequest) => {
+      if (!project) return;
+
+      setLoading(true);
+
+      try {
+        const response = await api.updateProject(project.id, request);
+        setProject(response);
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("get_project_error_description"),
+        });
+
+        if (currentUser?.role === UserRole.Admin) {
+          router.replace("/projects");
+        } else {
+          router.replace("/");
+        }
+      }
+      setLoading(false);
+    },
+    [project],
+  );
+
   return {
     loading,
     project,
+    updateProject,
   };
 };

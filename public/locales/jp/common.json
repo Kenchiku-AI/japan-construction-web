@@ -53,6 +53,7 @@
   "first_name": "名",
   "forgot_password": "パスワードをお忘れですか",
   "get_project_error_description": "現場の取得中にエラーが発生しました。",
+  "get_projects_error_description": "現場の取得中にエラーが発生しました。",
   "get_report_error_description": "報告書の取得中にエラーが発生しました。",
   "get_report_template_error_description": "テンプレートの取得中にエラーが発生しました。",
   "home": "ホーム",

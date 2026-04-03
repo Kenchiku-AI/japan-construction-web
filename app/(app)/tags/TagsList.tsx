@@ -45,15 +45,11 @@ const TagsList: FC<TagsListProps> = ({
                 <div style={{ height: 68 }} className="flex items-center gap-6">
                   <Tag size={30} />
                   <div>
-                    <div className="text-xl" style={{ color: fontColor1 }}>
-                      {t.name}
-                    </div>
-                    <div className="text" style={{ color: fontColor2 }}>
-                      {t.description}
-                    </div>
+                    <div style={{ color: fontColor1 }}>{t.name}</div>
+                    <div className={styles.subtitle}>{t.description}</div>
                   </div>
                 </div>
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-5 items-center">
                   {onEdit && (
                     <div
                       className="cursor-pointer pb-1"

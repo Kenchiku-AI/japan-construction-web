@@ -52,7 +52,7 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
   return (
     <>
       <div className="flex justify-between">
-        <div className="text-xl self-end">{t("fields")}</div>
+        <div className="self-end">{t("fields")}</div>
         {!disabled && (
           <div style={{ color: fontColor2 }}>{t("drag_to_reorder")}</div>
         )}

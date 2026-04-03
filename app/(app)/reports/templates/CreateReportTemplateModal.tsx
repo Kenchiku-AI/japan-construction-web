@@ -70,7 +70,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
           onChange={setDescription}
         />
         <div className="flex justify-between items-center">
-          <div className="text-xl">{t("type")}</div>
+          <div>{t("type")}</div>
           <Select
             options={parentTypeOptions}
             value={parentType}
@@ -82,7 +82,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
           />
         </div>
         <div className="flex justify-between items-center">
-          <div className="text-xl">{t("unique_by")}</div>
+          <div>{t("unique_by")}</div>
           <Select
             options={uniqueByOptions}
             value={uniqueBy}

@@ -48,10 +48,10 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onEdit={(n) => {}}
       />
       {company && (
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-8">
           <div>
             <div className="flex justify-between mt-8">
-              <div className="text-xl self-end">{t("projects")}</div>
+              <div className="self-end">{t("projects")}</div>
               {currentUser?.role === UserRole.Admin && (
                 <Button
                   variant="tertiary"
@@ -60,16 +60,16 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                   onClick={() => {
                     setShowCreateProject(true);
                   }}
-                  style={{ height: 30 }}
+                  style={{ height: "auto" }}
                 />
               )}
             </div>
-            <Divider style={{ marginTop: "12px" }} />
+            <Divider />
             <CompanyProjectsList projects={company.projects} />
           </div>
           <div>
             <div className="flex justify-between">
-              <div className="text-xl self-end">{t("users")}</div>
+              <div className="self-end">{t("users")}</div>
               {(currentUser?.role === UserRole.Admin ||
                 currentUser?.role === UserRole.Manager) && (
                 <Button
@@ -79,11 +79,11 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                   onClick={() => {
                     setShowInviteUser(true);
                   }}
-                  style={{ height: 30 }}
+                  style={{ height: "auto" }}
                 />
               )}
             </div>
-            <Divider style={{ marginTop: "12px" }} />
+            <Divider />
             <CompanyUsersList users={company.users} />
           </div>
         </div>

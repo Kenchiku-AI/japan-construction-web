@@ -11,6 +11,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import ReportTemplatesList from "./ReportTemplatesList";
 import { redirect } from "next/navigation";
+import Divider from "@/app/ui/Divider";
 
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
@@ -26,10 +27,11 @@ const ReportTemplatesPage = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex justify-between items-end">
         <Heading title={t("report_templates")} />
         <Button
-          variant="secondary"
+          variant="tertiary"
+          style={{ height: "auto" }}
           label={t("create_template")}
           iconLeft={() => <Plus />}
           onClick={() => {
@@ -37,6 +39,7 @@ const ReportTemplatesPage = () => {
           }}
         />
       </div>
+      <Divider />
       <ReportTemplatesList
         templates={reportTemplates ?? []}
         isEmpty={!loading && reportTemplates?.length === 0}
