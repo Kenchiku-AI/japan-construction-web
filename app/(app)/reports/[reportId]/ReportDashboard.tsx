@@ -2,7 +2,7 @@
 
 import { useApi } from "@/lib/api/ApiContext";
 import { redirect, useSearchParams } from "next/navigation";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReport } from "./useReport";
 import { ReportFieldValues, UserRole } from "@/types";
@@ -30,8 +30,15 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    window.matchMedia("(max-width: 768px)").matches,
+  );
 
   useEffect(() => {
+    resetFieldValues();
+  }, [report]);
+
+  const resetFieldValues = useCallback(() => {
     const newValues: ReportFieldValues = {};
 
     report?.fields.forEach((f) => {
@@ -41,8 +48,21 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     setFieldValues(newValues);
   }, [report]);
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const handler = (e: any) => setIsMobile(e.matches);
+
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
   const isDisabled = useMemo(() => {
-    if (!fieldValues || !report) return true;
+    if (
+      !fieldValues ||
+      !Object.keys(fieldValues ?? []).length ||
+      !report?.fields.length
+    )
+      return true;
 
     const isChanged = report.fields.some((f) => f.value !== fieldValues[f.id]);
     return !isChanged;
@@ -120,12 +140,12 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       </div>
       {!!sortedFields && (
         <>
-          <div className="flex flex-col w-full gap-2 mt-3 mb-12">
+          <div className="flex flex-col w-full gap-2 mt-3">
             {sortedFields?.map((field) => (
               <Input
                 key={field.id}
                 placeholder={field.name}
-                defaultValue={field.value}
+                value={fieldValues?.[field.id]}
                 onChange={(value) => {
                   setFieldValues((prev) => {
                     const newValues = { ...prev };
@@ -136,7 +156,34 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               />
             ))}
           </div>
-          <div className="mb-12 w-full">
+          <div
+            style={{
+              height: isDisabled ? 0 : isMobile ? 136 : 80,
+              opacity: isDisabled ? 0 : 1,
+              overflow: "hidden",
+              transition: "height 0.2s ease-in-out, opacity 0.2s ease-in-out",
+            }}
+            className="pt-4 w-full grid grid-cols-1 md:grid-cols-2 md:gap-3"
+          >
+            <Button
+              label={t("update_report")}
+              onClick={() => {
+                updateReport({ field_values: fieldValues });
+              }}
+              style={{ height: 50 }}
+              loading={updateLoading}
+            />
+            <Button
+              variant="secondary"
+              label={t("discard_changes")}
+              onClick={() => {
+                resetFieldValues();
+              }}
+              style={{ borderColor: errorColor1 }}
+              textStyle={{ color: errorColor1 }}
+            />
+          </div>
+          <div className="mt-4 w-full">
             <div className="flex justify-between items-end">
               <div>{t("photos")}</div>
               <Button
@@ -156,16 +203,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             {images?.map((i) => (
               <img src={i.download_url} />
             ))}
-          </div>
-          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Button
-              label={t("update_report")}
-              onClick={() => {
-                updateReport({ field_values: fieldValues });
-              }}
-              disabled={isDisabled}
-              loading={updateLoading}
-            />
           </div>
         </>
       )}
