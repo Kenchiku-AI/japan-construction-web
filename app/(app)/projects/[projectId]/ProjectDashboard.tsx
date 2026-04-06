@@ -8,12 +8,13 @@ import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Plus } from "@/app/ui/Icons";
+import { Check, Close, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
+import { errorColor1 } from "@/lib/constants";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -28,6 +29,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const searchParams = useSearchParams();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
+  const isDescriptionEdited =
+    project?.description !== description && isLoaded.current;
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -58,7 +61,43 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             placeholder={t("description")}
             onChange={setDescription}
           />
-          <div className="flex justify-between mt-12">
+          <div
+            style={{
+              height: isDescriptionEdited ? 36 : 0,
+              opacity: isDescriptionEdited ? 1 : 0,
+              overflow: "hidden",
+              transition:
+                "height 0.075s ease-in-out, opacity 0.15s ease-in-out",
+              display: "flex",
+              alignItems: "flex-end",
+              gap: 24,
+            }}
+          >
+            <Button
+              variant="tertiary"
+              iconLeft={() => <Check />}
+              style={{ height: "auto" }}
+              label={t("update_description")}
+              onClick={() => {
+                updateProject({ description });
+              }}
+            />
+            <Button
+              variant="tertiary"
+              iconLeft={() => (
+                <div style={{ marginRight: -3 }}>
+                  <Close color={errorColor1} />
+                </div>
+              )}
+              style={{ height: "auto" }}
+              label={t("cancel")}
+              onClick={() => {
+                setDescription(project.description);
+              }}
+              textStyle={{ color: errorColor1 }}
+            />
+          </div>
+          <div className="flex justify-between mt-8">
             <div className="self-end">{t("reports")}</div>
             <Button
               variant="tertiary"

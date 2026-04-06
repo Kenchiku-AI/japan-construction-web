@@ -12,7 +12,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { errorColor1 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
-import { Plus, Share, Trash } from "@/app/ui/Icons";
+import { Plus, Download, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
@@ -25,7 +25,7 @@ interface ReportDashboardProps {
 const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const { currentUser } = useApi();
   const { t } = useTranslation();
-  const { report, loading, updateReport, deleteReport, updateLoading } =
+  const { report, images, loading, updateReport, deleteReport, updateLoading } =
     useReport(reportId);
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
@@ -78,8 +78,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       <div className="flex w-full flex-row justify-between gap-2 lg:gap-8">
         <Button
           variant="tertiary"
-          label={t("export")}
-          iconLeft={() => <Share />}
+          label={t("download_pdf")}
+          iconLeft={() => <Download />}
           onClick={async () => {
             if (!report || !currentUser?.company) return;
 
@@ -148,7 +148,14 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               />
             </div>
             <Divider />
-            <div className={styles.empty}>{t("empty_photos_description")}</div>
+            {!!images && images.length === 0 && (
+              <div className={styles.empty}>
+                {t("empty_photos_description")}
+              </div>
+            )}
+            {images?.map((i) => (
+              <img src={i.download_url} />
+            ))}
           </div>
           <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Button

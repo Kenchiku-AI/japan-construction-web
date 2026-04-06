@@ -11,6 +11,7 @@ import {
   ReportImageTag,
   ReportImageTagRequest,
   UpdateProjectRequest,
+  ReportImage,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -167,6 +168,10 @@ export const useApiData = () => {
     async getReport(reportId: string) {
       const url = `/reports/${reportId}`;
       return call(() => http.get<Report>(url));
+    },
+    async getReportImages(reportId: string) {
+      const url = `/reports/${reportId}/images`;
+      return call(() => http.get<ReportImage[]>(url));
     },
     async createReport(request: CreateReportRequest) {
       const url = "/reports";

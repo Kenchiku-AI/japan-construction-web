@@ -18,6 +18,24 @@ export type ReportField = {
   order: number;
 };
 
+export type ReportImage = {
+  id: string;
+  report_id: string;
+  status: string;
+  download_url: string;
+  created_at: string;
+  width: number;
+  height: number;
+  description?: string;
+  tags: ReportImageTagLink[];
+};
+
+export type ReportImageTagLink = {
+  tag_id: string;
+  link_id: string;
+  name: string;
+};
+
 export type CreateReportRequest = {
   template_id: string;
   parent_id: string;

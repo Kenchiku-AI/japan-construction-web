@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
-import { Report, ReportRequest } from "@/types/reports";
+import { Report, ReportImage, ReportRequest } from "@/types/reports";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 
@@ -11,6 +11,7 @@ export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [report, setReport] = useState<Report>();
+  const [images, setImages] = useState<ReportImage[]>();
   const { t } = useTranslation();
   const router = useRouter();
   const api = useApi();
@@ -18,6 +19,7 @@ export const useReport = (reportId: string) => {
 
   useEffect(() => {
     getReport(reportId);
+    getImages(reportId);
   }, [reportId]);
 
   const getReport = useCallback(
@@ -38,7 +40,23 @@ export const useReport = (reportId: string) => {
 
       setLoading(false);
     },
-    [setReport],
+    [api, reportId, setReport],
+  );
+
+  const getImages = useCallback(
+    async (reportId: string) => {
+      setLoading(true);
+
+      try {
+        const response = await api.getReportImages(reportId);
+        setImages(response);
+      } catch (err) {
+        console.log(err);
+      }
+
+      setLoading(false);
+    },
+    [api, reportId, setImages],
   );
 
   const updateReport = useCallback(
@@ -84,6 +102,7 @@ export const useReport = (reportId: string) => {
     loading,
     updateLoading,
     report,
+    images,
     updateReport,
     deleteReport,
   };
