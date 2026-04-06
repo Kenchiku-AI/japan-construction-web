@@ -17,6 +17,7 @@ import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
 import { pdf } from "@react-pdf/renderer";
+import Masonry from "react-masonry-css";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -195,14 +196,23 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               />
             </div>
             <Divider />
-            {!!images && images.length === 0 && (
+            {!!images && images.length === 0 ? (
               <div className={styles.empty}>
                 {t("empty_photos_description")}
               </div>
+            ) : (
+              <Masonry
+                breakpointCols={{
+                  default: 4,
+                  768: 2,
+                }}
+                className="flex gap-2"
+              >
+                {images?.map((i) => (
+                  <img src={i.download_url} />
+                ))}
+              </Masonry>
             )}
-            {images?.map((i) => (
-              <img src={i.download_url} />
-            ))}
           </div>
         </>
       )}
