@@ -42,6 +42,10 @@ export type CreateReportRequest = {
   name: string;
 };
 
+export type ReportImageUpdateRequest = {
+  description: string;
+};
+
 export type ReportTemplateFieldInfo = {
   id: string;
   name: string;

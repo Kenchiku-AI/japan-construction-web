@@ -3,16 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { ReportImageTag, ReportImageTagRequest } from "@/types/reports";
-import { useRouter } from "next/navigation";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
-import { updateTag } from "next/cache";
 
 export const useTags = () => {
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState<ReportImageTag[]>();
   const { currentUser, ...api } = useApi();
-  const router = useRouter();
   const { showModal } = useModal();
   const { t } = useTranslation();
 

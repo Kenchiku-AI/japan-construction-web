@@ -10,6 +10,7 @@ import { useModal } from "@/lib/modal/ModalContext";
 export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [updateImageLoading, setUpdateImageLoading] = useState(false);
   const [report, setReport] = useState<Report>();
   const [images, setImages] = useState<ReportImage[]>();
   const { t } = useTranslation();
@@ -98,6 +99,33 @@ export const useReport = (reportId: string) => {
     setLoading(false);
   }, [reportId]);
 
+  const updateImageDescription = useCallback(
+    async (imageId: string, description: string) => {
+      setUpdateImageLoading(true);
+
+      try {
+        const response = await api.updateImage(reportId, imageId, {
+          description,
+        });
+
+        if (response) {
+          const imageIndex = images?.findIndex((i) => i.id === imageId) ?? -1;
+
+          if (imageIndex > -1) {
+            const newImages = [...(images ?? [])];
+            newImages[imageIndex] = response;
+            setImages(newImages);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+      setUpdateImageLoading(false);
+    },
+    [images, reportId],
+  );
+
   return {
     loading,
     updateLoading,
@@ -105,5 +133,7 @@ export const useReport = (reportId: string) => {
     images,
     updateReport,
     deleteReport,
+    updateImageDescription,
+    updateImageLoading,
   };
 };

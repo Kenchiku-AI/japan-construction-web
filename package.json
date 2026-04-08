@@ -14,6 +14,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@react-pdf/renderer": "^4.3.2",
     "axios": "^1.13.3",
+    "dayjs": "^1.11.20",
     "i18next": "^25.8.0",
     "lodash.debounce": "^4.0.8",
     "next": "16.1.5",

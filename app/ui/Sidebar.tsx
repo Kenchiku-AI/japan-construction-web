@@ -25,7 +25,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
     <div className="drawer drawer-open">
       <input type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col md:px-24 px-4 md:py-12 max-w-4xl">
+      <div className="drawer-content flex flex-col p-4 md:px-24 md:py-12 max-w-4xl">
         {children}
       </div>
       <div className="drawer-side flex">

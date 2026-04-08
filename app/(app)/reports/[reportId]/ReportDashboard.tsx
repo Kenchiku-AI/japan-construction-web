@@ -2,10 +2,10 @@
 
 import { useApi } from "@/lib/api/ApiContext";
 import { redirect, useSearchParams } from "next/navigation";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReport } from "./useReport";
-import { ReportFieldValues, UserRole } from "@/types";
+import { ReportFieldValues, ReportImage, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
@@ -18,6 +18,8 @@ import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
 import { pdf } from "@react-pdf/renderer";
 import Masonry from "react-masonry-css";
+import PhotoDetailModal from "./PhotoDetailModal";
+import { useTags } from "../../tags/useTags";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -25,18 +27,34 @@ interface ReportDashboardProps {
 
 const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const { currentUser } = useApi();
+  const { tags } = useTags();
   const { t } = useTranslation();
-  const { report, images, loading, updateReport, deleteReport, updateLoading } =
-    useReport(reportId);
+  const {
+    report,
+    images,
+    loading,
+    updateReport,
+    deleteReport,
+    updateLoading,
+    updateImageDescription,
+    updateImageLoading,
+  } = useReport(reportId);
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
+  const [selectedPhoto, setSelectedPhoto] = useState<ReportImage>();
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
-  const [isMobile, setIsMobile] = useState(
-    window.matchMedia("(max-width: 768px)").matches,
-  );
+  const [isPhotoModalShown, setIsPhotoModalShown] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const loaded = useRef(false);
 
   useEffect(() => {
     resetFieldValues();
+
+    if (report) {
+      setTimeout(() => {
+        loaded.current = true;
+      }, 500);
+    }
   }, [report]);
 
   const resetFieldValues = useCallback(() => {
@@ -51,6 +69,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
+    setIsMobile(mediaQuery.matches);
     const handler = (e: any) => setIsMobile(e.matches);
 
     mediaQuery.addEventListener("change", handler);
@@ -146,7 +165,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               <Input
                 key={field.id}
                 placeholder={field.name}
-                value={fieldValues?.[field.id]}
+                value={fieldValues?.[field.id] ?? ""}
                 onChange={(value) => {
                   setFieldValues((prev) => {
                     const newValues = { ...prev };
@@ -154,6 +173,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                     return newValues;
                   });
                 }}
+                animationDisabled={!loaded.current}
               />
             ))}
           </div>
@@ -209,7 +229,15 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                 className="flex gap-2"
               >
                 {images?.map((i) => (
-                  <img src={i.download_url} />
+                  <img
+                    key={i.id}
+                    className="cursor-pointer hover:opacity-90"
+                    src={i.download_url}
+                    onClick={() => {
+                      setIsPhotoModalShown(true);
+                      setSelectedPhoto(i);
+                    }}
+                  />
                 ))}
               </Masonry>
             )}
@@ -223,6 +251,39 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           setIsDeleteModalShown(false);
           deleteReport();
         }}
+      />
+      <PhotoDetailModal
+        image={selectedPhoto}
+        tags={tags ?? []}
+        reportName={report?.name ?? ""}
+        onUpdateDescription={async (description) => {
+          if (!selectedPhoto) return;
+
+          await updateImageDescription(selectedPhoto.id, description);
+
+          const newDescription = images?.find(
+            (i) => i.id === selectedPhoto.id,
+          )?.description;
+
+          if (newDescription) {
+            setSelectedPhoto({
+              ...selectedPhoto,
+              description: newDescription,
+            });
+          }
+        }}
+        onAddTag={(tagId) => {}}
+        onDeleteTag={(linkId) => {}}
+        loading={updateImageLoading}
+        isOpen={isPhotoModalShown}
+        onClose={() => {
+          setIsPhotoModalShown(false);
+
+          setTimeout(() => {
+            setSelectedPhoto(undefined);
+          }, 500);
+        }}
+        isMobile={isMobile}
       />
       {loading && <Loader />}
     </>
