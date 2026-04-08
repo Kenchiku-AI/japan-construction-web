@@ -62,7 +62,6 @@ export type CreateReportTemplateRequest = {
   description: string;
   fields: ReportTemplateFieldInfo[];
   parent_type: ReportParentType;
-  unique_by?: ReportUniqueBy;
 };
 
 export type ReportRequest = {
@@ -77,7 +76,6 @@ export type ReportTemplate = {
   name: string;
   description: string;
   parent_type: ReportParentType;
-  unique_by: ReportUniqueBy;
   fields: ReportTemplateField[];
   is_global: boolean;
 };
@@ -95,7 +93,6 @@ export type ReportTemplateRequest = {
   description?: string;
   fields?: ReportTemplateRequestField[];
   parent_type?: ReportParentType;
-  unique_by?: ReportUniqueBy;
 };
 
 export type ReportTemplateRequestField = {
@@ -111,13 +108,6 @@ export type ShareReportTemplateRequest = {
 export enum ReportParentType {
   Company = "company",
   Project = "project",
-}
-
-export enum ReportUniqueBy {
-  Day = "day",
-  Week = "week",
-  Month = "month",
-  Year = "year",
 }
 
 export type ReportImageTag = {

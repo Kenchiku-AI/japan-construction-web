@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
-import { ReportTemplateRequest, ReportTemplate } from "@/types/reports";
+import {
+  ReportTemplateRequest,
+  ReportTemplate,
+  ReportParentType,
+} from "@/types/reports";
 import { UserRole } from "@/types";
 import { useTranslation } from "react-i18next";
 
@@ -48,19 +52,8 @@ export const useReportTemplates = () => {
 
   const parentTypeOptions = useMemo(
     () => [
-      { label: t("project"), value: "projects" },
-      { label: t("company"), value: "company" },
-    ],
-    [t],
-  );
-
-  const uniqueByOptions = useMemo(
-    () => [
-      { label: t("none") },
-      { label: t("day"), value: "day" },
-      { label: t("week"), value: "week" },
-      { label: t("month"), value: "month" },
-      { label: t("year"), value: "year" },
+      { label: t("project"), value: ReportParentType.Project },
+      { label: t("company"), value: ReportParentType.Company },
     ],
     [t],
   );
@@ -70,6 +63,5 @@ export const useReportTemplates = () => {
     reportTemplates,
     createReportTemplate,
     parentTypeOptions,
-    uniqueByOptions,
   };
 };

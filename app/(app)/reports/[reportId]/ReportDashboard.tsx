@@ -9,10 +9,10 @@ import { ReportFieldValues, ReportImage, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
-import { errorColor1 } from "@/lib/constants";
+import { buttonColor, errorColor1 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
-import { Plus, Download, Trash } from "@/app/ui/Icons";
+import { Plus, Download, Trash, Tag, Close, Check } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
@@ -144,6 +144,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
 
             URL.revokeObjectURL(fileUrl);
           }}
+          style={{ height: "auto" }}
           textStyle={{
             fontWeight: "300",
           }}
@@ -155,6 +156,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           onClick={() => {
             setIsDeleteModalShown(true);
           }}
+          style={{ height: "auto" }}
           textStyle={{
             fontWeight: "300",
             color: errorColor1,
@@ -194,6 +196,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               onClick={() => {
                 updateReport({ field_values: fieldValues });
               }}
+              iconLeft={() => <Check color="white" />}
               style={{ height: 50 }}
               loading={updateLoading}
             />
@@ -203,6 +206,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               onClick={() => {
                 resetFieldValues();
               }}
+              iconLeft={() => <Close color={errorColor1} />}
               style={{ borderColor: errorColor1 }}
               textStyle={{ color: errorColor1 }}
             />
@@ -224,25 +228,49 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                 {t("empty_photos_description")}
               </div>
             ) : (
-              <Masonry
-                breakpointCols={{
-                  default: 4,
-                  768: 2,
-                }}
-                className="flex gap-2"
-              >
-                {images?.map((i) => (
-                  <img
-                    key={i.id}
-                    className="cursor-pointer hover:opacity-90"
-                    src={i.download_url}
-                    onClick={() => {
-                      setIsPhotoModalShown(true);
-                      setSelectedPhoto({ ...i });
+              <>
+                <div className="mb-3 flex w-full flex-row justify-between gap-2 lg:gap-8">
+                  <Button
+                    variant="tertiary"
+                    label={t("download_all")}
+                    iconLeft={() => <Download />}
+                    onClick={async () => {}}
+                    style={{ height: "auto" }}
+                    textStyle={{
+                      fontWeight: "300",
                     }}
                   />
-                ))}
-              </Masonry>
+                  <Button
+                    variant="tertiary"
+                    label={t("filter_by_tag")}
+                    iconLeft={() => <Tag color={buttonColor} size={30} />}
+                    onClick={() => {}}
+                    style={{ height: "auto" }}
+                    textStyle={{
+                      fontWeight: "300",
+                    }}
+                  />
+                </div>
+                <Masonry
+                  breakpointCols={{
+                    default: 4,
+                    768: 2,
+                  }}
+                  className="flex gap-2"
+                >
+                  {images?.map((i) => (
+                    <img
+                      key={i.id}
+                      className="cursor-pointer hover:opacity-90"
+                      src={i.download_url}
+                      onClick={() => {
+                        setIsPhotoModalShown(true);
+                        setSelectedPhoto({ ...i });
+                      }}
+                    />
+                  ))}
+                </Masonry>
+              </>
             )}
           </div>
         </>

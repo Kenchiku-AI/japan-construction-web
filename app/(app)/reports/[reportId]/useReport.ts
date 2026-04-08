@@ -118,7 +118,10 @@ export const useReport = (reportId: string) => {
 
           if (imageIndex > -1) {
             const newImages = [...(images ?? [])];
-            newImages[imageIndex] = response;
+            newImages[imageIndex] = {
+              ...newImages[imageIndex],
+              description,
+            };
             setImages(newImages);
           }
         }

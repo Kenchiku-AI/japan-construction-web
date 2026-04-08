@@ -7,7 +7,6 @@ import {
   CreateReportTemplateRequest,
   ReportParentType,
   ReportTemplateFieldInfo,
-  ReportUniqueBy,
 } from "@/types";
 import Select from "@/app/ui/Select/Select";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
@@ -30,16 +29,14 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
   const [parentType, setParentType] = useState<ReportParentType>(
     ReportParentType.Project,
   );
-  const [uniqueBy, setUniqueBy] = useState<ReportUniqueBy>();
   const [fields, setFields] = useState<ReportTemplateFieldInfo[]>([]);
   const { t } = useTranslation();
-  const { parentTypeOptions, uniqueByOptions } = useReportTemplates();
+  const { parentTypeOptions } = useReportTemplates();
 
   const reset = () => {
     setTimeout(() => {
       setName("");
       setDescription("");
-      setUniqueBy(undefined);
       setParentType(ReportParentType.Project);
       setFields([]);
     }, 500);
@@ -81,18 +78,6 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
             hideLabel
           />
         </div>
-        <div className="flex justify-between items-center">
-          <div>{t("unique_by")}</div>
-          <Select
-            options={uniqueByOptions}
-            value={uniqueBy}
-            onChange={(ub) => {
-              setUniqueBy(ub as ReportUniqueBy);
-            }}
-            style={{ width: "auto", paddingRight: 40 }}
-            hideLabel
-          />
-        </div>
       </div>
       <ReportTemplateFields fields={fields} onChange={(f) => setFields(f)} />
       <Button
@@ -104,7 +89,6 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
             description,
             fields,
             parent_type: parentType,
-            unique_by: uniqueBy,
           });
 
           reset();
