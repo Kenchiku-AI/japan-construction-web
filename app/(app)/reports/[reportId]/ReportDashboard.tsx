@@ -35,9 +35,12 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     loading,
     updateReport,
     deleteReport,
+    deleteImage,
     updateLoading,
     updateImageDescription,
     updateImageLoading,
+    addImageTag,
+    removeImageTag,
   } = useReport(reportId);
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
@@ -235,7 +238,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                     src={i.download_url}
                     onClick={() => {
                       setIsPhotoModalShown(true);
-                      setSelectedPhoto(i);
+                      setSelectedPhoto({ ...i });
                     }}
                   />
                 ))}
@@ -256,24 +259,49 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         image={selectedPhoto}
         tags={tags ?? []}
         reportName={report?.name ?? ""}
+        onDeletePhoto={() => {
+          if (!selectedPhoto) return;
+
+          deleteImage(selectedPhoto.id);
+          setSelectedPhoto(undefined);
+        }}
         onUpdateDescription={async (description) => {
           if (!selectedPhoto) return;
 
           await updateImageDescription(selectedPhoto.id, description);
 
-          const newDescription = images?.find(
-            (i) => i.id === selectedPhoto.id,
-          )?.description;
+          setSelectedPhoto({
+            ...selectedPhoto,
+            description,
+          });
+        }}
+        onAddTag={async (tagId) => {
+          if (!selectedPhoto) return;
 
-          if (newDescription) {
+          const newTag = await addImageTag(selectedPhoto.id, tagId);
+
+          if (newTag) {
+            const newTags = selectedPhoto.tags.filter(
+              (t) => t.tag_id !== tagId,
+            );
+            newTags.push(newTag);
+
             setSelectedPhoto({
               ...selectedPhoto,
-              description: newDescription,
+              tags: newTags,
             });
           }
         }}
-        onAddTag={(tagId) => {}}
-        onDeleteTag={(linkId) => {}}
+        onDeleteTag={async (linkId) => {
+          if (!selectedPhoto) return;
+
+          await removeImageTag(selectedPhoto.id, linkId);
+
+          setSelectedPhoto({
+            ...selectedPhoto,
+            tags: selectedPhoto.tags.filter((t) => t.link_id !== linkId),
+          });
+        }}
         loading={updateImageLoading}
         isOpen={isPhotoModalShown}
         onClose={() => {

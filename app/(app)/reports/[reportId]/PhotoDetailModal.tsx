@@ -12,11 +12,12 @@ import styles from "./page.module.css";
 
 interface PhotoDetailModalProps {
   image?: ReportImage;
+  tags: ReportImageTag[];
+  reportName: string;
+  onDeletePhoto: () => void;
   onUpdateDescription: (description: string) => void;
   onAddTag: (tagId: string) => void;
   onDeleteTag: (linkId: string) => void;
-  reportName: string;
-  tags: ReportImageTag[];
   loading: boolean;
   isOpen: boolean;
   onClose: () => void;
@@ -26,10 +27,11 @@ interface PhotoDetailModalProps {
 const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
   image,
   tags,
+  reportName,
+  onDeletePhoto,
   onUpdateDescription,
   onAddTag,
   onDeleteTag,
-  reportName,
   loading,
   isOpen,
   onClose,
@@ -40,6 +42,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
   const [description, setDescription] = useState("");
   const [isEdited, setIsEdited] = useState(false);
   const [isTagListShown, setIsTagListShown] = useState(false);
+  const [isConfirmDeleteShown, setIsConfirmDeleteShown] = useState(false);
   const imageRef = useRef<any>(null);
   const updateButtonRef = useRef<any>(null);
   const disableScroll = useRef(true);
@@ -86,11 +89,44 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
 
   const close = () => {
     onClose();
-    setIsTagListShown(false);
-    setIsEdited(false);
+
+    setTimeout(() => {
+      setIsTagListShown(false);
+      setIsEdited(false);
+      setIsConfirmDeleteShown(false);
+    }, 500);
   };
 
   if (!image) return null;
+
+  if (isConfirmDeleteShown) {
+    return (
+      <Modal
+        title={t("confirm_delete")}
+        subtitle={t("confirm_delete_photo_description")}
+        isOpen={isOpen}
+        onClose={close}
+      >
+        <div className="mt-8 flex flex-col gap-2">
+          <Button
+            label={t("delete_photo")}
+            onClick={() => {
+              close();
+              onDeletePhoto();
+            }}
+          />
+          <Button
+            variant="secondary"
+            label={t("cancel")}
+            onClick={() => {
+              setIsConfirmDeleteShown(false);
+            }}
+            style={{ height: 60 }}
+          />
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={close}>
@@ -116,11 +152,13 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
         />
         <Button
           variant="tertiary"
-          label={t("delete")}
+          label={t("delete_photo")}
           iconLeft={() => <Trash />}
           style={{ borderColor: errorColor1, height: "auto" }}
           textStyle={{ color: errorColor1 }}
-          onClick={() => {}}
+          onClick={() => {
+            setIsConfirmDeleteShown(true);
+          }}
         />
       </div>
       <div className="flex flex-col gap-4">
@@ -134,7 +172,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
       </div>
       <div
         style={{
-          height: !isEdited ? 0 : isMobile ? 136 : 80,
+          height: !isEdited ? 0 : isMobile ? 130 : 74,
           opacity: !isEdited ? 0 : 1,
           overflow: "hidden",
           transition: "height 0.2s ease-in-out, opacity 0.2s ease-in-out",
@@ -163,7 +201,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
           loading={loading}
         />
       </div>
-      <div className="flex justify-between mt-2 relative">
+      <div className="flex justify-between mt-3 relative">
         <div>{t("tags")}</div>
         {!!availableTags.length && (
           <Button
@@ -178,7 +216,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
           <div
             className="shadow-lg absolute w-3/4 bg-white"
             style={{
-              top: availableTags.length * -40 - 75,
+              top: availableTags.length * -60 - 56,
               right: 0,
               padding: "0 16px",
               borderRadius: 10,
@@ -195,18 +233,22 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
             </div>
             <Divider style={{ margin: 0 }} />
             {availableTags.map((t, i) => (
-              <>
+              <div key={`add_tag_${t.id}`}>
                 {i !== 0 && (
                   <Divider style={{ background: fontColor2, margin: 0 }} />
                 )}
                 <div
                   className="flex gap-2 cursor-pointer px-2 items-center"
                   style={{ height: 60 }}
+                  onClick={() => {
+                    setIsTagListShown(false);
+                    onAddTag(t.id);
+                  }}
                 >
                   <Tag size={24} />
                   <div>{t.name}</div>
                 </div>
-              </>
+              </div>
             ))}
           </div>
         )}
@@ -218,6 +260,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
         <div className="flex gap-3">
           {image.tags?.map((t) => (
             <div
+              key={`tag_${t.tag_id}`}
               className="flex gap-2 items-center"
               style={{
                 height: 40,

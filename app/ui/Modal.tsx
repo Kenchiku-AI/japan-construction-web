@@ -3,6 +3,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { Close } from "@/app/ui/Icons";
 import { Button } from "./Button/Button";
 import { useTranslation } from "react-i18next";
+import { fontColor2 } from "@/lib/constants";
 
 interface ModalProps {
   title?: string;
@@ -31,7 +32,12 @@ const Modal: FC<ModalProps> = ({
             <Close />
           </button>
         </div>
-        {title && <Heading title={title} subtitle={subtitle} />}
+        {title && <div className="text-ellipsis text-2xl">{title}</div>}
+        {subtitle && (
+          <div className="mt-2" style={{ color: fontColor2 }}>
+            {subtitle}
+          </div>
+        )}
         {children ? (
           children
         ) : (

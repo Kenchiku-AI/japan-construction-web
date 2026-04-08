@@ -13,6 +13,8 @@ import {
   UpdateProjectRequest,
   ReportImage,
   ReportImageUpdateRequest,
+  AddTagRequest,
+  ReportImageTagLink,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -189,6 +191,18 @@ export const useApiData = () => {
     ) {
       const url = `/reports/${reportId}/images/${imageId}`;
       return call(() => http.patch<ReportImage>(url, request));
+    },
+    async deleteImage(reportId: string, imageId: string) {
+      const url = `/reports/${reportId}/images/${imageId}`;
+      return call(() => http.delete(url));
+    },
+    async addTag(reportId: string, imageId: string, request: AddTagRequest) {
+      const url = `/reports/${reportId}/images/${imageId}/tags`;
+      return call(() => http.post<ReportImageTagLink>(url, request));
+    },
+    async removeTag(reportId: string, imageId: string, linkId: string) {
+      const url = `/reports/${reportId}/images/${imageId}/tags/${linkId}`;
+      return call(() => http.delete(url));
     },
     async deleteReport(reportId: string) {
       const url = `/reports/${reportId}`;

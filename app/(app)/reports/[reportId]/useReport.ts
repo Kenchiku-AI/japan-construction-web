@@ -3,7 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
-import { Report, ReportImage, ReportRequest } from "@/types/reports";
+import {
+  Report,
+  ReportImage,
+  ReportImageTagLink,
+  ReportRequest,
+} from "@/types/reports";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 
@@ -126,6 +131,72 @@ export const useReport = (reportId: string) => {
     [images, reportId],
   );
 
+  const addImageTag = useCallback(
+    async (imageId: string, tagId: string) => {
+      let tag: ReportImageTagLink | undefined;
+
+      try {
+        const request = { tag_id: tagId };
+        const response = await api.addTag(reportId, imageId, request);
+
+        if (response) {
+          tag = response;
+          const imageIndex = images?.findIndex((i) => i.id === imageId) ?? -1;
+
+          if (imageIndex > -1) {
+            const newImages = [...(images ?? [])];
+            newImages[imageIndex].tags.push(response);
+            setImages(newImages);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+      return tag;
+    },
+    [images, reportId],
+  );
+
+  const removeImageTag = useCallback(
+    async (imageId: string, linkId: string) => {
+      try {
+        await api.removeTag(reportId, imageId, linkId);
+
+        const imageIndex = images?.findIndex((i) => i.id === imageId) ?? -1;
+
+        if (imageIndex > -1) {
+          const newImages = [...(images ?? [])];
+          const { tags } = newImages[imageIndex];
+          newImages[imageIndex].tags = tags.filter((t) => t.link_id !== linkId);
+          setImages(newImages);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [images, reportId],
+  );
+
+  const deleteImage = useCallback(
+    async (imageId: string) => {
+      setLoading(true);
+
+      try {
+        await api.deleteImage(reportId, imageId);
+        setImages(images?.filter((i) => i.id !== imageId));
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("delete_photo_error"),
+        });
+      }
+
+      setLoading(false);
+    },
+    [reportId],
+  );
+
   return {
     loading,
     updateLoading,
@@ -133,7 +204,10 @@ export const useReport = (reportId: string) => {
     images,
     updateReport,
     deleteReport,
+    deleteImage,
     updateImageDescription,
     updateImageLoading,
+    addImageTag,
+    removeImageTag,
   };
 };

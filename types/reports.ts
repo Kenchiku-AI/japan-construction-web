@@ -46,6 +46,10 @@ export type ReportImageUpdateRequest = {
   description: string;
 };
 
+export type AddTagRequest = {
+  tag_id: string;
+};
+
 export type ReportTemplateFieldInfo = {
   id: string;
   name: string;
