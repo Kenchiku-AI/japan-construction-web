@@ -10,6 +10,7 @@ import {
   ReportRequest,
 } from "@/types/reports";
 import { useTranslation } from "react-i18next";
+import imageCompression from "browser-image-compression";
 import { useModal } from "@/lib/modal/ModalContext";
 
 export const useReport = (reportId: string) => {
@@ -197,7 +198,56 @@ export const useReport = (reportId: string) => {
 
       setLoading(false);
     },
-    [reportId],
+    [reportId, images],
+  );
+
+  const uploadImage = useCallback(
+    async (file: File) => {
+      setLoading(true);
+
+      try {
+        const resized = await imageCompression(file, {
+          maxWidthOrHeight: 1024,
+          initialQuality: 0.8,
+          fileType: "image/jpeg",
+          useWebWorker: true,
+        });
+
+        const bitmap = await createImageBitmap(resized);
+
+        const request = {
+          width: bitmap.width,
+          height: bitmap.height,
+        };
+
+        const createResponse = await api.createImage(reportId, request);
+        if (!createResponse) throw new Error();
+
+        const uploadResponse = await fetch(createResponse.upload_url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "image/jpeg",
+          },
+          body: resized,
+        });
+
+        if (!uploadResponse.ok) throw new Error();
+
+        const newImage = {
+          ...createResponse,
+          download_url: URL.createObjectURL(file),
+        };
+        setImages([...(images ?? []), newImage]);
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("upload_image_error"),
+        });
+      }
+
+      setLoading(false);
+    },
+    [reportId, images],
   );
 
   return {
@@ -212,5 +262,6 @@ export const useReport = (reportId: string) => {
     updateImageLoading,
     addImageTag,
     removeImageTag,
+    uploadImage,
   };
 };

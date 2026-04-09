@@ -5,7 +5,12 @@ import { redirect, useSearchParams } from "next/navigation";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReport } from "./useReport";
-import { ReportFieldValues, ReportImage, UserRole } from "@/types";
+import {
+  ReportFieldValues,
+  ReportImage,
+  ReportImageTag,
+  UserRole,
+} from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
@@ -20,6 +25,7 @@ import { pdf } from "@react-pdf/renderer";
 import Masonry from "react-masonry-css";
 import PhotoDetailModal from "./PhotoDetailModal";
 import { useTags } from "../../tags/useTags";
+import FilterByTagModal from "./FilterByTagModal";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -41,14 +47,18 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     updateImageLoading,
     addImageTag,
     removeImageTag,
+    uploadImage,
   } = useReport(reportId);
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
   const [selectedPhoto, setSelectedPhoto] = useState<ReportImage>();
+  const [selectedTag, setSelectedTag] = useState<ReportImageTag>();
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
   const [isPhotoModalShown, setIsPhotoModalShown] = useState(false);
+  const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const loaded = useRef(false);
+  const fileInputRef = useRef<any>(null);
 
   useEffect(() => {
     resetFieldValues();
@@ -90,6 +100,14 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     const isChanged = report.fields.some((f) => f.value !== fieldValues[f.id]);
     return !isChanged;
   }, [report, fieldValues]);
+
+  const filteredImages = useMemo(() => {
+    if (!selectedTag) return images ?? [];
+
+    return (images ?? []).filter((i) =>
+      i.tags.some((tag) => tag.tag_id === selectedTag.id),
+    );
+  }, [images, selectedTag]);
 
   const sortedFields = useMemo(
     () => report?.fields.sort((a, b) => a.order - b.order),
@@ -151,7 +169,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         />
         <Button
           variant="tertiary"
-          label={t("delete")}
+          label={t("delete_report")}
           iconLeft={() => <Trash />}
           onClick={() => {
             setIsDeleteModalShown(true);
@@ -218,8 +236,22 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                 label={t("upload_photo")}
                 iconLeft={() => <Plus />}
                 variant="tertiary"
-                onClick={() => {}}
+                onClick={() => {
+                  fileInputRef.current?.click();
+                }}
                 style={{ height: "auto" }}
+              />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={(e: any) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+
+                  uploadImage(file);
+                }}
+                style={{ display: "none" }}
               />
             </div>
             <Divider />
@@ -242,15 +274,22 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                   />
                   <Button
                     variant="tertiary"
-                    label={t("filter_by_tag")}
+                    label={selectedTag?.name ?? t("filter_by_tag")}
                     iconLeft={() => <Tag color={buttonColor} size={30} />}
-                    onClick={() => {}}
+                    onClick={() => {
+                      setIsFilterByTagModalShown(true);
+                    }}
                     style={{ height: "auto" }}
                     textStyle={{
                       fontWeight: "300",
                     }}
                   />
                 </div>
+                {filteredImages.length === 0 && (
+                  <div className={styles.empty}>
+                    {t("empty_tag_photos_description")}
+                  </div>
+                )}
                 <Masonry
                   breakpointCols={{
                     default: 4,
@@ -258,10 +297,10 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                   }}
                   className="flex gap-2"
                 >
-                  {images?.map((i) => (
+                  {filteredImages.map((i) => (
                     <img
                       key={i.id}
-                      className="cursor-pointer hover:opacity-90"
+                      className="mb-2 cursor-pointer hover:opacity-90"
                       src={i.download_url}
                       onClick={() => {
                         setIsPhotoModalShown(true);
@@ -281,6 +320,14 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         onDelete={() => {
           setIsDeleteModalShown(false);
           deleteReport();
+        }}
+      />
+      <FilterByTagModal
+        tags={tags ?? []}
+        isOpen={isFilterByTagModalShown}
+        onClose={() => setIsFilterByTagModalShown(false)}
+        onSelectTag={(tag?: ReportImageTag) => {
+          setSelectedTag(tag);
         }}
       />
       <PhotoDetailModal
