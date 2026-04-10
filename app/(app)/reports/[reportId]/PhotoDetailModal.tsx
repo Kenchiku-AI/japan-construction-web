@@ -87,6 +87,18 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
     [image?.tags, tags],
   );
 
+  const isTagProcessingShown = useMemo(() => {
+    if (!image) return;
+
+    const statuses = ["pending", "processing"];
+    if (!statuses.includes(image.status)) return false;
+
+    const createdAt = new Date(image.created_at).getMilliseconds();
+    const now = new Date().getMilliseconds();
+    const fiveMinutes = 5 * 60 * 1000;
+    return now - createdAt < fiveMinutes;
+  }, [image]);
+
   const close = () => {
     onClose();
 
@@ -202,7 +214,12 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
         />
       </div>
       <div className="flex justify-between mt-3 relative">
-        <div>{t("tags")}</div>
+        <div className="flex gap-3">
+          <div>{t("tags")}</div>
+          {isTagProcessingShown && (
+            <div style={{ color: fontColor2 }}>{t("tags_processing")}</div>
+          )}
+        </div>
         {!!availableTags.length && (
           <Button
             variant="tertiary"

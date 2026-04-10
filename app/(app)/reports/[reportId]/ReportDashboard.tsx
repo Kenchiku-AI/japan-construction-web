@@ -48,10 +48,11 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     addImageTag,
     removeImageTag,
     uploadImage,
+    selectedPhoto,
+    setSelectedPhoto,
   } = useReport(reportId);
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
-  const [selectedPhoto, setSelectedPhoto] = useState<ReportImage>();
   const [selectedTag, setSelectedTag] = useState<ReportImageTag>();
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
   const [isPhotoModalShown, setIsPhotoModalShown] = useState(false);
@@ -110,7 +111,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   }, [images, selectedTag]);
 
   const sortedFields = useMemo(
-    () => report?.fields.sort((a, b) => a.order - b.order),
+    () => [...(report?.fields ?? [])].sort((a, b) => a.order - b.order),
     [report?.fields],
   );
 
@@ -306,6 +307,9 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                         setIsPhotoModalShown(true);
                         setSelectedPhoto({ ...i });
                       }}
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
                     />
                   ))}
                 </Masonry>
@@ -335,47 +339,16 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         tags={tags ?? []}
         reportName={report?.name ?? ""}
         onDeletePhoto={() => {
-          if (!selectedPhoto) return;
-
-          deleteImage(selectedPhoto.id);
-          setSelectedPhoto(undefined);
+          deleteImage();
         }}
         onUpdateDescription={async (description) => {
-          if (!selectedPhoto) return;
-
-          await updateImageDescription(selectedPhoto.id, description);
-
-          setSelectedPhoto({
-            ...selectedPhoto,
-            description,
-          });
+          updateImageDescription(description);
         }}
         onAddTag={async (tagId) => {
-          if (!selectedPhoto) return;
-
-          const newTag = await addImageTag(selectedPhoto.id, tagId);
-
-          if (newTag) {
-            const newTags = selectedPhoto.tags.filter(
-              (t) => t.tag_id !== tagId,
-            );
-            newTags.push(newTag);
-
-            setSelectedPhoto({
-              ...selectedPhoto,
-              tags: newTags,
-            });
-          }
+          addImageTag(tagId);
         }}
         onDeleteTag={async (linkId) => {
-          if (!selectedPhoto) return;
-
-          await removeImageTag(selectedPhoto.id, linkId);
-
-          setSelectedPhoto({
-            ...selectedPhoto,
-            tags: selectedPhoto.tags.filter((t) => t.link_id !== linkId),
-          });
+          removeImageTag(linkId);
         }}
         loading={updateImageLoading}
         isOpen={isPhotoModalShown}

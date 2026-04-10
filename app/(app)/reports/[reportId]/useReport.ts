@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import {
@@ -12,6 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import imageCompression from "browser-image-compression";
 import { useModal } from "@/lib/modal/ModalContext";
+import { wsUrl } from "@/lib/constants";
 
 export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(false);
@@ -19,15 +20,64 @@ export const useReport = (reportId: string) => {
   const [updateImageLoading, setUpdateImageLoading] = useState(false);
   const [report, setReport] = useState<Report>();
   const [images, setImages] = useState<ReportImage[]>();
+  const [selectedPhoto, setSelectedPhoto] = useState<ReportImage>();
   const { t } = useTranslation();
   const router = useRouter();
   const api = useApi();
   const { showModal } = useModal();
+  const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
     getReport(reportId);
     getImages(reportId);
   }, [reportId]);
+
+  useEffect(() => {
+    const ws = new WebSocket(`${wsUrl}/reports/images/ws`);
+    wsRef.current = ws;
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!wsRef.current || !images) return;
+
+    wsRef.current.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+
+        if (data.type === "image_tags_ready" && data.tags && data.image_id) {
+          const imageIndex =
+            images?.findIndex((i) => i.id === data.image_id) ?? -1;
+
+          if (imageIndex > -1) {
+            const newImage = { ...images[imageIndex] };
+
+            data.tags.forEach((tag: ReportImageTagLink) => {
+              const hasTag = newImage.tags.some((t) => t.tag_id === tag.tag_id);
+              if (!hasTag) newImage.tags.push(tag);
+            });
+
+            if (selectedPhoto && selectedPhoto.id === data.image_id) {
+              setSelectedPhoto({
+                ...selectedPhoto,
+                tags: newImage.tags,
+                status: "completed",
+              });
+            }
+
+            newImage.status = "completed";
+            images[imageIndex] = newImage;
+            setImages(images);
+          }
+        }
+      } catch (err) {
+        console.warn("Invalid WS message", err);
+      }
+    };
+  }, [images, selectedPhoto]);
 
   const getReport = useCallback(
     async (reportId: string) => {
@@ -106,16 +156,19 @@ export const useReport = (reportId: string) => {
   }, [reportId]);
 
   const updateImageDescription = useCallback(
-    async (imageId: string, description: string) => {
+    async (description: string) => {
+      if (!selectedPhoto) return;
+
       setUpdateImageLoading(true);
 
       try {
-        const response = await api.updateImage(reportId, imageId, {
+        const response = await api.updateImage(reportId, selectedPhoto.id, {
           description,
         });
 
         if (response) {
-          const imageIndex = images?.findIndex((i) => i.id === imageId) ?? -1;
+          const imageIndex =
+            images?.findIndex((i) => i.id === selectedPhoto.id) ?? -1;
 
           if (imageIndex > -1) {
             const newImages = [...(images ?? [])];
@@ -125,6 +178,11 @@ export const useReport = (reportId: string) => {
             };
             setImages(newImages);
           }
+
+          setSelectedPhoto({
+            ...selectedPhoto,
+            description,
+          });
         }
       } catch (err) {
         console.log(err);
@@ -132,74 +190,88 @@ export const useReport = (reportId: string) => {
 
       setUpdateImageLoading(false);
     },
-    [images, reportId],
+    [images, reportId, selectedPhoto],
   );
 
   const addImageTag = useCallback(
-    async (imageId: string, tagId: string) => {
-      let tag: ReportImageTagLink | undefined;
+    async (tagId: string) => {
+      if (!selectedPhoto) return;
 
       try {
         const request = { tag_id: tagId };
-        const response = await api.addTag(reportId, imageId, request);
+        const response = await api.addTag(reportId, selectedPhoto.id, request);
 
         if (response) {
-          tag = response;
-          const imageIndex = images?.findIndex((i) => i.id === imageId) ?? -1;
+          const imageIndex =
+            images?.findIndex((i) => i.id === selectedPhoto.id) ?? -1;
 
           if (imageIndex > -1) {
             const newImages = [...(images ?? [])];
             newImages[imageIndex].tags.push(response);
             setImages(newImages);
           }
+
+          const newTags = selectedPhoto.tags.filter((t) => t.tag_id !== tagId);
+          newTags.push(response);
+
+          setSelectedPhoto({
+            ...selectedPhoto,
+            tags: newTags,
+          });
         }
       } catch (err) {
         console.log(err);
       }
-
-      return tag;
     },
-    [images, reportId],
+    [images, reportId, selectedPhoto],
   );
 
   const removeImageTag = useCallback(
-    async (imageId: string, linkId: string) => {
-      try {
-        await api.removeTag(reportId, imageId, linkId);
+    async (linkId: string) => {
+      if (!selectedPhoto) return;
 
-        const imageIndex = images?.findIndex((i) => i.id === imageId) ?? -1;
+      try {
+        await api.removeTag(reportId, selectedPhoto.id, linkId);
+
+        const imageIndex =
+          images?.findIndex((i) => i.id === selectedPhoto.id) ?? -1;
 
         if (imageIndex > -1) {
           const newImages = [...(images ?? [])];
           const { tags } = newImages[imageIndex];
           newImages[imageIndex].tags = tags.filter((t) => t.link_id !== linkId);
           setImages(newImages);
+
+          setSelectedPhoto({
+            ...selectedPhoto,
+            tags: selectedPhoto.tags.filter((t) => t.link_id !== linkId),
+          });
         }
       } catch (err) {
         console.log(err);
       }
     },
-    [images, reportId],
+    [images, reportId, selectedPhoto],
   );
 
-  const deleteImage = useCallback(
-    async (imageId: string) => {
-      setLoading(true);
+  const deleteImage = useCallback(async () => {
+    if (!selectedPhoto) return;
 
-      try {
-        await api.deleteImage(reportId, imageId);
-        setImages(images?.filter((i) => i.id !== imageId));
-      } catch (err) {
-        showModal({
-          title: t("error"),
-          subtitle: t("delete_photo_error"),
-        });
-      }
+    setLoading(true);
 
-      setLoading(false);
-    },
-    [reportId, images],
-  );
+    try {
+      await api.deleteImage(reportId, selectedPhoto.id);
+      setImages(images?.filter((i) => i.id !== selectedPhoto.id));
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("delete_photo_error"),
+      });
+    }
+
+    setSelectedPhoto(undefined);
+    setLoading(false);
+  }, [reportId, images, selectedPhoto]);
 
   const uploadImage = useCallback(
     async (file: File) => {
@@ -263,5 +335,7 @@ export const useReport = (reportId: string) => {
     addImageTag,
     removeImageTag,
     uploadImage,
+    selectedPhoto,
+    setSelectedPhoto,
   };
 };

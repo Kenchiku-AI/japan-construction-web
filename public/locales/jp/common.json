@@ -121,6 +121,7 @@
   "share_report_template_error_description": "テンプレートの共有中にエラーが発生しました。",
   "settings": "設定",
   "tags": "タグ",
+  "tags_processing": "(処理中)",
   "text": "テキスト",
   "type": "種類",
   "update": "更新",
