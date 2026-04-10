@@ -87,8 +87,8 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
     [image?.tags, tags],
   );
 
-  const isTagProcessingShown = useMemo(() => {
-    if (!image) return;
+  const isProcessingShown = useMemo(() => {
+    if (!image) return false;
 
     const statuses = ["pending", "processing"];
     if (!statuses.includes(image.status)) return false;
@@ -142,7 +142,14 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={close}>
-      <div className="text-2xl">{t("photo_details")}</div>
+      <div className="flex gap-3">
+        <div className="text-2xl">{t("photo_details")}</div>
+        {isProcessingShown && (
+          <div className="text-2xl" style={{ color: fontColor2 }}>
+            {t("processing")}
+          </div>
+        )}
+      </div>
       <Divider />
       <div className="flex justify-between mb-3">
         <Button
@@ -150,15 +157,32 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
           label={t("download")}
           iconLeft={() => <Download />}
           onClick={() => {
-            if (!imageRef.current) return;
+            const img = imageRef.current;
+            if (!img) return;
 
-            const a = document.createElement("a");
-            a.href = imageRef.current.src;
-            a.download = `${reportName}_${date}.jpg`;
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
 
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+
+            ctx?.drawImage(img, 0, 0);
+
+            canvas.toBlob((blob) => {
+              if (!blob) return;
+
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+
+              a.href = url;
+              a.download = `${reportName.replace(/ /g, "_")}_${date}.jpg`;
+
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+
+              URL.revokeObjectURL(url);
+            }, "image/jpeg");
           }}
           style={{ height: "auto" }}
         />
@@ -174,7 +198,12 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
         />
       </div>
       <div className="flex flex-col gap-4">
-        <img ref={imageRef} src={image.download_url} />
+        <img
+          ref={imageRef}
+          src={image.download_url}
+          crossOrigin="anonymous"
+          style={{ height: (image.height * 464) / image.width }}
+        />
         {date && <div className="text-sm">{t("photo_taken", { date })}</div>}
         <TextArea
           placeholder={t("description")}
@@ -214,12 +243,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
         />
       </div>
       <div className="flex justify-between mt-3 relative">
-        <div className="flex gap-3">
-          <div>{t("tags")}</div>
-          {isTagProcessingShown && (
-            <div style={{ color: fontColor2 }}>{t("tags_processing")}</div>
-          )}
-        </div>
+        <div>{t("tags")}</div>
         {!!availableTags.length && (
           <Button
             variant="tertiary"
@@ -274,7 +298,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
       {!image.tags?.length ? (
         <div className={styles.empty}>{t("empty_tags_description")}</div>
       ) : (
-        <div className="flex gap-3">
+        <div className="flex gap-3 mb-10">
           {image.tags?.map((t) => (
             <div
               key={`tag_${t.tag_id}`}

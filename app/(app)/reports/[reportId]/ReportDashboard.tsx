@@ -156,7 +156,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
 
             const a = document.createElement("a");
             a.href = fileUrl;
-            a.download = `${report.name.replace(" ", "_")}.pdf`;
+            a.download = `${report.name.replace(/ /g, "_")}.pdf`;
             document.body.appendChild(a);
             a.click();
             a.remove();

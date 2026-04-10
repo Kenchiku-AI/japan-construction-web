@@ -54,6 +54,9 @@ export const useReport = (reportId: string) => {
 
           if (imageIndex > -1) {
             const newImage = { ...images[imageIndex] };
+            const newDescription = data.description
+              ? `${newImage.description ? `${newImage.description}\n\n` : ""}${data.description ?? ""}`
+              : newImage.description;
 
             data.tags.forEach((tag: ReportImageTagLink) => {
               const hasTag = newImage.tags.some((t) => t.tag_id === tag.tag_id);
@@ -64,11 +67,14 @@ export const useReport = (reportId: string) => {
               setSelectedPhoto({
                 ...selectedPhoto,
                 tags: newImage.tags,
+                description: newDescription,
                 status: "completed",
               });
             }
 
             newImage.status = "completed";
+            newImage.description = newDescription;
+
             images[imageIndex] = newImage;
             setImages(images);
           }
@@ -77,7 +83,7 @@ export const useReport = (reportId: string) => {
         console.warn("Invalid WS message", err);
       }
     };
-  }, [images, selectedPhoto]);
+  }, [images, selectedPhoto, setImages]);
 
   const getReport = useCallback(
     async (reportId: string) => {
