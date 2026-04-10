@@ -24,7 +24,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const { currentUser } = useApi();
   const { reportTemplates } = useReportTemplates();
   const { t } = useTranslation();
-  const { project, updateProject } = useProject(projectId);
+  const { project, updateProject, createReport } = useProject(projectId);
   const isLoaded = useRef(false);
   const searchParams = useSearchParams();
   const [showCreateReport, setShowCreateReport] = useState(false);
@@ -123,11 +123,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         onClose={() => {
           setShowCreateReport(false);
         }}
-        onSubmit={() => {
+        onSubmit={(request) => {
           setShowCreateReport(false);
-
-          try {
-          } catch (err) {}
+          createReport(request);
         }}
       />
     </>

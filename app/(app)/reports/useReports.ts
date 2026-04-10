@@ -40,7 +40,7 @@ export const useReports = () => {
         const response = await api.createReport(request);
 
         if (response) {
-          router.push(`reports/${response.id}?name=${response.name}`);
+          router.push(`/reports/${response.id}?name=${response.name}`);
         }
       } catch (err) {
         showModal({
@@ -51,7 +51,7 @@ export const useReports = () => {
 
       setLoading(false);
     },
-    [getReports],
+    [api],
   );
 
   return {

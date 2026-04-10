@@ -4,7 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Project, UpdateProjectRequest, UserRole } from "@/types";
+import {
+  CreateReportRequest,
+  Project,
+  UpdateProjectRequest,
+  UserRole,
+} from "@/types";
 import { useModal } from "@/lib/modal/ModalContext";
 
 export const useProject = (projectId: string) => {
@@ -66,12 +71,35 @@ export const useProject = (projectId: string) => {
       }
       setLoading(false);
     },
-    [project],
+    [project, api],
+  );
+
+  const createReport = useCallback(
+    async (request: CreateReportRequest) => {
+      setLoading(true);
+
+      try {
+        const response = await api.createReport(request);
+
+        if (response) {
+          router.push(`/reports/${response.id}?name=${response.name}`);
+        }
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("create_report_error_description"),
+        });
+      }
+
+      setLoading(false);
+    },
+    [api],
   );
 
   return {
     loading,
     project,
     updateProject,
+    createReport,
   };
 };
