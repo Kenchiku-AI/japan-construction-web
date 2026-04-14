@@ -275,36 +275,37 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
           </div>
           <div
             style={{
-              height: !isEdited ? 0 : isMobile ? 130 : 74,
+              height: !isEdited ? 0 : 40,
               opacity: !isEdited ? 0 : 1,
               overflow: "hidden",
               transition: "height 0.2s ease-in-out, opacity 0.2s ease-in-out",
             }}
-            className="pt-3 w-full grid grid-cols-1 md:grid-cols-2 md:gap-3"
+            className="pt-1 flex gap-6"
             ref={updateButtonRef}
           >
             <Button
+              variant="tertiary"
               label={t("update_description")}
-              iconLeft={() => <Check color="white" />}
+              iconLeft={() => <Check />}
               onClick={() => {
                 onUpdateDescription(description);
               }}
-              style={{ height: 50 }}
+              // style={{ height: 50 }}
               loading={loading}
             />
             <Button
-              variant="secondary"
+              variant="tertiary"
               label={t("discard_changes")}
               iconLeft={() => <Close color={errorColor1} />}
               onClick={() => {
                 setDescription(image?.description ?? "");
               }}
-              style={{ height: 50, borderColor: errorColor1 }}
+              // style={{ height: 50 }}
               textStyle={{ color: errorColor1 }}
               loading={loading}
             />
           </div>
-          <div className="flex justify-between mt-3 relative">
+          <div className="flex justify-between mt-4 relative">
             <div>{t("tags")}</div>
             {!!availableTags.length && (
               <Button

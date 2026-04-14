@@ -112,6 +112,7 @@
   "role": "権限",
   "save_changes": "変更を保存",
   "search_companies": "会社を検索",
+  "select_project": "現場を選択",
   "select_template": "テンプレートを選択",
   "sign_up": "サインアップ",
   "sign_up_description": "登録するには、有効なメールアドレスと8文字以上のパスワードを入力してください。",
