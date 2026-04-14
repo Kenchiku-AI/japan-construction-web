@@ -55,17 +55,11 @@ const UpdateTagModal: FC<UpdateTagModalProps> = ({
       subtitle={t("update_tag_description")}
     >
       <div className="my-8 flex flex-col gap-3">
-        <Input
-          value={name}
-          placeholder={t("name")}
-          onChange={setName}
-          animationDisabled={isShowing}
-        />
+        <Input value={name} placeholder={t("name")} onChange={setName} />
         <TextArea
           value={description}
           placeholder={t("description")}
           onChange={setDescription}
-          animationDisabled={isShowing}
         />
       </div>
       <Button

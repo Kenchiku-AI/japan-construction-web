@@ -40,7 +40,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     deleteImage,
     updateLoading,
     updateImageDescription,
-    updateImageLoading,
     addImageTag,
     removeImageTag,
     uploadImage,
@@ -242,7 +241,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                     return newValues;
                   });
                 }}
-                animationDisabled={!loaded.current}
               />
             ))}
           </div>
@@ -374,7 +372,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         onDeleteTag={async (linkId) => {
           removeImageTag(linkId);
         }}
-        loading={updateImageLoading}
         isOpen={isPhotoModalShown}
         onClose={() => {
           setIsPhotoModalShown(false);

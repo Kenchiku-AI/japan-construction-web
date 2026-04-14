@@ -18,7 +18,6 @@ export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(true);
   const [imagesLoading, setImagesLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
-  const [updateImageLoading, setUpdateImageLoading] = useState(false);
   const [report, setReport] = useState<Report>();
   const [images, setImages] = useState<ReportImage[]>();
   const imagesRef = useRef<ReportImage[] | undefined>(undefined);
@@ -175,8 +174,6 @@ export const useReport = (reportId: string) => {
     async (description: string) => {
       if (!selectedPhoto) return;
 
-      setUpdateImageLoading(true);
-
       try {
         const response = await api.updateImage(reportId, selectedPhoto.id, {
           description,
@@ -203,8 +200,6 @@ export const useReport = (reportId: string) => {
       } catch (err) {
         console.log(err);
       }
-
-      setUpdateImageLoading(false);
     },
     [images, reportId, selectedPhoto],
   );
@@ -347,7 +342,6 @@ export const useReport = (reportId: string) => {
     deleteReport,
     deleteImage,
     updateImageDescription,
-    updateImageLoading,
     addImageTag,
     removeImageTag,
     uploadImage,

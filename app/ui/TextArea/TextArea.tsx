@@ -9,7 +9,6 @@ interface TextAreaProps {
   onChange?: (text: string) => void;
   error?: boolean;
   disabled?: boolean;
-  animationDisabled?: boolean;
 }
 
 export const TextArea: FC<TextAreaProps> = ({
@@ -19,7 +18,6 @@ export const TextArea: FC<TextAreaProps> = ({
   onChange,
   error,
   disabled,
-  animationDisabled,
 }) => {
   const [isEmpty, setIsEmpty] = useState(!value && !defaultValue);
   const valueRef = useRef(value);
@@ -46,7 +44,7 @@ export const TextArea: FC<TextAreaProps> = ({
         className={styles.label}
         style={{
           opacity: isEmpty ? 0 : 1,
-          transition: animationDisabled ? "none" : "opacity 0.075s ease-in-out",
+          transition: "opacity 0.075s ease-in-out",
         }}
       >
         {placeholder}
@@ -63,9 +61,7 @@ export const TextArea: FC<TextAreaProps> = ({
           backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,
           paddingTop: isEmpty ? undefined : 26,
           pointerEvents: disabled ? "none" : undefined,
-          transition: animationDisabled
-            ? "none"
-            : "padding-top 0.075s ease-in-out",
+          transition: "padding-top 0.075s ease-in-out",
         }}
       />
     </div>
