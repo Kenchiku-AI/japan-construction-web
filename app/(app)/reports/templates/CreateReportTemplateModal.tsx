@@ -57,7 +57,7 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
       }}
       title={t("create_report_template")}
       subtitle={t("create_report_template_description")}
-      size="3xl"
+      width={640}
     >
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("report_name")} onChange={setName} />

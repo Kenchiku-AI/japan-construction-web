@@ -15,11 +15,13 @@ import { useModal } from "@/lib/modal/ModalContext";
 import { wsUrl } from "@/lib/constants";
 
 export const useReport = (reportId: string) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [imagesLoading, setImagesLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateImageLoading, setUpdateImageLoading] = useState(false);
   const [report, setReport] = useState<Report>();
   const [images, setImages] = useState<ReportImage[]>();
+  const imagesRef = useRef<ReportImage[] | undefined>(undefined);
   const [selectedPhoto, setSelectedPhoto] = useState<ReportImage>();
   const { t } = useTranslation();
   const router = useRouter();
@@ -42,18 +44,26 @@ export const useReport = (reportId: string) => {
   }, []);
 
   useEffect(() => {
-    if (!wsRef.current || !images) return;
+    imagesRef.current = images;
+  }, [images]);
+
+  useEffect(() => {
+    if (!wsRef.current) return;
 
     wsRef.current.onmessage = (event) => {
+      if (!imagesRef.current) return;
+
       try {
         const data = JSON.parse(event.data);
 
+        console.log("DATA", data);
+
         if (data.type === "image_tags_ready" && data.tags && data.image_id) {
           const imageIndex =
-            images?.findIndex((i) => i.id === data.image_id) ?? -1;
+            imagesRef.current.findIndex((i) => i.id === data.image_id) ?? -1;
 
           if (imageIndex > -1) {
-            const newImage = { ...images[imageIndex] };
+            const newImage = { ...imagesRef.current[imageIndex] };
             const newDescription = data.description
               ? `${newImage.description ? `${newImage.description}\n\n` : ""}${data.description ?? ""}`
               : newImage.description;
@@ -75,15 +85,15 @@ export const useReport = (reportId: string) => {
             newImage.status = "completed";
             newImage.description = newDescription;
 
-            images[imageIndex] = newImage;
-            setImages(images);
+            imagesRef.current[imageIndex] = newImage;
+            setImages(imagesRef.current);
           }
         }
       } catch (err) {
         console.warn("Invalid WS message", err);
       }
     };
-  }, [images, selectedPhoto, setImages]);
+  }, [selectedPhoto]);
 
   const getReport = useCallback(
     async (reportId: string) => {
@@ -108,16 +118,16 @@ export const useReport = (reportId: string) => {
 
   const getImages = useCallback(
     async (reportId: string) => {
-      setLoading(true);
+      setImagesLoading(true);
 
       try {
         const response = await api.getReportImages(reportId);
-        setImages(response);
+        setImages(response ?? []);
       } catch (err) {
         console.log(err);
       }
 
-      setLoading(false);
+      setImagesLoading(false);
     },
     [api, reportId, setImages],
   );
@@ -329,7 +339,7 @@ export const useReport = (reportId: string) => {
   );
 
   return {
-    loading,
+    loading: loading || imagesLoading,
     updateLoading,
     report,
     images,

@@ -11,7 +11,7 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
-  size?: string;
+  width?: number;
 }
 
 const Modal: FC<ModalProps> = ({
@@ -20,13 +20,19 @@ const Modal: FC<ModalProps> = ({
   isOpen,
   onClose,
   children,
-  size,
+  width,
 }) => {
   const { t } = useTranslation();
 
   return (
     <div className={`modal ${isOpen ? "modal-open" : ""}`}>
-      <div className={`modal-box ${size ? `md:min-w-${size}` : ""}`}>
+      <div
+        className="modal-box"
+        style={{
+          maxWidth: width,
+          maxHeight: "96vh",
+        }}
+      >
         <div className="flex flex-col">
           <button className="self-end hover:cursor-pointer" onClick={onClose}>
             <Close />

@@ -1,12 +1,19 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
 import Modal from "@/app/ui/Modal";
 import { ReportImage, ReportImageTag } from "@/types";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Divider from "@/app/ui/Divider";
 import { useDate } from "@/public/date/useDate";
 import { Button } from "@/app/ui/Button/Button";
-import { bgColor2, errorColor1, fontColor2 } from "@/lib/constants";
+import {
+  bgColor1,
+  bgColor2,
+  bgColor3,
+  errorColor1,
+  fontColor2,
+} from "@/lib/constants";
 import { Check, Close, Download, Plus, Tag, Trash } from "@/app/ui/Icons";
 import styles from "./page.module.css";
 
@@ -46,16 +53,21 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
   const imageRef = useRef<any>(null);
   const updateButtonRef = useRef<any>(null);
   const disableScroll = useRef(true);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     disableScroll.current = true;
 
-    if (isOpen) {
+    if (isOpen && isMobile) {
       setTimeout(() => {
         disableScroll.current = false;
       }, 300);
     }
-  }, [isOpen]);
+
+    if (!isOpen) {
+      setLoaded(false);
+    }
+  }, [isOpen, isMobile]);
 
   useEffect(() => {
     setDescription(image?.description ?? "");
@@ -109,6 +121,29 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
     }, 500);
   };
 
+  const Photo = useMemo(
+    () =>
+      !image ? null : (
+        <Image
+          ref={imageRef}
+          alt={image.id}
+          src={image.download_url}
+          fill
+          className={`object-cover transition-opacity duration-200 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
+          crossOrigin="anonymous"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+          onLoad={() => {
+            setLoaded(true);
+          }}
+        />
+      ),
+    [image, loaded],
+  );
+
   if (!image) return null;
 
   if (isConfirmDeleteShown) {
@@ -141,187 +176,222 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={close}>
-      <div className="flex gap-3">
-        <div className="text-2xl">{t("photo_details")}</div>
-        {isProcessingShown && (
-          <div className="text-2xl" style={{ color: fontColor2 }}>
-            {t("processing")}
+    <Modal isOpen={isOpen} onClose={close} width={2000}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          className="hidden md:flex"
+          style={{
+            position: "relative",
+            width: "100%",
+            aspectRatio: `${image.width} / ${image.height}`,
+            backgroundColor: bgColor3,
+            marginTop: -24,
+          }}
+        >
+          {Photo}
+        </div>
+        <div>
+          <div className="flex gap-3">
+            <div className="text-2xl">{t("photo_details")}</div>
+            {isProcessingShown && (
+              <div className="text-2xl" style={{ color: fontColor2 }}>
+                {t("processing")}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <Divider />
-      <div className="flex justify-between mb-3">
-        <Button
-          variant="tertiary"
-          label={t("download")}
-          iconLeft={() => <Download />}
-          onClick={() => {
-            const img = imageRef.current;
-            if (!img) return;
+          <Divider />
+          <div className="flex justify-between gap-2 flex-wrap">
+            {date && (
+              <div
+                className="hidden md:flex"
+                style={{ paddingTop: 2, color: "gray" }}
+              >
+                {t("photo_taken", { date })}
+              </div>
+            )}
+            <div className="flex w-full md:w-auto justify-between md:justify-end gap-6 mb-3">
+              <Button
+                variant="tertiary"
+                label={t("download")}
+                iconLeft={() => <Download />}
+                onClick={async () => {
+                  try {
+                    const response = await fetch(image.download_url, {
+                      mode: "cors",
+                    });
 
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
 
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `${reportName.replace(/ /g, "_")}_${date}.jpg`;
 
-            ctx?.drawImage(img, 0, 0);
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
 
-            canvas.toBlob((blob) => {
-              if (!blob) return;
-
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement("a");
-
-              a.href = url;
-              a.download = `${reportName.replace(/ /g, "_")}_${date}.jpg`;
-
-              document.body.appendChild(a);
-              a.click();
-              a.remove();
-
-              URL.revokeObjectURL(url);
-            }, "image/jpeg");
-          }}
-          style={{ height: "auto" }}
-        />
-        <Button
-          variant="tertiary"
-          label={t("delete_photo")}
-          iconLeft={() => <Trash />}
-          style={{ borderColor: errorColor1, height: "auto" }}
-          textStyle={{ color: errorColor1 }}
-          onClick={() => {
-            setIsConfirmDeleteShown(true);
-          }}
-        />
-      </div>
-      <div className="flex flex-col gap-4">
-        <img
-          ref={imageRef}
-          src={image.download_url}
-          crossOrigin="anonymous"
-          style={{ height: (image.height * 464) / image.width }}
-        />
-        {date && <div className="text-sm">{t("photo_taken", { date })}</div>}
-        <TextArea
-          placeholder={t("description")}
-          value={description}
-          onChange={(d) => setDescription(d)}
-        />
-      </div>
-      <div
-        style={{
-          height: !isEdited ? 0 : isMobile ? 130 : 74,
-          opacity: !isEdited ? 0 : 1,
-          overflow: "hidden",
-          transition: "height 0.2s ease-in-out, opacity 0.2s ease-in-out",
-        }}
-        className="pt-3 w-full grid grid-cols-1 md:grid-cols-2 md:gap-3"
-        ref={updateButtonRef}
-      >
-        <Button
-          label={t("update_description")}
-          iconLeft={() => <Check color="white" />}
-          onClick={() => {
-            onUpdateDescription(description);
-          }}
-          style={{ height: 50 }}
-          loading={loading}
-        />
-        <Button
-          variant="secondary"
-          label={t("discard_changes")}
-          iconLeft={() => <Close color={errorColor1} />}
-          onClick={() => {
-            setDescription(image?.description ?? "");
-          }}
-          style={{ height: 50, borderColor: errorColor1 }}
-          textStyle={{ color: errorColor1 }}
-          loading={loading}
-        />
-      </div>
-      <div className="flex justify-between mt-3 relative">
-        <div>{t("tags")}</div>
-        {!!availableTags.length && (
-          <Button
-            variant="tertiary"
-            label={t("add_tag")}
-            onClick={() => setIsTagListShown(true)}
-            iconLeft={() => <Plus />}
-            style={{ height: "auto" }}
-          />
-        )}
-        {isTagListShown && (
+                    URL.revokeObjectURL(url);
+                  } catch (err) {
+                    console.error("Download failed", err);
+                  }
+                }}
+                style={{ height: "auto" }}
+              />
+              <Button
+                variant="tertiary"
+                label={t("delete_photo")}
+                iconLeft={() => <Trash />}
+                style={{ borderColor: errorColor1, height: "auto" }}
+                textStyle={{ color: errorColor1 }}
+                onClick={() => {
+                  setIsConfirmDeleteShown(true);
+                }}
+              />
+            </div>
+          </div>
           <div
-            className="shadow-lg absolute w-3/4 bg-white"
+            className="md:hidden mb-4"
             style={{
-              top: availableTags.length * -60 - 56,
-              right: 0,
-              padding: "0 16px",
-              borderRadius: 10,
+              position: "relative",
+              width: "100%",
+              aspectRatio: `${image.width} / ${image.height}`,
+              backgroundColor: bgColor3,
             }}
           >
-            <div className="flex justify-between mt-3" style={{ height: 30 }}>
-              {t("add_tag")}
-              <div
-                className="cursor-pointer"
-                onClick={() => setIsTagListShown(false)}
-              >
-                <Close />
+            {Photo}
+          </div>
+          <div className="flex flex-col gap-4">
+            {date && (
+              <div className="md:hidden" style={{ color: "gray" }}>
+                {t("photo_taken", { date })}
               </div>
-            </div>
-            <Divider style={{ margin: 0 }} />
-            {availableTags.map((t, i) => (
-              <div key={`add_tag_${t.id}`}>
-                {i !== 0 && (
-                  <Divider style={{ background: fontColor2, margin: 0 }} />
-                )}
+            )}
+            <TextArea
+              placeholder={t("description")}
+              value={description}
+              onChange={(d) => setDescription(d)}
+            />
+          </div>
+          <div
+            style={{
+              height: !isEdited ? 0 : isMobile ? 130 : 74,
+              opacity: !isEdited ? 0 : 1,
+              overflow: "hidden",
+              transition: "height 0.2s ease-in-out, opacity 0.2s ease-in-out",
+            }}
+            className="pt-3 w-full grid grid-cols-1 md:grid-cols-2 md:gap-3"
+            ref={updateButtonRef}
+          >
+            <Button
+              label={t("update_description")}
+              iconLeft={() => <Check color="white" />}
+              onClick={() => {
+                onUpdateDescription(description);
+              }}
+              style={{ height: 50 }}
+              loading={loading}
+            />
+            <Button
+              variant="secondary"
+              label={t("discard_changes")}
+              iconLeft={() => <Close color={errorColor1} />}
+              onClick={() => {
+                setDescription(image?.description ?? "");
+              }}
+              style={{ height: 50, borderColor: errorColor1 }}
+              textStyle={{ color: errorColor1 }}
+              loading={loading}
+            />
+          </div>
+          <div className="flex justify-between mt-3 relative">
+            <div>{t("tags")}</div>
+            {!!availableTags.length && (
+              <Button
+                variant="tertiary"
+                label={t("add_tag")}
+                onClick={() => setIsTagListShown(true)}
+                iconLeft={() => <Plus />}
+                style={{ height: "auto" }}
+              />
+            )}
+            {isTagListShown && (
+              <div
+                className="shadow-md absolute w-3/4 bg-white"
+                style={{
+                  top: isMobile ? availableTags.length * -60 - 56 : 40,
+                  right: 0,
+                  padding: "0 16px",
+                  borderRadius: 10,
+                  maxWidth: 400,
+                  borderWidth: 1,
+                  borderColor: bgColor2,
+                }}
+              >
                 <div
-                  className="flex gap-2 cursor-pointer px-2 items-center"
-                  style={{ height: 60 }}
-                  onClick={() => {
-                    setIsTagListShown(false);
-                    onAddTag(t.id);
+                  className="flex justify-between mt-3"
+                  style={{ height: 30 }}
+                >
+                  {t("add_tag")}
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => setIsTagListShown(false)}
+                  >
+                    <Close />
+                  </div>
+                </div>
+                <Divider style={{ margin: 0 }} />
+                {availableTags.map((t, i) => (
+                  <div key={`add_tag_${t.id}`}>
+                    {i !== 0 && (
+                      <Divider style={{ background: fontColor2, margin: 0 }} />
+                    )}
+                    <div
+                      className="flex gap-2 cursor-pointer px-2 items-center"
+                      style={{ height: 60 }}
+                      onClick={() => {
+                        setIsTagListShown(false);
+                        onAddTag(t.id);
+                      }}
+                    >
+                      <Tag size={24} />
+                      <div>{t.name}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <Divider />
+          {!image.tags?.length ? (
+            <div className={styles.empty}>{t("empty_tags_description")}</div>
+          ) : (
+            <div className="flex gap-3 mt-4 mb-10">
+              {image.tags?.map((t) => (
+                <div
+                  key={`tag_${t.tag_id}`}
+                  className="flex gap-2 items-center"
+                  style={{
+                    height: 40,
+                    borderRadius: 20,
+                    paddingLeft: 20,
+                    paddingRight: 12,
+                    backgroundColor: bgColor2,
                   }}
                 >
-                  <Tag size={24} />
-                  <div>{t.name}</div>
+                  {t.name}
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => onDeleteTag(t.link_id)}
+                  >
+                    <Close color={errorColor1} />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <Divider />
-      {!image.tags?.length ? (
-        <div className={styles.empty}>{t("empty_tags_description")}</div>
-      ) : (
-        <div className="flex gap-3 mb-10">
-          {image.tags?.map((t) => (
-            <div
-              key={`tag_${t.tag_id}`}
-              className="flex gap-2 items-center"
-              style={{
-                height: 40,
-                borderRadius: 20,
-                paddingLeft: 20,
-                paddingRight: 12,
-                backgroundColor: bgColor2,
-              }}
-            >
-              {t.name}
-              <div
-                className="cursor-pointer"
-                onClick={() => onDeleteTag(t.link_id)}
-              >
-                <Close color={errorColor1} />
-              </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
+      </div>
     </Modal>
   );
 };

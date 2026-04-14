@@ -23,6 +23,7 @@ export const TextArea: FC<TextAreaProps> = ({
 }) => {
   const [isEmpty, setIsEmpty] = useState(!value && !defaultValue);
   const valueRef = useRef(value);
+  const textAreaRef = useRef<any>(null);
 
   useEffect(() => {
     if (value) {
@@ -32,6 +33,11 @@ export const TextArea: FC<TextAreaProps> = ({
     }
 
     valueRef.current = value;
+
+    const el = textAreaRef.current;
+    el.style.height = "auto";
+    const height = Math.max(100, el.scrollHeight);
+    el.style.height = height + "px";
   }, [value]);
 
   return (
@@ -46,6 +52,7 @@ export const TextArea: FC<TextAreaProps> = ({
         {placeholder}
       </div>
       <textarea
+        ref={textAreaRef}
         placeholder={placeholder}
         defaultValue={defaultValue}
         value={value}

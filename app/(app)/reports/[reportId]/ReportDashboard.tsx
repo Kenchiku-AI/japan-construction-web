@@ -5,16 +5,11 @@ import { redirect, useSearchParams } from "next/navigation";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReport } from "./useReport";
-import {
-  ReportFieldValues,
-  ReportImage,
-  ReportImageTag,
-  UserRole,
-} from "@/types";
+import { ReportFieldValues, ReportImageTag, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
-import { buttonColor, errorColor1 } from "@/lib/constants";
+import { bgColor2, bgColor3, buttonColor, errorColor1 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
 import { Plus, Download, Trash, Tag, Close, Check } from "@/app/ui/Icons";
@@ -26,6 +21,7 @@ import Masonry from "react-masonry-css";
 import PhotoDetailModal from "./PhotoDetailModal";
 import { useTags } from "../../tags/useTags";
 import FilterByTagModal from "./FilterByTagModal";
+import Image from "next/image";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -57,6 +53,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
   const [isPhotoModalShown, setIsPhotoModalShown] = useState(false);
   const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [isMobile, setIsMobile] = useState(false);
   const loaded = useRef(false);
   const fileInputRef = useRef<any>(null);
@@ -121,6 +118,52 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     currentUser.role !== UserRole.Admin &&
     currentUser.company.id !== report.company_id;
 
+  const ImageList = useMemo(
+    () => (
+      <Masonry
+        breakpointCols={{
+          default: 4,
+          768: 2,
+        }}
+        className="flex gap-2"
+      >
+        {filteredImages.map((i) => (
+          <div
+            key={i.id}
+            className={`mb-2 cursor-pointer hover:opacity-90${!loadedImages[i.id] ? " animate-pulse" : ""}`}
+            onClick={() => {
+              setIsPhotoModalShown(true);
+              setSelectedPhoto({ ...i });
+            }}
+            style={{
+              position: "relative",
+              width: "100%",
+              aspectRatio: `${i.width} / ${i.height}`,
+              backgroundColor: bgColor3,
+            }}
+          >
+            <Image
+              alt={i.id}
+              sizes="(max-width: 768px) 50vw, 25vw"
+              src={i.download_url}
+              fill
+              className={`object-cover transition-opacity duration-200 ${
+                !loadedImages[i.id] ? "opacity-0" : "opacity-100"
+              }`}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+              onLoad={(e) => {
+                setLoadedImages((p) => ({ ...p, [i.id]: true }));
+              }}
+            />
+          </div>
+        ))}
+      </Masonry>
+    ),
+    [filteredImages, loadedImages],
+  );
+
   if (shouldRedirect) {
     redirect("/");
   }
@@ -137,51 +180,53 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         isEditable
       />
       <Divider />
-      <div className="flex w-full flex-row justify-between gap-2 lg:gap-8">
-        <Button
-          variant="tertiary"
-          label={t("download_pdf")}
-          iconLeft={() => <Download />}
-          onClick={async () => {
-            if (!report || !currentUser?.company) return;
+      {report != null && (
+        <div className="flex w-full flex-row justify-between gap-2 lg:gap-8">
+          <Button
+            variant="tertiary"
+            label={t("download_pdf")}
+            iconLeft={() => <Download />}
+            onClick={async () => {
+              if (!report || !currentUser?.company) return;
 
-            const blob = await pdf(
-              <ReportPDF
-                report={report}
-                companyName={currentUser.company.name}
-              />,
-            ).toBlob();
+              const blob = await pdf(
+                <ReportPDF
+                  report={report}
+                  companyName={currentUser.company.name}
+                />,
+              ).toBlob();
 
-            const fileUrl = URL.createObjectURL(blob);
+              const fileUrl = URL.createObjectURL(blob);
 
-            const a = document.createElement("a");
-            a.href = fileUrl;
-            a.download = `${report.name.replace(/ /g, "_")}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
+              const a = document.createElement("a");
+              a.href = fileUrl;
+              a.download = `${report.name.replace(/ /g, "_")}.pdf`;
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
 
-            URL.revokeObjectURL(fileUrl);
-          }}
-          style={{ height: "auto" }}
-          textStyle={{
-            fontWeight: "300",
-          }}
-        />
-        <Button
-          variant="tertiary"
-          label={t("delete_report")}
-          iconLeft={() => <Trash />}
-          onClick={() => {
-            setIsDeleteModalShown(true);
-          }}
-          style={{ height: "auto" }}
-          textStyle={{
-            fontWeight: "300",
-            color: errorColor1,
-          }}
-        />
-      </div>
+              URL.revokeObjectURL(fileUrl);
+            }}
+            style={{ height: "auto" }}
+            textStyle={{
+              fontWeight: "300",
+            }}
+          />
+          <Button
+            variant="tertiary"
+            label={t("delete_report")}
+            iconLeft={() => <Trash />}
+            onClick={() => {
+              setIsDeleteModalShown(true);
+            }}
+            style={{ height: "auto" }}
+            textStyle={{
+              fontWeight: "300",
+              color: errorColor1,
+            }}
+          />
+        </div>
+      )}
       {!!sortedFields && (
         <>
           <div className="flex flex-col w-full gap-2 mt-3">
@@ -230,93 +275,72 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               textStyle={{ color: errorColor1 }}
             />
           </div>
-          <div className="mt-4 w-full">
-            <div className="flex justify-between items-end">
-              <div>{t("photos")}</div>
-              <Button
-                label={t("upload_photo")}
-                iconLeft={() => <Plus />}
-                variant="tertiary"
-                onClick={() => {
-                  fileInputRef.current?.click();
-                }}
-                style={{ height: "auto" }}
-              />
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={(e: any) => {
-                  const file = e.target.files?.[0];
-                  if (!file) return;
-
-                  uploadImage(file);
-                }}
-                style={{ display: "none" }}
-              />
-            </div>
-            <Divider />
-            {!!images && images.length === 0 ? (
-              <div className={styles.empty}>
-                {t("empty_photos_description")}
-              </div>
-            ) : (
-              <>
-                <div className="mb-3 flex w-full flex-row justify-between gap-2 lg:gap-8">
-                  <Button
-                    variant="tertiary"
-                    label={t("download_all")}
-                    iconLeft={() => <Download />}
-                    onClick={async () => {}}
-                    style={{ height: "auto" }}
-                    textStyle={{
-                      fontWeight: "300",
-                    }}
-                  />
-                  <Button
-                    variant="tertiary"
-                    label={selectedTag?.name ?? t("filter_by_tag")}
-                    iconLeft={() => <Tag color={buttonColor} size={30} />}
-                    onClick={() => {
-                      setIsFilterByTagModalShown(true);
-                    }}
-                    style={{ height: "auto" }}
-                    textStyle={{
-                      fontWeight: "300",
-                    }}
-                  />
-                </div>
-                {filteredImages.length === 0 && (
-                  <div className={styles.empty}>
-                    {t("empty_tag_photos_description")}
-                  </div>
-                )}
-                <Masonry
-                  breakpointCols={{
-                    default: 4,
-                    768: 2,
-                  }}
-                  className="flex gap-2"
-                >
-                  {filteredImages.map((i) => (
-                    <img
-                      key={i.id}
-                      className="mb-2 cursor-pointer hover:opacity-90"
-                      src={i.download_url}
-                      onClick={() => {
-                        setIsPhotoModalShown(true);
-                        setSelectedPhoto({ ...i });
-                      }}
-                      onError={(e) => {
-                        e.currentTarget.style.display = "none";
-                      }}
-                    />
-                  ))}
-                </Masonry>
-              </>
-            )}
-          </div>
         </>
+      )}
+      {images != null && (
+        <div className="mt-4 w-full">
+          <div className="flex justify-between items-end">
+            <div>{t("photos")}</div>
+            <Button
+              label={t("upload_photo")}
+              iconLeft={() => <Plus />}
+              variant="tertiary"
+              onClick={() => {
+                fileInputRef.current?.click();
+              }}
+              style={{ height: "auto" }}
+            />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={(e: any) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                uploadImage(file);
+              }}
+              style={{ display: "none" }}
+            />
+          </div>
+          <Divider />
+          {!!images && images.length === 0 ? (
+            <div className={styles.empty}>{t("empty_photos_description")}</div>
+          ) : (
+            <>
+              <div className="mb-3 flex w-full flex-row justify-between gap-2 lg:gap-8">
+                <Button
+                  variant="tertiary"
+                  label={t("download_all")}
+                  iconLeft={() => <Download />}
+                  onClick={async () => {}}
+                  style={{ height: "auto" }}
+                  textStyle={{
+                    fontWeight: "300",
+                  }}
+                />
+                <Button
+                  variant="tertiary"
+                  label={selectedTag?.name ?? t("filter_by_tag")}
+                  iconLeft={() => <Tag color={buttonColor} size={30} />}
+                  onClick={() => {
+                    setIsFilterByTagModalShown(true);
+                  }}
+                  style={{ height: "auto" }}
+                  textStyle={{
+                    fontWeight: "300",
+                  }}
+                />
+              </div>
+              {filteredImages.length === 0 && (
+                <div className={styles.empty}>
+                  {t("empty_tag_photos_description")}
+                </div>
+              )}
+              {ImageList}
+            </>
+          )}
+        </div>
       )}
       <DeleteReportModal
         isOpen={isDeleteModalShown}
