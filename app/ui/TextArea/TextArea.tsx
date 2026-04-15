@@ -49,8 +49,14 @@ export const TextArea: FC<TextAreaProps> = ({
 
       requestAnimationFrame(() => {
         setShowContent(true);
+      });
+    }
+  }, [loading]);
 
-        if (showContent) resize();
+  useEffect(() => {
+    if (!loading && showContent) {
+      requestAnimationFrame(() => {
+        resize();
       });
     }
   }, [loading, showContent]);

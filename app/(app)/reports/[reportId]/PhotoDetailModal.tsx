@@ -286,6 +286,7 @@ const Tags: FC<TagsProps> = ({
             maxWidth: 400,
             borderWidth: 1,
             borderColor: bgColor2,
+            background: "white",
           }}
         >
           <div className="flex justify-between mt-3" style={{ height: 30 }}>
@@ -394,7 +395,7 @@ export const Description: FC<DescriptionProps> = ({
   }, [isOpen, isEdited]);
 
   useEffect(() => {
-    const edited = description !== imageDescription;
+    const edited = (description ?? "") !== (imageDescription ?? "");
     setIsEdited(edited);
 
     if (edited && !disableScroll.current) {
