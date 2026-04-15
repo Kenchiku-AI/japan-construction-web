@@ -20,18 +20,11 @@ const UpdateTagModal: FC<UpdateTagModalProps> = ({
   onSubmit,
 }) => {
   const [name, setName] = useState("");
-  const [isShowing, setIsShowing] = useState(false);
   const [description, setDescription] = useState("");
   const { t } = useTranslation();
 
   useEffect(() => {
     if (!tag) return;
-
-    setIsShowing(true);
-
-    setTimeout(() => {
-      setIsShowing(false);
-    }, 500);
 
     setName(tag.name);
     setDescription(tag.description);

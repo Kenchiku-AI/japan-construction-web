@@ -97,19 +97,13 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
       title={t("create_report")}
       subtitle={t("create_report_description")}
     >
-      <div className="mt-8 flex flex-col">
-        <div className="flex justify-between items-center">
-          <div>{t("type")}</div>
-          <Select
-            options={templateOptions}
-            value={templateId}
-            placeholder={t("select_template")}
-            hidePlaceholder
-            onChange={(id) => setTemplateId(id as string)}
-            style={{ width: "auto", paddingRight: 40 }}
-            hideLabel
-          />
-        </div>
+      <div className="mt-8 flex flex-col gap-2">
+        <Select
+          options={templateOptions}
+          value={templateId}
+          placeholder={t("type")}
+          onChange={(id) => setTemplateId(id as string)}
+        />
         <div
           className="flex items-end"
           style={{
@@ -119,21 +113,16 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
             transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
           }}
         >
-          <div className="flex flex-1 justify-between items-center">
-            <div>{t("project")}</div>
-            <Select
-              options={projectOptions}
-              value={projectId}
-              placeholder={t("select_project")}
-              hidePlaceholder
-              onChange={(id) => setProjectId(id as string)}
-              style={{ width: "auto", paddingRight: 40 }}
-              hideLabel
-            />
-          </div>
+          <Select
+            options={projectOptions}
+            value={projectId}
+            placeholder={t("project")}
+            onChange={(id) => setProjectId(id as string)}
+            style={{ width: "auto", paddingRight: 40 }}
+          />
         </div>
       </div>
-      <div className="mt-4 mb-8 flex flex-col gap-2">
+      <div className="mb-6 flex flex-col gap-2">
         <Input
           value={name}
           placeholder={t("name")}

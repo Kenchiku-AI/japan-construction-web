@@ -66,18 +66,14 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
           placeholder={t("description")}
           onChange={setDescription}
         />
-        <div className="flex justify-between items-center">
-          <div>{t("type")}</div>
-          <Select
-            options={parentTypeOptions}
-            value={parentType}
-            onChange={(pt) => {
-              setParentType(pt as ReportParentType);
-            }}
-            style={{ width: "auto", paddingRight: 40 }}
-            hideLabel
-          />
-        </div>
+        <Select
+          options={parentTypeOptions}
+          value={parentType}
+          placeholder={t("type")}
+          onChange={(pt) => {
+            setParentType(pt as ReportParentType);
+          }}
+        />
       </div>
       <ReportTemplateFields fields={fields} onChange={(f) => setFields(f)} />
       <Button

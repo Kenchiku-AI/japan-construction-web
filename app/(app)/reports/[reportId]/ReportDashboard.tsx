@@ -38,7 +38,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     updateReport,
     deleteReport,
     deleteImage,
-    updateLoading,
     updateImageDescription,
     addImageTag,
     removeImageTag,
@@ -54,17 +53,10 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [isMobile, setIsMobile] = useState(false);
-  const loaded = useRef(false);
   const fileInputRef = useRef<any>(null);
 
   useEffect(() => {
     resetFieldValues();
-
-    if (report) {
-      setTimeout(() => {
-        loaded.current = true;
-      }, 500);
-    }
   }, [report]);
 
   const resetFieldValues = useCallback(() => {
@@ -138,7 +130,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               position: "relative",
               width: "100%",
               aspectRatio: `${i.width} / ${i.height}`,
-              backgroundColor: bgColor3,
+              backgroundColor: bgColor2,
             }}
           >
             <Image
@@ -241,6 +233,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                     return newValues;
                   });
                 }}
+                loading={loading}
               />
             ))}
           </div>
@@ -260,7 +253,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               }}
               iconLeft={() => <Check color="white" />}
               style={{ height: 50 }}
-              loading={updateLoading}
             />
             <Button
               variant="secondary"

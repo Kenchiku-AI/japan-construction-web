@@ -17,7 +17,6 @@ import { wsUrl } from "@/lib/constants";
 export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(true);
   const [imagesLoading, setImagesLoading] = useState(false);
-  const [updateLoading, setUpdateLoading] = useState(false);
   const [report, setReport] = useState<Report>();
   const [images, setImages] = useState<ReportImage[]>();
   const imagesRef = useRef<ReportImage[] | undefined>(undefined);
@@ -133,10 +132,6 @@ export const useReport = (reportId: string) => {
 
   const updateReport = useCallback(
     async (request: ReportRequest, silent: boolean = false) => {
-      if (!silent) {
-        setUpdateLoading(true);
-      }
-
       try {
         const response = await api.updateReport(reportId, request);
         setReport(response);
@@ -148,8 +143,6 @@ export const useReport = (reportId: string) => {
           });
         }
       }
-
-      setUpdateLoading(false);
     },
     [setReport, reportId],
   );
@@ -335,7 +328,6 @@ export const useReport = (reportId: string) => {
 
   return {
     loading: loading || imagesLoading,
-    updateLoading,
     report,
     images,
     updateReport,

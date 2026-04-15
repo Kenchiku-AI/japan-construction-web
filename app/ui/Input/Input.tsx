@@ -19,6 +19,7 @@ interface InputProps {
   disabled?: boolean;
   autoFocus?: boolean;
   hideLabel?: boolean;
+  loading?: boolean;
   style?: CSSProperties;
 }
 
@@ -33,20 +34,36 @@ export const Input: FC<InputProps> = ({
   autoFocus,
   hideLabel,
   style,
+  loading,
 }) => {
   const [isEmpty, setIsEmpty] = useState(!value && !defaultValue);
+  const [showContent, setShowContent] = useState(false);
   const labelShown = !hideLabel && !isEmpty;
-  const valueRef = useRef(value);
+  const lastChangeWasUser = useRef(false);
 
   useEffect(() => {
-    if (value) {
-      setIsEmpty(false);
-    } else if (!!valueRef.current) {
-      setIsEmpty(true);
+    if (!lastChangeWasUser.current) {
+      setIsEmpty(!value);
     }
 
-    valueRef.current = value;
+    lastChangeWasUser.current = false;
   }, [value]);
+
+  useEffect(() => {
+    if (!loading) {
+      setShowContent(false);
+
+      requestAnimationFrame(() => {
+        setShowContent(true);
+      });
+    }
+  }, [loading]);
+
+  if (loading || !showContent) {
+    return (
+      <div style={{ height: 60, background: bgColor2, borderRadius: 10 }} />
+    );
+  }
 
   return (
     <div className="relative flex flex-1">
@@ -54,7 +71,9 @@ export const Input: FC<InputProps> = ({
         className={styles.label}
         style={{
           opacity: labelShown ? 1 : 0,
-          transition: "opacity 0.075s ease-in-out",
+          transition: lastChangeWasUser.current
+            ? "opacity 0.075s ease-in-out"
+            : "none",
         }}
       >
         {placeholder}
@@ -66,6 +85,7 @@ export const Input: FC<InputProps> = ({
         value={value}
         defaultValue={defaultValue}
         onChange={(e) => {
+          lastChangeWasUser.current = true;
           onChange?.(e.target.value);
           setIsEmpty(!e.target.value);
         }}
@@ -73,7 +93,9 @@ export const Input: FC<InputProps> = ({
           backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,
           paddingTop: labelShown ? 16 : undefined,
           pointerEvents: disabled ? "none" : undefined,
-          transition: "padding-top 0.075s ease-in-out",
+          transition: lastChangeWasUser.current
+            ? "padding-top 0.075s ease-in-out"
+            : "none",
           ...style,
         }}
         autoFocus={autoFocus}

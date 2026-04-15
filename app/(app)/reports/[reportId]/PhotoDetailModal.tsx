@@ -62,7 +62,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
       position: "relative",
       width: "100%",
       aspectRatio: `${image?.width ?? 1} / ${image?.height ?? 1}`,
-      backgroundColor: bgColor3,
+      backgroundColor: bgColor2,
     }),
     [image?.width, image?.height],
   );
@@ -365,7 +365,7 @@ export const Description: FC<DescriptionProps> = ({
   isOpen,
   isMobile,
 }) => {
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState<string | undefined>();
   const [isEdited, setIsEdited] = useState(false);
   const updateButtonRef = useRef<any>(null);
   const { t } = useTranslation();
@@ -382,7 +382,7 @@ export const Description: FC<DescriptionProps> = ({
   }, [isOpen, isMobile]);
 
   useEffect(() => {
-    if (imageDescription) setDescription(imageDescription);
+    setDescription(imageDescription ?? "");
   }, [imageDescription]);
 
   useEffect(() => {
@@ -424,6 +424,7 @@ export const Description: FC<DescriptionProps> = ({
           placeholder={t("description")}
           value={description}
           onChange={(d) => setDescription(d)}
+          loading={description === undefined}
         />
       </div>
       <div

@@ -20,8 +20,6 @@ interface SelectProps {
   defaultValue?: string | number;
   onChange?: (value?: string | number) => void;
   placeholder?: string;
-  hidePlaceholder?: boolean;
-  hideLabel?: boolean;
   error?: boolean;
   style?: CSSProperties;
   disabled?: boolean;
@@ -33,8 +31,6 @@ const Select: FC<SelectProps> = ({
   defaultValue,
   onChange,
   placeholder,
-  hidePlaceholder,
-  hideLabel,
   error,
   style,
   disabled,
@@ -42,7 +38,7 @@ const Select: FC<SelectProps> = ({
   const [isUnselected, setIsUnselected] = useState(!options[0]?.value);
   const [isEmpty, setIsEmpty] = useState(false);
   const [open, setOpen] = useState(false);
-  const labelShown = !hideLabel && !isEmpty;
+  const labelShown = !isEmpty;
   const valueRef = useRef(value);
 
   const backgroundColor = useMemo(() => {
@@ -96,11 +92,7 @@ const Select: FC<SelectProps> = ({
         }}
       >
         {placeholder && (
-          <option
-            value=""
-            disabled
-            style={{ display: hidePlaceholder ? "none" : "flex" }}
-          >
+          <option value="" disabled>
             {placeholder}
           </option>
         )}

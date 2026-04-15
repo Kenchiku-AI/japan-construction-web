@@ -9,6 +9,7 @@ interface TextAreaProps {
   onChange?: (text: string) => void;
   error?: boolean;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 export const TextArea: FC<TextAreaProps> = ({
@@ -18,25 +19,53 @@ export const TextArea: FC<TextAreaProps> = ({
   onChange,
   error,
   disabled,
+  loading,
 }) => {
   const [isEmpty, setIsEmpty] = useState(!value && !defaultValue);
-  const valueRef = useRef(value);
   const textAreaRef = useRef<any>(null);
+  const lastChangeWasUser = useRef(false);
+  const [showContent, setShowContent] = useState(false);
+
+  const resize = () => {
+    const ta = textAreaRef.current;
+    if (!ta) return;
+
+    ta.style.height = "auto";
+    ta.style.height = Math.max(100, ta.scrollHeight) + "px";
+  };
 
   useEffect(() => {
-    if (value) {
-      setIsEmpty(false);
-    } else if (!!valueRef.current) {
-      setIsEmpty(true);
+    if (!lastChangeWasUser.current) {
+      setIsEmpty(!value);
     }
 
-    valueRef.current = value;
-
-    const el = textAreaRef.current;
-    el.style.height = "auto";
-    const height = Math.max(100, el.scrollHeight);
-    el.style.height = height + "px";
+    lastChangeWasUser.current = false;
+    resize();
   }, [value]);
+
+  useEffect(() => {
+    if (!loading) {
+      setShowContent(false);
+
+      requestAnimationFrame(() => {
+        setShowContent(true);
+
+        if (showContent) resize();
+      });
+    }
+  }, [loading, showContent]);
+
+  if (loading || !showContent) {
+    return (
+      <div
+        style={{
+          height: 100,
+          background: bgColor2,
+          borderRadius: 10,
+        }}
+      />
+    );
+  }
 
   return (
     <div className="relative" style={{ marginBottom: -6 }}>
@@ -44,7 +73,9 @@ export const TextArea: FC<TextAreaProps> = ({
         className={styles.label}
         style={{
           opacity: isEmpty ? 0 : 1,
-          transition: "opacity 0.075s ease-in-out",
+          transition: lastChangeWasUser.current
+            ? "opacity 0.075s ease-in-out"
+            : "none",
         }}
       >
         {placeholder}
@@ -55,13 +86,17 @@ export const TextArea: FC<TextAreaProps> = ({
         defaultValue={defaultValue}
         value={value}
         onChange={(e) => {
+          lastChangeWasUser.current = true;
           onChange?.(e.target.value);
+          setIsEmpty(!e.target.value);
         }}
         style={{
           backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,
           paddingTop: isEmpty ? undefined : 26,
           pointerEvents: disabled ? "none" : undefined,
-          transition: "padding-top 0.075s ease-in-out",
+          transition: lastChangeWasUser.current
+            ? "padding-top 0.075s ease-in-out"
+            : "none",
         }}
       />
     </div>
