@@ -98,10 +98,15 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     );
   }, [images, selectedTag]);
 
-  const sortedFields = useMemo(
-    () => [...(report?.fields ?? [])].sort((a, b) => a.order - b.order),
-    [report?.fields],
-  );
+  const sortedFields = useMemo(() => {
+    return [...(report?.fields ?? [])].sort((a, b) => {
+      if (a.order !== b.order) return a.order - b.order;
+
+      return a.id.localeCompare(b.id);
+    });
+  }, [report?.fields]);
+
+  console.log("FIELDS", sortedFields);
 
   const shouldRedirect =
     currentUser?.company &&

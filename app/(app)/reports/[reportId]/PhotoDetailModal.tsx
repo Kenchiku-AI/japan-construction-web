@@ -7,7 +7,7 @@ import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Divider from "@/app/ui/Divider";
 import { useDate } from "@/public/date/useDate";
 import { Button } from "@/app/ui/Button/Button";
-import { bgColor2, bgColor3, errorColor1, fontColor2 } from "@/lib/constants";
+import { bgColor2, errorColor1, fontColor2 } from "@/lib/constants";
 import { Check, Close, Download, Plus, Tag, Trash } from "@/app/ui/Icons";
 import styles from "./page.module.css";
 
