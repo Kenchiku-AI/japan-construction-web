@@ -13,6 +13,7 @@ import styles from "./page.module.css";
 
 interface PhotoDetailModalProps {
   image?: ReportImage;
+  index?: number;
   tags: ReportImageTag[];
   reportName: string;
   onDeletePhoto: () => void;
@@ -26,6 +27,7 @@ interface PhotoDetailModalProps {
 
 const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
   image,
+  index,
   tags,
   reportName,
   onDeletePhoto,
@@ -150,7 +152,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
 
                     const a = document.createElement("a");
                     a.href = url;
-                    a.download = `${reportName.replace(/ /g, "_")}_${date}.jpg`;
+                    a.download = `${reportName.replace(/ /g, "_").replace(/[()]/g, "")}${index === undefined ? "" : `_${t("photo")}_${index}`}.jpg`;
 
                     document.body.appendChild(a);
                     a.click();

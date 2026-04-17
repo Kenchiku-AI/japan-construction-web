@@ -9,7 +9,7 @@ import { ReportFieldValues, ReportImageTag, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
-import { bgColor2, bgColor3, buttonColor, errorColor1 } from "@/lib/constants";
+import { bgColor2, buttonColor, errorColor1 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
 import { Plus, Download, Trash, Tag, Close, Check } from "@/app/ui/Icons";
@@ -22,6 +22,7 @@ import PhotoDetailModal from "./PhotoDetailModal";
 import { useTags } from "../../tags/useTags";
 import FilterByTagModal from "./FilterByTagModal";
 import Image from "next/image";
+import JSZip from "jszip";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -97,6 +98,53 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       i.tags.some((tag) => tag.tag_id === selectedTag.id),
     );
   }, [images, selectedTag]);
+
+  const selectedPhotoIndex = useMemo(() => {
+    if (!selectedPhoto || !images) return undefined;
+
+    const index = images.findIndex((i) => i.id === selectedPhoto.id);
+    return index === -1 ? undefined : index;
+  }, [images, selectedPhoto]);
+
+  const downloadAllImages = useCallback(async () => {
+    if (!filteredImages?.length) return;
+
+    try {
+      const zip = new JSZip();
+
+      const files = await Promise.all(
+        filteredImages.map(async (img, index) => {
+          const response = await fetch(img.download_url, { mode: "cors" });
+          const blob = await response.blob();
+
+          const fileName = `${t("photo")}_${index + 1}.jpg`;
+
+          return { fileName, blob };
+        }),
+      );
+
+      files.forEach(({ fileName, blob }) => {
+        zip.file(fileName, blob);
+      });
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement("a");
+
+      a.href = url;
+      const filename = `${report?.name ?? ""}${!selectedTag ? "" : `_${selectedTag.name}`}_${t("photos")}`;
+      a.download = `${filename.replace(/ /g, "_").replace(/[()]/g, "")}.zip`;
+
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download all failed", err);
+    }
+  }, [filteredImages, report?.name, selectedTag]);
 
   const sortedFields = useMemo(() => {
     return [...(report?.fields ?? [])].sort((a, b) => {
@@ -175,7 +223,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       />
       <Divider />
       {report != null && (
-        <div className="flex w-full flex-row justify-between gap-2 lg:gap-8">
+        <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8">
           <Button
             variant="tertiary"
             label={t("download_pdf")}
@@ -194,7 +242,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
 
               const a = document.createElement("a");
               a.href = fileUrl;
-              a.download = `${report.name.replace(/ /g, "_")}.pdf`;
+              a.download = `${report.name.replace(/ /g, "_").replace(/[()]/g, "")}.pdf`;
               document.body.appendChild(a);
               a.click();
               a.remove();
@@ -301,12 +349,16 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             <div className={styles.empty}>{t("empty_photos_description")}</div>
           ) : (
             <>
-              <div className="mb-3 flex w-full flex-row justify-between gap-2 lg:gap-8">
+              <div className="mb-3 flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8">
                 <Button
                   variant="tertiary"
-                  label={t("download_all")}
+                  label={
+                    selectedTag
+                      ? t("download_tag", { tag: selectedTag.name })
+                      : t("download_all")
+                  }
                   iconLeft={() => <Download />}
-                  onClick={async () => {}}
+                  onClick={downloadAllImages}
                   style={{ height: "auto" }}
                   textStyle={{
                     fontWeight: "300",
@@ -353,6 +405,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       />
       <PhotoDetailModal
         image={selectedPhoto}
+        index={selectedPhotoIndex}
         tags={tags ?? []}
         reportName={report?.name ?? ""}
         onDeletePhoto={() => {
