@@ -12,6 +12,13 @@ export type SignupRequest = {
   password: string;
 };
 
+export type ForgotPasswordRequest = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+};
+
 export type UserCompany = {
   id: string;
   name: string;

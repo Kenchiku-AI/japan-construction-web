@@ -16,8 +16,8 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const { loading, login, error } = useLogin();
-  const { showModal, onClose } = useModal();
+  const { loading, login } = useLogin();
+  const { showModal } = useModal();
   const { t } = useTranslation();
   const searchParams = useSearchParams();
 
@@ -37,7 +37,6 @@ const LoginPage = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <Heading title={t("login")} subtitle={t("login_description")} />
-        {error && <div className={styles.error}>{error}</div>}
         <div className={styles.fields}>
           <Input
             placeholder={t("email")}
@@ -65,7 +64,9 @@ const LoginPage = () => {
           <Button
             variant="tertiary"
             label={t("forgot_password")}
-            onClick={() => {}}
+            onClick={() => {
+              router.push("/forgot-password");
+            }}
           />
           <Button
             variant="tertiary"

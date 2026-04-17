@@ -106,8 +106,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     });
   }, [report?.fields]);
 
-  console.log("FIELDS", sortedFields);
-
   const shouldRedirect =
     currentUser?.company &&
     report?.company_id &&
@@ -238,7 +236,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                     return newValues;
                   });
                 }}
-                loading={loading}
+                loading={fieldValues?.[field.id] === undefined}
               />
             ))}
           </div>

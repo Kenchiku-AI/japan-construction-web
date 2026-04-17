@@ -2,34 +2,23 @@ import { useApi } from "@/lib/api/ApiContext";
 import { invitationTokenKey } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
 import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const useSignup = () => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const api = useApi();
   const { t } = useTranslation();
   const { showModal } = useModal();
 
-  const signup = useCallback(
-    async (
-      first_name: string,
-      last_name: string,
-      email: string,
-      password: string,
-    ) => {
+  const forgotPassword = useCallback(
+    async (email: string) => {
       setLoading(true);
 
       try {
-        const user = await api.signup({
-          first_name,
-          last_name,
+        await api.forgotPassword({
           email,
-          password,
         });
-        api.setCurrentUser(user);
 
         const invitationToken = sessionStorage.getItem(invitationTokenKey);
         if (invitationToken) {

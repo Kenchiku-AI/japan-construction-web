@@ -6,13 +6,14 @@ import { useRouter } from "next/navigation";
 import { invitationTokenKey } from "@/lib/constants";
 import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
+import { useModal } from "@/lib/modal/ModalContext";
 
 export const useLogin = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const api = useApi();
   const { t } = useTranslation();
+  const { showModal } = useModal();
 
   const login = useCallback(
     async (email: string, password: string) => {
@@ -35,9 +36,15 @@ export const useLogin = () => {
         setLoading(false);
 
         if ((err as AxiosError).status === 401) {
-          setError(t("invalid_email_password"));
+          showModal({
+            title: t("error"),
+            subtitle: t("invalid_email_password"),
+          });
         } else {
-          setError(t("login_error"));
+          showModal({
+            title: t("error"),
+            subtitle: t("login_error"),
+          });
         }
       }
 
@@ -49,6 +56,5 @@ export const useLogin = () => {
   return {
     loading,
     login,
-    error,
   };
 };

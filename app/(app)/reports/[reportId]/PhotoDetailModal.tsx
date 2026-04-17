@@ -215,6 +215,7 @@ const Photo: FC<PhotoProps> = ({ image }) => {
       alt={image.id}
       src={image.download_url}
       fill
+      sizes="(max-width: 564px) 100vw"
       className={`object-cover transition-opacity duration-200 ${
         loaded ? "opacity-100" : "opacity-0"
       }`}
@@ -242,7 +243,6 @@ const Tags: FC<TagsProps> = ({
   allTags,
   onAdd,
   onDelete,
-  isMobile,
   isOpen,
 }) => {
   const [isTagListShown, setIsTagListShown] = useState(false);
@@ -276,54 +276,12 @@ const Tags: FC<TagsProps> = ({
             display: availableTags.length ? "flex" : "none",
           }}
         />
-        <div
-          className={`shadow-md absolute w-3/4 bg-white${isTagListShown ? "" : " hidden"}`}
-          style={{
-            top: isMobile ? availableTags.length * -60 - 56 : 40,
-            right: 0,
-            padding: "0 16px",
-            borderRadius: 10,
-            maxWidth: 400,
-            borderWidth: 1,
-            borderColor: bgColor2,
-            background: "white",
-          }}
-        >
-          <div className="flex justify-between mt-3" style={{ height: 30 }}>
-            {t("add_tag")}
-            <div
-              className="cursor-pointer"
-              onClick={() => setIsTagListShown(false)}
-            >
-              <Close />
-            </div>
-          </div>
-          <Divider style={{ margin: 0 }} />
-          {availableTags.map((t, i) => (
-            <div key={`add_tag_${t.id}`}>
-              {i !== 0 && (
-                <Divider style={{ background: fontColor2, margin: 0 }} />
-              )}
-              <div
-                className="flex gap-2 cursor-pointer px-2 items-center"
-                style={{ height: 60 }}
-                onClick={() => {
-                  setIsTagListShown(false);
-                  onAdd(t.id);
-                }}
-              >
-                <Tag size={24} />
-                <div>{t.name}</div>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
       <Divider />
       {!imageTags?.length ? (
         <div className={styles.empty}>{t("empty_tags_description")}</div>
       ) : (
-        <div className="flex gap-3 mt-4 mb-10">
+        <div className="flex gap-3 my-4">
           {imageTags?.map((t) => (
             <div
               key={`tag_${t.tag_id}`}
@@ -345,6 +303,60 @@ const Tags: FC<TagsProps> = ({
               </div>
             </div>
           ))}
+        </div>
+      )}
+      {isTagListShown && (
+        <div
+          style={{
+            position: "absolute",
+            background: "#0000004D",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 100,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="shadow-md absolute w-3/4 bg-white p-4"
+            style={{
+              borderRadius: 10,
+              maxWidth: 400,
+            }}
+          >
+            <div className="flex justify-between mb-2" style={{ height: 30 }}>
+              {t("add_tag")}
+              <div
+                className="cursor-pointer"
+                onClick={() => setIsTagListShown(false)}
+                style={{}}
+              >
+                <Close />
+              </div>
+            </div>
+            <Divider style={{ margin: 0 }} />
+            {availableTags.map((t, i) => (
+              <div key={`add_tag_${t.id}`}>
+                {i !== 0 && (
+                  <Divider style={{ background: fontColor2, margin: 0 }} />
+                )}
+                <div
+                  className="flex gap-2 cursor-pointer px-2 items-center"
+                  style={{ height: 60 }}
+                  onClick={() => {
+                    setIsTagListShown(false);
+                    onAdd(t.id);
+                  }}
+                >
+                  <Tag size={24} />
+                  <div>{t.name}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </>
@@ -409,7 +421,9 @@ export const Description: FC<DescriptionProps> = ({
 
   useEffect(() => {
     if (!isOpen) {
-      setTimeout(() => {});
+      setTimeout(() => {
+        setDescription(undefined);
+      });
     }
   }, [isOpen]);
 
@@ -443,7 +457,7 @@ export const Description: FC<DescriptionProps> = ({
           label={t("update_description")}
           iconLeft={() => <Check />}
           onClick={() => {
-            onUpdate(description);
+            onUpdate(description ?? "");
           }}
         />
         <Button

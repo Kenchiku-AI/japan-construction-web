@@ -19,7 +19,7 @@ const SignupPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
-  const { loading, signup, error } = useSignup();
+  const { loading, signup } = useSignup();
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -27,7 +27,6 @@ const SignupPage = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <Heading title={t("sign_up")} subtitle={t("sign_up_description")} />
-        {error && <div className={styles.error}>{error}</div>}
         <div className={styles.fields}>
           <Input
             placeholder={t("first_name")}
