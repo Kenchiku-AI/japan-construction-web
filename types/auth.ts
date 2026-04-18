@@ -13,10 +13,12 @@ export type SignupRequest = {
 };
 
 export type ForgotPasswordRequest = {
-  first_name: string;
-  last_name: string;
   email: string;
-  password: string;
+};
+
+export type ResetPasswordRequest = {
+  token: string;
+  new_password: string;
 };
 
 export type UserCompany = {

@@ -4,13 +4,12 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useProjects } from "./useProjects";
 import { useRouter } from "next/navigation";
-import { Hardhat, Plus } from "@/app/ui/Icons";
+import { Hardhat } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { fontColor2 } from "@/lib/constants";
 import { FC } from "react";
 import { Project, ProjectStatus } from "@/types";
 import styles from "./page.module.css";
-import { Button } from "@/app/ui/Button/Button";
 
 const ProjectsPage = () => {
   const { t } = useTranslation();

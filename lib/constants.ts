@@ -1,7 +1,12 @@
 const host = "localhost:8000";
 export const baseUrl = `http://${host}`; // use https in prod
 export const wsUrl = `ws://${host}`; // use wss in prod
-export const authRoutes = ["/login", "/signup", "/forgot-password"];
+export const authRoutes = [
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/reset-password",
+];
 export const accessTokenKey = "accessToken";
 export const refreshTokenKey = "refreshToken";
 export const invitationTokenKey = "invitationToken";
