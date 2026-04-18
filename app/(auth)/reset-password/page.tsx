@@ -39,6 +39,7 @@ const ResetPasswordPage = () => {
               setPassword(t);
             }}
             disabled={loading}
+            type="password"
           />
           <Input
             placeholder={t("confirm_new_password")}
@@ -46,6 +47,7 @@ const ResetPasswordPage = () => {
               setConfirmPassword(t);
             }}
             disabled={loading}
+            type="password"
           />
         </div>
         <Button

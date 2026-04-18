@@ -18,6 +18,7 @@ import {
   CreateImageResponse,
   ReportImageCreateRequest,
   ForgotPasswordRequest,
+  ResetPasswordRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -109,6 +110,10 @@ export const useApiData = () => {
     },
     async forgotPassword(request: ForgotPasswordRequest) {
       const url = "/auth/forgot-password";
+      return handleResponse(() => http.post(url, request));
+    },
+    async resetPassword(request: ResetPasswordRequest) {
+      const url = "/auth/reset-password";
       return handleResponse(() => http.post(url, request));
     },
     async logout() {

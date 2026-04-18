@@ -29,7 +29,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
         {children}
       </div>
       <div className="drawer-side flex">
-        <ul className="menu bg-base-200 lg:w-48 min-w-14 sm:min-w-20 text-base-content min-h-full py-6 md:px-4 px-1 justify-between">
+        <ul className="menu bg-base-200 lg:w-48 min-w-14 md:min-w-20 text-base-content min-h-full py-6 md:px-4 px-1 justify-between">
           {currentUser && (
             <>
               <div className="space-y-2">

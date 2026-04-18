@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import styles from "./Input.module.css";
+import { Eye, EyeOff } from "../Icons";
 
 interface InputProps {
   placeholder?: string;
@@ -40,6 +41,7 @@ export const Input: FC<InputProps> = ({
   const [showContent, setShowContent] = useState(false);
   const labelShown = !hideLabel && !isEmpty;
   const lastChangeWasUser = useRef(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (!lastChangeWasUser.current) {
@@ -80,7 +82,7 @@ export const Input: FC<InputProps> = ({
       </div>
       <input
         placeholder={placeholder}
-        type={type}
+        type={showPassword ? undefined : type}
         className="input"
         value={value}
         defaultValue={defaultValue}
@@ -93,6 +95,7 @@ export const Input: FC<InputProps> = ({
           backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,
           paddingTop: labelShown ? 16 : undefined,
           pointerEvents: disabled ? "none" : undefined,
+          paddingRight: type === "password" ? 50 : undefined,
           transition: lastChangeWasUser.current
             ? "padding-top 0.075s ease-in-out"
             : "none",
@@ -100,6 +103,19 @@ export const Input: FC<InputProps> = ({
         }}
         autoFocus={autoFocus}
       />
+      {type === "password" && (
+        <div
+          className="hover:opacity-50 cursor-pointer flex items-center"
+          style={{
+            position: "absolute",
+            right: 16,
+            height: 60,
+          }}
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? <EyeOff /> : <Eye />}
+        </div>
+      )}
     </div>
   );
 };

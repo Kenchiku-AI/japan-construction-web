@@ -26,6 +26,7 @@ const ForgotPasswordPage = () => {
         <div className={styles.fields}>
           <Input
             placeholder={t("email")}
+            value={email}
             onChange={(t) => {
               setEmail(t);
             }}
