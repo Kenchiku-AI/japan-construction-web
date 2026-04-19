@@ -1,19 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSignup } from "./useSignup";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { Input } from "@/app/ui/Input/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
-import { emailRegex } from "@/lib/constants";
-import { redirect, useRouter } from "next/navigation";
+import { emailRegex, invitationTokenKey } from "@/lib/constants";
+import { redirect, useSearchParams } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
 
 const SignupPage = () => {
-  redirect("/");
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,13 +20,28 @@ const SignupPage = () => {
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
   const { loading, signup } = useSignup();
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const token = searchParams.get(invitationTokenKey);
+
+    if (token) {
+      sessionStorage.setItem(invitationTokenKey, token);
+    }
+  }, [searchParams]);
+
+  if (
+    !sessionStorage.getItem(invitationTokenKey) &&
+    !searchParams.get(invitationTokenKey)
+  ) {
+    redirect("/");
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <Heading title={t("sign_up")} subtitle={t("sign_up_description")} />
+        <Heading title={t("welcome")} subtitle={t("sign_up_description")} />
         <div className={styles.fields}>
           <Input
             placeholder={t("first_name")}
@@ -93,15 +106,6 @@ const SignupPage = () => {
             !firstName || !lastName || !email || !password || !confirmPassword
           }
         />
-        <div className={styles.buttons}>
-          <Button
-            variant="tertiary"
-            label={t("login")}
-            onClick={() => {
-              router.push("/login");
-            }}
-          />
-        </div>
       </div>
       {loading && <Loader />}
     </div>

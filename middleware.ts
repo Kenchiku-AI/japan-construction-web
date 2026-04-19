@@ -5,7 +5,7 @@ import { accessTokenKey, authRoutes } from "./lib/constants";
 export function middleware(req: NextRequest) {
   const token = req.cookies.get(accessTokenKey);
 
-  const { pathname, searchParams } = req.nextUrl;
+  const { pathname } = req.nextUrl;
   const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
 
   if (!token && !isAuthRoute) {
