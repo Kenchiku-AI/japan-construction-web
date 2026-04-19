@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import { useLogin } from "./useLogin";
@@ -8,15 +8,21 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { Input } from "@/app/ui/Input/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
-import { Loader } from "@/app/ui/Loader";
 import { invitationTokenKey } from "@/lib/constants";
+import { Loader } from "@/app/ui/Loader";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [invitationToken, setInvitationToken] = useState<string | null>(null);
   const router = useRouter();
   const { loading, login } = useLogin();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem(invitationTokenKey);
+    setInvitationToken(token);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -53,12 +59,12 @@ const LoginPage = () => {
               router.push("/forgot-password");
             }}
           />
-          {!!sessionStorage.getItem(invitationTokenKey) && (
+          {invitationToken && (
             <Button
               variant="tertiary"
               label={t("sign_up")}
               onClick={() => {
-                router.push("/signup");
+                router.push(`/signup?invitationToken=${invitationToken}`);
               }}
             />
           )}

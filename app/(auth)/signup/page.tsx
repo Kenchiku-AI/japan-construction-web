@@ -31,10 +31,7 @@ const SignupPage = () => {
     }
   }, [searchParams]);
 
-  if (
-    !sessionStorage.getItem(invitationTokenKey) &&
-    !searchParams.get(invitationTokenKey)
-  ) {
+  if (!searchParams.get(invitationTokenKey)) {
     redirect("/");
   }
 
