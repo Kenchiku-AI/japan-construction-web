@@ -1,37 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useLogin } from "./useLogin";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { Input } from "@/app/ui/Input/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
-import { invitationTokenKey } from "@/lib/constants";
-import { useModal } from "@/lib/modal/ModalContext";
 import { Loader } from "@/app/ui/Loader";
+import { invitationTokenKey } from "@/lib/constants";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
   const { loading, login } = useLogin();
-  const { showModal } = useModal();
   const { t } = useTranslation();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const token = searchParams.get(invitationTokenKey);
-
-    if (token) {
-      showModal({
-        title: t("invitation_accepted"),
-        subtitle: t("invitation_accepted_description"),
-      });
-      sessionStorage.setItem(invitationTokenKey, token);
-    }
-  }, [searchParams]);
 
   return (
     <div className={styles.container}>
@@ -68,13 +53,15 @@ const LoginPage = () => {
               router.push("/forgot-password");
             }}
           />
-          <Button
-            variant="tertiary"
-            label={t("sign_up")}
-            onClick={() => {
-              router.push("/signup");
-            }}
-          />
+          {!!sessionStorage.getItem(invitationTokenKey) && (
+            <Button
+              variant="tertiary"
+              label={t("sign_up")}
+              onClick={() => {
+                router.push("/signup");
+              }}
+            />
+          )}
         </div>
       </div>
       {loading && <Loader />}

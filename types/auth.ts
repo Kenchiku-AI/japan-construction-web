@@ -10,6 +10,7 @@ export type SignupRequest = {
   last_name: string;
   email: string;
   password: string;
+  invitation_token: string;
 };
 
 export type ForgotPasswordRequest = {

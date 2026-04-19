@@ -22,23 +22,22 @@ export const useSignup = () => {
     ) => {
       setLoading(true);
 
+      const invitation_token = sessionStorage.getItem(invitationTokenKey);
+
+      if (!invitation_token) {
+        throw new Error();
+      }
+
       try {
         const user = await api.signup({
           first_name,
           last_name,
           email,
           password,
+          invitation_token,
         });
         api.setCurrentUser(user);
-
-        const invitationToken = sessionStorage.getItem(invitationTokenKey);
-        if (invitationToken) {
-          await api.acceptInvitation(invitationToken);
-
-          const response = await api.getCurrentUser();
-          api.setCurrentUser(response);
-        }
-
+        sessionStorage.removeItem(invitationTokenKey);
         router.push("/");
       } catch (err) {
         setLoading(false);
@@ -55,8 +54,6 @@ export const useSignup = () => {
           });
         }
       }
-
-      sessionStorage.removeItem(invitationTokenKey);
     },
     [router],
   );

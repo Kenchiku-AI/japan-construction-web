@@ -1,7 +1,4 @@
 {
-  "accept_invitation_failed": "招待は失敗しました。",
-  "accept_invitation_failed_description": "メールに記載されているリンクをもう一度クリックするか、送信者に新しい招待状をリクエストしてください。",
-  "accepting_invitation": "招待を受け入れています...",
   "add_field": "項目を追加",
   "add_tag": "タグを追加",
   "boolean": "オン／オフ",
@@ -77,7 +74,7 @@
   "home": "ホーム",
   "invalid_email_password": "入力されたメールアドレスまたはパスワードが無効です。",
   "invitation_accepted": "招待を受け入れました",
-  "invitation_accepted_description": "招待が承認されました。会社に参加するには、ログインまたは新規登録してください。",
+  "invitation_accepted_description": "招待が承認されました。会社に参加するには、アカウント登録をしてください。",
   "invitation_existing_company_error": "あなたはすでに会社に所属しています。",
   "invitation_existing_company_error_description": "複数の会社から招待を受けることはできません。",
   "invitation_sent": "招待を送信しました",

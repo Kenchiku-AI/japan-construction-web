@@ -8,10 +8,12 @@ import { Input } from "@/app/ui/Input/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
 import { emailRegex } from "@/lib/constants";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
 
 const SignupPage = () => {
+  redirect("/");
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

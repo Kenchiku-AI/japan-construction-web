@@ -251,10 +251,6 @@ export const useApiData = () => {
       const url = "/invitations";
       return call(() => http.post(url, request));
     },
-    async acceptInvitation(token: string) {
-      const url = `/invitations/accept/${token}`;
-      return call(() => http.post(url));
-    },
   };
 
   return {

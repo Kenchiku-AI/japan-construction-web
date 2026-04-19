@@ -3,7 +3,6 @@
 import { useCallback, useState } from "react";
 import { useApi } from "../../../lib/api/ApiContext";
 import { useRouter } from "next/navigation";
-import { invitationTokenKey } from "@/lib/constants";
 import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
@@ -22,15 +21,6 @@ export const useLogin = () => {
       try {
         const user = await api.login({ email, password });
         api.setCurrentUser(user);
-
-        const invitationToken = sessionStorage.getItem(invitationTokenKey);
-        if (invitationToken) {
-          await api.acceptInvitation(invitationToken);
-
-          const response = await api.getCurrentUser();
-          api.setCurrentUser(response);
-        }
-
         router.push("/");
       } catch (err) {
         setLoading(false);
@@ -47,8 +37,6 @@ export const useLogin = () => {
           });
         }
       }
-
-      sessionStorage.removeItem(invitationTokenKey);
     },
     [router],
   );

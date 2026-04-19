@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import {
-  accessTokenKey,
-  authRoutes,
-  invitationTokenKey,
-} from "./lib/constants";
+import { accessTokenKey, authRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get(accessTokenKey);
@@ -13,17 +9,7 @@ export function middleware(req: NextRequest) {
   const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
 
   if (!token && !isAuthRoute) {
-    let redirectUrl = "/login";
-
-    if (pathname.startsWith("/invitation")) {
-      const invitationToken = searchParams.get("token");
-
-      if (invitationToken) {
-        redirectUrl += `?${invitationTokenKey}=${invitationToken}`;
-      }
-    }
-
-    return NextResponse.redirect(new URL(redirectUrl, req.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   if (token && isAuthRoute) {
