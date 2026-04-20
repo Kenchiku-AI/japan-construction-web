@@ -13,6 +13,12 @@ export type SignupRequest = {
   invitation_token: string;
 };
 
+export type CreateAdminRequest = {
+  first_name: string;
+  last_name: string;
+  email: string;
+};
+
 export type ForgotPasswordRequest = {
   email: string;
 };

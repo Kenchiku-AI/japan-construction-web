@@ -19,6 +19,7 @@ import {
   ReportImageCreateRequest,
   ForgotPasswordRequest,
   ResetPasswordRequest,
+  CreateAdminRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -107,6 +108,10 @@ export const useApiData = () => {
     async signup(request: SignupRequest) {
       const url = "/auth/signup";
       return handleResponse(() => http.post(url, request));
+    },
+    async createAdmin(request: CreateAdminRequest) {
+      const url = "/auth/create-admin";
+      return call(() => http.post(url, request));
     },
     async forgotPassword(request: ForgotPasswordRequest) {
       const url = "/auth/forgot-password";

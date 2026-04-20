@@ -22,7 +22,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { logout } = useApi();
   const { currentUser } = useApi();
 
-  return (
+  return !currentUser ? null : (
     <div className="drawer drawer-open">
       <input type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col p-4 md:px-24 md:py-12 max-w-4xl">

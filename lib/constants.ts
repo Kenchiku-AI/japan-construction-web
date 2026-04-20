@@ -1,6 +1,7 @@
 const host = "localhost:8000";
 export const baseUrl = `http://${host}`; // use https in prod
 export const wsUrl = `ws://${host}`; // use wss in prod
+export const superUserEmail = "admin@example.com";
 export const authRoutes = [
   "/login",
   "/signup",
