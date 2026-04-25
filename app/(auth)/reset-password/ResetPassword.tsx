@@ -18,7 +18,6 @@ const ResetPassword = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { showModal } = useModal();
-
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
