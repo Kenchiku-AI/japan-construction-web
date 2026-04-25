@@ -18,14 +18,14 @@ const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
 }) => {
   const [name, setName] = useState("");
   const [corporateNumber, setCorporateNumber] = useState("");
-  const [managerEmail, setManagerEmail] = useState<string>();
+  const [managerEmail, setManagerEmail] = useState("");
   const { t } = useTranslation();
 
   const reset = () => {
     setTimeout(() => {
       setName("");
       setCorporateNumber("");
-      setManagerEmail(undefined);
+      setManagerEmail("");
     }, 500);
   };
 
@@ -59,7 +59,7 @@ const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
           onSubmit({
             name,
             corporate_number: corporateNumber,
-            manager_email: managerEmail,
+            manager_email: managerEmail || undefined,
           });
 
           reset();

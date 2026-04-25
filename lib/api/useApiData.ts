@@ -109,10 +109,6 @@ export const useApiData = () => {
       const url = "/auth/signup";
       return handleResponse(() => http.post(url, request));
     },
-    async createAdmin(request: CreateAdminRequest) {
-      const url = "/auth/create-admin";
-      return call(() => http.post(url, request));
-    },
     async forgotPassword(request: ForgotPasswordRequest) {
       const url = "/auth/forgot-password";
       return handleResponse(() => http.post(url, request));
@@ -128,6 +124,10 @@ export const useApiData = () => {
     async getCurrentUser() {
       const url = "/users/me";
       return call(() => http.get<CurrentUser>(url));
+    },
+    async createAdmin(request: CreateAdminRequest) {
+      const url = "/users/create-admin";
+      return call(() => http.post(url, request));
     },
     async getCompanies() {
       const url = "/companies";
@@ -255,6 +255,9 @@ export const useApiData = () => {
     async inviteUser(request: InviteUserRequest) {
       const url = "/invitations";
       return call(() => http.post(url, request));
+    },
+    async health() {
+      return call(() => http.get("/health"));
     },
   };
 

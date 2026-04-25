@@ -32,7 +32,7 @@ const SignupPage = () => {
   }, [searchParams]);
 
   if (!searchParams.get(invitationTokenKey)) {
-    redirect("/");
+    redirect("/login");
   }
 
   return (

@@ -21,6 +21,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
   const { logout } = useApi();
   const { currentUser } = useApi();
+  const isAdmin = currentUser?.role === UserRole.Admin;
 
   return !currentUser ? null : (
     <div className="drawer drawer-open">
@@ -33,11 +34,19 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
           {currentUser && (
             <>
               <div className="space-y-2">
-                <SidebarItem
-                  name={t("home")}
-                  icon={() => <Home size={24} />}
-                  path={"/"}
-                />
+                {isAdmin ? (
+                  <SidebarItem
+                    name={t("companies")}
+                    icon={() => <Users size={24} />}
+                    path={"/companies"}
+                  />
+                ) : (
+                  <SidebarItem
+                    name={t("home")}
+                    icon={() => <Home size={24} />}
+                    path={"/"}
+                  />
+                )}
                 <SidebarItem
                   name={t("projects")}
                   icon={() => <Hardhat size={24} />}
@@ -53,13 +62,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                   icon={() => <Papers size={24} />}
                   path={"/reports/templates"}
                 />
-                {currentUser.role === UserRole.Admin ? (
-                  <SidebarItem
-                    name={t("companies")}
-                    icon={() => <Users size={24} />}
-                    path={"/companies"}
-                  />
-                ) : (
+                {!isAdmin && (
                   <SidebarItem
                     name={t("tags")}
                     icon={() => <Tag size={22} />}

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
+import { UserRole } from "@/types";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -21,7 +22,8 @@ export const useLogin = () => {
       try {
         const user = await api.login({ email, password });
         api.setCurrentUser(user);
-        router.push("/");
+        const url = user.role === UserRole.Admin ? "/companies" : "/";
+        router.push(url);
       } catch (err) {
         setLoading(false);
 

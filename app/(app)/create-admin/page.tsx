@@ -6,7 +6,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { Input } from "@/app/ui/Input/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
-import { emailRegex, superUserEmail } from "@/lib/constants";
+import { emailRegex } from "@/lib/constants";
 import { redirect } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
 import { useApi } from "@/lib/api/ApiContext";
@@ -19,7 +19,10 @@ const CreatAdminPage = () => {
   const { loading, createAdmin } = useCreateAdmin();
   const { currentUser } = useApi();
 
-  if (currentUser && currentUser?.email !== superUserEmail) {
+  if (
+    currentUser &&
+    currentUser?.email !== process.env.NEXT_PUBLIC_SUPER_USER_EMAIL
+  ) {
     redirect("/");
   }
 
@@ -30,18 +33,21 @@ const CreatAdminPage = () => {
         <div className={styles.fields}>
           <Input
             placeholder="First name"
+            value={firstName}
             onChange={(t) => {
               setFirstName(t);
             }}
           />
           <Input
             placeholder="Last name"
+            value={lastName}
             onChange={(t) => {
               setLastName(t);
             }}
           />
           <Input
             placeholder="Email"
+            value={email}
             onChange={(t) => {
               setEmail(t);
               setIsEmailInvalid(false);
@@ -57,7 +63,13 @@ const CreatAdminPage = () => {
               return;
             }
 
-            await createAdmin(firstName, lastName, email);
+            const success = await createAdmin(firstName, lastName, email);
+
+            if (success) {
+              setEmail("");
+              setFirstName("");
+              setLastName("");
+            }
           }}
           disabled={!firstName || !lastName || !email}
         />

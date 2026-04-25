@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -18,8 +18,12 @@ const CompaniesPage = () => {
   const { t } = useTranslation();
   const { companies, createCompany } = useCompanies();
   const router = useRouter();
-  const { currentUser } = useApi();
+  const { currentUser, health } = useApi();
   const [showCreateCompany, setShowCreateCompany] = useState(false);
+
+  useEffect(() => {
+    health();
+  }, []);
 
   if (currentUser && currentUser.role !== UserRole.Admin) {
     redirect("/");

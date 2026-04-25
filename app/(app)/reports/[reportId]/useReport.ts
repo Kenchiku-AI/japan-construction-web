@@ -12,7 +12,6 @@ import {
 import { useTranslation } from "react-i18next";
 import imageCompression from "browser-image-compression";
 import { useModal } from "@/lib/modal/ModalContext";
-import { wsUrl } from "@/lib/constants";
 
 export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(true);
@@ -33,7 +32,9 @@ export const useReport = (reportId: string) => {
   }, [reportId]);
 
   useEffect(() => {
-    const ws = new WebSocket(`${wsUrl}/reports/images/ws`);
+    const ws = new WebSocket(
+      `${process.env.NEXT_PUBLIC_API_WS_URL}/reports/images/ws`,
+    );
     wsRef.current = ws;
 
     return () => {

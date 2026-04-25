@@ -13,6 +13,7 @@ export const useCreateAdmin = () => {
   const createAdmin = useCallback(
     async (first_name: string, last_name: string, email: string) => {
       setLoading(true);
+      let success = false;
 
       try {
         await api.createAdmin({
@@ -25,9 +26,8 @@ export const useCreateAdmin = () => {
           title: "Success",
           subtitle: "The admin was created.",
         });
+        success = true;
       } catch (err) {
-        setLoading(false);
-
         if ((err as AxiosError).status === 400) {
           showModal({
             title: "Error",
@@ -40,6 +40,9 @@ export const useCreateAdmin = () => {
           });
         }
       }
+
+      setLoading(false);
+      return true;
     },
     [api],
   );
