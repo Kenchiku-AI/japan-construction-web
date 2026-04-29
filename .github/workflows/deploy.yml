@@ -24,12 +24,7 @@ jobs:
             -d '{
               "name": "nextjs-app",
               "project": "'"$PROJECT_ID"'",
-              "target": "production",
-              "gitSource": {
-                "type": "github",
-                "repo": "'"${{ github.repository }}"'",
-                "ref": "'"${{ github.ref_name }}"'"
-              }
+              "target": "production"
             }')
 
           echo "Response: $RESPONSE"
