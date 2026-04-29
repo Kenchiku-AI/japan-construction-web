@@ -256,9 +256,6 @@ export const useApiData = () => {
       const url = "/invitations";
       return call(() => http.post(url, request));
     },
-    async health() {
-      return call(() => http.get("/health"));
-    },
   };
 
   return {

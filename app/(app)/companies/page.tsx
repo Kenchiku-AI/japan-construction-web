@@ -10,7 +10,7 @@ import { Users, Plus } from "@/app/ui/Icons";
 import styles from "./page.module.css";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Divider from "@/app/ui/Divider";
 import { fontColor2 } from "@/lib/constants";
 
@@ -18,18 +18,16 @@ const CompaniesPage = () => {
   const { t } = useTranslation();
   const { companies, createCompany } = useCompanies();
   const router = useRouter();
-  const { currentUser, health } = useApi();
+  const { currentUser } = useApi();
   const [showCreateCompany, setShowCreateCompany] = useState(false);
 
   useEffect(() => {
-    health();
-  }, []);
+    if (currentUser && currentUser.role !== UserRole.Admin) {
+      router.push("/");
+    }
+  }, [currentUser]);
 
-  if (currentUser && currentUser.role !== UserRole.Admin) {
-    redirect("/");
-  }
-
-  return (
+  return !currentUser ? null : (
     <>
       <div className="flex justify-between items-end">
         <Heading title={t("companies")} />
