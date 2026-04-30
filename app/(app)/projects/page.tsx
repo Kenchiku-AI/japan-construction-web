@@ -22,6 +22,9 @@ const ProjectsPage = () => {
         <Heading title={t("tags")} />
       </div>
       <Divider />
+      {projects?.length === 0 && (
+        <div className={styles.empty}>{t("empty_projects_description")}</div>
+      )}
       {projects.map((p) => (
         <div key={p.id}>
           <div
