@@ -85,7 +85,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 <span className="max-lg:hidden">
                   <Button
                     variant="tertiary"
-                    label={`${currentUser.first_name} ${currentUser.last_name}`}
+                    label={`${currentUser.first_name ?? ""} ${currentUser.last_name ?? ""}`}
                     onClick={() => {
                       router.push(`/users/${currentUser.id}`);
                     }}
