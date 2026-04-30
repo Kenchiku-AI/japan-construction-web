@@ -16,10 +16,11 @@ import {
   Logout,
   Tag,
 } from "./Icons";
+import { buttonColor } from "@/lib/constants";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
-  const { logout } = useApi();
+  const router = useRouter();
   const { currentUser } = useApi();
   const isAdmin = currentUser?.role === UserRole.Admin;
 
@@ -71,29 +72,25 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 )}
               </div>
               <div>
-                <div className="flex gap-2 items-center max-lg:hidden mb-2">
-                  <User />
-                  <div>{`${currentUser.first_name} ${currentUser.last_name}`}</div>
-                </div>
                 <span className="min-lg:hidden">
                   <Button
                     variant="tertiary"
-                    onClick={async () => {
-                      await logout();
+                    onClick={() => {
+                      router.push(`/users/${currentUser.id}`);
                     }}
-                    iconLeft={() => <Logout />}
+                    iconLeft={() => <User color={buttonColor} size={30} />}
                     style={{ width: "100%" }}
                   />
                 </span>
                 <span className="max-lg:hidden">
                   <Button
                     variant="tertiary"
-                    label={t("logout")}
-                    onClick={async () => {
-                      await logout();
+                    label={`${currentUser.first_name} ${currentUser.last_name}`}
+                    onClick={() => {
+                      router.push(`/users/${currentUser.id}`);
                     }}
-                    iconLeft={() => <Logout />}
-                    style={{ width: "100%" }}
+                    iconLeft={() => <User color={buttonColor} size={28} />}
+                    textStyle={{ fontWeight: "normal", fontSize: 14 }}
                   />
                 </span>
               </div>

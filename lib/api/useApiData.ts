@@ -20,6 +20,7 @@ import {
   ForgotPasswordRequest,
   ResetPasswordRequest,
   CreateAdminRequest,
+  User,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -124,6 +125,14 @@ export const useApiData = () => {
     async getCurrentUser() {
       const url = "/users/me";
       return call(() => http.get<CurrentUser>(url));
+    },
+    async getUser(userId: string) {
+      const url = `/user/${userId}`;
+      return call(() => http.get(url));
+    },
+    async updateUser(userId: string, request: User) {
+      const url = `/user/${userId}`;
+      return call(() => http.post(url, request));
     },
     async createAdmin(request: CreateAdminRequest) {
       const url = "/users/create-admin";

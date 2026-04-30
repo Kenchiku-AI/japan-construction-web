@@ -28,6 +28,12 @@ export type ResetPasswordRequest = {
   new_password: string;
 };
 
+export type User = {
+  first_name: string;
+  last_name: string;
+  email: string;
+};
+
 export type UserCompany = {
   id: string;
   name: string;
