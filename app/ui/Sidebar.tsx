@@ -90,7 +90,11 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                       router.push(`/users/${currentUser.id}`);
                     }}
                     iconLeft={() => <User color={buttonColor} size={28} />}
-                    textStyle={{ fontWeight: "normal", fontSize: 14 }}
+                    textStyle={{
+                      fontWeight: "normal",
+                      fontSize: 14,
+                      textAlign: "left",
+                    }}
                   />
                 </span>
               </div>

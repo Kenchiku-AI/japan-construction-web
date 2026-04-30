@@ -11,8 +11,11 @@ import { emailRegex } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
 import { UserRole } from "@/types";
 import { redirect } from "next/navigation";
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useUser } from "./useUser";
+import { Loader } from "@/app/ui/Loader";
+import Select from "@/app/ui/Select/Select";
 
 interface UserDashboardProps {
   userId: string;
@@ -20,26 +23,67 @@ interface UserDashboardProps {
 
 const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const { t } = useTranslation();
-  const { currentUser, logout, updateUser } = useApi();
+  const { loading, user, updateUser } = useUser(userId);
+  const userRef = useRef(user);
+  const { currentUser, logout } = useApi();
   const { showModal } = useModal();
-  const [firstName, setFirstName] = useState(currentUser?.first_name ?? "");
-  const [lastName, setLastName] = useState(currentUser?.last_name ?? "");
-  const [email, setEmail] = useState(currentUser?.email ?? "");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState<UserRole>();
   const [isConfirmLogoutShown, setIsConfirmLogoutShown] = useState(false);
 
-  const isDisabled = useMemo(() => {
-    if (!email || !firstName || !lastName) return true;
-    if (email !== currentUser?.email) return false;
-    if (firstName !== currentUser?.first_name) return false;
-    if (lastName !== currentUser?.last_name) return false;
+  const isEditDisabled = useMemo(() => {
+    if (!user || !currentUser) return true;
+
+    if (currentUser.role === UserRole.Admin) {
+      if (currentUser.id === userId) return false;
+      return user.role === UserRole.Admin;
+    }
+
+    return currentUser.id !== userId;
+  }, [user, currentUser]);
+
+  const isUpdateDisabled = useMemo(() => {
+    if (!email || !firstName || !lastName || !user) return true;
+    if (email !== user.email) return false;
+    if (firstName !== user.first_name) return false;
+    if (lastName !== user.last_name) return false;
+    if (role !== user.role) return false;
 
     return true;
-  }, [firstName, lastName, email]);
+  }, [firstName, lastName, email, user]);
+
+  const isRoleDisabled = useMemo(() => {
+    if (isEditDisabled) return true;
+    if (!currentUser || !user) return true;
+    if (user.role === UserRole.Admin) return true;
+    if (currentUser.role === UserRole.Admin) return false;
+    if (currentUser.role === UserRole.User) return true;
+    return user.role === UserRole.Manager;
+  }, [isEditDisabled, user, currentUser]);
+
+  useEffect(() => {
+    if (!!userRef.current || !user) return;
+
+    setFirstName(user.first_name ?? "");
+    setLastName(user.last_name ?? "");
+    setEmail(user.email);
+    setRole(user.role);
+
+    userRef.current = user;
+  }, [user]);
+
+  const roleOptions = [
+    { label: t("manager"), value: UserRole.Manager },
+    { label: t("user"), value: UserRole.User },
+  ];
 
   if (
+    user &&
     currentUser &&
     currentUser.role !== UserRole.Admin &&
-    currentUser.id !== userId
+    currentUser.company?.id !== user.company_id
   ) {
     redirect("/");
   }
@@ -60,51 +104,70 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
           />
         )}
       </div>
-      <div className="flex flex-col gap-3">
-        <Divider />
-        <Input
-          placeholder={t("first_name")}
-          value={firstName}
-          onChange={(t) => {
-            setFirstName(t);
-          }}
-        />
-        <Input
-          placeholder={t("last_name")}
-          value={lastName}
-          onChange={(t) => {
-            setLastName(t);
-          }}
-        />
-        <Input
-          placeholder={t("email")}
-          value={email}
-          onChange={(t) => {
-            setEmail(t);
-          }}
-        />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
-        <Button
-          label={t("update_user")}
-          onClick={() => {
-            if (!emailRegex.test(email)) {
-              showModal({
-                title: t("invalid_email"),
-                subtitle: t("invalid_email_description"),
-              });
-              return;
-            }
+      <Divider />
+      {!!user && (
+        <>
+          <div className="flex flex-col gap-3 mt-3">
+            <Input
+              placeholder={t("first_name")}
+              value={firstName}
+              onChange={(t) => {
+                setFirstName(t);
+              }}
+              disabled={isEditDisabled}
+            />
+            <Input
+              placeholder={t("last_name")}
+              value={lastName}
+              onChange={(t) => {
+                setLastName(t);
+              }}
+              disabled={isEditDisabled}
+            />
+            <Input
+              placeholder={t("email")}
+              value={email}
+              onChange={(t) => {
+                setEmail(t);
+              }}
+              disabled={isEditDisabled}
+            />
+            <Select
+              placeholder={t("role")}
+              options={roleOptions}
+              value={role}
+              onChange={(r) => setRole(r as UserRole)}
+              disabled={isRoleDisabled}
+            />
+          </div>
+          {!isEditDisabled && (
+            <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
+              <Button
+                label={t("update_user")}
+                onClick={() => {
+                  if (!role) return;
 
-            updateUser(userId, {
-              first_name: firstName,
-              last_name: lastName,
-              email: email,
-            });
-          }}
-          disabled={isDisabled}
-        />
-      </div>
+                  if (!emailRegex.test(email)) {
+                    showModal({
+                      title: t("invalid_email"),
+                      subtitle: t("invalid_email_description"),
+                    });
+                    return;
+                  }
+
+                  updateUser({
+                    first_name: firstName,
+                    last_name: lastName,
+                    email: email,
+                    role: role,
+                  });
+                }}
+                disabled={isUpdateDisabled}
+              />
+            </div>
+          )}
+        </>
+      )}
       <Modal
         title={t("confirm_logout")}
         subtitle={t("confirm_logout_description")}
@@ -121,6 +184,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
           />
         </div>
       </Modal>
+      {loading && <Loader />}
     </>
   );
 };

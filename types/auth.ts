@@ -29,9 +29,18 @@ export type ResetPasswordRequest = {
 };
 
 export type User = {
-  first_name: string;
-  last_name: string;
+  first_name?: string;
+  last_name?: string;
   email: string;
+  company_id?: string;
+  role: UserRole;
+};
+
+export type UpdateUserRequest = {
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  role?: UserRole;
 };
 
 export type UserCompany = {

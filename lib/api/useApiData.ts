@@ -21,6 +21,7 @@ import {
   ResetPasswordRequest,
   CreateAdminRequest,
   User,
+  UpdateUserRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -127,12 +128,12 @@ export const useApiData = () => {
       return call(() => http.get<CurrentUser>(url));
     },
     async getUser(userId: string) {
-      const url = `/user/${userId}`;
-      return call(() => http.get(url));
+      const url = `/users/${userId}`;
+      return call(() => http.get<User>(url));
     },
-    async updateUser(userId: string, request: User) {
-      const url = `/user/${userId}`;
-      return call(() => http.post(url, request));
+    async updateUser(userId: string, request: UpdateUserRequest) {
+      const url = `/users/${userId}`;
+      return call(() => http.patch<User>(url, request));
     },
     async createAdmin(request: CreateAdminRequest) {
       const url = "/users/create-admin";
