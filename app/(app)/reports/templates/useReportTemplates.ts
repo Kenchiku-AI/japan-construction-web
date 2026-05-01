@@ -30,7 +30,7 @@ export const useReportTemplates = () => {
 
     try {
       const response = await api.getReportTemplates();
-      setReportTemplates(response);
+      setReportTemplates(response ?? []);
     } finally {
       setLoading(false);
     }

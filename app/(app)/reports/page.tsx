@@ -21,20 +21,23 @@ const ReportsPage = () => {
     <>
       <div className="flex justify-between items-end">
         <Heading title={t("reports")} />
-        <Button
-          variant="tertiary"
-          style={{ height: "auto" }}
-          label={t("create_report")}
-          iconLeft={() => <Plus />}
-          onClick={() => {
-            setShowCreateReport(true);
-          }}
-        />
+        {reportTemplates?.length && (
+          <Button
+            variant="tertiary"
+            style={{ height: "auto" }}
+            label={t("create_report")}
+            iconLeft={() => <Plus />}
+            onClick={() => {
+              setShowCreateReport(true);
+            }}
+          />
+        )}
       </div>
       <Divider />
       <ReportsList
         reports={reports ?? []}
         isEmpty={!loading && reports?.length === 0}
+        needsTemplates={reportTemplates?.length === 0}
       />
       <CreateReportModal
         templates={reportTemplates ?? []}

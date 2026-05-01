@@ -98,6 +98,7 @@
   "manager_email": "管理者メールアドレス",
   "month": "月",
   "name": "名称",
+  "needs_templates": "報告書を作成する前に、まずテンプレートを作成する必要があります。",
   "new_password": "新しいパスワード",
   "none": "なし",
   "number": "数値",

@@ -12,19 +12,27 @@ interface ReportsListProps {
   reports: Report[];
   isCollapsible?: boolean;
   isEmpty?: boolean;
+  needsTemplates?: boolean;
 }
 
 const ReportsList: FC<ReportsListProps> = ({
   reports,
   isCollapsible,
   isEmpty,
+  needsTemplates,
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [showAll, setShowAll] = useState(!isCollapsible);
 
   if (isEmpty) {
-    return <div className={styles.empty}>{t("empty_reports_description")}</div>;
+    let emptyMessage = t("empty_reports_description");
+
+    if (needsTemplates) {
+      emptyMessage = `${emptyMessage} ${t("needs_templates")}`;
+    }
+
+    return <div className={styles.empty}>{emptyMessage}</div>;
   }
 
   return (
