@@ -21,7 +21,7 @@ const ReportsPage = () => {
     <>
       <div className="flex justify-between items-end">
         <Heading title={t("reports")} />
-        {reportTemplates?.length && (
+        {!!reportTemplates?.length && (
           <Button
             variant="tertiary"
             style={{ height: "auto" }}
