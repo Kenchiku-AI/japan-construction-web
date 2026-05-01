@@ -300,6 +300,8 @@ export const useReport = (reportId: string) => {
         const createResponse = await api.createImage(reportId, request);
         if (!createResponse) throw new Error();
 
+        console.log("UPLOADING");
+
         const uploadResponse = await fetch(createResponse.upload_url, {
           method: "PUT",
           // headers: {
