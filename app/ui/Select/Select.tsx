@@ -1,5 +1,5 @@
 import {
-  // bgColor1,
+  bgColor1,
   bgColor2,
   bgColor3,
   errorColor2,
@@ -8,6 +8,7 @@ import {
 } from "@/lib/constants";
 import { CSSProperties, FC, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Select.module.css";
+import { createPortal } from "react-dom";
 
 interface SelectOption {
   value?: string | number;
@@ -28,7 +29,6 @@ interface SelectProps {
 const Select: FC<SelectProps> = ({
   options,
   value,
-  defaultValue,
   onChange,
   placeholder,
   error,
@@ -38,21 +38,28 @@ const Select: FC<SelectProps> = ({
   const [isUnselected, setIsUnselected] = useState(!options[0]?.value);
   const [isEmpty, setIsEmpty] = useState(false);
   const [open, setOpen] = useState(false);
-  const labelShown = !isEmpty;
   const valueRef = useRef(value);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const [dropdownStyles, setDropdownStyles] = useState<CSSProperties>({});
+
+  const selectedOption = useMemo(() => {
+    return options.find((o) => o.value === value);
+  }, [value, options]);
+
+  const labelShown = !isEmpty;
 
   const backgroundColor = useMemo(() => {
-    // if (open) return bgColor1;
     if (error) return errorColor2;
     if (disabled) return bgColor3;
-
     return bgColor2;
-  }, [error, disabled, open]);
+  }, [error, disabled]);
 
   useEffect(() => {
     if (valueRef.current && !value) {
       setIsUnselected(true);
     }
+
+    console.log("VALUE", value);
 
     if (value) {
       setIsEmpty(false);
@@ -63,49 +70,93 @@ const Select: FC<SelectProps> = ({
     valueRef.current = value;
   }, [value]);
 
+  useEffect(() => {
+    if (open && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      const maxHeight = Math.max(spaceBelow, spaceAbove) - 8; // padding from edge
+
+      const openUpward = spaceBelow < 200 && spaceAbove > spaceBelow;
+
+      setDropdownStyles({
+        position: "fixed",
+        left: rect.left,
+        width: rect.width,
+        zIndex: 9999,
+        maxHeight,
+        overflowY: "auto",
+        top: openUpward ? undefined : rect.bottom + 6,
+        bottom: openUpward ? window.innerHeight - rect.top + 6 : undefined,
+      });
+    }
+  }, [open]);
+
+  const handleSelect = (option?: SelectOption) => {
+    if (disabled) return;
+
+    onChange?.(option?.value);
+    setIsUnselected(!option?.value);
+    setOpen(false);
+  };
+
   return (
     <div className="relative flex">
       <div className={styles.label} style={{ opacity: labelShown ? 1 : 0 }}>
         {placeholder}
       </div>
-      <select
-        className="select cursor-pointer"
-        value={value}
-        defaultValue={defaultValue}
-        onFocus={() => setOpen(true)}
+      <div
+        tabIndex={0}
+        ref={triggerRef}
+        className="select w-full cursor-pointer flex items-center justify-between focus:outline focus:outline-2"
+        onClick={() => !disabled && setOpen((o) => !o)}
         onBlur={() => setOpen(false)}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          const { value } = e.target;
-          const option = options.find((o) => o.value === value);
-          onChange?.(option?.value);
-          setIsUnselected(!option?.value);
-        }}
         style={{
           backgroundColor,
-          backgroundImage: disabled
-            ? "none"
-            : "linear-gradient(45deg, #0000 50%, #23303B 50%), linear-gradient(135deg, #23303B 50%, #0000 50%)",
           color: isUnselected ? fontColor2 : fontColor1,
           paddingTop: labelShown ? 16 : undefined,
           pointerEvents: disabled ? "none" : undefined,
+          outlineColor: "var(--text-color-1)",
+          borderBottomLeftRadius: open ? 0 : undefined,
+          borderBottomRightRadius: open ? 0 : undefined,
           ...style,
         }}
       >
-        {placeholder && (
-          <option value="" disabled>
-            {placeholder}
-          </option>
-        )}
-        {options.map((option, index) => (
-          <option
-            key={option.value ?? `select_option_${index}`}
-            value={option.value}
-            style={{ color: option.value ? fontColor1 : fontColor2 }}
+        <span>{selectedOption?.label || placeholder || "Select"}</span>
+      </div>
+
+      {/* Dropdown */}
+      {open &&
+        !disabled &&
+        typeof window !== "undefined" &&
+        createPortal(
+          <ul
+            className="rounded-box p-2 ring-2 ring-offset-2"
+            style={{
+              ...dropdownStyles,
+              backgroundColor: bgColor2,
+              fontSize: 18,
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+            }}
           >
-            {option.label}
-          </option>
-        ))}
-      </select>
+            {options.map((option, index) => (
+              <li
+                key={option.value ?? `select_option_${index}`}
+                className="px-3 py-2 cursor-pointer text-sm hover:bg-black/5 rounded"
+                style={{
+                  color: option.value ? fontColor1 : fontColor2,
+                }}
+                onMouseDown={() => handleSelect(option)}
+              >
+                {option.label}
+              </li>
+            ))}
+          </ul>,
+          document.body,
+        )}
     </div>
   );
 };

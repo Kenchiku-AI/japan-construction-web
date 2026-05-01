@@ -41,6 +41,10 @@ input,
   width: 100%;
   font-size: 18px;
   outline-color: var(--text-color-1);
+}
+
+input,
+.input {
   transition: padding-top 0.075s ease-in-out;
 }
 

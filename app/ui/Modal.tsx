@@ -1,5 +1,4 @@
 import { FC, ReactNode } from "react";
-import { Heading } from "@/app/ui/Heading/Heading";
 import { Close } from "@/app/ui/Icons";
 import { Button } from "./Button/Button";
 import { useTranslation } from "react-i18next";
