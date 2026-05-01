@@ -3,7 +3,12 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
-import { CreateReportRequest, ReportParentType, ReportTemplate } from "@/types";
+import {
+  CreateReportRequest,
+  ProjectStatus,
+  ReportParentType,
+  ReportTemplate,
+} from "@/types";
 import Select from "@/app/ui/Select/Select";
 import { useApi } from "@/lib/api/ApiContext";
 
@@ -74,10 +79,12 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
 
   const projectOptions = useMemo(
     () =>
-      currentUser?.projects.map((p) => ({
-        label: p.name,
-        value: p.id,
-      })) ?? [],
+      currentUser?.projects
+        .filter((p) => p.status === ProjectStatus.Active)
+        .map((p) => ({
+          label: p.name,
+          value: p.id,
+        })) ?? [],
     [currentUser?.projects],
   );
 
