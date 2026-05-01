@@ -19,7 +19,7 @@ const ProjectsPage = () => {
   return (
     <>
       <div className="flex justify-between items-end">
-        <Heading title={t("tags")} />
+        <Heading title={t("projects")} />
       </div>
       <Divider />
       {projects?.length === 0 && (
