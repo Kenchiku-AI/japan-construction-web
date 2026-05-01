@@ -302,9 +302,9 @@ export const useReport = (reportId: string) => {
 
         const uploadResponse = await fetch(createResponse.upload_url, {
           method: "PUT",
-          headers: {
-            "Content-Type": "image/jpeg",
-          },
+          // headers: {
+          //   "Content-Type": "image/jpeg",
+          // },
           body: resized,
         });
 
