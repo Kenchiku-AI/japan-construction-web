@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -10,18 +10,29 @@ import { useReportTemplates } from "./templates/useReportTemplates";
 import { Plus } from "@/app/ui/Icons";
 import ReportsList from "./ReportsList";
 import Divider from "@/app/ui/Divider";
+import { useApi } from "@/lib/api/ApiContext";
+import { ProjectStatus } from "@/types";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
+  const { currentUser } = useApi();
   const { reports, createReport, loading } = useReports();
   const { reportTemplates } = useReportTemplates();
   const [showCreateReport, setShowCreateReport] = useState(false);
+
+  const isCreateEnabled = useMemo(() => {
+    const hasTemplate = !!reportTemplates?.length;
+    const hasActiveProject = currentUser?.projects?.some(
+      (p) => p.status === ProjectStatus.Active,
+    );
+    return hasActiveProject && hasTemplate;
+  }, [reportTemplates, currentUser]);
 
   return (
     <>
       <div className="flex justify-between items-end">
         <Heading title={t("reports")} />
-        {!!reportTemplates?.length && (
+        {isCreateEnabled && (
           <Button
             variant="tertiary"
             style={{ height: "auto" }}
