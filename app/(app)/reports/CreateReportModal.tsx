@@ -97,7 +97,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
       title={t("create_report")}
       subtitle={t("create_report_description")}
     >
-      <div className="mt-8 flex flex-col gap-2">
+      <div className="mt-8 flex flex-col gap-3">
         <Select
           options={templateOptions}
           value={templateId}
@@ -105,9 +105,8 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
           onChange={(id) => setTemplateId(id as string)}
         />
         <div
-          className="flex items-end"
           style={{
-            height: showProjectSelect ? 76 : 0,
+            height: showProjectSelect ? 72 : 0,
             opacity: showProjectSelect ? 1 : 0,
             pointerEvents: showProjectSelect ? undefined : "none",
             transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
@@ -118,11 +117,11 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
             value={projectId}
             placeholder={t("project")}
             onChange={(id) => setProjectId(id as string)}
-            style={{ width: "auto", paddingRight: 40 }}
+            style={{ paddingRight: 40 }}
           />
         </div>
       </div>
-      <div className="mb-6 flex flex-col gap-2">
+      <div className="mb-6">
         <Input
           value={name}
           placeholder={t("name")}
