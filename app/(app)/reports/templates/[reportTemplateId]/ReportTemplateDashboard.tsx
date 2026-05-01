@@ -129,14 +129,13 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
               onChange={setDescription}
               disabled={!canEdit}
             />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-              <Select
-                placeholder={t("type")}
-                options={parentTypeOptions}
-                onChange={(pt) => setParentType(pt as ReportParentType)}
-                disabled={!canEdit}
-              />
-            </div>
+            <Select
+              placeholder={t("type")}
+              options={parentTypeOptions}
+              value={parentType}
+              onChange={(pt) => setParentType(pt as ReportParentType)}
+              disabled={!canEdit}
+            />
           </div>
           <div className="mt-12">
             <ReportTemplateFields
