@@ -59,6 +59,7 @@ const NewCompanyModal: FC<InviteUserModalProps> = ({
           reset();
           onSubmit(email, role);
         }}
+        handleEnter
       />
     </Modal>
   );

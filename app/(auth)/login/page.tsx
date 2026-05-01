@@ -50,6 +50,7 @@ const LoginPage = () => {
             login(email, password);
           }}
           disabled={!email || !password || loading}
+          handleEnter
         />
         <div className={styles.buttons}>
           <Button

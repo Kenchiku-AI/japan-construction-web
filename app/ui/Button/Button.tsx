@@ -1,4 +1,4 @@
-import { FC, useMemo, CSSProperties } from "react";
+import { FC, useMemo, CSSProperties, useEffect } from "react";
 import styles from "./Button.module.css";
 
 interface ButtonProps {
@@ -11,6 +11,7 @@ interface ButtonProps {
   style?: CSSProperties;
   textStyle?: CSSProperties;
   loading?: boolean;
+  handleEnter?: boolean;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -23,6 +24,7 @@ export const Button: FC<ButtonProps> = ({
   style,
   textStyle,
   loading,
+  handleEnter,
 }) => {
   const IconLeft = iconLeft;
   const IconRight = iconRight;
@@ -37,6 +39,17 @@ export const Button: FC<ButtonProps> = ({
         return [styles.primaryContainer, styles.primaryLabel];
     }
   }, [variant]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && handleEnter && !disabled && !loading) {
+        onClick();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClick, disabled, loading, handleEnter]);
 
   return (
     <>
