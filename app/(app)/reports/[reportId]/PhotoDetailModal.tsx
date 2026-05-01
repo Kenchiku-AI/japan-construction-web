@@ -112,10 +112,11 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose} width={1200}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div
-          className="hidden md:flex"
+          className="hidden  md:flex"
           style={{
             ...photoStyle,
             marginTop: -24,
+            alignSelf: "center",
           }}
         >
           <Photo image={image} />
