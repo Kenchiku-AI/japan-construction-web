@@ -23,7 +23,7 @@ interface CompanyDashboardProps {
 const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const { currentUser, inviteUser } = useApi();
   const { t } = useTranslation();
-  const { company, createProject } = useCompany(companyId);
+  const { company, createProject, updateName } = useCompany(companyId);
   const searchParams = useSearchParams();
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showCreateProject, setShowCreateProject] = useState(false);
@@ -45,7 +45,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         topLabel={t("company")}
         placeholder={t("company_name")}
         isEditable={currentUser?.role === UserRole.Admin}
-        onEdit={(n) => {}}
+        onEdit={(n) => updateName(n)}
       />
       {company && (
         <div className="flex flex-col gap-8">

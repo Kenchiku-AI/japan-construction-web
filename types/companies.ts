@@ -14,6 +14,16 @@ export type CreateCompanyRequest = {
   manager_email?: string;
 };
 
+export type UpdateCompanyRequest = {
+  name?: string;
+  corporate_number?: string;
+};
+
+export type UpdateCompanyResponse = {
+  name: string;
+  corporate_number: string;
+};
+
 export type InviteUserRequest = {
   email: string;
   company_id: string;

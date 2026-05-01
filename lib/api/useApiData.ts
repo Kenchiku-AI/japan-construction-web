@@ -22,6 +22,8 @@ import {
   CreateAdminRequest,
   User,
   UpdateUserRequest,
+  UpdateCompanyRequest,
+  UpdateCompanyResponse,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -154,6 +156,10 @@ export const useApiData = () => {
     async createCompany(request: CreateCompanyRequest) {
       const url = "/companies";
       return call(() => http.post(url, request));
+    },
+    async updateCompany(companyId: string, request: UpdateCompanyRequest) {
+      const url = `/companies/${companyId}`;
+      return call(() => http.patch<UpdateCompanyResponse>(url, request));
     },
     async getTags(companyId: string) {
       const url = `/companies/${companyId}/tags`;

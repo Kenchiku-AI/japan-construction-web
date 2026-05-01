@@ -30,7 +30,27 @@ export const useCompany = (companyId: string) => {
         setLoading(false);
       }
     },
-    [setCompany],
+    [companyId],
+  );
+
+  const updateName = useCallback(
+    async (name: string) => {
+      setLoading(true);
+
+      try {
+        const response = await api.updateCompany(companyId, { name });
+
+        if (company && response) {
+          setCompany({
+            ...company,
+            name: response.name,
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [company, companyId],
   );
 
   const createProject = useCallback(
@@ -63,5 +83,6 @@ export const useCompany = (companyId: string) => {
     loading,
     company,
     createProject,
+    updateName,
   };
 };
