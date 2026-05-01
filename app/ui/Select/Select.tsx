@@ -36,7 +36,7 @@ const Select: FC<SelectProps> = ({
   disabled,
 }) => {
   const [isUnselected, setIsUnselected] = useState(!options[0]?.value);
-  const [isEmpty, setIsEmpty] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(true);
   const [open, setOpen] = useState(false);
   const valueRef = useRef(value);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -58,8 +58,6 @@ const Select: FC<SelectProps> = ({
     if (valueRef.current && !value) {
       setIsUnselected(true);
     }
-
-    console.log("VALUE", value);
 
     if (value) {
       setIsEmpty(false);
@@ -126,8 +124,6 @@ const Select: FC<SelectProps> = ({
       >
         <span>{selectedOption?.label || placeholder || "Select"}</span>
       </div>
-
-      {/* Dropdown */}
       {open &&
         !disabled &&
         typeof window !== "undefined" &&
