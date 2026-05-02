@@ -30,14 +30,13 @@ export const useProjects = () => {
 
       setProjects(response);
     } catch (err) {
-      setLoading(false);
-
       showModal({
         title: t("error"),
         subtitle: t("get_projects_error_description"),
       });
     }
 
+    setLoading(false);
     setLoaded(true);
   };
 
