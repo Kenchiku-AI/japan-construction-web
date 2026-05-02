@@ -7,7 +7,8 @@ import { useModal } from "@/lib/modal/ModalContext";
 import { Project } from "@/types";
 
 export const useProjects = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loaded, setLoaded] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const { t } = useTranslation();
   const api = useApi();
@@ -36,10 +37,13 @@ export const useProjects = () => {
         subtitle: t("get_projects_error_description"),
       });
     }
+
+    setLoaded(true);
   };
 
   return {
     loading,
+    loaded,
     projects,
   };
 };

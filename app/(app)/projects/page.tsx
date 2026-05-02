@@ -10,10 +10,11 @@ import { fontColor2 } from "@/lib/constants";
 import { FC } from "react";
 import { Project, ProjectStatus } from "@/types";
 import styles from "./page.module.css";
+import { Loader } from "@/app/ui/Loader";
 
 const ProjectsPage = () => {
   const { t } = useTranslation();
-  const { projects } = useProjects();
+  const { projects, loading, loaded } = useProjects();
   const router = useRouter();
 
   return (
@@ -22,7 +23,7 @@ const ProjectsPage = () => {
         <Heading title={t("projects")} />
       </div>
       <Divider />
-      {projects?.length === 0 && (
+      {loaded && projects?.length === 0 && (
         <div className={styles.empty}>{t("empty_projects_description")}</div>
       )}
       {projects.map((p) => (
@@ -44,6 +45,7 @@ const ProjectsPage = () => {
           <Divider color={fontColor2} />
         </div>
       ))}
+      {loading && <Loader />}
     </>
   );
 };

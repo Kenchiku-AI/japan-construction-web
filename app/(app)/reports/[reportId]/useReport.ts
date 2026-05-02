@@ -36,18 +36,17 @@ export const useReport = (reportId: string) => {
       `${process.env.NEXT_PUBLIC_API_WS_URL}/reports/images/ws`,
     );
 
-    ws.onopen = () => {
-      console.log("✅ WebSocket connected!");
-      ws.send("Hello from client");
-    };
+    // ws.onopen = () => {
+    //   console.log("✅ WebSocket connected!");
+    // };
 
-    ws.onmessage = (event) => {
-      console.log("📨 Received from server:", event.data);
-    };
+    // ws.onmessage = (event) => {
+    //   console.log("📨 Received from server:", event.data);
+    // };
 
-    ws.onclose = (event) => {
-      console.log("❌ Connection closed:", event.code, event.reason);
-    };
+    // ws.onclose = (event) => {
+    //   console.log("❌ Connection closed:", event.code, event.reason);
+    // };
 
     wsRef.current = ws;
 
