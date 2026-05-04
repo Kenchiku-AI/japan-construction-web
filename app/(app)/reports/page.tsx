@@ -12,6 +12,7 @@ import ReportsList from "./ReportsList";
 import Divider from "@/app/ui/Divider";
 import { useApi } from "@/lib/api/ApiContext";
 import { ProjectStatus } from "@/types";
+import { Loader } from "@/app/ui/Loader";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
@@ -61,6 +62,7 @@ const ReportsPage = () => {
           createReport(request);
         }}
       />
+      {loading && <Loader />}
     </>
   );
 };

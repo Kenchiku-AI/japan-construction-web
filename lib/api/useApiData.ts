@@ -24,6 +24,7 @@ import {
   UpdateUserRequest,
   UpdateCompanyRequest,
   UpdateCompanyResponse,
+  ReportImagePollResponse,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -208,6 +209,10 @@ export const useApiData = () => {
     async getReportImages(reportId: string) {
       const url = `/reports/${reportId}/images`;
       return call(() => http.get<ReportImage[]>(url));
+    },
+    async getImageStatus(reportId: string, imageId: string) {
+      const url = `/reports/${reportId}/images/${imageId}/status`;
+      return call(() => http.get<ReportImagePollResponse>(url));
     },
     async createReport(request: CreateReportRequest) {
       const url = "/reports";

@@ -24,7 +24,7 @@ export const useReport = (reportId: string) => {
   const router = useRouter();
   const api = useApi();
   const { showModal } = useModal();
-  const wsRef = useRef<WebSocket | null>(null);
+  const pollingRef = useRef<Record<string, NodeJS.Timeout>>({});
 
   useEffect(() => {
     getReport(reportId);
@@ -32,80 +32,65 @@ export const useReport = (reportId: string) => {
   }, [reportId]);
 
   useEffect(() => {
-    const ws = new WebSocket(
-      `${process.env.NEXT_PUBLIC_API_WS_URL}/reports/images/ws`,
-    );
-
-    ws.onopen = () => {
-      console.log("✅ WebSocket connected!");
-    };
-
-    ws.onmessage = (event) => {
-      console.log("📨 Received from server:", event.data);
-    };
-
-    ws.onclose = (event) => {
-      console.log("❌ Connection closed:", event.code, event.reason);
-    };
-
-    wsRef.current = ws;
-
-    return () => {
-      ws.close();
-    };
-  }, []);
-
-  useEffect(() => {
     imagesRef.current = images;
   }, [images]);
 
-  useEffect(() => {
-    if (!wsRef.current) return;
+  const pollImageStatus = useCallback(
+    (imageId: string) => {
+      let attempts = 0;
+      const maxAttempts = 30;
 
-    wsRef.current.onmessage = (event) => {
-      if (!imagesRef.current) return;
+      const poll = async () => {
+        attempts++;
 
-      try {
-        const data = JSON.parse(event.data);
+        try {
+          const data = await api.getImageStatus(reportId, imageId);
+          if (!data) return;
 
-        console.log("DATA", data);
+          setImages((prev) => {
+            if (!prev) return prev;
 
-        if (data.type === "image_tags_ready" && data.tags && data.image_id) {
-          const imageIndex =
-            imagesRef.current.findIndex((i) => i.id === data.image_id) ?? -1;
+            const idx = prev.findIndex((i) => i.id === imageId);
+            if (idx === -1) return prev;
 
-          if (imageIndex > -1) {
-            const newImage = { ...imagesRef.current[imageIndex] };
-            const newDescription = data.description
-              ? `${newImage.description ? `${newImage.description}\n\n` : ""}${data.description ?? ""}`
-              : newImage.description;
+            const updated = [...prev];
+            const existing = updated[idx];
 
-            data.tags.forEach((tag: ReportImageTagLink) => {
-              const hasTag = newImage.tags.some((t) => t.tag_id === tag.tag_id);
-              if (!hasTag) newImage.tags.push(tag);
-            });
+            updated[idx] = {
+              ...existing,
+              status: data.status,
+              description: data.description,
+              tags: data.tags ?? [],
+            };
 
-            if (selectedPhoto && selectedPhoto.id === data.image_id) {
-              setSelectedPhoto({
-                ...selectedPhoto,
-                tags: newImage.tags,
-                description: newDescription,
-                status: "completed",
-              });
+            if (selectedPhoto?.id === imageId) {
+              setSelectedPhoto(updated[idx]);
             }
 
-            newImage.status = "completed";
-            newImage.description = newDescription;
+            return updated;
+          });
 
-            imagesRef.current[imageIndex] = newImage;
-            setImages(imagesRef.current);
+          if (data.status === "complete" || data.status === "failed") {
+            clearInterval(pollingRef.current[imageId]);
+            delete pollingRef.current[imageId];
           }
+
+          if (attempts >= maxAttempts) {
+            clearInterval(pollingRef.current[imageId]);
+            delete pollingRef.current[imageId];
+          }
+        } catch (err) {
+          console.error("Polling error:", err);
         }
-      } catch (err) {
-        console.warn("Invalid WS message", err);
-      }
-    };
-  }, [selectedPhoto]);
+      };
+
+      const interval = setInterval(poll, 1000);
+      pollingRef.current[imageId] = interval;
+
+      poll();
+    },
+    [api, reportId, selectedPhoto],
+  );
 
   const getReport = useCallback(
     async (reportId: string) => {
@@ -135,6 +120,12 @@ export const useReport = (reportId: string) => {
       try {
         const response = await api.getReportImages(reportId);
         setImages(response ?? []);
+
+        (response ?? []).forEach((img: ReportImage) => {
+          if (img.status === "pending" || img.status === "processing") {
+            pollImageStatus(img.id);
+          }
+        });
       } catch (err) {
         console.log(err);
       }
@@ -328,6 +319,8 @@ export const useReport = (reportId: string) => {
           download_url: URL.createObjectURL(file),
         };
         setImages([...(images ?? []), newImage]);
+
+        pollImageStatus(newImage.id);
       } catch (err) {
         showModal({
           title: t("error"),

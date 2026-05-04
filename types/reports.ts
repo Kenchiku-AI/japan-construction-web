@@ -30,6 +30,13 @@ export type ReportImage = {
   tags: ReportImageTagLink[];
 };
 
+export type ReportImagePollResponse = {
+  id: string;
+  status: string;
+  description?: string;
+  tags: ReportImageTagLink[];
+};
+
 export type CreateImageResponse = {
   id: string;
   report_id: string;
