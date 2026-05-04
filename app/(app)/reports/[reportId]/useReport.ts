@@ -25,6 +25,7 @@ export const useReport = (reportId: string) => {
   const api = useApi();
   const { showModal } = useModal();
   const pollingRef = useRef<Record<string, NodeJS.Timeout>>({});
+  const selectedPhotoRef = useRef<ReportImage | undefined>(undefined);
 
   useEffect(() => {
     getReport(reportId);
@@ -34,6 +35,10 @@ export const useReport = (reportId: string) => {
   useEffect(() => {
     imagesRef.current = images;
   }, [images]);
+
+  useEffect(() => {
+    selectedPhotoRef.current = selectedPhoto;
+  }, [selectedPhoto]);
 
   const pollImageStatus = useCallback(
     (imageId: string) => {
@@ -63,7 +68,9 @@ export const useReport = (reportId: string) => {
               tags: data.tags ?? [],
             };
 
-            if (selectedPhoto?.id === imageId) {
+            console.log("selected photo", selectedPhotoRef.current);
+
+            if (selectedPhotoRef.current?.id === imageId) {
               console.log("setting selected photo", updated[idx]);
               setSelectedPhoto(updated[idx]);
             }
