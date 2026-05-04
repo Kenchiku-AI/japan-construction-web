@@ -28,7 +28,7 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <div className="flex justify-center mt-8 mb-4">
+        <div className="flex justify-center my-4">
           <Logo />
         </div>
         <Heading title={t("login")} subtitle={t("login_description")} />
