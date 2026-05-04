@@ -27,7 +27,7 @@ export const useForgotPassword = () => {
           title: t("error"),
           subtitle: t("forgot_password_error_description"),
         });
-        console.log("err", err);
+        console.log(err);
       }
 
       setLoading(false);

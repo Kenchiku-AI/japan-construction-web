@@ -68,10 +68,7 @@ export const useReport = (reportId: string) => {
               tags: data.tags ?? [],
             };
 
-            console.log("selected photo", selectedPhotoRef.current);
-
             if (selectedPhotoRef.current?.id === imageId) {
-              console.log("setting selected photo", updated[idx]);
               setSelectedPhoto(updated[idx]);
             }
 
@@ -97,7 +94,7 @@ export const useReport = (reportId: string) => {
 
       poll();
     },
-    [api, reportId, selectedPhoto],
+    [api, reportId],
   );
 
   const getReport = useCallback(
