@@ -17,7 +17,7 @@ const ForgotPasswordPage = () => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col mt-20 sm:mt-0 sm:justify-center items-center px-5 h-screen">
+    <div className="flex flex-col mt-20 sm:mt-0 sm:justify-center items-center h-screen">
       <div className={styles.content}>
         <Heading
           title={t("forgot_password")}
