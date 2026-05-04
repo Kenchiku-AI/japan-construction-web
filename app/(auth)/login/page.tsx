@@ -10,6 +10,7 @@ import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
 import { invitationTokenKey } from "@/lib/constants";
 import { Loader } from "@/app/ui/Loader";
+import { Logo } from "@/app/ui/Icons";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -27,6 +28,9 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
+        <div className="flex justify-center mt-8 mb-4">
+          <Logo />
+        </div>
         <Heading title={t("login")} subtitle={t("login_description")} />
         <div className={styles.fields}>
           <Input
