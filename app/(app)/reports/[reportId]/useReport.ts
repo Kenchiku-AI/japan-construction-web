@@ -64,13 +64,14 @@ export const useReport = (reportId: string) => {
             };
 
             if (selectedPhoto?.id === imageId) {
+              console.log("setting selected photo", updated[idx]);
               setSelectedPhoto(updated[idx]);
             }
 
             return updated;
           });
 
-          if (data.status === "complete" || data.status === "failed") {
+          if (data.status === "completed" || data.status === "failed") {
             clearInterval(pollingRef.current[imageId]);
             delete pollingRef.current[imageId];
           }
@@ -80,7 +81,7 @@ export const useReport = (reportId: string) => {
             delete pollingRef.current[imageId];
           }
         } catch (err) {
-          console.error("Polling error:", err);
+          // console.error("Polling error:", err);
         }
       };
 
