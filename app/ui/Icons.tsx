@@ -268,8 +268,8 @@ export const EyeOff = () => (
 
 export const Logo = ({ size }: IconProps) => (
   <svg
-    width={size ?? 120}
-    height={size ?? 120}
+    width={size ?? 100}
+    height={size ?? 100}
     viewBox="0 0 112.77966 154.2243"
     xmlSpace="preserve"
     xmlns="http://www.w3.org/2000/svg"
