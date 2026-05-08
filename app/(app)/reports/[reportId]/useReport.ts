@@ -3,12 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
-import {
-  Report,
-  ReportImage,
-  ReportImageTagLink,
-  ReportRequest,
-} from "@/types/reports";
+import { Report, ReportImage, ReportRequest } from "@/types/reports";
 import { useTranslation } from "react-i18next";
 import imageCompression from "browser-image-compression";
 import { useModal } from "@/lib/modal/ModalContext";
