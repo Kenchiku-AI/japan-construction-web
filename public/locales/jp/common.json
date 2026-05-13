@@ -157,7 +157,7 @@
   "update_tag": "タグを更新",
   "update_tag_description": "このタグの名前を変更すると、現在このタグが適用されているすべての写真に反映されます。ただし、説明を更新した場合、新しい説明は変更後にアップロードされた写真の分類にのみ使用されます。このタグが既に付けられている写真は、新しい説明に基づいて再分類されません。",
   "update_tag_error_description": "タグの更新中にエラーが発生しました。",
-  "update_user_error_description": "ユーザーの更新中にエラーが発生しました",
+  "update_user_error_description": "ユーザーの更新中にエラーが発生しました。",
   "update_user": "ユーザーを更新",
   "user": "ユーザー",
   "users": "ユーザー",
