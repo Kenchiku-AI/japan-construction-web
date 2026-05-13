@@ -36,7 +36,7 @@ const Signup = () => {
   }, [token, router]);
 
   return !token ? null : (
-    <div className={styles.container}>
+    <div className="flex flex-col sm:justify-center items-center px-5 h-screen">
       <div className={styles.content}>
         <div className="flex justify-center mt-14 sm:mt-0 mb-4">
           <Logo />
