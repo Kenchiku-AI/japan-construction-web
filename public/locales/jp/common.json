@@ -46,7 +46,7 @@
   "download_pdf": "PDFをダウンロード",
   "download_tag": "「{{tag}}」の写真をダウンロード",
   "drag_to_reorder": "ドラッグして並び替え",
-  "email": "メール",
+  "email": "Emailアドレス",
   "email_registered": "そのメールアドレスは既に登録されています。",
   "email_sent": "メールを送信しました",
   "email_sent_description": "パスワードをリセットするためのリンクをメールで送信しましたので、ご確認ください。",

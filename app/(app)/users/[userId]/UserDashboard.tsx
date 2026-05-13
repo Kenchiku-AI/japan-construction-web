@@ -109,18 +109,18 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
         <>
           <div className="flex flex-col gap-3 mt-3">
             <Input
-              placeholder={t("first_name")}
-              value={firstName}
-              onChange={(t) => {
-                setFirstName(t);
-              }}
-              disabled={isEditDisabled}
-            />
-            <Input
               placeholder={t("last_name")}
               value={lastName}
               onChange={(t) => {
                 setLastName(t);
+              }}
+              disabled={isEditDisabled}
+            />
+            <Input
+              placeholder={t("first_name")}
+              value={firstName}
+              onChange={(t) => {
+                setFirstName(t);
               }}
               disabled={isEditDisabled}
             />

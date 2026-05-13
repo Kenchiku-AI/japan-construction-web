@@ -40,15 +40,15 @@ const Signup = () => {
         <Heading title={t("welcome")} subtitle={t("sign_up_description")} />
         <div className={styles.fields}>
           <Input
-            placeholder={t("first_name")}
-            onChange={(t) => {
-              setFirstName(t);
-            }}
-          />
-          <Input
             placeholder={t("last_name")}
             onChange={(t) => {
               setLastName(t);
+            }}
+          />
+          <Input
+            placeholder={t("first_name")}
+            onChange={(t) => {
+              setFirstName(t);
             }}
           />
           <Input
