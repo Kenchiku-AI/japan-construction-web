@@ -10,6 +10,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { emailRegex, invitationTokenKey } from "@/lib/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
+import { Logo } from "@/app/ui/Icons";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -37,6 +38,9 @@ const Signup = () => {
   return !token ? null : (
     <div className={styles.container}>
       <div className={styles.content}>
+        <div className="flex justify-center mt-14 sm:mt-0 mb-4">
+          <Logo />
+        </div>
         <Heading title={t("welcome")} subtitle={t("sign_up_description")} />
         <div className={styles.fields}>
           <Input
