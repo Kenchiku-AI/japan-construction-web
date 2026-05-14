@@ -46,7 +46,9 @@ const TagsList: FC<TagsListProps> = ({
                   style={{ height: 68, minWidth: 0 }}
                   className="flex items-center gap-6"
                 >
-                  <Tag size={30} />
+                  <div>
+                    <Tag size={30} />
+                  </div>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ color: fontColor1 }}>{t.name}</div>
                     <div className={styles.subtitle}>{t.description}</div>
