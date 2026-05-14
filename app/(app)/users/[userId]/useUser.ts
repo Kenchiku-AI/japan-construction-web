@@ -61,6 +61,11 @@ export const useUser = (userId: string) => {
             ...response,
           });
         }
+
+        showModal({
+          title: t("success"),
+          subtitle: t("user_updated"),
+        });
       } catch (err) {
         showModal({
           title: t("error"),
