@@ -18,7 +18,9 @@ import Divider from "@/app/ui/Divider";
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const { tags, updateTag, createTag, deleteTag, loading } = useTags();
+  const { tags, updateTag, createTag, deleteTag, loading } = useTags(
+    currentUser?.company?.id,
+  );
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();

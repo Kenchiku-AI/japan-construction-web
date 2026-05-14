@@ -6,7 +6,7 @@ import { ReportImageTag, ReportImageTagRequest } from "@/types/reports";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
 
-export const useTags = () => {
+export const useTags = (companyId?: string) => {
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState<ReportImageTag[]>();
   const { currentUser, ...api } = useApi();
@@ -20,7 +20,6 @@ export const useTags = () => {
   }, [currentUser]);
 
   const getTags = useCallback(async () => {
-    const companyId = currentUser?.company?.id;
     if (!companyId) return;
 
     setLoading(true);
@@ -31,11 +30,10 @@ export const useTags = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentUser, setTags]);
+  }, [companyId]);
 
   const createTag = useCallback(
     async (request: ReportImageTagRequest) => {
-      const companyId = currentUser?.company?.id;
       if (!companyId) return;
 
       setLoading(true);
@@ -52,12 +50,11 @@ export const useTags = () => {
 
       setLoading(false);
     },
-    [currentUser],
+    [companyId],
   );
 
   const updateTag = useCallback(
     async (tagId: string, request: ReportImageTagRequest) => {
-      const companyId = currentUser?.company?.id;
       if (!companyId) return;
 
       setLoading(true);
@@ -74,12 +71,11 @@ export const useTags = () => {
 
       setLoading(false);
     },
-    [currentUser],
+    [companyId],
   );
 
   const deleteTag = useCallback(
     async (tagId: string) => {
-      const companyId = currentUser?.company?.id;
       if (!companyId) return;
 
       setLoading(true);
@@ -96,7 +92,7 @@ export const useTags = () => {
 
       setLoading(false);
     },
-    [currentUser],
+    [companyId],
   );
 
   return {

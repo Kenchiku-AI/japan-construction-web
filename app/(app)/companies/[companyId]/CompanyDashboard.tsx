@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { UserRole } from "@/types";
+import { ReportImageTag, UserRole } from "@/types";
 import { redirect, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
 import { Plus } from "@/app/ui/Icons";
@@ -15,6 +15,11 @@ import CreateProjectModal from "./CreateProjectModal";
 import CompanyProjectsList from "./CompanyProjectsList";
 import Divider from "@/app/ui/Divider";
 import { useModal } from "@/lib/modal/ModalContext";
+import TagsList from "../../tags/TagsList";
+import { useTags } from "../../tags/useTags";
+import UpdateTagModal from "../../tags/UpdateTagModal";
+import DeleteTagModal from "../../tags/DeleteTagModal";
+import CreateTagModal from "../../tags/CreateTagModal";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -27,7 +32,11 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const searchParams = useSearchParams();
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showCreateProject, setShowCreateProject] = useState(false);
+  const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
+  const [editingTag, setEditingTag] = useState<ReportImageTag>();
+  const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
   const { showModal } = useModal();
+  const { tags, updateTag, createTag, deleteTag, loading } = useTags();
 
   const shouldRedirect =
     currentUser &&
@@ -86,6 +95,29 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
             <Divider />
             <CompanyUsersList users={company.users} />
           </div>
+          {currentUser?.role === "admin" && (
+            <div>
+              <div className="flex justify-between">
+                <div className="self-end">{t("tags")}</div>
+                <Button
+                  variant="tertiary"
+                  label={t("create_tag")}
+                  iconLeft={() => <Plus />}
+                  onClick={() => {
+                    setIsCreateTagModalShown(true);
+                  }}
+                  style={{ height: "auto" }}
+                />
+              </div>
+              <Divider />
+              <TagsList
+                tags={tags ?? []}
+                isEmpty={!loading && tags?.length === 0}
+                onEdit={(t) => setEditingTag(t)}
+                onDelete={(t) => setDeletingTag(t)}
+              />
+            </div>
+          )}
         </div>
       )}
       <InviteUserModal
@@ -125,6 +157,46 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           try {
             await createProject(name, description);
           } catch (err) {}
+        }}
+      />
+      <CreateTagModal
+        isOpen={isCreateTagModalShown}
+        onClose={() => {
+          setIsCreateTagModalShown(false);
+        }}
+        onSubmit={(name, description) => {
+          setIsCreateTagModalShown(false);
+          createTag({ name, description });
+        }}
+      />
+      <UpdateTagModal
+        isOpen={!!editingTag}
+        tag={editingTag}
+        onClose={() => {
+          setEditingTag(undefined);
+        }}
+        onSubmit={(name, description) => {
+          if (!editingTag) return;
+
+          const tagId = editingTag.id;
+          setEditingTag(undefined);
+          updateTag(tagId, {
+            name,
+            description,
+          });
+        }}
+      />
+      <DeleteTagModal
+        isOpen={!!deletingTag}
+        onClose={() => {
+          setDeletingTag(undefined);
+        }}
+        onDelete={() => {
+          if (!deletingTag) return;
+
+          const tagId = deletingTag.id;
+          setDeletingTag(undefined);
+          deleteTag(tagId);
         }}
       />
     </>
