@@ -9,6 +9,11 @@
   --text-color-2: #a4a9ae;
   --button-color: #6fb37a;
   --error-color: #ff6363;
+  color-scheme: light;
+}
+
+html {
+  color-scheme: light;
 }
 
 @theme inline {
