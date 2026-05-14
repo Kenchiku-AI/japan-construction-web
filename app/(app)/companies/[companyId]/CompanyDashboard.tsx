@@ -36,7 +36,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
   const { showModal } = useModal();
-  const { tags, updateTag, createTag, deleteTag, loading } = useTags();
+  const { tags, updateTag, createTag, deleteTag, loading } = useTags(companyId);
 
   const shouldRedirect =
     currentUser &&

@@ -30,7 +30,7 @@ interface ReportDashboardProps {
 
 const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const { currentUser } = useApi();
-  const { tags } = useTags();
+  const { tags } = useTags(currentUser?.company?.id);
   const { t } = useTranslation();
   const {
     report,
