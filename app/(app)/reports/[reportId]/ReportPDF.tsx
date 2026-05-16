@@ -1,12 +1,25 @@
 import { FC } from "react";
-import { Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
-import { Report, Company } from "@/types";
+import {
+  Document,
+  Page,
+  View,
+  Text,
+  StyleSheet,
+  Font,
+} from "@react-pdf/renderer";
+import { Report } from "@/types";
 import { bgColor2, fontColor1, fontColor2 } from "@/lib/constants";
+import path from "path";
 
 interface ReportPDFProps {
   report: Report;
   companyName: string;
 }
+
+Font.register({
+  family: "KosugiMaru",
+  src: path.join(process.cwd(), "public/fonts/KosugiMaru-Regular.ttf"),
+});
 
 export const ReportPDF: FC<ReportPDFProps> = ({ report, companyName }) => (
   <Document>
@@ -27,6 +40,7 @@ export const ReportPDF: FC<ReportPDFProps> = ({ report, companyName }) => (
 const styles = StyleSheet.create({
   page: {
     padding: 48,
+    fontFamily: "KosugiMaru",
   },
   companyName: {
     fontSize: 12,
