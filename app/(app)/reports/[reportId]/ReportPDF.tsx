@@ -18,7 +18,7 @@ interface ReportPDFProps {
 
 Font.register({
   family: "KosugiMaru",
-  src: path.join(process.cwd(), "public/fonts/KosugiMaru-Regular.ttf"),
+  src: "/fonts/KosugiMaru-Regular.ttf",
 });
 
 export const ReportPDF: FC<ReportPDFProps> = ({ report, companyName }) => (
