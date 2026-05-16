@@ -29,7 +29,7 @@ interface ReportDashboardProps {
 }
 
 const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
-  const { currentUser } = useApi();
+  const { currentUser, getCompany } = useApi();
   const { tags } = useTags(currentUser?.company?.id);
   const { t } = useTranslation();
   const {
@@ -229,13 +229,21 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             label={t("download_pdf")}
             iconLeft={() => <Download />}
             onClick={async () => {
-              if (!report || !currentUser?.company) return;
+              if (!report) return;
+
+              let companyName = currentUser?.company?.name ?? "";
+
+              if (!companyName && report.company_id) {
+                try {
+                  const company = await getCompany(report.company_id);
+                  companyName = company?.name ?? "";
+                } catch (err) {
+                  // console.log(err);
+                }
+              }
 
               const blob = await pdf(
-                <ReportPDF
-                  report={report}
-                  companyName={currentUser.company.name}
-                />,
+                <ReportPDF report={report} companyName={companyName} />,
               ).toBlob();
 
               const fileUrl = URL.createObjectURL(blob);
