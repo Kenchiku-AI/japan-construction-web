@@ -5,11 +5,11 @@ const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen">
       <div className="max-w-3xl mx-auto px-6 py-12">
-        <div className="flex justify-center mt-14 sm:mt-0 mb-4">
+        <div className="flex justify-center mt-8">
           <Logo />
         </div>
 
-        <h1 className="text-3xl font-bold mb-8">プライバシーポリシー</h1>
+        <h1 className="text-3xl font-bold mb-8 mt-12">プライバシーポリシー</h1>
 
         <p className="mb-6 leading-relaxed">
           本プライバシーポリシーは、<strong>Okapi, LLC（以下「当社」）</strong>
