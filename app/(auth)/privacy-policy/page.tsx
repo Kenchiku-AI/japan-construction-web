@@ -1,9 +1,14 @@
+import { Logo } from "@/app/ui/Icons";
 import { FC } from "react";
 
 const PrivacyPolicy = () => {
   return (
-    <div className="bg-gray-50 text-gray-800 min-h-screen">
+    <div className="min-h-screen">
       <div className="max-w-3xl mx-auto px-6 py-12">
+        <div className="flex justify-center mt-14 sm:mt-0 mb-4">
+          <Logo />
+        </div>
+
         <h1 className="text-3xl font-bold mb-8">プライバシーポリシー</h1>
 
         <p className="mb-6 leading-relaxed">
