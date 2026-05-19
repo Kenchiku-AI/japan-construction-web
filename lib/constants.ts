@@ -3,6 +3,7 @@ export const authRoutes = [
   "/signup",
   "/forgot-password",
   "/reset-password",
+  "/privacy-policy",
 ];
 export const accessTokenKey = "accessToken";
 export const refreshTokenKey = "refreshToken";

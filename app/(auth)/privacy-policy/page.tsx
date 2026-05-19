@@ -1,0 +1,148 @@
+import { FC } from "react";
+
+const PrivacyPolicy = () => {
+  return (
+    <div className="bg-gray-50 text-gray-800 min-h-screen">
+      <div className="max-w-3xl mx-auto px-6 py-12">
+        <h1 className="text-3xl font-bold mb-8">プライバシーポリシー</h1>
+
+        <p className="mb-6 leading-relaxed">
+          本プライバシーポリシーは、<strong>Okapi, LLC（以下「当社」）</strong>
+          が提供するモバイルアプリ（以下「本アプリ」）におけるユーザー情報の取扱いについて説明するものです。
+        </p>
+
+        <Section title="1. 取得する情報">
+          <ul className="list-disc pl-6 space-y-2">
+            <li>
+              <strong>音声データ：</strong>
+              ユーザーが入力した音声（現場記録、メモ等）
+            </li>
+            <li>
+              <strong>テキストデータ：</strong>
+              音声から変換された文字情報、およびユーザーが入力したテキスト
+            </li>
+            <li>
+              <strong>画像データ：</strong>
+              ユーザーがアップロードした写真およびそれに付随する情報
+            </li>
+            <li>
+              <strong>自動生成データ：</strong>
+              AIにより生成された文章（キャプション、レポート案など）
+            </li>
+            <li>
+              <strong>デバイス情報：</strong>端末種類、OSバージョン等
+            </li>
+          </ul>
+        </Section>
+
+        <Section title="2. 利用目的">
+          <ul className="list-disc pl-6 space-y-2">
+            <li>音声の文字起こし機能の提供</li>
+            <li>画像に対する説明文（キャプション）の生成</li>
+            <li>作業記録・報告書作成支援機能の提供</li>
+            <li>サービスの改善および品質向上</li>
+            <li>不正利用の防止</li>
+          </ul>
+        </Section>
+
+        <Section title="3. AIおよび外部サービスの利用">
+          <p className="mb-4">
+            本アプリでは、機能提供のために外部のAIサービスを利用する場合があります。
+          </p>
+          <p className="mb-2">
+            以下の情報が外部サービスに送信されることがあります：
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>音声データ</li>
+            <li>テキストデータ</li>
+            <li>画像データ</li>
+          </ul>
+          <p className="mt-4">
+            当社は、これらのサービス提供事業者と適切な契約を締結し、情報の安全管理に努めます。
+          </p>
+        </Section>
+
+        <Section title="4. 情報の保存および管理">
+          <ul className="list-disc pl-6 space-y-2">
+            <li>ユーザー情報は、安全な方法で管理されます。</li>
+            <li>必要な期間に限り保存し、その後は適切に削除します。</li>
+            <li>
+              不正アクセス、漏洩、改ざん等を防止するための合理的な安全対策を講じます。
+            </li>
+          </ul>
+        </Section>
+
+        <Section title="5. 第三者提供">
+          <p className="mb-4">
+            当社は、以下の場合を除き、ユーザー情報を第三者に提供しません。
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>ユーザーの同意がある場合</li>
+            <li>法令に基づく場合</li>
+            <li>サービス提供に必要な範囲で業務委託先に提供する場合</li>
+          </ul>
+        </Section>
+
+        <Section title="6. ユーザーの権利">
+          <p>
+            ユーザーは、自身の情報について開示、訂正、削除を請求することができます。
+            ご希望の場合は、下記お問い合わせ先までご連絡ください。
+          </p>
+        </Section>
+
+        <Section title="7. 未成年の利用について">
+          <p>
+            未成年者が本アプリを利用する場合は、保護者の同意を得た上で利用するものとします。
+          </p>
+        </Section>
+
+        <Section title="8. プライバシーポリシーの変更">
+          <p>
+            当社は、必要に応じて本ポリシーを変更することがあります。
+            変更後の内容は、本アプリまたは当社ウェブサイト上で通知します。
+          </p>
+        </Section>
+
+        <Section title="9. お問い合わせ先">
+          <p>
+            Okapi, LLC
+            <br />
+            メールアドレス：
+            <a
+              href="mailto:support@kenchiku.ai"
+              className="text-blue-600 underline ml-1"
+            >
+              support@kenchiku.ai
+            </a>
+          </p>
+        </Section>
+
+        <Section title="10. 法令遵守">
+          <p>
+            当社は、個人情報の取扱いについて、日本の個人情報保護法および関連法令を遵守します。
+          </p>
+        </Section>
+
+        <footer className="text-sm text-gray-500 mt-12">
+          最終更新日：2026年5月
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+interface SectionProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+const Section: FC<SectionProps> = ({ title, children }) => {
+  return (
+    <section className="mb-8">
+      <h2 className="text-xl font-semibold mb-4">{title}</h2>
+      {children}
+    </section>
+  );
+};
+
+export default PrivacyPolicy;
