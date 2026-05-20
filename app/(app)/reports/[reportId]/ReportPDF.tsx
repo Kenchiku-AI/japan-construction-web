@@ -26,7 +26,7 @@ Font.register({
 });
 
 const PAGE_CONTENT_WIDTH = 499;
-const MAX_IMAGE_HEIGHT = 600;
+const MAX_IMAGE_HEIGHT = 580;
 
 export const ReportPDF: FC<ReportPDFProps> = ({
   report,
