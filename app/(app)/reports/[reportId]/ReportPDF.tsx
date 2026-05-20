@@ -65,49 +65,43 @@ export const ReportPDF: FC<ReportPDFProps> = ({
 
         return (
           <Page size="A4" key={image.id} style={styles.page}>
-            <View style={styles.imageContainer}>
-              <Image
-                src={image.download_url}
-                style={{ width: dims.width, height: dims.height }}
-              />
-              <View style={styles.fields}>
-                <View
-                  style={{
-                    ...styles.row,
-                    marginTop: 16,
-                  }}
-                >
-                  <Text style={{ ...styles.label, width: 76 }}>
-                    {t("date_taken")}
-                  </Text>
-                  <Text style={styles.value}>
-                    {formatDate(image.created_at)}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    ...styles.row,
-                    borderTopWidth: 0.5,
-                  }}
-                >
-                  <Text style={{ ...styles.label, width: 76 }}>
-                    {t("description")}
-                  </Text>
-                  <Text style={styles.value}>{image.description}</Text>
-                </View>
-                <View
-                  style={{
-                    ...styles.row,
-                    borderTopWidth: 0.5,
-                  }}
-                >
-                  <Text style={{ ...styles.label, width: 76 }}>
-                    {t("tags")}
-                  </Text>
-                  <Text style={styles.value}>
-                    {image.tags.map((tag) => tag.name).join(", ")}
-                  </Text>
-                </View>
+            <Image
+              src={image.download_url}
+              style={{ width: dims.width, height: dims.height }}
+            />
+            <View style={styles.fields}>
+              <View
+                style={{
+                  ...styles.row,
+                  marginTop: 16,
+                }}
+              >
+                <Text style={{ ...styles.label, width: 76 }}>
+                  {t("date_taken")}
+                </Text>
+                <Text style={styles.value}>{formatDate(image.created_at)}</Text>
+              </View>
+              <View
+                style={{
+                  ...styles.row,
+                  borderTopWidth: 0.5,
+                }}
+              >
+                <Text style={{ ...styles.label, width: 76 }}>
+                  {t("description")}
+                </Text>
+                <Text style={styles.value}>{image.description}</Text>
+              </View>
+              <View
+                style={{
+                  ...styles.row,
+                  borderTopWidth: 0.5,
+                }}
+              >
+                <Text style={{ ...styles.label, width: 76 }}>{t("tags")}</Text>
+                <Text style={styles.value}>
+                  {image.tags.map((tag) => tag.name).join(", ")}
+                </Text>
               </View>
             </View>
           </Page>
@@ -150,9 +144,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: fontColor2,
     width: "100%",
-  },
-  imageContainer: {
-    alignItems: "center",
   },
   fields: {
     width: "100%",
