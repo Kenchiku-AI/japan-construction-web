@@ -64,30 +64,34 @@ export const ReportPDF: FC<ReportPDFProps> = ({
         const dims = getImageDimensions(image.width, image.height);
 
         return (
-          <Page size="A4" key={image.id} style={styles.imageContainer}>
-            <Image
-              src={image.download_url}
-              style={{ width: dims.width, height: dims.height }}
-            />
-            <View style={styles.fields}>
-              <View style={styles.row}>
-                <Text style={styles.label}>{t("date_taken")}</Text>
-                <Text style={styles.value}>{formatDate(image.created_at)}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.label}>{t("description")}</Text>
-                <Text style={styles.value}>{image.description}</Text>
-              </View>
-              <View
-                style={{
-                  ...styles.row,
-                  borderTopWidth: index === 0 ? 0 : 0.5,
-                }}
-              >
-                <Text style={styles.label}>{t("tags")}</Text>
-                <Text style={styles.value}>
-                  {image.tags.map((tag) => tag.name).join(", ")}
-                </Text>
+          <Page size="A4" key={image.id} style={styles.page}>
+            <View style={styles.imageContainer}>
+              <Image
+                src={image.download_url}
+                style={{ width: dims.width, height: dims.height }}
+              />
+              <View style={styles.fields}>
+                <View style={styles.row}>
+                  <Text style={styles.label}>{t("date_taken")}</Text>
+                  <Text style={styles.value}>
+                    {formatDate(image.created_at)}
+                  </Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.label}>{t("description")}</Text>
+                  <Text style={styles.value}>{image.description}</Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.row,
+                    borderTopWidth: index === 0 ? 0 : 0.5,
+                  }}
+                >
+                  <Text style={styles.label}>{t("tags")}</Text>
+                  <Text style={styles.value}>
+                    {image.tags.map((tag) => tag.name).join(", ")}
+                  </Text>
+                </View>
               </View>
             </View>
           </Page>

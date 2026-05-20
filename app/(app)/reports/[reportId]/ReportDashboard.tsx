@@ -258,7 +258,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               const labelWidths = await Promise.all(
                 report.fields.map((f) => measureTextWidth(f.name, 12)),
               );
-              const labelWidth = Math.max(...labelWidths) + 8;
+              const labelWidth = Math.max(...labelWidths) + 16;
 
               const blob = await pdf(
                 <ReportPDF
