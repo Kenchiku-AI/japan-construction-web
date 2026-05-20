@@ -125,7 +125,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 <div className="self-end">{t("report_templates")}</div>
                 <Button
                   variant="tertiary"
-                  label={t("create")}
+                  label={t("create_report_template")}
                   iconLeft={() => <Plus />}
                   onClick={() => {
                     setIsCreateTemplateModalShown(true);
