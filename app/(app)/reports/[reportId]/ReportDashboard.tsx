@@ -247,7 +247,11 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               }
 
               const blob = await pdf(
-                <ReportPDF report={report} companyName={companyName} />,
+                <ReportPDF
+                  report={report}
+                  companyName={companyName}
+                  images={images ?? []}
+                />,
               ).toBlob();
 
               const fileUrl = URL.createObjectURL(blob);
