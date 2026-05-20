@@ -41,13 +41,21 @@ export const ReportPDF: FC<ReportPDFProps> = ({
         <Text style={styles.companyName}>{companyName}</Text>
         <Text style={styles.title}>{report.name}</Text>
         <View style={styles.divider} />
-        {report.fields.map((f) => (
-          <View key={f.id} style={styles.field} wrap={false}>
-            <Text style={styles.fieldName}>{f.name}</Text>
-            <Text style={styles.fieldValue}>{f.value}</Text>
-          </View>
-        ))}
-        {images.map((image) => {
+        <View style={styles.fields}>
+          {report.fields.map((field, index) => (
+            <View
+              key={field.id}
+              style={{
+                ...styles.row,
+                borderTopWidth: index === 0 ? 0 : 0.5,
+              }}
+            >
+              <Text style={styles.label}>{field.name}</Text>
+              <Text style={styles.value}>{field.value}</Text>
+            </View>
+          ))}
+        </View>
+        {images.map((image, index) => {
           const dims = getImageDimensions(image.width, image.height);
 
           return (
@@ -56,27 +64,28 @@ export const ReportPDF: FC<ReportPDFProps> = ({
                 src={image.download_url}
                 style={{ width: dims.width, height: dims.height }}
               />
-              <View style={styles.imageInfo}>
-                <View style={styles.imageInfoRow}>
-                  <Text style={styles.imageInfoLabel}>{t("date_taken")}</Text>
-                  <Text style={styles.imageInfoValue}>
+              <View style={styles.fields}>
+                <View style={styles.row}>
+                  <Text style={styles.label}>{t("date_taken")}</Text>
+                  <Text style={styles.value}>
                     {formatDate(image.created_at)}
                   </Text>
                 </View>
                 {!!image.description?.length && (
-                  <View style={styles.imageInfoRow}>
-                    <Text style={styles.imageInfoLabel}>
-                      {t("description")}
-                    </Text>
-                    <Text style={styles.imageInfoValue}>
-                      {image.description}
-                    </Text>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>{t("description")}</Text>
+                    <Text style={styles.value}>{image.description}</Text>
                   </View>
                 )}
                 {!!image.tags?.length && (
-                  <View style={styles.imageInfoRow}>
-                    <Text style={styles.imageInfoLabel}>{t("tags")}</Text>
-                    <Text style={styles.imageInfoValue}>
+                  <View
+                    style={{
+                      ...styles.row,
+                      borderTopWidth: index === 0 ? 0 : 0.5,
+                    }}
+                  >
+                    <Text style={styles.label}>{t("tags")}</Text>
+                    <Text style={styles.value}>
                       {image.tags.map((tag) => tag.name).join(", ")}
                     </Text>
                   </View>
@@ -125,46 +134,25 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 16,
   },
-  field: {
-    marginBottom: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: bgColor2,
-    minHeight: 46,
-  },
-  fieldName: {
-    fontSize: 10,
-    color: fontColor2,
-    marginBottom: 4,
-  },
-  fieldValue: {
-    fontSize: 12,
-    color: fontColor1,
-  },
   imageContainer: {
     alignItems: "center",
   },
-  imageInfo: {
+  fields: {
     width: "100%",
-    marginTop: 8,
-    marginBottom: 16,
-    borderTopWidth: 1,
-    borderTopColor: fontColor2,
   },
-  imageInfoRow: {
+  row: {
     flexDirection: "row",
-    borderBottomWidth: 1,
-    borderBottomColor: fontColor2,
-    paddingVertical: 5,
+    borderTopColor: fontColor2,
+    padding: 10,
   },
-  imageInfoLabel: {
-    fontSize: 10,
+  label: {
+    fontSize: 12,
     color: fontColor2,
-    width: "30%",
+    width: "20%",
   },
-  imageInfoValue: {
+  value: {
     fontSize: 10,
     color: fontColor1,
-    width: "70%",
+    width: "80%",
   },
 });
