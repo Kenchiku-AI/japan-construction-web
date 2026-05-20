@@ -45,6 +45,7 @@
   "download_all": "すべてダウンロード",
   "download_pdf": "PDFをダウンロード",
   "download_tag": "「{{tag}}」の写真をダウンロード",
+  "downloading": "ダウンロード中...",
   "drag_to_reorder": "ドラッグして並び替え",
   "email": "Emailアドレス",
   "email_registered": "そのメールアドレスは既に登録されています。",

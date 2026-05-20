@@ -6,14 +6,15 @@ import {
   Text,
   StyleSheet,
   Font,
+  Image,
 } from "@react-pdf/renderer";
-import { Report } from "@/types";
+import { Report, ReportImage } from "@/types";
 import { bgColor2, fontColor1, fontColor2 } from "@/lib/constants";
-import path from "path";
 
 interface ReportPDFProps {
   report: Report;
   companyName: string;
+  images: ReportImage[];
 }
 
 Font.register({
@@ -21,7 +22,11 @@ Font.register({
   src: "/fonts/KosugiMaru-Regular.ttf",
 });
 
-export const ReportPDF: FC<ReportPDFProps> = ({ report, companyName }) => (
+export const ReportPDF: FC<ReportPDFProps> = ({
+  report,
+  companyName,
+  images,
+}) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <Text style={styles.companyName}>{companyName}</Text>
@@ -31,6 +36,11 @@ export const ReportPDF: FC<ReportPDFProps> = ({ report, companyName }) => (
         <View key={f.id} style={styles.field} wrap={false}>
           <Text style={styles.fieldName}>{f.name}</Text>
           <Text style={styles.fieldValue}>{f.value}</Text>
+        </View>
+      ))}
+      {images.map((i) => (
+        <View key={i.id} style={styles.imageContainer} wrap={false}>
+          <Image src={i.download_url} style={styles.image} />
         </View>
       ))}
     </Page>
@@ -74,4 +84,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: fontColor1,
   },
+  imageContainer: {},
+  image: {},
 });

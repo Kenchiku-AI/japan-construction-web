@@ -54,6 +54,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [isMobile, setIsMobile] = useState(false);
+  const [isPdfDownloading, setIsPdfDownloading] = useState(false);
   const fileInputRef = useRef<any>(null);
 
   useEffect(() => {
@@ -226,10 +227,13 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8">
           <Button
             variant="tertiary"
-            label={t("download_pdf")}
+            label={t(isPdfDownloading ? "downloading" : "download_pdf")}
             iconLeft={() => <Download />}
+            disabled={isPdfDownloading}
             onClick={async () => {
               if (!report) return;
+
+              setIsPdfDownloading(true);
 
               let companyName = currentUser?.company?.name ?? "";
 
@@ -256,6 +260,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               a.remove();
 
               URL.revokeObjectURL(fileUrl);
+
+              setIsPdfDownloading(false);
             }}
             style={{ height: "auto" }}
             textStyle={{
