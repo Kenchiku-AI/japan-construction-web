@@ -57,9 +57,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onEdit={(n) => updateName(n)}
       />
       {company && (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col">
           <div>
-            <div className="flex justify-between mt-8">
+            <div className="flex justify-between mt-12">
               <div className="self-end">{t("projects")}</div>
               {currentUser?.role === UserRole.Admin && (
                 <Button
@@ -77,7 +77,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
             <CompanyProjectsList projects={company.projects} />
           </div>
           <div>
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-12">
               <div className="self-end">{t("users")}</div>
               {(currentUser?.role === UserRole.Admin ||
                 currentUser?.role === UserRole.Manager) && (
@@ -97,7 +97,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           </div>
           {currentUser?.role === "admin" && (
             <div>
-              <div className="flex justify-between">
+              <div className="flex justify-between mt-12">
                 <div className="self-end">{t("tags")}</div>
                 <Button
                   variant="tertiary"
