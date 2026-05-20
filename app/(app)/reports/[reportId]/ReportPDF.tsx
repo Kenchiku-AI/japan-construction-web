@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     borderTopColor: fontColor2,
-    padding: 16,
+    padding: 12,
   },
   label: {
     fontSize: 12,
