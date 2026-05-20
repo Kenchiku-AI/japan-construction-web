@@ -9,7 +9,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { Report, ReportImage } from "@/types";
-import { bgColor2, fontColor1, fontColor2 } from "@/lib/constants";
+import { fontColor1, fontColor2 } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
 import { useDate } from "@/public/date/useDate";
 
@@ -17,6 +17,7 @@ interface ReportPDFProps {
   report: Report;
   companyName: string;
   images: ReportImage[];
+  labelWidth: number;
 }
 
 Font.register({
@@ -31,6 +32,7 @@ export const ReportPDF: FC<ReportPDFProps> = ({
   report,
   companyName,
   images,
+  labelWidth,
 }) => {
   const { t } = useTranslation();
   const { formatDate } = useDate();
@@ -50,51 +52,47 @@ export const ReportPDF: FC<ReportPDFProps> = ({
                 borderTopWidth: index === 0 ? 0 : 0.5,
               }}
             >
-              <Text style={styles.label}>{field.name}</Text>
+              <Text style={{ ...styles.label, width: labelWidth }}>
+                {field.name}
+              </Text>
               <Text style={styles.value}>{field.value}</Text>
             </View>
           ))}
         </View>
-        {images.map((image, index) => {
-          const dims = getImageDimensions(image.width, image.height);
+      </Page>
+      {images.map((image, index) => {
+        const dims = getImageDimensions(image.width, image.height);
 
-          return (
-            <View key={image.id} style={styles.imageContainer} wrap={false}>
-              <Image
-                src={image.download_url}
-                style={{ width: dims.width, height: dims.height }}
-              />
-              <View style={styles.fields}>
-                <View style={styles.row}>
-                  <Text style={styles.label}>{t("date_taken")}</Text>
-                  <Text style={styles.value}>
-                    {formatDate(image.created_at)}
-                  </Text>
-                </View>
-                {!!image.description?.length && (
-                  <View style={styles.row}>
-                    <Text style={styles.label}>{t("description")}</Text>
-                    <Text style={styles.value}>{image.description}</Text>
-                  </View>
-                )}
-                {!!image.tags?.length && (
-                  <View
-                    style={{
-                      ...styles.row,
-                      borderTopWidth: index === 0 ? 0 : 0.5,
-                    }}
-                  >
-                    <Text style={styles.label}>{t("tags")}</Text>
-                    <Text style={styles.value}>
-                      {image.tags.map((tag) => tag.name).join(", ")}
-                    </Text>
-                  </View>
-                )}
+        return (
+          <Page size="A4" key={image.id} style={styles.imageContainer}>
+            <Image
+              src={image.download_url}
+              style={{ width: dims.width, height: dims.height }}
+            />
+            <View style={styles.fields}>
+              <View style={styles.row}>
+                <Text style={styles.label}>{t("date_taken")}</Text>
+                <Text style={styles.value}>{formatDate(image.created_at)}</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.label}>{t("description")}</Text>
+                <Text style={styles.value}>{image.description}</Text>
+              </View>
+              <View
+                style={{
+                  ...styles.row,
+                  borderTopWidth: index === 0 ? 0 : 0.5,
+                }}
+              >
+                <Text style={styles.label}>{t("tags")}</Text>
+                <Text style={styles.value}>
+                  {image.tags.map((tag) => tag.name).join(", ")}
+                </Text>
               </View>
             </View>
-          );
-        })}
-      </Page>
+          </Page>
+        );
+      })}
     </Document>
   );
 };
@@ -121,7 +119,7 @@ const styles = StyleSheet.create({
   companyName: {
     fontSize: 12,
     color: fontColor2,
-    marginBottom: 8,
+    marginBottom: 12,
   },
   title: {
     fontSize: 20,
@@ -132,7 +130,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: fontColor2,
     width: "100%",
-    marginBottom: 16,
   },
   imageContainer: {
     alignItems: "center",
@@ -151,7 +148,7 @@ const styles = StyleSheet.create({
     width: "20%",
   },
   value: {
-    fontSize: 10,
+    fontSize: 12,
     color: fontColor1,
     width: "80%",
   },

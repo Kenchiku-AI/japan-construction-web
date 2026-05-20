@@ -207,6 +207,15 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     [filteredImages, loadedImages],
   );
 
+  const measureTextWidth = (text: string, fontSize: number) => {
+    let width = 0;
+    for (const char of text) {
+      const code = char.charCodeAt(0);
+      width += code > 0x7f ? fontSize : fontSize * 0.5;
+    }
+    return width;
+  };
+
   if (shouldRedirect) {
     redirect("/");
   }
@@ -246,11 +255,17 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                 }
               }
 
+              const labelWidths = await Promise.all(
+                report.fields.map((f) => measureTextWidth(f.name, 12)),
+              );
+              const labelWidth = Math.max(...labelWidths) + 8;
+
               const blob = await pdf(
                 <ReportPDF
                   report={report}
                   companyName={companyName}
                   images={images ?? []}
+                  labelWidth={labelWidth}
                 />,
               ).toBlob();
 
