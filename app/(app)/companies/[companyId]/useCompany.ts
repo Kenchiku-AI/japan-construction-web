@@ -6,17 +6,23 @@ import { Company } from "@/types/companies";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
+import { ReportTemplate, ReportTemplateRequest } from "@/types";
 
 export const useCompany = (companyId: string) => {
   const [loading, setLoading] = useState(false);
   const [company, setCompany] = useState<Company>();
+  const [templates, setTemplates] = useState<ReportTemplate[]>([]);
   const { t } = useTranslation();
   const router = useRouter();
-  const api = useApi();
+  const { currentUser, ...api } = useApi();
   const { showModal } = useModal();
 
   useEffect(() => {
     getCompany(companyId);
+
+    if (currentUser?.role === "admin") {
+      getTemplates(companyId);
+    }
   }, [companyId]);
 
   const getCompany = useCallback(
@@ -29,6 +35,16 @@ export const useCompany = (companyId: string) => {
       } finally {
         setLoading(false);
       }
+    },
+    [companyId],
+  );
+
+  const getTemplates = useCallback(
+    async (companyId: string) => {
+      try {
+        const response = await api.getReportTemplates(companyId);
+        setTemplates(response ?? []);
+      } catch (err) {}
     },
     [companyId],
   );
@@ -79,10 +95,26 @@ export const useCompany = (companyId: string) => {
     [company],
   );
 
+  const createTemplate = useCallback(
+    async (request: ReportTemplateRequest) => {
+      setLoading(true);
+
+      try {
+        await api.createReportTemplate(request, companyId);
+        await getTemplates(companyId);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [companyId, getTemplates],
+  );
+
   return {
     loading,
     company,
     createProject,
     updateName,
+    templates,
+    createTemplate,
   };
 };

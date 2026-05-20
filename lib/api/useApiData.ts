@@ -250,16 +250,19 @@ export const useApiData = () => {
       const url = `/reports/${reportId}`;
       return call(() => http.delete(url));
     },
-    async getReportTemplates() {
-      const url = `/reports/templates`;
+    async getReportTemplates(companyId?: string) {
+      const url = `/reports/templates${companyId ? `?company_id=${companyId}` : ""}`;
       return call(() => http.get<ReportTemplate[]>(url));
     },
     async getReportTemplate(reportTemplateId: string) {
       const url = `/reports/templates/${reportTemplateId}`;
       return call(() => http.get<ReportTemplate>(url));
     },
-    async createReportTemplate(request: ReportTemplateRequest) {
-      const url = "/reports/templates";
+    async createReportTemplate(
+      request: ReportTemplateRequest,
+      companyId?: string,
+    ) {
+      const url = `/reports/templates${companyId ? `?company_id=${companyId}` : ""}`;
       return call(() => http.post<ReportTemplate>(url, request));
     },
     async updateReportTemplate(

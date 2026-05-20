@@ -20,6 +20,8 @@ import { useTags } from "../../tags/useTags";
 import UpdateTagModal from "../../tags/UpdateTagModal";
 import DeleteTagModal from "../../tags/DeleteTagModal";
 import CreateTagModal from "../../tags/CreateTagModal";
+import CreateReportTemplateModal from "../../reports/templates/CreateReportTemplateModal";
+import ReportTemplatesList from "../../reports/templates/ReportTemplatesList";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -28,11 +30,14 @@ interface CompanyDashboardProps {
 const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const { currentUser, inviteUser } = useApi();
   const { t } = useTranslation();
-  const { company, createProject, updateName } = useCompany(companyId);
+  const { company, createProject, updateName, templates, createTemplate } =
+    useCompany(companyId);
   const searchParams = useSearchParams();
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
+  const [isCreateTemplateModalShown, setIsCreateTemplateModalShown] =
+    useState(false);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
   const { showModal } = useModal();
@@ -116,6 +121,23 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 onEdit={(t) => setEditingTag(t)}
                 onDelete={(t) => setDeletingTag(t)}
               />
+              <div className="flex justify-between mt-12">
+                <div className="self-end">{t("report_templates")}</div>
+                <Button
+                  variant="tertiary"
+                  label={t("create")}
+                  iconLeft={() => <Plus />}
+                  onClick={() => {
+                    setIsCreateTemplateModalShown(true);
+                  }}
+                  style={{ height: "auto" }}
+                />
+              </div>
+              <Divider />
+              <ReportTemplatesList
+                templates={templates}
+                isEmpty={!loading && templates.length === 0}
+              />
             </div>
           )}
         </div>
@@ -167,6 +189,16 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onSubmit={(name, description) => {
           setIsCreateTagModalShown(false);
           createTag({ name, description });
+        }}
+      />
+      <CreateReportTemplateModal
+        isOpen={isCreateTemplateModalShown}
+        onClose={() => {
+          setIsCreateTemplateModalShown(false);
+        }}
+        onSubmit={(request) => {
+          setIsCreateTemplateModalShown(false);
+          createTemplate(request);
         }}
       />
       <UpdateTagModal
