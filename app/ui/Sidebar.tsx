@@ -15,8 +15,10 @@ import {
   Users,
   Logout,
   Tag,
+  Logo,
 } from "./Icons";
-import { buttonColor } from "@/lib/constants";
+import { buttonColor, fontColor2 } from "@/lib/constants";
+import Divider from "./Divider";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
@@ -31,10 +33,16 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
         {children}
       </div>
       <div className="drawer-side flex">
-        <ul className="menu bg-base-200 lg:w-48 min-w-14 md:min-w-20 text-base-content min-h-full py-6 md:px-4 px-1 justify-between">
+        <ul className="menu bg-base-200 lg:w-48 min-w-14 md:min-w-20 text-base-content min-h-full pb-4 md:px-4 px-1 justify-between">
           {currentUser && (
             <>
               <div className="space-y-2">
+                <div className="flex justify-center py-2">
+                  <Logo size={26} color={fontColor2} />
+                </div>
+                <Divider
+                  style={{ opacity: 0.1, marginBottom: 18, marginTop: 0 }}
+                />
                 {isAdmin ? (
                   <SidebarItem
                     name={t("companies")}
