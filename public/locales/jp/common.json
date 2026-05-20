@@ -29,6 +29,7 @@
   "create_tag_error_description": "タグの作成中にエラーが発生しました。",
   "create_template": "テンプレート作成",
   "date": "日付",
+  "date_taken": "撮影日",
   "day": "日",
   "delete": "削除",
   "delete_photo": "写真削除",
