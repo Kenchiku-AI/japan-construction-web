@@ -103,6 +103,23 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           {currentUser?.role === "admin" && (
             <div>
               <div className="flex justify-between mt-12">
+                <div className="self-end">{t("report_templates")}</div>
+                <Button
+                  variant="tertiary"
+                  label={t("create_report_template")}
+                  iconLeft={() => <Plus />}
+                  onClick={() => {
+                    setIsCreateTemplateModalShown(true);
+                  }}
+                  style={{ height: "auto" }}
+                />
+              </div>
+              <Divider />
+              <ReportTemplatesList
+                templates={templates}
+                isEmpty={!loading && templates.length === 0}
+              />
+              <div className="flex justify-between mt-12">
                 <div className="self-end">{t("tags")}</div>
                 <Button
                   variant="tertiary"
@@ -120,23 +137,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 isEmpty={!loading && tags?.length === 0}
                 onEdit={(t) => setEditingTag(t)}
                 onDelete={(t) => setDeletingTag(t)}
-              />
-              <div className="flex justify-between mt-12">
-                <div className="self-end">{t("report_templates")}</div>
-                <Button
-                  variant="tertiary"
-                  label={t("create_report_template")}
-                  iconLeft={() => <Plus />}
-                  onClick={() => {
-                    setIsCreateTemplateModalShown(true);
-                  }}
-                  style={{ height: "auto" }}
-                />
-              </div>
-              <Divider />
-              <ReportTemplatesList
-                templates={templates}
-                isEmpty={!loading && templates.length === 0}
               />
             </div>
           )}
