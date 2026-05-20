@@ -22,6 +22,9 @@ Font.register({
   src: "/fonts/KosugiMaru-Regular.ttf",
 });
 
+const PAGE_CONTENT_WIDTH = 499;
+const MAX_IMAGE_HEIGHT = 600;
+
 export const ReportPDF: FC<ReportPDFProps> = ({
   report,
   companyName,
@@ -38,14 +41,36 @@ export const ReportPDF: FC<ReportPDFProps> = ({
           <Text style={styles.fieldValue}>{f.value}</Text>
         </View>
       ))}
-      {images.map((i) => (
-        <View key={i.id} style={styles.imageContainer} wrap={false}>
-          <Image src={i.download_url} style={styles.image} />
-        </View>
-      ))}
+      {images.map((i) => {
+        const dims = getImageDimensions(i.width, i.height);
+
+        return (
+          <View key={i.id} style={styles.imageContainer} wrap={false}>
+            <Image
+              src={i.download_url}
+              style={{ width: dims.width, height: dims.height }}
+            />
+          </View>
+        );
+      })}
     </Page>
   </Document>
 );
+
+const getImageDimensions = (width: number, height: number) => {
+  const aspectRatio = width / height;
+
+  let displayWidth = Math.min(width, PAGE_CONTENT_WIDTH);
+  let displayHeight = displayWidth / aspectRatio;
+
+  // If still too tall, constrain by height instead
+  if (displayHeight > MAX_IMAGE_HEIGHT) {
+    displayHeight = MAX_IMAGE_HEIGHT;
+    displayWidth = displayHeight * aspectRatio;
+  }
+
+  return { width: displayWidth, height: displayHeight };
+};
 
 const styles = StyleSheet.create({
   page: {
