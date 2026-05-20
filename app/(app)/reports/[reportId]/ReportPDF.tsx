@@ -71,23 +71,39 @@ export const ReportPDF: FC<ReportPDFProps> = ({
                 style={{ width: dims.width, height: dims.height }}
               />
               <View style={styles.fields}>
-                <View style={styles.row}>
-                  <Text style={styles.label}>{t("date_taken")}</Text>
+                <View
+                  style={{
+                    ...styles.row,
+                    marginTop: 16,
+                  }}
+                >
+                  <Text style={{ ...styles.label, width: 76 }}>
+                    {t("date_taken")}
+                  </Text>
                   <Text style={styles.value}>
                     {formatDate(image.created_at)}
                   </Text>
                 </View>
-                <View style={styles.row}>
-                  <Text style={styles.label}>{t("description")}</Text>
+                <View
+                  style={{
+                    ...styles.row,
+                    borderTopWidth: 0.5,
+                  }}
+                >
+                  <Text style={{ ...styles.label, width: 76 }}>
+                    {t("description")}
+                  </Text>
                   <Text style={styles.value}>{image.description}</Text>
                 </View>
                 <View
                   style={{
                     ...styles.row,
-                    borderTopWidth: index === 0 ? 0 : 0.5,
+                    borderTopWidth: 0.5,
                   }}
                 >
-                  <Text style={styles.label}>{t("tags")}</Text>
+                  <Text style={{ ...styles.label, width: 76 }}>
+                    {t("tags")}
+                  </Text>
                   <Text style={styles.value}>
                     {image.tags.map((tag) => tag.name).join(", ")}
                   </Text>
