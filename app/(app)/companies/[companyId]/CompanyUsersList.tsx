@@ -41,7 +41,7 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users }) => {
           >
             <div className="mx-4">
               <div className="flex items-center justify-between">
-                <div style={{ height: 68 }} className="flex items-center gap-4">
+                <div style={{ height: 60 }} className="flex items-center gap-4">
                   <User />
                   <div className="flex flex-col">
                     <div>{`${u.last_name} ${u.first_name}`}</div>

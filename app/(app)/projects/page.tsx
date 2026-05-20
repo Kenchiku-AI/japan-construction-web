@@ -35,7 +35,7 @@ const ProjectsPage = () => {
             className={"hover:opacity-50 cursor-pointer"}
           >
             <div className="flex items-center justify-between mx-4">
-              <div style={{ height: 68 }} className="flex items-center gap-4">
+              <div style={{ height: 60 }} className="flex items-center gap-4">
                 <Hardhat />
                 <div>{p.name}</div>
               </div>

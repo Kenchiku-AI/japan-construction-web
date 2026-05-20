@@ -96,7 +96,7 @@ const ShareReportTemplateModal: FC<ShareReportTemplateModalProps> = ({
               className="hover:opacity-50 cursor-pointer mx-4"
             >
               <div className="flex items-center justify-between">
-                <div style={{ height: 68 }} className="flex items-center gap-4">
+                <div style={{ height: 60 }} className="flex items-center gap-4">
                   <Users />
                   <div className="flex flex-col">
                     <div>{c.name}</div>
