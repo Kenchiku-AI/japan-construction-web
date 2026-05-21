@@ -32,14 +32,16 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const isDescriptionEdited =
     project?.description !== description && isLoaded.current;
 
-  console.log("PROJECT", project);
-
   useEffect(() => {
     if (isLoaded.current || !project) return;
 
     isLoaded.current = true;
     setDescription(project.description);
-  }, [project]);
+
+    if (currentUser?.role === "admin") {
+      getReportTemplates(project.company_id);
+    }
+  }, [project, currentUser]);
 
   return (
     <>
