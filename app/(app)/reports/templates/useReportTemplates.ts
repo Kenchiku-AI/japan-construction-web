@@ -25,16 +25,19 @@ export const useReportTemplates = () => {
     }
   }, [currentUser]);
 
-  const getReportTemplates = useCallback(async () => {
-    setLoading(true);
+  const getReportTemplates = useCallback(
+    async (companyId?: string) => {
+      setLoading(true);
 
-    try {
-      const response = await api.getReportTemplates();
-      setReportTemplates(response ?? []);
-    } finally {
-      setLoading(false);
-    }
-  }, [setReportTemplates]);
+      try {
+        const response = await api.getReportTemplates(companyId);
+        setReportTemplates(response ?? []);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setReportTemplates, companyId],
+  );
 
   const createReportTemplate = useCallback(
     async (request: ReportTemplateRequest) => {
@@ -61,6 +64,7 @@ export const useReportTemplates = () => {
   return {
     loading,
     reportTemplates,
+    getReportTemplates,
     createReportTemplate,
     parentTypeOptions,
   };

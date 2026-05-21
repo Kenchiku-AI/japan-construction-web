@@ -22,7 +22,7 @@ interface ProjectDashboardProps {
 
 const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const { currentUser } = useApi();
-  const { reportTemplates } = useReportTemplates();
+  const { reportTemplates, getReportTemplates } = useReportTemplates();
   const { t } = useTranslation();
   const { project, updateProject, createReport } = useProject(projectId);
   const isLoaded = useRef(false);
@@ -32,11 +32,15 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const isDescriptionEdited =
     project?.description !== description && isLoaded.current;
 
+  console.log("PROJECT", project);
+
   useEffect(() => {
     if (isLoaded.current || !project) return;
 
     isLoaded.current = true;
     setDescription(project.description);
+
+    getReportTemplates(project.)
   }, [project]);
 
   return (
