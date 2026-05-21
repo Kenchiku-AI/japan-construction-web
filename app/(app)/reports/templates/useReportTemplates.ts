@@ -36,7 +36,7 @@ export const useReportTemplates = () => {
         setLoading(false);
       }
     },
-    [setReportTemplates, companyId],
+    [setReportTemplates],
   );
 
   const createReportTemplate = useCallback(
