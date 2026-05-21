@@ -39,8 +39,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
 
     isLoaded.current = true;
     setDescription(project.description);
-
-    getReportTemplates(project.)
   }, [project]);
 
   return (
