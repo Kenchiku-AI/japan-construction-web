@@ -1,4 +1,5 @@
 import { Logo } from "@/app/ui/Icons";
+import { buttonColor } from "@/lib/constants";
 import { FC } from "react";
 
 const PrivacyPolicy = () => {
@@ -115,7 +116,8 @@ const PrivacyPolicy = () => {
             メールアドレス：
             <a
               href="mailto:support@kenchiku.ai"
-              className="text-blue-600 underline ml-1"
+              className="underline ml-1"
+              style={{ color: buttonColor }}
             >
               support@kenchiku.ai
             </a>

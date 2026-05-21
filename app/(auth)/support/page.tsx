@@ -1,4 +1,5 @@
 import { Logo } from "@/app/ui/Icons";
+import { buttonColor } from "@/lib/constants";
 
 const Support = () => {
   return (
@@ -12,13 +13,15 @@ const Support = () => {
           <h1 className="text-2xl font-semibold mb-4">サポート</h1>
 
           <p className="text-lg leading-relaxed">
-            ご質問や不具合などございましたら、以下のメールアドレスまで
-            お気軽にお問い合わせください。
+            ご質問や不具合などございましたら、
+            <br />
+            以下のメールアドレスまでお気軽にお問い合わせください。
           </p>
 
           <a
             href="mailto:support@kenchiku.ai"
-            className="inline-block mt-6 text-blue-600 hover:text-blue-800 underline"
+            className="inline-block mt-6 underline"
+            style={{ color: buttonColor }}
           >
             support@kenchiku.ai
           </a>
