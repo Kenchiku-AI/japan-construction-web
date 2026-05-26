@@ -30,7 +30,7 @@ interface ReportDashboardProps {
 
 const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const { currentUser } = useApi();
-  const { tags } = useTags(currentUser?.company?.id);
+  const { tags, getTags } = useTags(currentUser?.company?.id);
   const { t } = useTranslation();
   const {
     report,
@@ -57,8 +57,17 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isPdfDownloading, setIsPdfDownloading] = useState(false);
   const fileInputRef = useRef<any>(null);
+  const loadedRef = useRef(false);
 
   useEffect(() => {
+    if (report && !loadedRef.current) {
+      if (currentUser?.role === "admin") {
+        getTags();
+      }
+
+      loadedRef.current = true;
+    }
+
     resetFieldValues();
   }, [report]);
 

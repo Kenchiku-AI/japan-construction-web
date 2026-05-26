@@ -14,10 +14,8 @@ export const useTags = (companyId?: string) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!currentUser) return;
-
     getTags();
-  }, [currentUser]);
+  }, []);
 
   const getTags = useCallback(async () => {
     if (!companyId) return;
@@ -98,6 +96,7 @@ export const useTags = (companyId?: string) => {
   return {
     loading,
     tags,
+    getTags,
     createTag,
     updateTag,
     deleteTag,
