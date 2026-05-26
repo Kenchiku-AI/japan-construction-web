@@ -25,4 +25,5 @@ export type CreateProjectRequest = {
 export type UpdateProjectRequest = {
   name?: string;
   description?: string;
+  status?: string;
 };

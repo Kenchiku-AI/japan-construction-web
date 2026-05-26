@@ -128,7 +128,11 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               style={{ height: "auto" }}
               label={t("update")}
               onClick={() => {
-                updateProject({ description });
+                if (currentUser?.role === "admin") {
+                  updateProject({ description });
+                } else {
+                  updateProject({ description });
+                }
               }}
             />
             <Button
