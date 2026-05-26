@@ -51,7 +51,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     if (project?.description !== description) return true;
 
     if (currentUser?.role === "admin") {
-      return project?.status === status;
+      return project?.status !== status;
     }
 
     return false;
@@ -93,21 +93,23 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
       <Divider />
       {project && (
         <>
-          <TextArea
-            value={description}
-            placeholder={t("description")}
-            onChange={setDescription}
-          />
-          {currentUser?.role === "admin" && (
-            <Select
-              options={statusOptions}
-              value={status}
-              placeholder={t("status")}
-              onChange={(s) => {
-                setStatus(s as string);
-              }}
+          <div className="flex flex-col gap-2">
+            <TextArea
+              value={description}
+              placeholder={t("description")}
+              onChange={setDescription}
             />
-          )}
+            {currentUser?.role === "admin" && (
+              <Select
+                options={statusOptions}
+                value={status}
+                placeholder={t("status")}
+                onChange={(s) => {
+                  setStatus(s as string);
+                }}
+              />
+            )}
+          </div>
           <div
             style={{
               height: isEdited ? 36 : 0,
