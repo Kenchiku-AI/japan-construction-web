@@ -23,6 +23,7 @@ interface PhotoDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   isMobile: boolean;
+  isDisabled?: boolean;
 }
 
 const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
@@ -37,6 +38,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
   isOpen,
   onClose,
   isMobile,
+  isDisabled,
 }) => {
   const { t } = useTranslation();
   const { formatDate } = useDate();
@@ -166,16 +168,18 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
                 }}
                 style={{ height: "auto" }}
               />
-              <Button
-                variant="tertiary"
-                label={t("delete_photo")}
-                iconLeft={() => <Trash />}
-                style={{ borderColor: errorColor1, height: "auto" }}
-                textStyle={{ color: errorColor1 }}
-                onClick={() => {
-                  setIsConfirmDeleteShown(true);
-                }}
-              />
+              {!isDisabled && (
+                <Button
+                  variant="tertiary"
+                  label={t("delete_photo")}
+                  iconLeft={() => <Trash />}
+                  style={{ borderColor: errorColor1, height: "auto" }}
+                  textStyle={{ color: errorColor1 }}
+                  onClick={() => {
+                    setIsConfirmDeleteShown(true);
+                  }}
+                />
+              )}
             </div>
           </div>
           <div className="md:hidden mb-4" style={photoStyle}>
@@ -186,6 +190,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
             onUpdate={onUpdateDescription}
             isOpen={isOpen}
             isMobile={isMobile}
+            isDisabled={isDisabled}
             date={date}
           />
           <Tags
@@ -195,6 +200,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
             onDelete={onDeleteTag}
             isOpen={isOpen}
             isMobile={isMobile}
+            isDisabled={isDisabled}
           />
         </div>
       </div>
@@ -239,6 +245,7 @@ interface TagsProps {
   onDelete: (linkId: string) => void;
   isMobile: boolean;
   isOpen: boolean;
+  isDisabled?: boolean;
 }
 
 const Tags: FC<TagsProps> = ({
@@ -247,6 +254,7 @@ const Tags: FC<TagsProps> = ({
   onAdd,
   onDelete,
   isOpen,
+  isDisabled,
 }) => {
   const [isTagListShown, setIsTagListShown] = useState(false);
   const { t } = useTranslation();
@@ -269,16 +277,18 @@ const Tags: FC<TagsProps> = ({
     <>
       <div className="flex justify-between mt-6 relative">
         <div>{t("tags")}</div>
-        <Button
-          variant="tertiary"
-          label={t("add_tag")}
-          onClick={() => setIsTagListShown(true)}
-          iconLeft={() => <Plus />}
-          style={{
-            height: "auto",
-            display: availableTags.length ? "flex" : "none",
-          }}
-        />
+        {!isDisabled && (
+          <Button
+            variant="tertiary"
+            label={t("add_tag")}
+            onClick={() => setIsTagListShown(true)}
+            iconLeft={() => <Plus />}
+            style={{
+              height: "auto",
+              display: availableTags.length ? "flex" : "none",
+            }}
+          />
+        )}
       </div>
       <Divider />
       {!imageTags?.length ? (
@@ -293,17 +303,19 @@ const Tags: FC<TagsProps> = ({
                 height: 40,
                 borderRadius: 20,
                 paddingLeft: 20,
-                paddingRight: 12,
+                paddingRight: isDisabled ? 20 : 12,
                 backgroundColor: bgColor2,
               }}
             >
               {t.name}
-              <div
-                className="cursor-pointer"
-                onClick={() => onDelete(t.link_id)}
-              >
-                <Close color={errorColor1} />
-              </div>
+              {!isDisabled && (
+                <div
+                  className="cursor-pointer"
+                  onClick={() => onDelete(t.link_id)}
+                >
+                  <Close color={errorColor1} />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -372,6 +384,7 @@ interface DescriptionProps {
   onUpdate: (description: string) => void;
   isOpen: boolean;
   isMobile: boolean;
+  isDisabled?: boolean;
 }
 
 export const Description: FC<DescriptionProps> = ({
@@ -380,6 +393,7 @@ export const Description: FC<DescriptionProps> = ({
   onUpdate,
   isOpen,
   isMobile,
+  isDisabled,
 }) => {
   const [description, setDescription] = useState<string | undefined>();
   const [isEdited, setIsEdited] = useState(false);
@@ -443,6 +457,7 @@ export const Description: FC<DescriptionProps> = ({
           value={description}
           onChange={(d) => setDescription(d)}
           loading={description === undefined}
+          disabled={isDisabled}
         />
       </div>
       <div

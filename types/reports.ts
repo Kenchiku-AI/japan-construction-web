@@ -10,6 +10,7 @@ export type Report = {
   fields: ReportField[];
   created_at: string;
   updated_at: string;
+  disabled?: boolean;
 };
 
 export type ReportField = {

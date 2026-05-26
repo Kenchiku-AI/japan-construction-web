@@ -64,6 +64,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     currentUser?.role,
   ]);
 
+  const isEditable = useMemo(() => {
+    if (currentUser?.role === UserRole.Admin) return true;
+    if (project?.status !== "active") return false;
+    return currentUser?.role === UserRole.Manager;
+  }, [project?.status, currentUser?.role]);
+
   const topLabel = useMemo(() => {
     if (currentUser?.role !== "admin") {
       return t("project");
@@ -82,10 +88,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         title={project?.name ?? searchParams.get("name") ?? ""}
         topLabel={topLabel}
         placeholder={t("project_name")}
-        isEditable={
-          currentUser?.role === UserRole.Admin ||
-          currentUser?.role === UserRole.Manager
-        }
+        isEditable={isEditable}
         onEdit={(name) => {
           updateProject({ name });
         }}
@@ -98,6 +101,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               value={description}
               placeholder={t("description")}
               onChange={setDescription}
+              disabled={!isEditable}
             />
             {currentUser?.role === "admin" && (
               <Select
@@ -152,15 +156,17 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
           <div className="flex justify-between mt-8">
             <div className="self-end">{t("reports")}</div>
-            <Button
-              variant="tertiary"
-              label={t("create_report")}
-              iconLeft={() => <Plus />}
-              onClick={() => {
-                setShowCreateReport(true);
-              }}
-              style={{ height: "auto" }}
-            />
+            {isEditable && (
+              <Button
+                variant="tertiary"
+                label={t("create_report")}
+                iconLeft={() => <Plus />}
+                onClick={() => {
+                  setShowCreateReport(true);
+                }}
+                style={{ height: "auto" }}
+              />
+            )}
           </div>
           <Divider />
           <ReportsList

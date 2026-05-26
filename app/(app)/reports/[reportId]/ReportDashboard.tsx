@@ -58,6 +58,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [isPdfDownloading, setIsPdfDownloading] = useState(false);
   const fileInputRef = useRef<any>(null);
   const loadedRef = useRef(false);
+  const isReportDisabled = report?.disabled && currentUser?.role !== "admin";
 
   useEffect(() => {
     if (report && !loadedRef.current) {
@@ -264,7 +265,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         onEdit={(name) => {
           updateReport({ name }, true);
         }}
-        isEditable
+        isEditable={!isReportDisabled}
       />
       <Divider />
       {report != null && (
@@ -313,19 +314,21 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               fontWeight: "300",
             }}
           />
-          <Button
-            variant="tertiary"
-            label={t("delete_report")}
-            iconLeft={() => <Trash />}
-            onClick={() => {
-              setIsDeleteModalShown(true);
-            }}
-            style={{ height: "auto" }}
-            textStyle={{
-              fontWeight: "300",
-              color: errorColor1,
-            }}
-          />
+          {!isReportDisabled && (
+            <Button
+              variant="tertiary"
+              label={t("delete_report")}
+              iconLeft={() => <Trash />}
+              onClick={() => {
+                setIsDeleteModalShown(true);
+              }}
+              style={{ height: "auto" }}
+              textStyle={{
+                fontWeight: "300",
+                color: errorColor1,
+              }}
+            />
+          )}
         </div>
       )}
       {!!sortedFields && (
@@ -343,6 +346,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                     return newValues;
                   });
                 }}
+                disabled={isReportDisabled}
                 loading={fieldValues?.[field.id] === undefined}
               />
             ))}
@@ -381,15 +385,17 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         <div className="mt-4 w-full">
           <div className="flex justify-between items-end">
             <div>{t("photos")}</div>
-            <Button
-              label={t("upload_photo")}
-              iconLeft={() => <Plus />}
-              variant="tertiary"
-              onClick={() => {
-                fileInputRef.current?.click();
-              }}
-              style={{ height: "auto" }}
-            />
+            {!isReportDisabled && (
+              <Button
+                label={t("upload_photo")}
+                iconLeft={() => <Plus />}
+                variant="tertiary"
+                onClick={() => {
+                  fileInputRef.current?.click();
+                }}
+                style={{ height: "auto" }}
+              />
+            )}
             <input
               ref={fileInputRef}
               type="file"
@@ -488,6 +494,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           }, 500);
         }}
         isMobile={isMobile}
+        isDisabled={isReportDisabled}
       />
       {loading && <Loader />}
     </>
