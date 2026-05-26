@@ -15,6 +15,7 @@ import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
 import { errorColor1 } from "@/lib/constants";
+import Select from "@/app/ui/Select/Select";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -24,24 +25,44 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const { currentUser } = useApi();
   const { reportTemplates, getReportTemplates } = useReportTemplates();
   const { t } = useTranslation();
-  const { project, updateProject, createReport } = useProject(projectId);
+  const { project, updateProject, createReport, statusOptions } =
+    useProject(projectId);
   const isLoaded = useRef(false);
   const searchParams = useSearchParams();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
-  const isDescriptionEdited =
-    project?.description !== description && isLoaded.current;
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
 
     isLoaded.current = true;
     setDescription(project.description);
+    setStatus(project.status);
 
     const isAdmin = currentUser?.role === "admin";
     const companyId = isAdmin ? project.company_id : undefined;
     getReportTemplates(companyId);
   }, [project, currentUser]);
+
+  const isEdited = useMemo(() => {
+    if (!isLoaded.current) return false;
+
+    if (project?.description !== description) return true;
+
+    if (currentUser?.role === "admin") {
+      return project?.status === status;
+    }
+
+    return false;
+  }, [
+    description,
+    status,
+    isLoaded.current,
+    project?.description,
+    project?.status,
+    currentUser?.role,
+  ]);
 
   const topLabel = useMemo(() => {
     if (currentUser?.role !== "admin") {
@@ -77,10 +98,20 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             placeholder={t("description")}
             onChange={setDescription}
           />
+          {currentUser?.role === "admin" && (
+            <Select
+              options={statusOptions}
+              value={status}
+              placeholder={t("status")}
+              onChange={(s) => {
+                setStatus(s as string);
+              }}
+            />
+          )}
           <div
             style={{
-              height: isDescriptionEdited ? 36 : 0,
-              opacity: isDescriptionEdited ? 1 : 0,
+              height: isEdited ? 36 : 0,
+              opacity: isEdited ? 1 : 0,
               overflow: "hidden",
               transition:
                 "height 0.075s ease-in-out, opacity 0.15s ease-in-out",
@@ -93,7 +124,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               variant="tertiary"
               iconLeft={() => <Check />}
               style={{ height: "auto" }}
-              label={t("update_description")}
+              label={t("update")}
               onClick={() => {
                 updateProject({ description });
               }}

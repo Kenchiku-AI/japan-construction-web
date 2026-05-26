@@ -96,10 +96,16 @@ export const useProject = (projectId: string) => {
     [api],
   );
 
+  const statusOptions = [
+    { label: t("active"), value: "active" },
+    { label: t("completed"), value: "completed" },
+  ];
+
   return {
     loading,
     project,
     updateProject,
     createReport,
+    statusOptions,
   };
 };
