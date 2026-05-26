@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -16,10 +16,14 @@ import Divider from "@/app/ui/Divider";
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const { reportTemplates, createReportTemplate, loading } =
+  const { reportTemplates, getReportTemplates, createReportTemplate, loading } =
     useReportTemplates();
   const [showCreateReportTemplate, setShowCreateReportTemplate] =
     useState(false);
+
+  useEffect(() => {
+    getReportTemplates();
+  }, []);
 
   if (currentUser?.role === UserRole.User) {
     redirect("/");

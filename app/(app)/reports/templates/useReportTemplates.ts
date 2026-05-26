@@ -16,15 +16,6 @@ export const useReportTemplates = () => {
   const { currentUser, ...api } = useApi();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (!currentUser) return;
-
-    const roles = [UserRole.Manager, UserRole.Admin];
-    if (roles.includes(currentUser.role)) {
-      getReportTemplates();
-    }
-  }, [currentUser]);
-
   const getReportTemplates = useCallback(
     async (companyId?: string) => {
       setLoading(true);

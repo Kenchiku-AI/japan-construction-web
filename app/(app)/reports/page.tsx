@@ -20,18 +20,26 @@ const ReportsPage = () => {
   const { currentUser } = useApi();
   const { reports, setReports, getReports, createReport, search, loading } =
     useReports();
-  const { reportTemplates } = useReportTemplates();
+  const { reportTemplates, getReportTemplates } = useReportTemplates();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef<any>(null);
 
   const isCreateEnabled = useMemo(() => {
+    if (currentUser?.role === "admin") return false;
+
     const hasTemplate = !!reportTemplates?.length;
     const hasActiveProject = currentUser?.projects?.some(
       (p) => p.status === ProjectStatus.Active,
     );
     return hasActiveProject && hasTemplate;
   }, [reportTemplates, currentUser]);
+
+  useEffect(() => {
+    if (currentUser?.role === "manager") {
+      getReportTemplates();
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     if (showSearch) {

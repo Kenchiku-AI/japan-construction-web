@@ -38,9 +38,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     isLoaded.current = true;
     setDescription(project.description);
 
-    if (currentUser?.role === "admin") {
-      getReportTemplates(project.company_id);
-    }
+    const isAdmin = currentUser?.role === "admin";
+    const companyId = isAdmin ? project.company_id : undefined;
+    getReportTemplates(companyId);
   }, [project, currentUser]);
 
   return (
