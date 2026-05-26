@@ -1,5 +1,6 @@
 import { FC, useMemo, useState } from "react";
-import { useSSR, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import Link from "next/link";
 import { Report } from "@/types";
 import styles from "./page.module.css";
 import { Paper } from "@/app/ui/Icons";
@@ -97,11 +98,9 @@ const ReportsListItem: FC<ReportsListItemProps> = ({ report, showCompany }) => {
 
   return (
     <div>
-      <div
+      <Link
+        href={`/reports/${report.id}?name=${report.name}`}
         className="hover:opacity-50 cursor-pointer mx-4"
-        onClick={() => {
-          router.push(`/reports/${report.id}?name=${report.name}`);
-        }}
       >
         <div className="flex items-center justify-between">
           <div style={{ height: 60 }} className="flex items-center gap-6">
@@ -112,7 +111,7 @@ const ReportsListItem: FC<ReportsListItemProps> = ({ report, showCompany }) => {
             </div>
           </div>
         </div>
-      </div>
+      </Link>
       <Divider color={fontColor2} />
     </div>
   );
