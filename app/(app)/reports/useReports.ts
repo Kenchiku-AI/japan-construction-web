@@ -61,11 +61,6 @@ export const useReports = () => {
   const search = useMemo(
     () =>
       debounce(async (query: string) => {
-        if (query.length < 3) {
-          setReports([]);
-          return;
-        }
-
         try {
           const response = await api.getReports(query);
           setReports(response ?? []);
