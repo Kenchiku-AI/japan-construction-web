@@ -11,10 +11,12 @@ import { FC } from "react";
 import { Project, ProjectStatus } from "@/types";
 import styles from "./page.module.css";
 import { Loader } from "@/app/ui/Loader";
+import { useApi } from "@/lib/api/ApiContext";
 
 const ProjectsPage = () => {
   const { t } = useTranslation();
   const { projects, loading, loaded } = useProjects();
+  const { currentUser } = useApi();
   const router = useRouter();
 
   return (
@@ -38,6 +40,9 @@ const ProjectsPage = () => {
               <div style={{ height: 60 }} className="flex items-center gap-4">
                 <Hardhat />
                 <div>{p.name}</div>
+                {currentUser?.role === "admin" && p.company && (
+                  <div className={styles.subtitle}>{p.company.name}</div>
+                )}
               </div>
               <StatusLabel project={p} />
             </div>
