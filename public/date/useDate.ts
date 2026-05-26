@@ -10,7 +10,7 @@ export const useDate = () => {
       const date = new Date(dateString);
 
       if (i18n.language === "jp") {
-        return dayjs(date).locale("ja").format("M月D日");
+        return dayjs(date).locale("ja").format("YYYY年M月D日");
       }
 
       return date.toLocaleDateString();

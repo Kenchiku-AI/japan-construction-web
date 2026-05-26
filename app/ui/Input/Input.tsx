@@ -3,6 +3,7 @@ import {
   CSSProperties,
   FC,
   HTMLInputTypeAttribute,
+  RefObject,
   useEffect,
   useRef,
   useState,
@@ -11,6 +12,7 @@ import styles from "./Input.module.css";
 import { Eye, EyeOff } from "../Icons";
 
 interface InputProps {
+  ref?: RefObject<any>;
   placeholder?: string;
   value?: string;
   defaultValue?: string;
@@ -25,6 +27,7 @@ interface InputProps {
 }
 
 export const Input: FC<InputProps> = ({
+  ref,
   placeholder,
   value,
   defaultValue,
@@ -81,6 +84,7 @@ export const Input: FC<InputProps> = ({
         {placeholder}
       </div>
       <input
+        ref={ref}
         placeholder={placeholder}
         type={showPassword ? undefined : type}
         className="input"

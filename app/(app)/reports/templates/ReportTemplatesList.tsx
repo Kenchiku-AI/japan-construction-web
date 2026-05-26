@@ -7,21 +7,26 @@ import Divider from "@/app/ui/Divider";
 import { fontColor2 } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 import { Button } from "@/app/ui/Button/Button";
+import { useApi } from "@/lib/api/ApiContext";
 
 interface ReportTemplatesListProps {
   templates: ReportTemplate[];
   isCollapsible?: boolean;
   isEmpty?: boolean;
+  showCompanyName?: boolean;
 }
 
 const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
   templates,
   isCollapsible,
   isEmpty,
+  showCompanyName,
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [showAll, setShowAll] = useState(!isCollapsible);
+  const { currentUser } = useApi();
+  const isAdmin = currentUser?.role === "admin";
 
   if (isEmpty) {
     return (
@@ -52,6 +57,23 @@ const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
                 <div style={{ height: 60 }} className="flex items-center gap-6">
                   <Papers size={30} />
                   <div>{tp.name}</div>
+                  {isAdmin && (
+                    <>
+                      {tp.company_name ? (
+                        <div className={styles.companyName}>
+                          {tp.company_name}
+                        </div>
+                      ) : (
+                        <>
+                          {tp.is_global && (
+                            <div className={styles.companyName}>
+                              {t("global")}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
             </div>

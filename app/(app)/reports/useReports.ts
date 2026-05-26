@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { CreateReportRequest, Report } from "@/types/reports";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
+import debounce from "lodash.debounce";
 
 export const useReports = () => {
   const [loading, setLoading] = useState(false);
@@ -21,16 +22,19 @@ export const useReports = () => {
     getReports();
   }, [currentUser]);
 
-  const getReports = useCallback(async () => {
-    setLoading(true);
+  const getReports = useCallback(
+    async (query?: string) => {
+      setLoading(true);
 
-    try {
-      const response = await api.getReports();
-      setReports(response);
-    } finally {
-      setLoading(false);
-    }
-  }, [setReports]);
+      try {
+        const response = await api.getReports();
+        setReports(response);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setReports],
+  );
 
   const createReport = useCallback(
     async (request: CreateReportRequest) => {
@@ -54,9 +58,29 @@ export const useReports = () => {
     [api],
   );
 
+  const search = useMemo(
+    () =>
+      debounce(async (query: string) => {
+        if (query.length < 3) {
+          setReports([]);
+          return;
+        }
+
+        try {
+          const response = await api.getReports(query);
+          setReports(response ?? []);
+        } finally {
+        }
+      }, 400),
+    [getReports],
+  );
+
   return {
     loading,
     reports,
+    setReports,
+    getReports,
+    search,
     createReport,
   };
 };

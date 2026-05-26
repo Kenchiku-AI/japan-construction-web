@@ -198,8 +198,8 @@ export const useApiData = () => {
       const url = "/projects";
       return call(() => http.post<Project>(url, request));
     },
-    async getReports() {
-      const url = `/reports`;
+    async getReports(query?: string) {
+      const url = `/reports${query ? `?q=${query}` : ""}`;
       return call(() => http.get<Report[]>(url));
     },
     async getReport(reportId: string) {

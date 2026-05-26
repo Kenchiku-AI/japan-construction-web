@@ -23,13 +23,14 @@ import { useTags } from "../../tags/useTags";
 import FilterByTagModal from "./FilterByTagModal";
 import Image from "next/image";
 import JSZip from "jszip";
+import { useDate } from "@/public/date/useDate";
 
 interface ReportDashboardProps {
   reportId: string;
 }
 
 const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
-  const { currentUser, getCompany } = useApi();
+  const { currentUser } = useApi();
   const { tags } = useTags(currentUser?.company?.id);
   const { t } = useTranslation();
   const {
@@ -46,6 +47,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     selectedPhoto,
     setSelectedPhoto,
   } = useReport(reportId);
+  const { formatDate } = useDate();
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
   const [selectedTag, setSelectedTag] = useState<ReportImageTag>();
@@ -79,6 +81,31 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
+
+  const topLabel = useMemo(() => {
+    if (!report) return;
+
+    const parts = [];
+    const isAdmin = currentUser?.role === "admin";
+
+    if (isAdmin && report.company_name) {
+      parts.push(report.company_name);
+    }
+
+    if (report.project_name) {
+      parts.push(report.project_name);
+    }
+
+    const date = formatDate(report.created_at);
+    parts.push(t("created", { date }));
+
+    return parts.join(" • ");
+  }, [
+    currentUser?.role,
+    report?.company_name,
+    report?.project_name,
+    report?.created_at,
+  ]);
 
   const isDisabled = useMemo(() => {
     if (
@@ -224,7 +251,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     <>
       <Heading
         title={report?.name ?? searchParams.get("name") ?? ""}
-        topLabel={t("report")}
+        topLabel={topLabel}
         placeholder={t("report_name")}
         onEdit={(name) => {
           updateReport({ name }, true);
@@ -244,17 +271,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
 
               setIsPdfDownloading(true);
 
-              let companyName = currentUser?.company?.name ?? "";
-
-              if (!companyName && report.company_id) {
-                try {
-                  const company = await getCompany(report.company_id);
-                  companyName = company?.name ?? "";
-                } catch (err) {
-                  // console.log(err);
-                }
-              }
-
               const labelWidths = await Promise.all(
                 report.fields.map((f) => measureTextWidth(f.name, 12)),
               );
@@ -263,7 +279,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               const blob = await pdf(
                 <ReportPDF
                   report={report}
-                  companyName={companyName}
+                  topLabel={topLabel ?? ""}
                   images={images ?? []}
                   labelWidth={labelWidth}
                 />,

@@ -15,7 +15,7 @@ import { useDate } from "@/public/date/useDate";
 
 interface ReportPDFProps {
   report: Report;
-  companyName: string;
+  topLabel: string;
   images: ReportImage[];
   labelWidth: number;
 }
@@ -30,7 +30,7 @@ const MAX_IMAGE_HEIGHT = 580;
 
 export const ReportPDF: FC<ReportPDFProps> = ({
   report,
-  companyName,
+  topLabel,
   images,
   labelWidth,
 }) => {
@@ -40,7 +40,7 @@ export const ReportPDF: FC<ReportPDFProps> = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.companyName}>{companyName}</Text>
+        <Text style={styles.topLabel}>{topLabel}</Text>
         <Text style={styles.title}>{report.name}</Text>
         <View style={styles.divider} />
         <View style={styles.fields}>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     padding: 48,
     fontFamily: "KosugiMaru",
   },
-  companyName: {
+  topLabel: {
     fontSize: 12,
     color: fontColor2,
     marginBottom: 12,

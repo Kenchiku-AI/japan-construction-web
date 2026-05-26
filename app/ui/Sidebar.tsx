@@ -66,19 +66,17 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                   icon={() => <Paper size={24} />}
                   path={"/reports"}
                 />
+                <SidebarItem
+                  name={t("report_templates")}
+                  icon={() => <Papers size={24} />}
+                  path={"/reports/templates"}
+                />
                 {!isAdmin && (
-                  <>
-                    <SidebarItem
-                      name={t("report_templates")}
-                      icon={() => <Papers size={24} />}
-                      path={"/reports/templates"}
-                    />
-                    <SidebarItem
-                      name={t("tags")}
-                      icon={() => <Tag size={22} />}
-                      path={"/tags"}
-                    />
-                  </>
+                  <SidebarItem
+                    name={t("tags")}
+                    icon={() => <Tag size={22} />}
+                    path={"/tags"}
+                  />
                 )}
               </div>
               <div>

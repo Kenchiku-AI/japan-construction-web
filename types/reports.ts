@@ -4,7 +4,9 @@ export type Report = {
   template_id: string;
   parent_type: ReportParentType;
   parent_id: string;
+  project_name?: string;
   company_id?: string;
+  company_name?: string;
   fields: ReportField[];
   created_at: string;
   updated_at: string;
@@ -100,6 +102,7 @@ export type ReportTemplate = {
   name: string;
   description: string;
   parent_type: ReportParentType;
+  company_name?: string;
   fields: ReportTemplateField[];
   is_global: boolean;
 };

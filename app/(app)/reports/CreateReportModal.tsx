@@ -41,8 +41,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
     if (!template) return;
 
     if (!name || !hasEditedName.current) {
-      const today = new Date();
-      setName(`${template.name} (${today.toLocaleDateString("en-US")})`);
+      setName(template.name);
       hasEditedName.current = false;
     }
 
