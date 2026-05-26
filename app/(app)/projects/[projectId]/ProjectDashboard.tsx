@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -43,11 +43,23 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     getReportTemplates(companyId);
   }, [project, currentUser]);
 
+  const topLabel = useMemo(() => {
+    if (currentUser?.role !== "admin") {
+      return t("project");
+    }
+
+    if (!isLoaded.current) {
+      return "";
+    }
+
+    return project?.company_name ?? t("project");
+  }, [isLoaded.current, project?.company_name, currentUser, t]);
+
   return (
     <>
       <Heading
         title={project?.name ?? searchParams.get("name") ?? ""}
-        topLabel={project?.company_name ?? t("project")}
+        topLabel={topLabel}
         placeholder={t("project_name")}
         isEditable={
           currentUser?.role === UserRole.Admin ||
