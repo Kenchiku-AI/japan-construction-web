@@ -7,13 +7,7 @@ export type Project = {
   reports?: Report[];
   status: ProjectStatus;
   company_id: string;
-  company?: ProjectCompany;
-};
-
-export type ProjectCompany = {
-  id: string;
-  name: string;
-  corporate_number: string;
+  company_name?: string;
 };
 
 export enum ProjectStatus {

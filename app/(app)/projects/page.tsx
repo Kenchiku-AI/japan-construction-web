@@ -39,10 +39,12 @@ const ProjectsPage = () => {
             <div className="flex items-center justify-between mx-4">
               <div style={{ height: 60 }} className="flex items-center gap-4">
                 <Hardhat />
-                <div>{p.name}</div>
-                {currentUser?.role === "admin" && p.company && (
-                  <div className={styles.subtitle}>{p.company.name}</div>
-                )}
+                <div>
+                  <div>{p.name}</div>
+                  {currentUser?.role === "admin" && p.company_name && (
+                    <div className={styles.subtitle}>{p.company_name}</div>
+                  )}
+                </div>
               </div>
               <StatusLabel project={p} />
             </div>

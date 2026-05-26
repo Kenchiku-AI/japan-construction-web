@@ -47,7 +47,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     <>
       <Heading
         title={project?.name ?? searchParams.get("name") ?? ""}
-        topLabel={t("project")}
+        topLabel={project?.company_name ?? t("project")}
         placeholder={t("project_name")}
         isEditable={
           currentUser?.role === UserRole.Admin ||
