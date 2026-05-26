@@ -37,6 +37,11 @@ const CompanySearch: FC<CompanySearchProps> = ({ onSelect }) => {
   const debouncedSearch = useMemo(
     () =>
       debounce(async (query: string) => {
+        if (query.length < 1) {
+          setCompanies([]);
+          return;
+        }
+
         try {
           const response = await searchCompanies(query);
           setCompanies(response ?? []);
