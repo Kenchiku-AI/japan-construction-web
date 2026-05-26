@@ -16,7 +16,6 @@ import { Plus, Download, Trash, Tag, Close, Check } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
-import { pdf } from "@react-pdf/renderer";
 import Masonry from "react-masonry-css";
 import PhotoDetailModal from "./PhotoDetailModal";
 import { useTags } from "../../tags/useTags";
@@ -270,6 +269,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               if (!report) return;
 
               setIsPdfDownloading(true);
+
+              const { pdf } = await import("@react-pdf/renderer");
 
               const labelWidths = await Promise.all(
                 report.fields.map((f) => measureTextWidth(f.name, 12)),
