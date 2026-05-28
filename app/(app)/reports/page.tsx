@@ -7,22 +7,31 @@ import { useTranslation } from "react-i18next";
 import CreateReportModal from "./CreateReportModal";
 import { useReports } from "./useReports";
 import { useReportTemplates } from "./templates/useReportTemplates";
-import { Close, Plus, Search } from "@/app/ui/Icons";
+import { Close, Download, Plus, Search } from "@/app/ui/Icons";
 import ReportsList from "./ReportsList";
 import Divider from "@/app/ui/Divider";
 import { useApi } from "@/lib/api/ApiContext";
 import { ProjectStatus } from "@/types";
 import { Loader } from "@/app/ui/Loader";
 import { Input } from "@/app/ui/Input/Input";
+import DownloadExcelModal from "./DownloadExcelModal";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const { reports, setReports, getReports, createReport, search, loading } =
-    useReports();
+  const {
+    reports,
+    setReports,
+    getReports,
+    createReport,
+    search,
+    downloadExcel,
+    loading,
+  } = useReports();
   const { reportTemplates, getReportTemplates } = useReportTemplates();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const searchRef = useRef<any>(null);
 
   const isCreateEnabled = useMemo(() => {
@@ -85,6 +94,15 @@ const ReportsPage = () => {
             <Button
               variant="tertiary"
               style={{ height: "auto" }}
+              label={t("download_excel")}
+              iconLeft={() => <Download />}
+              onClick={() => {
+                setShowDownloadExcel(true);
+              }}
+            />
+            <Button
+              variant="tertiary"
+              style={{ height: "auto" }}
               label={t("search")}
               iconLeft={() => <Search />}
               onClick={() => {
@@ -121,6 +139,27 @@ const ReportsPage = () => {
         onSubmit={(request) => {
           setShowCreateReport(false);
           createReport(request);
+        }}
+      />
+      <DownloadExcelModal
+        templates={reportTemplates ?? []}
+        isOpen={showDownloadExcel}
+        onClose={() => {
+          setShowCreateReport(false);
+        }}
+        onSubmit={(templateId, projectId) => {
+          setShowCreateReport(false);
+          const template = reportTemplates?.find((t) => t.id === templateId);
+          if (!template) return;
+
+          let projectName;
+          if (projectId) {
+            projectName = currentUser?.projects.find(
+              (p) => p.id === projectId,
+            )?.name;
+          }
+
+          downloadExcel(templateId, template.name, projectId, projectName);
         }}
       />
       {loading && <Loader />}

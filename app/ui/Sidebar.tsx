@@ -38,7 +38,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
             <>
               <div className="space-y-2">
                 <div className="flex justify-center py-2">
-                  <Logo size={26} color={fontColor2} />
+                  <Logo size={24} color={fontColor2} />
                 </div>
                 <Divider
                   style={{ opacity: 0.1, marginBottom: 18, marginTop: 0 }}

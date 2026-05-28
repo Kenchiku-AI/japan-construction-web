@@ -202,6 +202,10 @@ export const useApiData = () => {
       const url = `/reports${query ? `?q=${query}` : ""}`;
       return call(() => http.get<Report[]>(url));
     },
+    async getReportsExport(templateId: string, projectId?: string) {
+      const url = `/exports/template/${templateId}${projectId ? `?project_id=${projectId}` : ""}`;
+      return call(() => http.get<any[]>(url));
+    },
     async getReport(reportId: string) {
       const url = `/reports/${reportId}`;
       return call(() => http.get<Report>(url));
