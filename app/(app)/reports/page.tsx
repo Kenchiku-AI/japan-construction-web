@@ -145,10 +145,11 @@ const ReportsPage = () => {
         templates={reportTemplates ?? []}
         isOpen={showDownloadExcel}
         onClose={() => {
-          setShowCreateReport(false);
+          setShowDownloadExcel(false);
         }}
         onSubmit={(templateId, projectId) => {
-          setShowCreateReport(false);
+          setShowDownloadExcel(false);
+
           const template = reportTemplates?.find((t) => t.id === templateId);
           if (!template) return;
 
