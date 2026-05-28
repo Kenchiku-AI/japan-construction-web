@@ -96,7 +96,7 @@ const ReportsPage = () => {
                 <Button
                   variant="tertiary"
                   style={{ height: "auto" }}
-                  label={t("download_excel")}
+                  label={t("export")}
                   iconLeft={() => <Download />}
                   onClick={() => {
                     setShowDownloadExcel(true);
@@ -113,7 +113,6 @@ const ReportsPage = () => {
                 />
               </>
             )}
-
             {isCreateEnabled && (
               <Button
                 variant="tertiary"

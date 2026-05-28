@@ -71,6 +71,7 @@
   "error": "エラー",
   "expired_link": "リンクの有効期限が切れています",
   "expired_link_description": "パスワードリセット用のリンクの有効期限が切れています。新しいリンクでもう一度お試しください。",
+  "export": "エクスポート",
   "field": "項目",
   "fields": "項目",
   "filter_by_tag": "タグで絞り込み",
