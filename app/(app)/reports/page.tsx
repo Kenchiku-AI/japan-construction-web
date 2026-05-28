@@ -91,24 +91,29 @@ const ReportsPage = () => {
         >
           <Heading title={t("reports")} />
           <div className="flex gap-8">
-            <Button
-              variant="tertiary"
-              style={{ height: "auto" }}
-              label={t("download_excel")}
-              iconLeft={() => <Download />}
-              onClick={() => {
-                setShowDownloadExcel(true);
-              }}
-            />
-            <Button
-              variant="tertiary"
-              style={{ height: "auto" }}
-              label={t("search")}
-              iconLeft={() => <Search />}
-              onClick={() => {
-                setShowSearch(true);
-              }}
-            />
+            {reports?.length && (
+              <>
+                <Button
+                  variant="tertiary"
+                  style={{ height: "auto" }}
+                  label={t("download_excel")}
+                  iconLeft={() => <Download />}
+                  onClick={() => {
+                    setShowDownloadExcel(true);
+                  }}
+                />
+                <Button
+                  variant="tertiary"
+                  style={{ height: "auto" }}
+                  label={t("search")}
+                  iconLeft={() => <Search />}
+                  onClick={() => {
+                    setShowSearch(true);
+                  }}
+                />
+              </>
+            )}
+
             {isCreateEnabled && (
               <Button
                 variant="tertiary"
