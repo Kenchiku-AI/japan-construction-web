@@ -9,7 +9,12 @@ import { ReportFieldValues, ReportImageTag, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
-import { bgColor2, buttonColor, errorColor1 } from "@/lib/constants";
+import {
+  bgColor2,
+  buttonColor,
+  errorColor1,
+  fontColor2,
+} from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
 import { Plus, Download, Trash, Tag, Close, Check } from "@/app/ui/Icons";
@@ -269,7 +274,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       />
       <Divider />
       {report != null && (
-        <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8">
+        <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
           <Button
             variant="tertiary"
             label={t(isPdfDownloading ? "downloading" : "download_pdf")}
@@ -331,9 +336,10 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           )}
         </div>
       )}
+      <Divider style={{ background: fontColor2 }} />
       {!!sortedFields && (
         <>
-          <div className="flex flex-col w-full gap-2 mt-3">
+          <div className="flex flex-col w-full gap-2">
             {sortedFields?.map((field) => (
               <Input
                 key={field.id}
