@@ -274,69 +274,71 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       />
       <Divider />
       {report != null && (
-        <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
-          <Button
-            variant="tertiary"
-            label={t(isPdfDownloading ? "downloading" : "download_pdf")}
-            iconLeft={() => <Download />}
-            disabled={isPdfDownloading}
-            onClick={async () => {
-              if (!report) return;
-
-              setIsPdfDownloading(true);
-
-              const { pdf } = await import("@react-pdf/renderer");
-
-              const labelWidths = await Promise.all(
-                report.fields.map((f) => measureTextWidth(f.name, 12)),
-              );
-              const labelWidth = Math.max(...labelWidths) + 40;
-
-              const blob = await pdf(
-                <ReportPDF
-                  report={report}
-                  topLabel={topLabel ?? ""}
-                  images={images ?? []}
-                  labelWidth={labelWidth}
-                />,
-              ).toBlob();
-
-              const fileUrl = URL.createObjectURL(blob);
-
-              const a = document.createElement("a");
-              a.href = fileUrl;
-              a.download = `${report.name.replace(/ /g, "_").replace(/[()]/g, "")}.pdf`;
-              document.body.appendChild(a);
-              a.click();
-              a.remove();
-
-              URL.revokeObjectURL(fileUrl);
-
-              setIsPdfDownloading(false);
-            }}
-            style={{ height: "auto" }}
-            textStyle={{
-              fontWeight: "300",
-            }}
-          />
-          {!isReportDisabled && (
+        <>
+          <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
             <Button
               variant="tertiary"
-              label={t("delete_report")}
-              iconLeft={() => <Trash />}
-              onClick={() => {
-                setIsDeleteModalShown(true);
+              label={t(isPdfDownloading ? "downloading" : "download_pdf")}
+              iconLeft={() => <Download />}
+              disabled={isPdfDownloading}
+              onClick={async () => {
+                if (!report) return;
+
+                setIsPdfDownloading(true);
+
+                const { pdf } = await import("@react-pdf/renderer");
+
+                const labelWidths = await Promise.all(
+                  report.fields.map((f) => measureTextWidth(f.name, 12)),
+                );
+                const labelWidth = Math.max(...labelWidths) + 40;
+
+                const blob = await pdf(
+                  <ReportPDF
+                    report={report}
+                    topLabel={topLabel ?? ""}
+                    images={images ?? []}
+                    labelWidth={labelWidth}
+                  />,
+                ).toBlob();
+
+                const fileUrl = URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                a.href = fileUrl;
+                a.download = `${report.name.replace(/ /g, "_").replace(/[()]/g, "")}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                URL.revokeObjectURL(fileUrl);
+
+                setIsPdfDownloading(false);
               }}
               style={{ height: "auto" }}
               textStyle={{
                 fontWeight: "300",
-                color: errorColor1,
               }}
             />
-          )}
-        </div>
+            {!isReportDisabled && (
+              <Button
+                variant="tertiary"
+                label={t("delete_report")}
+                iconLeft={() => <Trash />}
+                onClick={() => {
+                  setIsDeleteModalShown(true);
+                }}
+                style={{ height: "auto" }}
+                textStyle={{
+                  fontWeight: "300",
+                  color: errorColor1,
+                }}
+              />
+            )}
+          </div>
+          <Divider style={{ background: fontColor2 }} />
+        </>
       )}
-      <Divider style={{ background: fontColor2 }} />
       {!!sortedFields && (
         <>
           <div className="flex flex-col w-full gap-2">
