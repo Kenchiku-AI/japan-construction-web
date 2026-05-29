@@ -126,7 +126,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
         </div>
         <div>
           <div className="flex justify-between items-end">
-            <div className="flex gap-3">
+            <div className="flex md:gap-3 flex-col md:flex-row">
               <div className="text-2xl">{t("photo_details")}</div>
               {isProcessingShown && (
                 <div className="text-2xl" style={{ color: fontColor2 }}>
