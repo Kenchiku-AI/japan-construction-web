@@ -114,7 +114,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose} width={1200}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div
-          className="hidden  md:flex"
+          className="hidden md:flex"
           style={{
             ...photoStyle,
             marginTop: -24,
@@ -124,19 +124,18 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
           <Photo image={image} />
         </div>
         <div>
-          {date && (
-            <div
-              className="hidden md:flex"
-              style={{ color: fontColor2, fontSize: 14 }}
-            >
-              {t("photo_taken", { date })}
+          <div className="flex justify-between">
+            <div className="flex gap-3">
+              <div className="text-2xl">{t("photo_details")}</div>
+              {isProcessingShown && (
+                <div className="text-2xl" style={{ color: fontColor2 }}>
+                  {t("processing")}
+                </div>
+              )}
             </div>
-          )}
-          <div className="flex gap-3">
-            <div className="text-2xl">{t("photo_details")}</div>
-            {isProcessingShown && (
-              <div className="text-2xl" style={{ color: fontColor2 }}>
-                {t("processing")}
+            {date && (
+              <div style={{ color: fontColor2, fontSize: 14 }}>
+                {t("photo_taken", { date })}
               </div>
             )}
           </div>
@@ -448,20 +447,13 @@ export const Description: FC<DescriptionProps> = ({
 
   return (
     <>
-      <div className="flex flex-col gap-4">
-        {date && (
-          <div className="md:hidden" style={{ color: "gray" }}>
-            {t("photo_taken", { date })}
-          </div>
-        )}
-        <TextArea
-          placeholder={t("description")}
-          value={description}
-          onChange={(d) => setDescription(d)}
-          loading={description === undefined}
-          disabled={isDisabled}
-        />
-      </div>
+      <TextArea
+        placeholder={t("description")}
+        value={description}
+        onChange={(d) => setDescription(d)}
+        loading={description === undefined}
+        disabled={isDisabled}
+      />
       <div
         style={{
           height: !isEdited ? 0 : 40,
