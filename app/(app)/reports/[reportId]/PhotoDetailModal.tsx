@@ -124,6 +124,14 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
           <Photo image={image} />
         </div>
         <div>
+          {date && (
+            <div
+              className="hidden md:flex"
+              style={{ color: fontColor2, fontSize: 14 }}
+            >
+              {t("photo_taken", { date })}
+            </div>
+          )}
           <div className="flex gap-3">
             <div className="text-2xl">{t("photo_details")}</div>
             {isProcessingShown && (
@@ -133,55 +141,49 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
             )}
           </div>
           <Divider />
-          <div className="flex justify-between items-center flex-wrap-reverse gap-3 mb-3">
-            {date && (
-              <div className="hidden md:flex" style={{ color: "gray" }}>
-                {t("photo_taken", { date })}
-              </div>
-            )}
-            <div className="flex w-full md:w-auto justify-between md:justify-end gap-6">
+          <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
+            <Button
+              variant="tertiary"
+              label={t("download")}
+              iconLeft={() => <Download />}
+              onClick={async () => {
+                try {
+                  const response = await fetch(image.download_url, {
+                    mode: "cors",
+                  });
+
+                  const blob = await response.blob();
+                  const url = URL.createObjectURL(blob);
+
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `${reportName.replace(/ /g, "_").replace(/[()]/g, "")}${index === undefined ? "" : `_${t("photo")}_${index}`}.jpg`;
+
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+
+                  URL.revokeObjectURL(url);
+                } catch (err) {
+                  console.error("Download failed", err);
+                }
+              }}
+              style={{ height: "auto" }}
+            />
+            {!isDisabled && (
               <Button
                 variant="tertiary"
-                label={t("download")}
-                iconLeft={() => <Download />}
-                onClick={async () => {
-                  try {
-                    const response = await fetch(image.download_url, {
-                      mode: "cors",
-                    });
-
-                    const blob = await response.blob();
-                    const url = URL.createObjectURL(blob);
-
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = `${reportName.replace(/ /g, "_").replace(/[()]/g, "")}${index === undefined ? "" : `_${t("photo")}_${index}`}.jpg`;
-
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-
-                    URL.revokeObjectURL(url);
-                  } catch (err) {
-                    console.error("Download failed", err);
-                  }
+                label={t("delete_photo")}
+                iconLeft={() => <Trash />}
+                style={{ borderColor: errorColor1, height: "auto" }}
+                textStyle={{ color: errorColor1 }}
+                onClick={() => {
+                  setIsConfirmDeleteShown(true);
                 }}
-                style={{ height: "auto" }}
               />
-              {!isDisabled && (
-                <Button
-                  variant="tertiary"
-                  label={t("delete_photo")}
-                  iconLeft={() => <Trash />}
-                  style={{ borderColor: errorColor1, height: "auto" }}
-                  textStyle={{ color: errorColor1 }}
-                  onClick={() => {
-                    setIsConfirmDeleteShown(true);
-                  }}
-                />
-              )}
-            </div>
+            )}
           </div>
+          <Divider style={{ background: fontColor2 }} />
           <div className="md:hidden mb-4" style={photoStyle}>
             <Photo image={image} />
           </div>
