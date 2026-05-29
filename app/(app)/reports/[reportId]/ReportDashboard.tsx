@@ -422,7 +422,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             <div className={styles.empty}>{t("empty_photos_description")}</div>
           ) : (
             <>
-              <div className="mb-3 flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8">
+              <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
                 <Button
                   variant="tertiary"
                   label={
@@ -450,6 +450,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                   }}
                 />
               </div>
+              <Divider style={{ background: fontColor2 }} />
               {filteredImages.length === 0 && (
                 <div className={styles.empty}>
                   {t("empty_tag_photos_description")}
