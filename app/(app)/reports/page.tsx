@@ -15,23 +15,19 @@ import { ProjectStatus } from "@/types";
 import { Loader } from "@/app/ui/Loader";
 import { Input } from "@/app/ui/Input/Input";
 import DownloadExcelModal from "./DownloadExcelModal";
+import { useExport } from "./useExport";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const {
-    reports,
-    setReports,
-    getReports,
-    createReport,
-    search,
-    downloadExcel,
-    loading,
-  } = useReports();
+  const { reports, setReports, getReports, createReport, search, loading } =
+    useReports();
+  const { downloadExcel } = useExport();
   const { reportTemplates, getReportTemplates } = useReportTemplates();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
+  const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const searchRef = useRef<any>(null);
 
   const isCreateEnabled = useMemo(() => {
@@ -96,11 +92,12 @@ const ReportsPage = () => {
                 <Button
                   variant="tertiary"
                   style={{ height: "auto" }}
-                  label={t("export")}
+                  label={t(isExcelDownloading ? "downloading" : "export")}
                   iconLeft={() => <Download />}
                   onClick={() => {
                     setShowDownloadExcel(true);
                   }}
+                  disabled={isExcelDownloading}
                 />
                 <Button
                   variant="tertiary"
@@ -151,7 +148,7 @@ const ReportsPage = () => {
         onClose={() => {
           setShowDownloadExcel(false);
         }}
-        onSubmit={(templateId, projectId) => {
+        onSubmit={async (templateId, projectId) => {
           setShowDownloadExcel(false);
 
           const template = reportTemplates?.find((t) => t.id === templateId);
@@ -164,7 +161,16 @@ const ReportsPage = () => {
             )?.name;
           }
 
-          downloadExcel(templateId, template.name, projectId, projectName);
+          setIsExcelDownloading(true);
+
+          await downloadExcel(
+            templateId,
+            template.name,
+            projectId,
+            projectName,
+          );
+
+          setIsExcelDownloading(false);
         }}
       />
       {loading && <Loader />}

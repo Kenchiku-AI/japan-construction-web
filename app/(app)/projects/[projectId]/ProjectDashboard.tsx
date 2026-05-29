@@ -16,6 +16,8 @@ import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
 import { errorColor1 } from "@/lib/constants";
 import Select from "@/app/ui/Select/Select";
+import DownloadExcelModal from "../../reports/DownloadExcelModal";
+import { useExport } from "../../reports/useExport";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -27,12 +29,14 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const { project, updateProject, createReport, statusOptions } =
     useProject(projectId);
+  const { downloadExcel } = useExport();
   const isLoaded = useRef(false);
   const searchParams = useSearchParams();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
+  const [isExcelDownloading, setIsExcelDownloading] = useState(false);
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -158,15 +162,18 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           <div className="flex justify-between mt-8">
             <div className="self-end">{t("reports")}</div>
             <div>
-              <Button
-                variant="tertiary"
-                style={{ height: "auto" }}
-                label={t("export")}
-                iconLeft={() => <Download />}
-                onClick={() => {
-                  setShowDownloadExcel(true);
-                }}
-              />
+              {project.reports?.length && (
+                <Button
+                  variant="tertiary"
+                  style={{ height: "auto" }}
+                  label={t(isExcelDownloading ? "downloading" : "export")}
+                  iconLeft={() => <Download />}
+                  onClick={() => {
+                    setShowDownloadExcel(true);
+                  }}
+                  disabled={isExcelDownloading}
+                />
+              )}
               {isEditable && (
                 <Button
                   variant="tertiary"
@@ -197,6 +204,22 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         onSubmit={(request) => {
           setShowCreateReport(false);
           createReport(request);
+        }}
+      />
+      <DownloadExcelModal
+        templates={reportTemplates ?? []}
+        disableProject
+        isOpen={showDownloadExcel}
+        onClose={() => {
+          setShowDownloadExcel(false);
+        }}
+        onSubmit={(templateId, projectId) => {
+          setShowDownloadExcel(false);
+
+          const template = reportTemplates?.find((t) => t.id === templateId);
+          if (!template) return;
+
+          downloadExcel(templateId, template.name, projectId, project?.name);
         }}
       />
     </>

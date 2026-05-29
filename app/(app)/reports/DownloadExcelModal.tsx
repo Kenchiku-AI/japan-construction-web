@@ -1,19 +1,14 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
-import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
-import {
-  Project,
-  ProjectStatus,
-  ReportParentType,
-  ReportTemplate,
-} from "@/types";
+import { ProjectStatus, ReportParentType, ReportTemplate } from "@/types";
 import Select from "@/app/ui/Select/Select";
 import { useApi } from "@/lib/api/ApiContext";
 
 interface DownloadExcelModalProps {
   templates: ReportTemplate[];
+  disableProject?: boolean;
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (templateId: string, projectId?: string) => void;
@@ -21,6 +16,7 @@ interface DownloadExcelModalProps {
 
 const DownloadExcelModal: FC<DownloadExcelModalProps> = ({
   templates,
+  disableProject,
   isOpen,
   onClose,
   onSubmit,
@@ -34,6 +30,8 @@ const DownloadExcelModal: FC<DownloadExcelModalProps> = ({
   const { t } = useTranslation();
 
   useEffect(() => {
+    if (disableProject) return;
+
     const template = templates.find((t) => t.id === templateId);
     if (!template) return;
 
@@ -43,7 +41,7 @@ const DownloadExcelModal: FC<DownloadExcelModalProps> = ({
     if (!isProjectType) {
       setProjectId("");
     }
-  }, [templateId, templates]);
+  }, [templateId, templates, disableProject]);
 
   const reset = () => {
     setTimeout(() => {
@@ -120,7 +118,7 @@ const DownloadExcelModal: FC<DownloadExcelModalProps> = ({
         disabled={!templateId}
         label={t("download")}
         onClick={() => {
-          onSubmit(templateId, projectId);
+          onSubmit(templateId, disableProject ? undefined : projectId);
           reset();
         }}
       />
