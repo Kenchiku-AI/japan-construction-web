@@ -50,6 +50,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
   }, [image?.created_at]);
 
   const isProcessingShown = useMemo(() => {
+    return true;
     if (!image?.status) return false;
 
     const statuses = ["pending", "processing"];
@@ -124,7 +125,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
           <Photo image={image} />
         </div>
         <div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-end">
             <div className="flex gap-3">
               <div className="text-2xl">{t("photo_details")}</div>
               {isProcessingShown && (

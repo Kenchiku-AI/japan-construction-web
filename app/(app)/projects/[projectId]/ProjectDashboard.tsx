@@ -161,7 +161,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
           <div className="flex justify-between mt-8">
             <div className="self-end">{t("reports")}</div>
-            <div>
+            <div className="flex gap-8">
               {project.reports?.length && (
                 <Button
                   variant="tertiary"
