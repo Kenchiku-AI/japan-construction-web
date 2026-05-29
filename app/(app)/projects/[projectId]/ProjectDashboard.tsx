@@ -8,7 +8,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Check, Close, Plus } from "@/app/ui/Icons";
+import { Check, Close, Download, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
@@ -32,6 +32,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  const [showDownloadExcel, setShowDownloadExcel] = useState(false);
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -156,17 +157,28 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
           <div className="flex justify-between mt-8">
             <div className="self-end">{t("reports")}</div>
-            {isEditable && (
+            <div>
               <Button
                 variant="tertiary"
-                label={t("create_report")}
-                iconLeft={() => <Plus />}
-                onClick={() => {
-                  setShowCreateReport(true);
-                }}
                 style={{ height: "auto" }}
+                label={t("export")}
+                iconLeft={() => <Download />}
+                onClick={() => {
+                  setShowDownloadExcel(true);
+                }}
               />
-            )}
+              {isEditable && (
+                <Button
+                  variant="tertiary"
+                  label={t("create_report")}
+                  iconLeft={() => <Plus />}
+                  onClick={() => {
+                    setShowCreateReport(true);
+                  }}
+                  style={{ height: "auto" }}
+                />
+              )}
+            </div>
           </div>
           <Divider />
           <ReportsList
