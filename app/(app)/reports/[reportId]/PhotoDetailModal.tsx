@@ -50,16 +50,15 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
   }, [image?.created_at]);
 
   const isProcessingShown = useMemo(() => {
-    return true;
-    // if (!image?.status) return false;
+    if (!image?.status) return false;
 
-    // const statuses = ["pending", "processing"];
-    // if (!statuses.includes(image.status)) return false;
+    const statuses = ["pending", "processing"];
+    if (!statuses.includes(image.status)) return false;
 
-    // const createdAt = new Date(image.created_at).getMilliseconds();
-    // const now = new Date().getMilliseconds();
-    // const fiveMinutes = 5 * 60 * 1000;
-    // return now - createdAt < fiveMinutes;
+    const createdAt = new Date(image.created_at).getMilliseconds();
+    const now = new Date().getMilliseconds();
+    const fiveMinutes = 5 * 60 * 1000;
+    return now - createdAt < fiveMinutes;
   }, [image?.status]);
 
   const photoStyle: CSSProperties = useMemo(
