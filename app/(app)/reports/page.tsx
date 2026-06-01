@@ -16,10 +16,14 @@ import { Loader } from "@/app/ui/Loader";
 import { Input } from "@/app/ui/Input/Input";
 import DownloadExcelModal from "./DownloadExcelModal";
 import { useExport } from "./useExport";
+import { useSearchParams } from "next/navigation";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("projectId") || undefined;
+  const projectName = searchParams.get("projectName") || undefined;
   const { reports, setReports, getReports, createReport, search, loading } =
     useReports();
   const { downloadExcel } = useExport();
@@ -41,10 +45,9 @@ const ReportsPage = () => {
   }, [reportTemplates, currentUser]);
 
   useEffect(() => {
-    if (currentUser?.role === "manager") {
-      getReportTemplates();
-    }
-  }, [currentUser]);
+    getReports(projectId);
+    getReportTemplates();
+  }, []);
 
   useEffect(() => {
     if (showSearch) {
@@ -85,7 +88,7 @@ const ReportsPage = () => {
           className="flex justify-between items-end"
           style={{ display: showSearch ? "none" : undefined }}
         >
-          <Heading title={t("reports")} />
+          <Heading title={t("reports")} topLabel={projectName} />
           <div className="flex gap-8">
             {reports?.length && (
               <>
@@ -148,27 +151,22 @@ const ReportsPage = () => {
         onClose={() => {
           setShowDownloadExcel(false);
         }}
-        onSubmit={async (templateId, projectId) => {
+        disableProject={!!projectId}
+        onSubmit={async (templateId, selectedProjectId) => {
           setShowDownloadExcel(false);
 
           const template = reportTemplates?.find((t) => t.id === templateId);
           if (!template) return;
 
+          const pId = projectId ?? selectedProjectId;
           let projectName;
-          if (projectId) {
-            projectName = currentUser?.projects.find(
-              (p) => p.id === projectId,
-            )?.name;
+          if (pId) {
+            projectName = currentUser?.projects.find((p) => p.id === pId)?.name;
           }
 
           setIsExcelDownloading(true);
 
-          await downloadExcel(
-            templateId,
-            template.name,
-            projectId,
-            projectName,
-          );
+          await downloadExcel(templateId, template.name, pId, projectName);
 
           setIsExcelDownloading(false);
         }}

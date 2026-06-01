@@ -1,14 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { CreateReportRequest, Report } from "@/types/reports";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
 import debounce from "lodash.debounce";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 
 export const useReports = () => {
   const [loading, setLoading] = useState(false);
@@ -18,18 +16,12 @@ export const useReports = () => {
   const { showModal } = useModal();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (!currentUser) return;
-
-    getReports();
-  }, [currentUser]);
-
   const getReports = useCallback(
-    async (query?: string) => {
+    async (projectId?: string) => {
       setLoading(true);
 
       try {
-        const response = await api.getReports();
+        const response = await api.getReports(projectId);
         setReports(response);
       } finally {
         setLoading(false);
@@ -62,14 +54,14 @@ export const useReports = () => {
 
   const search = useMemo(
     () =>
-      debounce(async (query: string) => {
+      debounce(async (query: string, projectId?: string) => {
         if (query.length < 1) {
           setReports([]);
           return;
         }
 
         try {
-          const response = await api.getReports(query);
+          const response = await api.getReports(projectId, query);
           setReports(response ?? []);
         } finally {
         }

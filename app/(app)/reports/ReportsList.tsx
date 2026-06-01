@@ -11,21 +11,21 @@ import { useDate } from "@/public/date/useDate";
 
 interface ReportsListProps {
   reports: Report[];
-  isCollapsible?: boolean;
   isEmpty?: boolean;
   needsTemplates?: boolean;
   showCompany?: boolean;
+  maxShown?: number;
+  onViewAll?: () => void;
 }
 
 const ReportsList: FC<ReportsListProps> = ({
   reports,
-  isCollapsible,
   isEmpty,
   needsTemplates,
   showCompany,
+  onViewAll,
 }) => {
   const { t } = useTranslation();
-  const [showAll, setShowAll] = useState(!isCollapsible);
 
   if (isEmpty) {
     let emptyMessage = t("empty_reports_description");
@@ -39,29 +39,19 @@ const ReportsList: FC<ReportsListProps> = ({
 
   return (
     <>
-      <div
-        className="overflow-hidden"
-        style={{
-          maxHeight: showAll ? 2500 : 500,
-          transition: "max-height 0.5s ease-in-out",
-        }}
-      >
-        {reports.map((report) => (
-          <ReportsListItem
-            key={report.id}
-            report={report}
-            showCompany={showCompany}
-          />
-        ))}
-      </div>
-      {isCollapsible && reports.length > 5 && (
+      {reports.map((report) => (
+        <ReportsListItem
+          key={report.id}
+          report={report}
+          showCompany={showCompany}
+        />
+      ))}
+      {onViewAll && (
         <Button
           variant="tertiary"
-          style={{ marginLeft: 40 }}
-          label={showAll ? t("show_less") : t("show_more")}
-          onClick={() => {
-            setShowAll(!showAll);
-          }}
+          style={{ marginLeft: 20, marginTop: 10 }}
+          label={t("view_all")}
+          onClick={onViewAll}
         />
       )}
     </>

@@ -6,7 +6,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Check, Close, Download, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
@@ -24,6 +24,7 @@ interface ProjectDashboardProps {
 }
 
 const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
+  const router = useRouter();
   const { currentUser } = useApi();
   const { reportTemplates, getReportTemplates } = useReportTemplates();
   const { t } = useTranslation();
@@ -162,7 +163,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           <div className="flex justify-between mt-8">
             <div className="self-end">{t("reports")}</div>
             <div className="flex gap-8">
-              {project.reports?.length && (
+              {(project.reports?.length ?? 0) > 0 && (
                 <Button
                   variant="tertiary"
                   style={{ height: "auto" }}
@@ -189,8 +190,17 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
           <Divider />
           <ReportsList
-            reports={project.reports ?? []}
+            reports={project.reports?.slice(0, 5) ?? []}
             isEmpty={project.reports?.length === 0}
+            onViewAll={
+              (project.reports?.length ?? 0) < 6
+                ? undefined
+                : () => {
+                    router.push(
+                      `/reports?projectId=${projectId}&projectName=${project.name}`,
+                    );
+                  }
+            }
           />
         </>
       )}
