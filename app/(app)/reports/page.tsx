@@ -68,7 +68,7 @@ const ReportsPage = () => {
             ref={searchRef}
             placeholder={t("search_reports")}
             onChange={(t) => {
-              search(t);
+              search(t, projectId);
             }}
             style={{ height: 40 }}
             autoFocus
