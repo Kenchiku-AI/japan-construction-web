@@ -25,6 +25,8 @@ import {
   UpdateCompanyRequest,
   UpdateCompanyResponse,
   ReportImagePollResponse,
+  CompanyGuest,
+  InviteGuestRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -287,8 +289,20 @@ export const useApiData = () => {
       return call(() => http.post(url, request));
     },
     async inviteUser(request: InviteUserRequest) {
-      const url = "/invitations";
+      const url = "/invitations/company";
       return call(() => http.post(url, request));
+    },
+    async inviteGuest(request: InviteGuestRequest) {
+      const url = "/invitations/project-guest";
+      return call(() => http.post(url, request));
+    },
+    async removeGuest(projectId: string, linkId: string) {
+      const url = `/projects/${projectId}/guests/${linkId}`;
+      return call(() => http.delete(url));
+    },
+    async getGuests(companyId: string) {
+      const url = `/companies/${companyId}/guests`;
+      return call(() => http.get<CompanyGuest[]>(url));
     },
   };
 

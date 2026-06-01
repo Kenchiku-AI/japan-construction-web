@@ -30,10 +30,38 @@ export type InviteUserRequest = {
   role: string;
 };
 
+export type InviteGuestRequest = {
+  email: string;
+  project_id: string;
+  first_name?: string;
+  last_name?: string;
+};
+
 export type CompanyUser = {
   id: string;
   first_name: string;
   last_name: string;
   email: string;
   role: string;
+};
+
+export type CompanyGuest = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  projects: CompanyGuestProject[];
+};
+
+export type CompanyGuestProject = {
+  project_id: string;
+  project_name: string;
+  guest_link_id: string;
+};
+
+export type InviteProjectGuestRequest = {
+  project_id: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
 };

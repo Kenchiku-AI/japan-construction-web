@@ -49,7 +49,7 @@ const ReportsList: FC<ReportsListProps> = ({
       {onViewAll && (
         <Button
           variant="tertiary"
-          style={{ marginLeft: 20, marginTop: 10 }}
+          style={{ marginLeft: 20 }}
           label={t("view_all")}
           onClick={onViewAll}
         />

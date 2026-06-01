@@ -18,6 +18,9 @@ import { errorColor1 } from "@/lib/constants";
 import Select from "@/app/ui/Select/Select";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
+import GuestsList from "./GuestsList";
+import AddGuestModal from "./AddGuestModal";
+import RemoveGuestModal from "./RemoveGuestModal";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -28,8 +31,17 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const { currentUser } = useApi();
   const { reportTemplates, getReportTemplates } = useReportTemplates();
   const { t } = useTranslation();
-  const { project, updateProject, createReport, statusOptions } =
-    useProject(projectId);
+  const {
+    project,
+    updateProject,
+    createReport,
+    statusOptions,
+    projectGuests,
+    nonProjectGuests,
+    getCompanyGuests,
+    inviteGuest,
+    removeGuest,
+  } = useProject(projectId);
   const { downloadExcel } = useExport();
   const isLoaded = useRef(false);
   const searchParams = useSearchParams();
@@ -38,6 +50,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [status, setStatus] = useState("");
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
+  const [showAddGuest, setShowAddGuest] = useState(false);
+  const [removeGuestLinkId, setRemoveGuestLinkId] = useState("");
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -49,6 +63,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     const isAdmin = currentUser?.role === "admin";
     const companyId = isAdmin ? project.company_id : undefined;
     getReportTemplates(companyId);
+
+    getCompanyGuests(project.company_id);
   }, [project, currentUser]);
 
   const isEdited = useMemo(() => {
@@ -160,7 +176,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               textStyle={{ color: errorColor1 }}
             />
           </div>
-          <div className="flex justify-between mt-8">
+          <div className="flex justify-between mt-10">
             <div className="self-end">{t("reports")}</div>
             <div className="flex gap-8">
               {(project.reports?.length ?? 0) > 0 && (
@@ -202,6 +218,29 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   }
             }
           />
+          <div className="flex justify-between mt-10">
+            <div className="self-end">{t("guests")}</div>
+            {isEditable && (
+              <Button
+                variant="tertiary"
+                label={t("add_guest")}
+                iconLeft={() => <Plus />}
+                onClick={() => {
+                  setShowAddGuest(true);
+                }}
+                style={{ height: "auto" }}
+              />
+            )}
+          </div>
+          <Divider />
+          <GuestsList
+            guests={projectGuests}
+            projectId={projectId}
+            isEmpty={projectGuests.length === 0}
+            onDelete={(linkId) => {
+              setRemoveGuestLinkId(linkId);
+            }}
+          />
         </>
       )}
       <CreateReportModal
@@ -229,7 +268,32 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           const template = reportTemplates?.find((t) => t.id === templateId);
           if (!template) return;
 
+          setIsExcelDownloading(true);
+
           downloadExcel(templateId, template.name, projectId, project?.name);
+
+          setIsExcelDownloading(false);
+        }}
+      />
+      <AddGuestModal
+        knownGuests={nonProjectGuests}
+        isOpen={showAddGuest}
+        onClose={() => {
+          setShowAddGuest(false);
+        }}
+        onSubmit={(email, firstName, lastName) => {
+          setShowAddGuest(false);
+          inviteGuest(email, firstName, lastName);
+        }}
+      />
+      <RemoveGuestModal
+        isOpen={!!removeGuestLinkId}
+        onClose={() => {
+          setRemoveGuestLinkId("");
+        }}
+        onRemove={() => {
+          removeGuest(removeGuestLinkId);
+          setRemoveGuestLinkId("");
         }}
       />
     </>

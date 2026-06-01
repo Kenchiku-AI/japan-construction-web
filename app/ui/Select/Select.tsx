@@ -35,7 +35,7 @@ const Select: FC<SelectProps> = ({
   style,
   disabled,
 }) => {
-  const [isUnselected, setIsUnselected] = useState(!options[0]?.value);
+  const [isUnselected, setIsUnselected] = useState(true);
   const [isEmpty, setIsEmpty] = useState(true);
   const [open, setOpen] = useState(false);
   const valueRef = useRef(value);
@@ -122,7 +122,7 @@ const Select: FC<SelectProps> = ({
           ...style,
         }}
       >
-        <span>{selectedOption?.label || placeholder || "Select"}</span>
+        <span>{selectedOption?.label || placeholder}</span>
       </div>
       {open &&
         !disabled &&
