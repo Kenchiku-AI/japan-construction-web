@@ -6,17 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
-import {
-  Hardhat,
-  Home,
-  Paper,
-  Papers,
-  User,
-  Users,
-  Logout,
-  Tag,
-  Logo,
-} from "./Icons";
+import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo } from "./Icons";
 import { buttonColor, fontColor2 } from "@/lib/constants";
 import Divider from "./Divider";
 

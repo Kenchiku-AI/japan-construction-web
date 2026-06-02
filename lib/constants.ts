@@ -5,11 +5,12 @@ export const authRoutes = [
   "/reset-password",
   "/privacy-policy",
   "/support",
-  "/accept-invitation",
+  // "/accept-invitation",
 ];
 export const accessTokenKey = "accessToken";
 export const refreshTokenKey = "refreshToken";
 export const invitationTokenKey = "invitationToken";
+export const existingUserInvitationTokenKey = "existingUserInvitationToken";
 export const bgColor1 = "#FDFDFD";
 export const bgColor2 = "#F2F2F3";
 export const bgColor3 = "rgba(164, 169, 174, 0.05)";

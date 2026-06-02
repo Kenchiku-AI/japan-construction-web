@@ -4,8 +4,12 @@ import { accessTokenKey, authRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get(accessTokenKey);
-
   const { pathname } = req.nextUrl;
+
+  if (pathname.startsWith("/accept-invitation")) {
+    return NextResponse.next();
+  }
+
   const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
 
   if (!token && !isAuthRoute) {

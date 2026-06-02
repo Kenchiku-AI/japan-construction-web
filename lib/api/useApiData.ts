@@ -28,6 +28,7 @@ import {
   CompanyGuest,
   InviteGuestRequest,
   AcceptInvitationRequest,
+  AcceptInvitationResponse,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -311,7 +312,7 @@ export const useApiData = () => {
     },
     async acceptInvitation(request: AcceptInvitationRequest) {
       const url = "/invitations/accept";
-      return handleResponse(() => http.post(url, request));
+      return call(() => http.post<AcceptInvitationResponse>(url, request));
     },
   };
 

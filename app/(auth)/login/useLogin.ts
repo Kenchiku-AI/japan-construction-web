@@ -7,6 +7,7 @@ import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 import { UserRole } from "@/types";
+import { existingUserInvitationTokenKey } from "@/lib/constants";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -19,29 +20,62 @@ export const useLogin = () => {
     async (email: string, password: string) => {
       setLoading(true);
 
+      const token = sessionStorage.getItem(existingUserInvitationTokenKey);
+
       try {
-        const user = await api.login({ email, password });
+        let user = await api.login({ email, password });
+
+        if (token) {
+          await api.acceptInvitation({ token });
+          sessionStorage.removeItem(existingUserInvitationTokenKey);
+
+          const userResponse = await api.getCurrentUser();
+
+          if (!userResponse) {
+            throw new Error();
+          } else {
+            user = userResponse;
+          }
+        }
+
         api.setCurrentUser(user);
         const url = user.role === UserRole.Admin ? "/companies" : "/";
         router.push(url);
       } catch (err) {
         setLoading(false);
 
-        if ((err as AxiosError).status === 401) {
-          showModal({
-            title: t("error"),
-            subtitle: t("invalid_email_password"),
-          });
-        } else {
-          showModal({
-            title: t("error"),
-            subtitle: t("login_error"),
-          });
-        }
+        showModal({
+          title: t("error"),
+          subtitle: parseError(err),
+        });
       }
     },
     [router],
   );
+
+  const parseError = (error: any) => {
+    const status = (error as AxiosError).status;
+
+    if (status === 410) {
+      sessionStorage.removeItem(existingUserInvitationTokenKey);
+      return t("expired_invitation_login");
+    }
+
+    if (status === 409) {
+      sessionStorage.removeItem(existingUserInvitationTokenKey);
+      return t("existing_company_invitation_login");
+    }
+
+    if (status === 404) {
+      sessionStorage.removeItem(existingUserInvitationTokenKey);
+      return t("invalid_invitation_login");
+    }
+
+    if (status === 403) return t("wrong_user_invitation");
+    if (status === 401) return t("invalid_email_password");
+
+    return t("login_error");
+  };
 
   return {
     loading,

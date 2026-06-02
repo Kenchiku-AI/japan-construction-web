@@ -8,14 +8,19 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { Input } from "@/app/ui/Input/Input";
 import styles from "./page.module.css";
 import { Button } from "@/app/ui/Button/Button";
-import { invitationTokenKey } from "@/lib/constants";
+import {
+  existingUserInvitationTokenKey,
+  invitationTokenKey,
+} from "@/lib/constants";
 import { Loader } from "@/app/ui/Loader";
 import { Logo } from "@/app/ui/Icons";
+import ExistingUserInvitationModal from "./ExistingUserInvitationModal";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [invitationToken, setInvitationToken] = useState<string | null>(null);
+  const [showInvitationModal, setShowInvitationModal] = useState(false);
   const router = useRouter();
   const { loading, login } = useLogin();
   const { t } = useTranslation();
@@ -23,60 +28,72 @@ const LoginPage = () => {
   useEffect(() => {
     const token = sessionStorage.getItem(invitationTokenKey);
     setInvitationToken(token);
+
+    if (sessionStorage.getItem(existingUserInvitationTokenKey)) {
+      setShowInvitationModal(true);
+    }
   }, []);
 
   return (
-    <div className="flex flex-col sm:justify-center items-center px-5 h-screen">
-      <div className={styles.content}>
-        <div className="flex justify-center mt-14 sm:mt-0 mb-4">
-          <Logo />
-        </div>
-        <Heading title={t("login")} subtitle={t("login_description")} />
-        <div className={styles.fields}>
-          <Input
-            placeholder={t("email")}
-            onChange={(t) => {
-              setEmail(t);
-            }}
-            type="email"
-            disabled={loading}
-          />
-          <Input
-            placeholder={t("password")}
-            onChange={(t) => setPassword(t)}
-            type="password"
-            disabled={loading}
-          />
-        </div>
-        <Button
-          label={t("login")}
-          onClick={() => {
-            login(email, password);
-          }}
-          disabled={!email || !password || loading}
-          handleEnter
-        />
-        <div className={styles.buttons}>
+    <>
+      <div className="flex flex-col sm:justify-center items-center px-5 h-screen">
+        <div className={styles.content}>
+          <div className="flex justify-center mt-14 sm:mt-0 mb-4">
+            <Logo />
+          </div>
+          <Heading title={t("login")} subtitle={t("login_description")} />
+          <div className={styles.fields}>
+            <Input
+              placeholder={t("email")}
+              onChange={(t) => {
+                setEmail(t);
+              }}
+              type="email"
+              disabled={loading}
+            />
+            <Input
+              placeholder={t("password")}
+              onChange={(t) => setPassword(t)}
+              type="password"
+              disabled={loading}
+            />
+          </div>
           <Button
-            variant="tertiary"
-            label={t("forgot_password")}
+            label={t("login")}
             onClick={() => {
-              router.push("/forgot-password");
+              login(email, password);
             }}
+            disabled={!email || !password || loading}
+            handleEnter
           />
-          {invitationToken && (
+          <div className={styles.buttons}>
             <Button
               variant="tertiary"
-              label={t("sign_up")}
+              label={t("forgot_password")}
               onClick={() => {
-                router.push(`/signup?invitationToken=${invitationToken}`);
+                router.push("/forgot-password");
               }}
             />
-          )}
+            {invitationToken && (
+              <Button
+                variant="tertiary"
+                label={t("sign_up")}
+                onClick={() => {
+                  router.push(`/signup?invitationToken=${invitationToken}`);
+                }}
+              />
+            )}
+          </div>
         </div>
       </div>
       {loading && <Loader />}
-    </div>
+      <ExistingUserInvitationModal
+        isOpen={showInvitationModal}
+        onClose={() => {
+          setShowInvitationModal(false);
+        }}
+      />
+    </>
   );
 };
 

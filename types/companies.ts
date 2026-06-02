@@ -69,3 +69,7 @@ export type InviteProjectGuestRequest = {
 export type AcceptInvitationRequest = {
   token: string;
 };
+
+export type AcceptInvitationResponse = {
+  success: boolean;
+};
