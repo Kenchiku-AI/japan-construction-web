@@ -8,12 +8,16 @@ import { redirect } from "next/navigation";
 export default function Home() {
   const { currentUser } = useApi();
 
-  if (currentUser?.role === UserRole.Admin) {
+  if (!currentUser) {
+    return null;
+  }
+
+  if (currentUser.role === UserRole.Admin) {
     redirect("/companies");
   }
 
-  if (!currentUser?.company) {
-    return null;
+  if (!currentUser.company) {
+    redirect("/projects");
   }
 
   return <CompanyDashboard companyId={currentUser.company.id} />;

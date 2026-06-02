@@ -43,13 +43,14 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 <Divider
                   style={{ opacity: 0.1, marginBottom: 18, marginTop: 0 }}
                 />
-                {isAdmin ? (
+                {isAdmin && (
                   <SidebarItem
                     name={t("companies")}
                     icon={() => <Users size={24} />}
                     path={"/companies"}
                   />
-                ) : (
+                )}
+                {!!currentUser.company && (
                   <SidebarItem
                     name={t("home")}
                     icon={() => <Home size={24} />}
@@ -66,7 +67,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                   icon={() => <Paper size={24} />}
                   path={"/reports"}
                 />
-                {!isAdmin && (
+                {currentUser.role === "manager" && (
                   <>
                     <SidebarItem
                       name={t("report_templates")}

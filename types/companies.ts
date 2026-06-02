@@ -65,3 +65,7 @@ export type InviteProjectGuestRequest = {
   first_name?: string;
   last_name?: string;
 };
+
+export type AcceptInvitationRequest = {
+  token: string;
+};

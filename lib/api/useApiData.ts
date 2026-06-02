@@ -27,6 +27,7 @@ import {
   ReportImagePollResponse,
   CompanyGuest,
   InviteGuestRequest,
+  AcceptInvitationRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -55,7 +56,11 @@ export const useApiData = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
   useEffect(() => {
-    getCurrentUser();
+    const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
+
+    if (!isAuthRoute) {
+      getCurrentUser();
+    }
   }, []);
 
   const getCurrentUser = async () => {
@@ -303,6 +308,10 @@ export const useApiData = () => {
     async getGuests(companyId: string) {
       const url = `/companies/${companyId}/guests`;
       return call(() => http.get<CompanyGuest[]>(url));
+    },
+    async acceptInvitation(request: AcceptInvitationRequest) {
+      const url = "/invitations/accept";
+      return handleResponse(() => http.post(url, request));
     },
   };
 
