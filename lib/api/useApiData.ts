@@ -109,7 +109,7 @@ export const useApiData = () => {
       await http.post("/auth/refresh");
       return await handleResponse(callback);
     } catch (err) {
-      // await logout();
+      await logout();
     }
   };
 
