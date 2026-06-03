@@ -54,7 +54,11 @@ const AcceptInvitation = () => {
   const parseError = (error: any) => {
     const status = (error as AxiosError).status;
 
-    if (!status || status === 401) return null;
+    if (!status || status === 401) {
+      router.replace("/login");
+      return null;
+    }
+
     if (status === 403) return t("wrong_user_invitation");
 
     sessionStorage.removeItem(existingUserInvitationTokenKey);
