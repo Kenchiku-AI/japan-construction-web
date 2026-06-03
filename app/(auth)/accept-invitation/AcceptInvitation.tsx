@@ -33,9 +33,9 @@ const AcceptInvitation = () => {
         const response = await acceptInvitation({ token });
 
         if (!response?.success) {
-          console.log("RESPONSE", response);
           throw new Error();
         } else {
+          console.log("success");
           router.replace("/");
         }
       } catch (error) {
@@ -52,32 +52,19 @@ const AcceptInvitation = () => {
   }, [token, router]);
 
   const parseError = (error: any) => {
-    console.log("ERROR", error);
-
     const status = (error as AxiosError).status;
-
-    console.log("STATUS", status);
-
-    if (status === 410) {
-      sessionStorage.removeItem(existingUserInvitationTokenKey);
-      return t("expired_invitation");
-    }
-
-    if (status === 409) {
-      sessionStorage.removeItem(existingUserInvitationTokenKey);
-      return t("existing_company_invitation");
-    }
-
-    if (status === 404) {
-      sessionStorage.removeItem(existingUserInvitationTokenKey);
-      return t("invalid_invitation");
-    }
 
     if (status === 403) return t("wrong_user_invitation");
 
-    if (status === 401) {
-      setCurrentUser(undefined);
-      router.replace("/login");
+    sessionStorage.removeItem(existingUserInvitationTokenKey);
+
+    if (status === 410) return t("expired_invitation");
+    if (status === 409) return t("existing_company_invitation");
+    if (status === 404) return t("invalid_invitation");
+
+    if (!status || status === 401) {
+      // setCurrentUser(undefined);
+      // router.replace("/login");
       return null;
     }
 
