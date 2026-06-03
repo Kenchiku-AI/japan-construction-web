@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { FC, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useApi } from "@/lib/api/ApiContext";
 import {
   existingUserInvitationTokenKey,
@@ -12,9 +12,15 @@ import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 
-const AcceptInvitationPage = () => {
-  const searchParams = useSearchParams();
-  const token = searchParams.get(invitationTokenKey);
+interface AcceptInvitationPageProps {
+  searchParams: Promise<{ [invitationTokenKey]?: string }>;
+}
+
+const AcceptInvitationPage: FC<AcceptInvitationPageProps> = async ({
+  searchParams,
+}) => {
+  const params = await searchParams;
+  const token = params[invitationTokenKey];
   const router = useRouter();
   const { acceptInvitation, setCurrentUser } = useApi();
   const { t } = useTranslation();
