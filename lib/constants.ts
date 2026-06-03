@@ -5,7 +5,7 @@ export const authRoutes = [
   "/reset-password",
   "/privacy-policy",
   "/support",
-  // "/accept-invitation",
+  "/accept-invitation",
 ];
 export const accessTokenKey = "accessToken";
 export const refreshTokenKey = "refreshToken";
