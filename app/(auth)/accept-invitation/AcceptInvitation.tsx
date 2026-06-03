@@ -51,6 +51,8 @@ const AcceptInvitation = () => {
   }, [token, router]);
 
   const parseError = (error: any) => {
+    console.log("ERROR", error);
+
     const status = (error as AxiosError).status;
 
     console.log("STATUS", status);
