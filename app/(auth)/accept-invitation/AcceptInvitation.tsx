@@ -33,6 +33,7 @@ const AcceptInvitation = () => {
         const response = await acceptInvitation({ token });
 
         if (!response?.success) {
+          console.log("RESPONSE", response);
           throw new Error();
         } else {
           router.replace("/");
