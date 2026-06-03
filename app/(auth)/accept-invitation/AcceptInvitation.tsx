@@ -52,6 +52,8 @@ const AcceptInvitation = () => {
   }, [token, router]);
 
   const parseError = (error: any) => {
+    console.log("ERROR", error);
+
     const status = (error as AxiosError).status;
 
     if (status === 403) return t("wrong_user_invitation");
@@ -63,8 +65,8 @@ const AcceptInvitation = () => {
     if (status === 404) return t("invalid_invitation");
 
     if (!status || status === 401) {
-      // setCurrentUser(undefined);
-      // router.replace("/login");
+      setCurrentUser(undefined);
+      router.replace("/login");
       return null;
     }
 
