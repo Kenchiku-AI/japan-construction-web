@@ -34,9 +34,6 @@ const AcceptInvitation = () => {
 
         if (!response?.success) {
           throw new Error();
-        } else {
-          console.log("success");
-          router.replace("/");
         }
       } catch (error) {
         const message = parseError(error);
@@ -47,6 +44,8 @@ const AcceptInvitation = () => {
             subtitle: message,
           });
         }
+      } finally {
+        router.replace("/");
       }
     })();
   }, [token, router]);
@@ -54,11 +53,7 @@ const AcceptInvitation = () => {
   const parseError = (error: any) => {
     const status = (error as AxiosError).status;
 
-    if (!status || status === 401) {
-      router.replace("/login");
-      return null;
-    }
-
+    if (!status || status === 401) return null;
     if (status === 403) return t("wrong_user_invitation");
 
     sessionStorage.removeItem(existingUserInvitationTokenKey);
