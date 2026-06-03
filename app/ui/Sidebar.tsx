@@ -19,11 +19,11 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return !currentUser ? null : (
     <div className="drawer drawer-open">
       <input type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col p-4 md:px-24 md:py-12 max-w-4xl">
+      <div className="drawer-content flex flex-col p-4 md:px-12 lg:px-24 md:py-12 max-w-4xl">
         {children}
       </div>
       <div className="drawer-side flex">
-        <ul className="menu bg-base-200 lg:w-48 min-w-14 md:min-w-20 text-base-content min-h-full pb-4 md:px-4 px-1 justify-between">
+        <ul className="menu bg-base-200 lg:w-48 min-w-14 md:min-w-48 text-base-content min-h-full pb-4 md:px-4 px-1 justify-between">
           {currentUser && (
             <>
               <div className="space-y-2">
@@ -128,7 +128,7 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
         className={`active:bg-base-300 active:opacity-40 active:text-black gap-3`}
       >
         <Icon />
-        <span className="max-lg:hidden">{name}</span>
+        <span className="max-md:hidden">{name}</span>
       </a>
     </li>
   );
