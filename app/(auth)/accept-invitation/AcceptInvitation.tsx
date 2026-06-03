@@ -11,12 +11,13 @@ import { Loader } from "@/app/ui/Loader";
 import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
+import { UserRole } from "@/types";
 
 const AcceptInvitation = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get(invitationTokenKey);
   const router = useRouter();
-  const { acceptInvitation, setCurrentUser } = useApi();
+  const api = useApi();
   const { t } = useTranslation();
   const { showModal } = useModal();
 
@@ -30,11 +31,25 @@ const AcceptInvitation = () => {
 
     (async () => {
       try {
-        const response = await acceptInvitation({ token });
+        const response = await api.acceptInvitation({ token });
 
         if (!response?.success) {
           throw new Error();
         }
+
+        sessionStorage.removeItem(existingUserInvitationTokenKey);
+        const user = await api.getCurrentUser();
+
+        if (!user) {
+          showModal({
+            title: t("error"),
+            subtitle: t("get_user_error_description"),
+          });
+          router.replace("/login");
+          return;
+        }
+
+        api.setCurrentUser(user);
       } catch (error) {
         const message = parseError(error);
 
@@ -44,9 +59,9 @@ const AcceptInvitation = () => {
             subtitle: message,
           });
         }
-      } finally {
-        router.replace("/");
       }
+
+      router.replace("/");
     })();
   }, [token, router]);
 
