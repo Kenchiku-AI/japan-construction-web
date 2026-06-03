@@ -53,6 +53,8 @@ const AcceptInvitation = () => {
   const parseError = (error: any) => {
     const status = (error as AxiosError).status;
 
+    console.log("STATUS", status);
+
     if (status === 410) {
       sessionStorage.removeItem(existingUserInvitationTokenKey);
       return t("expired_invitation");
