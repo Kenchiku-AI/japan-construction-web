@@ -15,7 +15,6 @@ import {
 import { Loader } from "@/app/ui/Loader";
 import { Logo } from "@/app/ui/Icons";
 import ExistingUserInvitationModal from "./ExistingUserInvitationModal";
-import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +24,6 @@ const LoginPage = () => {
   const router = useRouter();
   const { loading, login } = useLogin();
   const { t } = useTranslation();
-  const { showMobileAppModal } = useMobileAppModal();
 
   useEffect(() => {
     const token = sessionStorage.getItem(invitationTokenKey);
@@ -34,8 +32,6 @@ const LoginPage = () => {
     if (sessionStorage.getItem(existingUserInvitationTokenKey)) {
       setShowInvitationModal(true);
     }
-
-    showMobileAppModal();
   }, []);
 
   return (

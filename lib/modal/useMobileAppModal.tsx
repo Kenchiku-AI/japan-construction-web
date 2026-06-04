@@ -25,7 +25,7 @@ export const useMobileAppModal = () => {
       platform = "android";
     }
 
-    const isDesktop = true; //platform === "desktop";
+    const isDesktop = platform === "desktop";
 
     showModal({
       title: t("switch_to_mobile_app"),

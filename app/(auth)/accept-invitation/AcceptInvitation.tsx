@@ -12,6 +12,7 @@ import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 import { UserRole } from "@/types";
+import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
 
 const AcceptInvitation = () => {
   const searchParams = useSearchParams();
@@ -20,6 +21,7 @@ const AcceptInvitation = () => {
   const api = useApi();
   const { t } = useTranslation();
   const { showModal } = useModal();
+  const { showMobileAppModal } = useMobileAppModal();
 
   useEffect(() => {
     if (!token) {
@@ -40,11 +42,9 @@ const AcceptInvitation = () => {
         sessionStorage.removeItem(existingUserInvitationTokenKey);
         const user = await api.getCurrentUser();
 
+        showMobileAppModal();
+
         if (!user) {
-          showModal({
-            title: t("error"),
-            subtitle: t("get_user_error_description"),
-          });
           router.replace("/login");
           return;
         }
