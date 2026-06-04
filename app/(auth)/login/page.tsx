@@ -15,7 +15,6 @@ import {
 import { Loader } from "@/app/ui/Loader";
 import { Logo } from "@/app/ui/Icons";
 import ExistingUserInvitationModal from "./ExistingUserInvitationModal";
-import MobileAppModal from "./MobileAppModalContent";
 import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
 
 const LoginPage = () => {

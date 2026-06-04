@@ -3,6 +3,7 @@ import { useModal } from "./ModalContext";
 import { useTranslation } from "react-i18next";
 import { androidUrl, iosUrl } from "../constants";
 import { Button } from "@/app/ui/Button/Button";
+import { Apple, Google } from "@/app/ui/Icons";
 
 export const useMobileAppModal = () => {
   const { showModal } = useModal();
@@ -42,14 +43,14 @@ const DesktopContent = () => {
         className="cursor-pointer"
         onClick={() => (window.location.href = iosUrl)}
       >
-        <img src="/apple.svg" alt="apple" width={192.86} height={70.87} />
+        <Apple />
       </div>
       <div>{t("or")}</div>
       <div
         className="cursor-pointer"
         onClick={() => (window.location.href = androidUrl)}
       >
-        <img src="/google.svg" alt="google" width={239.17} height={70.87} />
+        <Google />
       </div>
     </div>
   );
