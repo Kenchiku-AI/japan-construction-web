@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useModal } from "./ModalContext";
 import { useTranslation } from "react-i18next";
 import { androidUrl, fontColor2, iosUrl } from "../constants";
@@ -69,18 +69,33 @@ const DesktopContent = () => {
 };
 
 const MobileContent = ({ platform }: { platform: string }) => {
+  const appOpenedRef = useRef(false);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        appOpenedRef.current = true;
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
 
   return (
     <Button
       label={t("use_app")}
       onClick={() => {
-        const start = Date.now();
+        appOpenedRef.current = false;
 
         window.location.href = "kenchikuai://";
 
         setTimeout(() => {
-          if (Date.now() - start < 2000) {
+          if (!appOpenedRef.current) {
             const url = platform === "ios" ? iosUrl : androidUrl;
             window.location.href = url;
           }
