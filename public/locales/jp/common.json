@@ -148,6 +148,8 @@
   "remove_guest": "ゲストを削除",
   "remove_guest_description": "このゲストをこの現場から削除してもよろしいですか？",
   "remove_invitation": "招待を削除",
+  "remove_user": "ゲストを削除",
+  "remove_user_description": "このユーザーを会社から削除してもよろしいですか？",
   "report": "報告書",
   "reports": "報告書",
   "report_name": "報告書名",

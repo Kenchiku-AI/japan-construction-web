@@ -109,6 +109,31 @@ export const useCompany = (companyId: string) => {
     [companyId, getTemplates],
   );
 
+  const removeUser = useCallback(
+    async (userId: string) => {
+      setLoading(true);
+
+      try {
+        await api.removeUser(userId);
+
+        if (userId === currentUser?.id) {
+          await api.refreshCurrentUser();
+          router.replace("/");
+        } else if (project?.company_id) {
+          getCompanyGuests(project.company_id);
+        }
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("update_user_error_description"),
+        });
+      }
+
+      setLoading(true);
+    },
+    [currentUser],
+  );
+
   return {
     loading,
     company,

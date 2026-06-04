@@ -22,6 +22,7 @@ import DeleteTagModal from "../../tags/DeleteTagModal";
 import CreateTagModal from "../../tags/CreateTagModal";
 import CreateReportTemplateModal from "../../reports/templates/CreateReportTemplateModal";
 import ReportTemplatesList from "../../reports/templates/ReportTemplatesList";
+import RemoveUserModal from "./RemoveUserModal";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -30,8 +31,14 @@ interface CompanyDashboardProps {
 const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const { currentUser, inviteUser } = useApi();
   const { t } = useTranslation();
-  const { company, createProject, updateName, templates, createTemplate } =
-    useCompany(companyId);
+  const {
+    company,
+    createProject,
+    updateName,
+    templates,
+    createTemplate,
+    removeUser,
+  } = useCompany(companyId);
   const searchParams = useSearchParams();
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showCreateProject, setShowCreateProject] = useState(false);
@@ -40,6 +47,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     useState(false);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
+  const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
   const { tags, updateTag, createTag, deleteTag, loading } = useTags(companyId);
 
@@ -98,7 +106,10 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               )}
             </div>
             <Divider />
-            <CompanyUsersList users={company.users} />
+            <CompanyUsersList
+              users={company.users}
+              onRemove={(userId) => setUserIdToRemove(userId)}
+            />
           </div>
           {currentUser?.role === "admin" && (
             <div>
@@ -181,14 +192,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           } catch (err) {}
         }}
       />
-      <CreateTagModal
-        isOpen={isCreateTagModalShown}
+      <RemoveUserModal
+        isOpen={!!userIdToRemove}
         onClose={() => {
-          setIsCreateTagModalShown(false);
+          setUserIdToRemove("");
         }}
-        onSubmit={(name, description) => {
-          setIsCreateTagModalShown(false);
-          createTag({ name, description });
+        onRemove={() => {
+          removeUser(userIdToRemove);
+          setUserIdToRemove("");
         }}
       />
       <CreateReportTemplateModal
@@ -199,6 +210,16 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onSubmit={(request) => {
           setIsCreateTemplateModalShown(false);
           createTemplate(request);
+        }}
+      />
+      <CreateTagModal
+        isOpen={isCreateTagModalShown}
+        onClose={() => {
+          setIsCreateTagModalShown(false);
+        }}
+        onSubmit={(name, description) => {
+          setIsCreateTagModalShown(false);
+          createTag({ name, description });
         }}
       />
       <UpdateTagModal

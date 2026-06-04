@@ -198,6 +198,10 @@ export const useApiData = () => {
       const url = `/companies/${companyId}`;
       return call(() => http.patch<UpdateCompanyResponse>(url, request));
     },
+    async removeUser(userId: string) {
+      const url = `/users/${userId}/company`;
+      return call(() => http.delete(url));
+    },
     async getTags(companyId: string) {
       const url = `/companies/${companyId}/tags`;
       return call(() => http.get<ReportImageTag[]>(url));

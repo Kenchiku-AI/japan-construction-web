@@ -3,19 +3,22 @@ import { CompanyUser } from "@/types/companies";
 import { useTranslation } from "react-i18next";
 import styles from "./page.module.css";
 import { UserRole } from "@/types";
-import { User } from "@/app/ui/Icons";
+import { Trash, User } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { fontColor2 } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 import { useRouter } from "next/navigation";
+import { useApi } from "@/lib/api/ApiContext";
 
 interface CompanyUsersListProps {
   users: CompanyUser[];
+  onRemove: (userId: string) => void;
 }
 
-const CompanyUsersList: FC<CompanyUsersListProps> = ({ users }) => {
+const CompanyUsersList: FC<CompanyUsersListProps> = ({ users, onRemove }) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const { currentUser } = useApi();
   const [showAll, setShowAll] = useState(false);
 
   if (!users.length) {
@@ -45,11 +48,18 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users }) => {
                   <User />
                   <div className="flex flex-col">
                     <div>{`${u.last_name} ${u.first_name}`}</div>
-                    <div className={styles.subtitle}>{u.email}</div>
+                    <div
+                      className={styles.subtitle}
+                    >{`${u.email}${u.role === UserRole.Manager ? ` • ${t("manager")}` : ""}`}</div>
                   </div>
                 </div>
-                {u.role === UserRole.Manager && (
-                  <div className={styles.subtitle}>{t("manager")}</div>
+                {currentUser?.role !== "user" && (
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => onRemove(u.id)}
+                  >
+                    <Trash />
+                  </div>
                 )}
               </div>
             </div>
