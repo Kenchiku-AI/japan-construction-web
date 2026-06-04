@@ -44,13 +44,13 @@ export const useLogin = () => {
           router.push(url);
         }
       } catch (err) {
-        setLoading(false);
-
         showModal({
           title: t("error"),
           subtitle: parseError(err),
         });
       }
+
+      setLoading(false);
     },
     [router],
   );
