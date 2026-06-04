@@ -30,7 +30,7 @@ export const useMobileAppModal = () => {
     const isDesktop = platform === "desktop";
 
     showModal({
-      title: navigator.userAgent,
+      title: `${platform}... ${navigator.userAgent}`,
       subtitle: t(`switch_to_mobile_description${isDesktop ? "_desktop" : ""}`),
       children: isDesktop ? (
         <DesktopContent />
