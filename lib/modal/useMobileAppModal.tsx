@@ -19,6 +19,11 @@ export const useMobileAppModal = () => {
 
     const isAndroid = /Android/i.test(ua);
 
+    showModal({
+      title: `${/iPhone|iPad|iPod/i.test(ua)}`,
+      subtitle: `${isIOS}`,
+    });
+
     if (isIOS) {
       setPlatform("ios");
     } else if (isAndroid) {
@@ -29,15 +34,15 @@ export const useMobileAppModal = () => {
   const showMobileAppModal = useCallback(() => {
     const isDesktop = platform === "desktop";
 
-    showModal({
-      title: `${platform}... ${navigator.userAgent}`,
-      subtitle: t(`switch_to_mobile_description${isDesktop ? "_desktop" : ""}`),
-      children: isDesktop ? (
-        <DesktopContent />
-      ) : (
-        <MobileContent platform={platform} />
-      ),
-    });
+    // showModal({
+    //   title: t("switch_to_mobile_app"),
+    //   subtitle: t(`switch_to_mobile_description${isDesktop ? "_desktop" : ""}`),
+    //   children: isDesktop ? (
+    //     <DesktopContent />
+    //   ) : (
+    //     <MobileContent platform={platform} />
+    //   ),
+    // });
   }, [platform]);
 
   return {
