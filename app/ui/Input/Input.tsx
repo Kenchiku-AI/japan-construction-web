@@ -106,7 +106,6 @@ export const Input: FC<InputProps> = ({
           ...style,
         }}
         autoFocus={autoFocus}
-        autoComplete="off"
       />
       {type === "password" && (
         <div
