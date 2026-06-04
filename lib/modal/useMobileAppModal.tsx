@@ -7,7 +7,7 @@ import { Apple, Google } from "@/app/ui/Icons";
 
 export const useMobileAppModal = () => {
   const { showModal } = useModal();
-  const [isMobile, setIsMobile] = useState(false);
+  const [platform, setPlatform] = useState("desktop");
 
   useEffect(() => {
     const ua = navigator.userAgent;
@@ -18,16 +18,26 @@ export const useMobileAppModal = () => {
 
     const isAndroid = /Android/i.test(ua);
 
-    setIsMobile(isIOS || isAndroid);
+    if (isIOS) {
+      setPlatform("ios");
+    } else if (isAndroid) {
+      setPlatform("android");
+    }
   }, []);
 
   const showMobileAppModal = useCallback(() => {
+    const isDesktop = platform === "desktop";
+
     showModal({
       title: "switch_to_mobile_app",
-      subtitle: `switch_to_mobile_description${isMobile ? "" : "_desktop"}`,
-      children: isMobile ? <MobileContent /> : <DesktopContent />,
+      subtitle: `switch_to_mobile_description${isDesktop ? "_desktop" : ""}`,
+      children: isDesktop ? (
+        <DesktopContent />
+      ) : (
+        <MobileContent platform={platform} />
+      ),
     });
-  }, [isMobile]);
+  }, [platform]);
 
   return {
     showMobileAppModal,
@@ -58,14 +68,23 @@ const DesktopContent = () => {
   );
 };
 
-const MobileContent = () => {
+const MobileContent = ({ platform }: { platform: string }) => {
   const { t } = useTranslation();
 
   return (
     <Button
       label={t("go_to_app")}
       onClick={() => {
+        const start = Date.now();
+
         window.location.href = "kenchikuai://";
+
+        setTimeout(() => {
+          if (Date.now() - start < 2000) {
+            const url = platform === "ios" ? iosUrl : androidUrl;
+            window.location.href = url;
+          }
+        }, 1500);
       }}
     />
   );
