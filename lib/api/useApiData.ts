@@ -29,6 +29,7 @@ import {
   InviteGuestRequest,
   AcceptInvitationRequest,
   AcceptInvitationResponse,
+  UserRole,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -67,6 +68,17 @@ export const useApiData = () => {
   const getCurrentUser = async () => {
     try {
       const response = await api.getCurrentUser();
+
+      const shouldLogout =
+        !response?.company &&
+        response?.role !== UserRole.Admin &&
+        !response?.projects?.length;
+
+      if (shouldLogout) {
+        logout();
+        return;
+      }
+
       setCurrentUser(response);
     } catch {}
   };
