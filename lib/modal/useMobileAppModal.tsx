@@ -73,7 +73,7 @@ const MobileContent = ({ platform }: { platform: string }) => {
 
   return (
     <Button
-      label={t("go_to_app")}
+      label={t("use_app")}
       onClick={() => {
         const start = Date.now();
 
