@@ -167,7 +167,7 @@ export const useProject = (projectId: string) => {
         if (guest.id === currentUser?.id) {
           const isLast = !currentUser.company && guest.projects.length <= 1;
 
-          await api.getCurrentUser();
+          await api.refreshCurrentUser();
 
           if (!isLast) {
             router.replace("/");

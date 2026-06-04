@@ -30,6 +30,7 @@ import {
   AcceptInvitationRequest,
   AcceptInvitationResponse,
   UserRole,
+  ProjectStatus,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -43,6 +44,8 @@ import {
   ReportTemplateRequest,
 } from "@/types";
 import { authRoutes } from "../constants";
+import { useModal } from "../modal/ModalContext";
+import { useTranslation } from "react-i18next";
 
 export const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -56,25 +59,36 @@ export const useApiData = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
+  const { showModal } = useModal();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
 
     if (!isAuthRoute) {
-      getCurrentUser();
+      refreshCurrentUser();
     }
   }, []);
 
-  const getCurrentUser = async () => {
+  const refreshCurrentUser = async () => {
     try {
       const response = await api.getCurrentUser();
+
+      const hasActiveProject = response?.projects?.some(
+        (p) => p.status === ProjectStatus.Active,
+      );
 
       const shouldLogout =
         !response?.company &&
         response?.role !== UserRole.Admin &&
-        !response?.projects?.length;
+        !hasActiveProject;
 
       if (shouldLogout) {
+        showModal({
+          title: t("no_active_projects"),
+          subtitle: t("no_active_projects_description"),
+        });
+
         logout();
         return;
       }
@@ -332,7 +346,7 @@ export const useApiData = () => {
     ...api,
     logout,
     currentUser,
-    getCurrentUser,
+    refreshCurrentUser,
     setCurrentUser,
   };
 };
