@@ -35,7 +35,7 @@ export const Input: FC<InputProps> = ({
   error,
   type,
   disabled,
-  autoFocus = false,
+  autoFocus,
   hideLabel,
   style,
   loading,
@@ -106,6 +106,7 @@ export const Input: FC<InputProps> = ({
           ...style,
         }}
         autoFocus={autoFocus}
+        autoComplete="off"
       />
       {type === "password" && (
         <div
