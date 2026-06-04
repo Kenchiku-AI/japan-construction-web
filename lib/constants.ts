@@ -21,3 +21,6 @@ export const fontFamily = "KosugiMaru-Regular";
 export const errorColor1 = "#FF6363";
 export const errorColor2 = "#FF636326";
 export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+export const appUrl = "kenchikuai://";
+export const iosUrl = "https://apps.apple.com/app/kenchiku-ai/id6766349940";
+export const androidUrl = "";
