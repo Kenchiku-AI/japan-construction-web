@@ -35,7 +35,7 @@ export const Input: FC<InputProps> = ({
   error,
   type,
   disabled,
-  autoFocus,
+  autoFocus = false,
   hideLabel,
   style,
   loading,
