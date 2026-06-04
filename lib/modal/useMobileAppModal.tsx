@@ -7,10 +7,10 @@ import { Apple, Google } from "@/app/ui/Icons";
 
 export const useMobileAppModal = () => {
   const { showModal } = useModal();
-  const [platform, setPlatform] = useState("desktop");
   const { t } = useTranslation();
 
-  useEffect(() => {
+  const showMobileAppModal = () => {
+    let platform = "desktop";
     const ua = navigator.userAgent;
 
     const isIOS =
@@ -19,31 +19,24 @@ export const useMobileAppModal = () => {
 
     const isAndroid = /Android/i.test(ua);
 
-    showModal({
-      title: `${/iPhone|iPad|iPod/i.test(ua)}`,
-      subtitle: `${isIOS}`,
-    });
-
     if (isIOS) {
-      setPlatform("ios");
+      platform = "ios";
     } else if (isAndroid) {
-      setPlatform("android");
+      platform = "android";
     }
-  }, []);
 
-  const showMobileAppModal = useCallback(() => {
     const isDesktop = platform === "desktop";
 
-    // showModal({
-    //   title: t("switch_to_mobile_app"),
-    //   subtitle: t(`switch_to_mobile_description${isDesktop ? "_desktop" : ""}`),
-    //   children: isDesktop ? (
-    //     <DesktopContent />
-    //   ) : (
-    //     <MobileContent platform={platform} />
-    //   ),
-    // });
-  }, [platform]);
+    showModal({
+      title: t("switch_to_mobile_app"),
+      subtitle: t(`switch_to_mobile_description${isDesktop ? "_desktop" : ""}`),
+      children: isDesktop ? (
+        <DesktopContent />
+      ) : (
+        <MobileContent platform={platform} />
+      ),
+    });
+  };
 
   return {
     showMobileAppModal,
