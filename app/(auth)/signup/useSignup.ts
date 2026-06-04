@@ -1,6 +1,7 @@
 import { useApi } from "@/lib/api/ApiContext";
 import { invitationTokenKey } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
+import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -12,6 +13,7 @@ export const useSignup = () => {
   const api = useApi();
   const { t } = useTranslation();
   const { showModal } = useModal();
+  const { showMobileAppModal } = useMobileAppModal();
 
   const signup = useCallback(
     async (
@@ -39,6 +41,7 @@ export const useSignup = () => {
         api.setCurrentUser(user);
         sessionStorage.removeItem(invitationTokenKey);
         router.push("/");
+        showMobileAppModal();
       } catch (err) {
         setLoading(false);
 

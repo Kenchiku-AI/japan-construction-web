@@ -1,5 +1,6 @@
 import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
+import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -11,9 +12,10 @@ export const useResetPassword = () => {
   const { t } = useTranslation();
   const { showModal } = useModal();
   const router = useRouter();
+  const { showMobileAppModal } = useMobileAppModal();
 
   const resetPassword = useCallback(
-    async (new_password: string, token: string) => {
+    async (new_password: string, token: string, newUser: boolean) => {
       setLoading(true);
 
       try {
@@ -22,12 +24,16 @@ export const useResetPassword = () => {
           token,
         });
 
-        router.replace("/");
+        router.replace("/login");
 
-        showModal({
-          title: t("password_reset"),
-          subtitle: t("password_reset_description"),
-        });
+        if (newUser) {
+          showMobileAppModal();
+        } else {
+          showModal({
+            title: t("password_reset"),
+            subtitle: t("password_reset_description"),
+          });
+        }
       } catch (err) {
         if ((err as AxiosError).status === 400) {
           showModal({

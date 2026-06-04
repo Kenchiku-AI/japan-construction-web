@@ -20,6 +20,7 @@ const ResetPassword = () => {
   const { showModal } = useModal();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const newUser = searchParams.get("newUser");
 
   useEffect(() => {
     if (!token) {
@@ -63,7 +64,7 @@ const ResetPassword = () => {
               return;
             }
 
-            resetPassword(password, token);
+            resetPassword(password, token, !!newUser);
           }}
           disabled={!password || !confirmPassword || loading}
         />
