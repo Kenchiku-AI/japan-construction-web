@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { UserRole } from "@/types";
+import { CompanyGuest, UserRole } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Check, Close, Download, Plus } from "@/app/ui/Icons";
@@ -51,7 +51,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
-  const [removeGuestLinkId, setRemoveGuestLinkId] = useState("");
+  const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -237,8 +237,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             guests={projectGuests}
             projectId={projectId}
             isEmpty={projectGuests.length === 0}
-            onDelete={(linkId) => {
-              setRemoveGuestLinkId(linkId);
+            onDelete={(guest) => {
+              setGuestToRemove(guest);
             }}
           />
         </>
@@ -287,13 +287,15 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         }}
       />
       <RemoveGuestModal
-        isOpen={!!removeGuestLinkId}
+        isOpen={!!guestToRemove}
         onClose={() => {
-          setRemoveGuestLinkId("");
+          setGuestToRemove(undefined);
         }}
         onRemove={() => {
-          removeGuest(removeGuestLinkId);
-          setRemoveGuestLinkId("");
+          if (!guestToRemove) return;
+
+          removeGuest(guestToRemove);
+          setGuestToRemove(undefined);
         }}
       />
     </>

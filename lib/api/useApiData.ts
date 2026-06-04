@@ -332,6 +332,7 @@ export const useApiData = () => {
     ...api,
     logout,
     currentUser,
+    getCurrentUser,
     setCurrentUser,
   };
 };

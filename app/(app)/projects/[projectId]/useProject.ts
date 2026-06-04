@@ -12,7 +12,6 @@ import {
   UserRole,
 } from "@/types";
 import { useModal } from "@/lib/modal/ModalContext";
-import { emailRegex } from "@/lib/constants";
 
 export const useProject = (projectId: string) => {
   const [loading, setLoading] = useState(false);
@@ -156,13 +155,26 @@ export const useProject = (projectId: string) => {
   );
 
   const removeGuest = useCallback(
-    async (linkId: string) => {
+    async (guest: CompanyGuest) => {
       setLoading(true);
 
       try {
-        await api.removeGuest(projectId, linkId);
+        const guestProject = guest.projects.find((p) => projectId);
+        if (!guestProject) return;
 
-        if (project?.company_id) {
+        await api.removeGuest(projectId, guestProject.guest_link_id);
+
+        if (guest.id === currentUser?.id) {
+          const isLast = !currentUser.company && guest.projects.length <= 1;
+
+          await api.getCurrentUser();
+
+          if (isLast) {
+            router.replace("/login");
+          } else {
+            router.replace("/");
+          }
+        } else if (project?.company_id) {
           getCompanyGuests(project.company_id);
         }
       } catch (err) {

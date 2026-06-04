@@ -11,7 +11,7 @@ interface GuestsListProps {
   guests: CompanyGuest[];
   projectId: string;
   isEmpty?: boolean;
-  onDelete: (linkId: string) => void;
+  onDelete: (guest: CompanyGuest) => void;
 }
 
 const GuestsList: FC<GuestsListProps> = ({
@@ -49,10 +49,7 @@ const GuestsList: FC<GuestsListProps> = ({
                 <div
                   className="cursor-pointer"
                   onClick={() => {
-                    const project = guest.projects.find((p) => projectId);
-                    if (!project) return;
-
-                    onDelete(project.guest_link_id);
+                    onDelete(guest);
                   }}
                 >
                   <Trash />
