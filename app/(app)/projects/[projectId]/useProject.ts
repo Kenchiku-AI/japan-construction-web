@@ -169,9 +169,7 @@ export const useProject = (projectId: string) => {
 
           await api.getCurrentUser();
 
-          if (isLast) {
-            router.replace("/login");
-          } else {
+          if (!isLast) {
             router.replace("/");
           }
         } else if (project?.company_id) {
