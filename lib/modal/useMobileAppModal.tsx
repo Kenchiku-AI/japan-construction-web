@@ -29,7 +29,9 @@ export const useMobileAppModal = () => {
 
     showModal({
       title: t("switch_to_mobile_app"),
-      subtitle: t(`switch_to_mobile_description${isDesktop ? "_desktop" : ""}`),
+      subtitle: t(
+        `switch_to_mobile_app_description${isDesktop ? "_desktop" : ""}`,
+      ),
       children: isDesktop ? (
         <DesktopContent />
       ) : (
@@ -86,20 +88,22 @@ const MobileContent = ({ platform }: { platform: string }) => {
   }, []);
 
   return (
-    <Button
-      label={t("use_app")}
-      onClick={() => {
-        appOpenedRef.current = false;
+    <div className="mt-6">
+      <Button
+        label={t("use_app")}
+        onClick={() => {
+          appOpenedRef.current = false;
 
-        window.location.href = "kenchikuai://";
+          window.location.href = "kenchikuai://";
 
-        setTimeout(() => {
-          if (!appOpenedRef.current) {
-            const url = platform === "ios" ? iosUrl : androidUrl;
-            window.location.href = url;
-          }
-        }, 1500);
-      }}
-    />
+          setTimeout(() => {
+            if (!appOpenedRef.current) {
+              const url = platform === "ios" ? iosUrl : androidUrl;
+              window.location.href = url;
+            }
+          }, 1500);
+        }}
+      />
+    </div>
   );
 };
