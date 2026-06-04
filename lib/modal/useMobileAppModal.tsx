@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useModal } from "./ModalContext";
 import { useTranslation } from "react-i18next";
-import { androidUrl, iosUrl } from "../constants";
+import { androidUrl, fontColor2, iosUrl } from "../constants";
 import { Button } from "@/app/ui/Button/Button";
 import { Apple, Google } from "@/app/ui/Icons";
 
@@ -38,14 +38,16 @@ const DesktopContent = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className="flex flex-col md:flex-row items-center justify-center mt-10 mb-6 gap-3">
       <div
         className="cursor-pointer"
         onClick={() => (window.location.href = iosUrl)}
       >
         <Apple />
       </div>
-      <div>{t("or")}</div>
+      <div style={{ color: fontColor2, fontSize: 12, height: 20 }}>
+        {t("or")}
+      </div>
       <div
         className="cursor-pointer"
         onClick={() => (window.location.href = androidUrl)}

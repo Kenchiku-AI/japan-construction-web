@@ -303,7 +303,7 @@ export const Search = ({ color, size }: IconProps) => (
 );
 
 export const Apple = () => (
-  <svg width="108.85157" height="40" viewBox="0 0 108.85157 40">
+  <svg height={70} width={180} viewBox="0 0 108.85157 40">
     <g>
       <g>
         <path
@@ -398,7 +398,7 @@ export const Apple = () => (
 );
 
 export const Google = () => (
-  <svg viewBox="0 0 238.96 70.87">
+  <svg height={65} width={200} viewBox="0 0 238.96 70.87">
     <g>
       <rect x="-.11" y="0" width="239.17" height="70.87" rx="8.86" ry="8.86" />
       <path
