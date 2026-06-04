@@ -8,6 +8,7 @@ import { Apple, Google } from "@/app/ui/Icons";
 export const useMobileAppModal = () => {
   const { showModal } = useModal();
   const [platform, setPlatform] = useState("desktop");
+  const { t } = useTranslation();
 
   useEffect(() => {
     const ua = navigator.userAgent;
@@ -29,8 +30,8 @@ export const useMobileAppModal = () => {
     const isDesktop = platform === "desktop";
 
     showModal({
-      title: "switch_to_mobile_app",
-      subtitle: `switch_to_mobile_description${isDesktop ? "_desktop" : ""}`,
+      title: t("switch_to_mobile_app"),
+      subtitle: t(`switch_to_mobile_description${isDesktop ? "_desktop" : ""}`),
       children: isDesktop ? (
         <DesktopContent />
       ) : (
