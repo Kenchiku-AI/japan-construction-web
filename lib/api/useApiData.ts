@@ -74,19 +74,15 @@ export const useApiData = () => {
     try {
       const response = await api.getCurrentUser();
 
-      const hasActiveProject = response?.projects?.some(
-        (p) => p.status === ProjectStatus.Active,
-      );
-
       const shouldLogout =
         !response?.company &&
         response?.role !== UserRole.Admin &&
-        !hasActiveProject;
+        !response?.projects?.length;
 
       if (shouldLogout) {
         showModal({
-          title: t("no_active_projects"),
-          subtitle: t("no_active_projects_description"),
+          title: t("no_projects"),
+          subtitle: t("no_projects_description"),
         });
 
         logout();
