@@ -74,23 +74,29 @@ export const useApiData = () => {
     try {
       const response = await api.getCurrentUser();
 
-      const shouldLogout =
-        !response?.company &&
-        response?.role !== UserRole.Admin &&
-        !response?.projects?.length;
-
-      if (shouldLogout) {
-        showModal({
-          title: t("no_projects"),
-          subtitle: t("no_projects_description"),
-        });
-
-        logout();
-        return;
+      if (validateCurrentUser(response)) {
+        setCurrentUser(response);
       }
-
-      setCurrentUser(response);
     } catch {}
+  };
+
+  const validateCurrentUser = (user?: CurrentUser) => {
+    const shouldLogout =
+      !user?.company &&
+      user?.role !== UserRole.Admin &&
+      !user?.projects?.length;
+
+    if (shouldLogout) {
+      showModal({
+        title: t("no_projects"),
+        subtitle: t("no_projects_description"),
+      });
+
+      logout();
+      return false;
+    }
+
+    return true;
   };
 
   const logout = useCallback(async () => {
@@ -343,6 +349,7 @@ export const useApiData = () => {
     logout,
     currentUser,
     refreshCurrentUser,
+    validateCurrentUser,
     setCurrentUser,
   };
 };

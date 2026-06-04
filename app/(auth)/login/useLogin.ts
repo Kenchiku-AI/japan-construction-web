@@ -38,9 +38,11 @@ export const useLogin = () => {
           }
         }
 
-        api.setCurrentUser(user);
-        const url = user.role === UserRole.Admin ? "/companies" : "/";
-        router.push(url);
+        if (api.validateCurrentUser(user)) {
+          api.setCurrentUser(user);
+          const url = user.role === UserRole.Admin ? "/companies" : "/";
+          router.push(url);
+        }
       } catch (err) {
         setLoading(false);
 
