@@ -32,8 +32,8 @@ const MobileAppModal: FC<MobileAppModalProps> = ({ isOpen, onClose }) => {
   }, []);
 
   const descriptionKey = useMemo(() => {
-    if (isMobile) return "switch_to_mobile_description";
-    return "switch_to_mobile_description_desktop";
+    if (isMobile) return "switch_to_mobile_app_description";
+    return "switch_to_mobile_app_description_desktop";
   }, [isMobile]);
 
   return (
