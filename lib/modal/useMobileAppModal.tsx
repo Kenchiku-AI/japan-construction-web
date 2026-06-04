@@ -70,38 +70,14 @@ const DesktopContent = () => {
 };
 
 const MobileContent = ({ platform }: { platform: string }) => {
-  const appOpenedRef = useRef(false);
   const { t } = useTranslation();
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        appOpenedRef.current = true;
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, []);
 
   return (
     <div className="mt-6">
       <Button
         label={t("use_app")}
         onClick={() => {
-          appOpenedRef.current = false;
-
-          window.location.href = "kenchikuai://";
-
-          setTimeout(() => {
-            if (!appOpenedRef.current) {
-              const url = platform === "ios" ? iosUrl : androidUrl;
-              window.location.href = url;
-            }
-          }, 1500);
+          window.location.href = platform === "ios" ? iosUrl : androidUrl;
         }}
       />
     </div>
