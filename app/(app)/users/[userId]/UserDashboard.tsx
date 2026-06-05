@@ -59,7 +59,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
     if (role !== user.role) return false;
 
     return true;
-  }, [firstName, lastName, email, user]);
+  }, [firstName, lastName, email, user, role]);
 
   useEffect(() => {
     if (!!userRef.current || !user) return;
