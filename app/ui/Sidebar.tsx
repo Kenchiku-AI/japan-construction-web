@@ -73,7 +73,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 )}
               </div>
               <div>
-                <span className="min-sm:hidden">
+                <span className="min-md:hidden">
                   <Button
                     variant="tertiary"
                     onClick={() => {
@@ -83,7 +83,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                     style={{ width: "100%" }}
                   />
                 </span>
-                <span className="max-sm:hidden">
+                <span className="max-md:hidden">
                   <Button
                     variant="tertiary"
                     label={`${currentUser.last_name ?? ""} ${currentUser.first_name ?? ""}`}
