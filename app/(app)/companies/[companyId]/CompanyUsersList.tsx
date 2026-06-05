@@ -56,7 +56,10 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users, onRemove }) => {
                 {currentUser?.role !== "user" && (
                   <div
                     className="cursor-pointer"
-                    onClick={() => onRemove(u.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemove(u.id);
+                    }}
                   >
                     <Trash />
                   </div>
