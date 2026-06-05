@@ -16,6 +16,8 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { currentUser } = useApi();
   const isAdmin = currentUser?.role === UserRole.Admin;
 
+  console.log("current user", currentUser);
+
   return !currentUser ? null : (
     <div className="drawer drawer-open">
       <input type="checkbox" className="drawer-toggle" />

@@ -35,39 +35,44 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users, onRemove }) => {
         }}
       >
         {users.map((u) => (
-          <div
-            key={u.id}
-            onClick={() => {
-              router.push(`/users/${u.id}`);
-            }}
-            className="hover:opacity-50 cursor-pointer"
-          >
-            <div className="mx-4">
-              <div className="flex items-center justify-between">
-                <div style={{ height: 60 }} className="flex items-center gap-4">
-                  <User />
-                  <div className="flex flex-col">
-                    <div>{`${u.last_name} ${u.first_name}`}</div>
-                    <div
-                      className={styles.subtitle}
-                    >{`${u.email}${u.role === UserRole.Manager ? ` • ${t("manager")}` : ""}`}</div>
-                  </div>
-                </div>
-                {currentUser?.role !== "user" && (
+          <>
+            <div
+              key={u.id}
+              onClick={() => {
+                router.push(`/users/${u.id}`);
+              }}
+              className="hover:opacity-50 cursor-pointer"
+            >
+              <div className="mx-4">
+                <div className="flex items-center justify-between">
                   <div
-                    className="cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onRemove(u.id);
-                    }}
+                    style={{ height: 60 }}
+                    className="flex items-center gap-4"
                   >
-                    <Trash />
+                    <User />
+                    <div className="flex flex-col">
+                      <div>{`${u.last_name} ${u.first_name}`}</div>
+                      <div
+                        className={styles.subtitle}
+                      >{`${u.email}${u.role === UserRole.Manager ? ` • ${t("manager")}` : ""}`}</div>
+                    </div>
                   </div>
-                )}
+                  {currentUser?.role !== "user" && (
+                    <div
+                      className="cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRemove(u.id);
+                      }}
+                    >
+                      <Trash />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <Divider color={fontColor2} />
-          </div>
+          </>
         ))}
       </div>
       {users.length > 5 && (

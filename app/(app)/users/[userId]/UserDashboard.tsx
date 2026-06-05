@@ -34,12 +34,9 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const [isConfirmLogoutShown, setIsConfirmLogoutShown] = useState(false);
 
   const isEditDisabled = useMemo(() => {
-    if (!user || !currentUser) return true;
+    if (!user || !currentUser) return false;
 
-    if (currentUser.role === UserRole.Admin) {
-      if (currentUser.id === userId) return false;
-      return user.role === UserRole.Admin;
-    }
+    if (currentUser.role === UserRole.Admin) return false;
 
     return currentUser.id !== userId;
   }, [user, currentUser]);
@@ -55,12 +52,15 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   }, [firstName, lastName, email, user]);
 
   const isRoleDisabled = useMemo(() => {
-    if (isEditDisabled) return true;
     if (!currentUser || !user) return true;
-    if (user.role === UserRole.Admin) return true;
+
+    if (isEditDisabled) return true;
+
     if (currentUser.role === UserRole.Admin) return false;
+
     if (currentUser.role === UserRole.User) return true;
-    return user.role === UserRole.Manager;
+
+    return user.role === UserRole.Admin;
   }, [isEditDisabled, user, currentUser]);
 
   useEffect(() => {
