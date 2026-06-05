@@ -119,8 +119,8 @@ export const useCompany = (companyId: string) => {
         if (userId === currentUser?.id) {
           await api.refreshCurrentUser();
           router.replace("/");
-        } else if (project?.company_id) {
-          getCompanyGuests(project.company_id);
+        } else {
+          getCompany(companyId);
         }
       } catch (err) {
         showModal({
