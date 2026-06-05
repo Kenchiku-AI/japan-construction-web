@@ -77,6 +77,8 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
     { label: t("user"), value: UserRole.User },
   ];
 
+  const showUpdateButton = !isEditDisabled || !isRoleDisabled;
+
   if (
     user &&
     currentUser &&
@@ -138,33 +140,32 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
               disabled={isRoleDisabled}
             />
           </div>
-          {!isEditDisabled ||
-            (!isRoleDisabled && (
-              <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
-                <Button
-                  label={t("update_user")}
-                  onClick={() => {
-                    if (!role) return;
+          {showUpdateButton && (
+            <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
+              <Button
+                label={t("update_user")}
+                onClick={() => {
+                  if (!role) return;
 
-                    if (!emailRegex.test(email)) {
-                      showModal({
-                        title: t("invalid_email"),
-                        subtitle: t("invalid_email_description"),
-                      });
-                      return;
-                    }
-
-                    updateUser({
-                      first_name: firstName,
-                      last_name: lastName,
-                      email: email,
-                      role: role,
+                  if (!emailRegex.test(email)) {
+                    showModal({
+                      title: t("invalid_email"),
+                      subtitle: t("invalid_email_description"),
                     });
-                  }}
-                  disabled={isUpdateDisabled}
-                />
-              </div>
-            ))}
+                    return;
+                  }
+
+                  updateUser({
+                    first_name: firstName,
+                    last_name: lastName,
+                    email: email,
+                    role: role,
+                  });
+                }}
+                disabled={isUpdateDisabled}
+              />
+            </div>
+          )}
         </>
       )}
       <Modal
