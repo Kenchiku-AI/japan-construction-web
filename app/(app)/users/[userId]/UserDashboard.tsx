@@ -34,11 +34,21 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const [isConfirmLogoutShown, setIsConfirmLogoutShown] = useState(false);
 
   const isEditDisabled = useMemo(() => {
-    if (!user || !currentUser) return false;
+    if (!user || !currentUser) return true;
 
     if (currentUser.role === UserRole.Admin) return false;
 
     return currentUser.id !== userId;
+  }, [user, currentUser]);
+
+  const isRoleDisabled = useMemo(() => {
+    if (!currentUser || !user) return true;
+
+    if (currentUser.role === UserRole.Admin) return false;
+
+    if (currentUser.role === UserRole.User) return true;
+
+    return user.role === UserRole.Admin;
   }, [user, currentUser]);
 
   const isUpdateDisabled = useMemo(() => {
@@ -50,18 +60,6 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
 
     return true;
   }, [firstName, lastName, email, user]);
-
-  const isRoleDisabled = useMemo(() => {
-    if (!currentUser || !user) return true;
-
-    if (isEditDisabled) return true;
-
-    if (currentUser.role === UserRole.Admin) return false;
-
-    if (currentUser.role === UserRole.User) return true;
-
-    return user.role === UserRole.Admin;
-  }, [isEditDisabled, user, currentUser]);
 
   useEffect(() => {
     if (!!userRef.current || !user) return;
@@ -140,32 +138,33 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
               disabled={isRoleDisabled}
             />
           </div>
-          {!isEditDisabled && (
-            <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
-              <Button
-                label={t("update_user")}
-                onClick={() => {
-                  if (!role) return;
+          {!isEditDisabled ||
+            (!isRoleDisabled && (
+              <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
+                <Button
+                  label={t("update_user")}
+                  onClick={() => {
+                    if (!role) return;
 
-                  if (!emailRegex.test(email)) {
-                    showModal({
-                      title: t("invalid_email"),
-                      subtitle: t("invalid_email_description"),
+                    if (!emailRegex.test(email)) {
+                      showModal({
+                        title: t("invalid_email"),
+                        subtitle: t("invalid_email_description"),
+                      });
+                      return;
+                    }
+
+                    updateUser({
+                      first_name: firstName,
+                      last_name: lastName,
+                      email: email,
+                      role: role,
                     });
-                    return;
-                  }
-
-                  updateUser({
-                    first_name: firstName,
-                    last_name: lastName,
-                    email: email,
-                    role: role,
-                  });
-                }}
-                disabled={isUpdateDisabled}
-              />
-            </div>
-          )}
+                  }}
+                  disabled={isUpdateDisabled}
+                />
+              </div>
+            ))}
         </>
       )}
       <Modal

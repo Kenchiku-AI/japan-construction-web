@@ -35,7 +35,7 @@ const Select: FC<SelectProps> = ({
   style,
   disabled,
 }) => {
-  const [isUnselected, setIsUnselected] = useState(true);
+  const [isUnselected, setIsUnselected] = useState(!value);
   const [isEmpty, setIsEmpty] = useState(true);
   const [open, setOpen] = useState(false);
   const valueRef = useRef(value);
