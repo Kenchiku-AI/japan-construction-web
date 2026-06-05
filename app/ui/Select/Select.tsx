@@ -55,9 +55,7 @@ const Select: FC<SelectProps> = ({
   }, [error, disabled]);
 
   useEffect(() => {
-    if (valueRef.current && !value) {
-      setIsUnselected(true);
-    }
+    setIsUnselected(!value);
 
     if (value) {
       setIsEmpty(false);
