@@ -141,5 +141,6 @@ export const useCompany = (companyId: string) => {
     updateName,
     templates,
     createTemplate,
+    removeUser,
   };
 };
