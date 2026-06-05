@@ -15,9 +15,6 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const router = useRouter();
   const { currentUser } = useApi();
   const isAdmin = currentUser?.role === UserRole.Admin;
-  const userName = `${currentUser?.last_name ?? ""} ${currentUser?.first_name ?? ""}`;
-
-  console.log("current user", userName);
 
   return !currentUser ? null : (
     <div className="drawer drawer-open">
@@ -76,7 +73,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 )}
               </div>
               <div>
-                <span className="min-lg:hidden">
+                <span className="min-sm:hidden">
                   <Button
                     variant="tertiary"
                     onClick={() => {
@@ -86,10 +83,10 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                     style={{ width: "100%" }}
                   />
                 </span>
-                <span className="max-lg:hidden">
+                <span className="max-sm:hidden">
                   <Button
                     variant="tertiary"
-                    label={userName}
+                    label={`${currentUser.last_name ?? ""} ${currentUser.first_name ?? ""}`}
                     onClick={() => {
                       router.push(`/users/${currentUser.id}`);
                     }}
