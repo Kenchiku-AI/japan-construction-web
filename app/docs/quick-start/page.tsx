@@ -1,8 +1,12 @@
+import Divider from "@/app/ui/Divider";
+import { Heading } from "@/app/ui/Heading/Heading";
+
 export default function QuickStartPage() {
   return (
     <div className="max-w-4xl space-y-12">
       <div>
-        <h1 className="text-4xl font-bold">クイックスタート</h1>
+        <Heading title="クイックスタート" />
+        <Divider />
         <p className="mt-4 text-muted-foreground">
           Kenchiku AIの基本的な利用方法をご紹介します。初めて利用する方は、
           まずこのページをご確認ください。
