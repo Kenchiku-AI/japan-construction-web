@@ -3,9 +3,12 @@ export const authRoutes = [
   "/signup",
   "/forgot-password",
   "/reset-password",
+];
+export const publicRoutes = [
   "/privacy-policy",
   "/support",
   "/accept-invitation",
+  "/docs",
 ];
 export const accessTokenKey = "accessToken";
 export const refreshTokenKey = "refreshToken";

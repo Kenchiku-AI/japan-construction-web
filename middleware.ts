@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { accessTokenKey, authRoutes } from "./lib/constants";
+import { accessTokenKey, authRoutes, publicRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get(accessTokenKey);
   const { pathname } = req.nextUrl;
 
-  if (pathname.startsWith("/accept-invitation")) {
+  const isPublicRoute = publicRoutes.some((r) => pathname.startsWith(r));
+
+  if (isPublicRoute) {
     return NextResponse.next();
   }
 

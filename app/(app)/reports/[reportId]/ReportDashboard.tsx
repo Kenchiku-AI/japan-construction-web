@@ -60,6 +60,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [isMobile, setIsMobile] = useState(false);
+  const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [isPdfDownloading, setIsPdfDownloading] = useState(false);
   const fileInputRef = useRef<any>(null);
   const loadedRef = useRef(false);
@@ -276,50 +277,67 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       {report != null && (
         <>
           <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
-            <Button
-              variant="tertiary"
-              label={t(isPdfDownloading ? "downloading" : "download_pdf")}
-              iconLeft={() => <Download />}
-              disabled={isPdfDownloading}
-              onClick={async () => {
-                if (!report) return;
+            <div className="flexflex-row gap-2">
+              <Button
+                variant="tertiary"
+                label={t(isExcelDownloading ? "downloading" : "Excel")}
+                iconLeft={() => <Download />}
+                disabled={isPdfDownloading}
+                onClick={async () => {
+                  if (!report) return;
 
-                setIsPdfDownloading(true);
+                  setIsExcelDownloading(true);
+                }}
+                style={{ height: "auto" }}
+                textStyle={{
+                  fontWeight: "300",
+                }}
+              />
+              <Button
+                variant="tertiary"
+                label={t(isPdfDownloading ? "downloading" : "PDF")}
+                iconLeft={() => <Download />}
+                disabled={isPdfDownloading}
+                onClick={async () => {
+                  if (!report) return;
 
-                const { pdf } = await import("@react-pdf/renderer");
+                  setIsPdfDownloading(true);
 
-                const labelWidths = await Promise.all(
-                  report.fields.map((f) => measureTextWidth(f.name, 12)),
-                );
-                const labelWidth = Math.max(...labelWidths) + 40;
+                  const { pdf } = await import("@react-pdf/renderer");
 
-                const blob = await pdf(
-                  <ReportPDF
-                    report={report}
-                    topLabel={topLabel ?? ""}
-                    images={images ?? []}
-                    labelWidth={labelWidth}
-                  />,
-                ).toBlob();
+                  const labelWidths = await Promise.all(
+                    report.fields.map((f) => measureTextWidth(f.name, 12)),
+                  );
+                  const labelWidth = Math.max(...labelWidths) + 40;
 
-                const fileUrl = URL.createObjectURL(blob);
+                  const blob = await pdf(
+                    <ReportPDF
+                      report={report}
+                      topLabel={topLabel ?? ""}
+                      images={images ?? []}
+                      labelWidth={labelWidth}
+                    />,
+                  ).toBlob();
 
-                const a = document.createElement("a");
-                a.href = fileUrl;
-                a.download = `${report.name.replace(/ /g, "_").replace(/[()]/g, "")}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
+                  const fileUrl = URL.createObjectURL(blob);
 
-                URL.revokeObjectURL(fileUrl);
+                  const a = document.createElement("a");
+                  a.href = fileUrl;
+                  a.download = `${report.name.replace(/ /g, "_").replace(/[()]/g, "")}.pdf`;
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
 
-                setIsPdfDownloading(false);
-              }}
-              style={{ height: "auto" }}
-              textStyle={{
-                fontWeight: "300",
-              }}
-            />
+                  URL.revokeObjectURL(fileUrl);
+
+                  setIsPdfDownloading(false);
+                }}
+                style={{ height: "auto" }}
+                textStyle={{
+                  fontWeight: "300",
+                }}
+              />
+            </div>
             {!isReportDisabled && (
               <Button
                 variant="tertiary"
