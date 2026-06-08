@@ -25,14 +25,13 @@ const thinBorder: any = {
   right: side("thin", C.border),
 };
 
-// Estimate character width for Japanese text:
-// full-width chars (CJK etc.) count as ~1.8 units, ASCII as ~1.0
+// Estimate column width for a string:
+// full-width CJK chars count as 1.8 units, ASCII as 1.0
 function estimateColWidth(text: string, fontSize = 9): number {
   let w = 0;
   for (const ch of text) {
     w += ch.charCodeAt(0) > 0x7f ? 1.8 : 1.0;
   }
-  // add padding and scale by font size ratio vs default 10pt
   return (w + 2) * (fontSize / 10);
 }
 
@@ -78,11 +77,9 @@ async function buildReportWorkbook(
   const leftFields = sortedFields.slice(0, half);
   const rightFields = sortedFields.slice(half);
 
-  // Width of the widest label in each column, with a minimum
   const MIN_LABEL_W = 10;
   const MIN_VALUE_W = 18;
-  // Total width budget for fields section (matches photo section width)
-  const TOTAL_FIELD_W = 76; // cols B+C+D+E combined
+  const TOTAL_FIELD_W = 76; // combined width budget for both field columns
 
   const leftLabelW = Math.max(
     MIN_LABEL_W,
@@ -92,7 +89,6 @@ async function buildReportWorkbook(
     ? Math.max(MIN_LABEL_W, ...rightFields.map((f) => estimateColWidth(f.name)))
     : 0;
 
-  // Value columns fill the remaining half-width each
   const halfTotal = TOTAL_FIELD_W / 2;
   const leftValueW = Math.max(MIN_VALUE_W, halfTotal - leftLabelW);
   const rightValueW = rightFields.length
@@ -100,24 +96,21 @@ async function buildReportWorkbook(
     : 0;
 
   // ── column layout ─────────────────────────────────────────────────────────
-  // Col 1=A margin, 2=B label-L, 3=C value-L, 4=D gutter, 5=E label-R,
-  // 6=F value-R, 7=G right-margin
-  // Photos span B+C (cols 2+3) and E+F (cols 5+6) same as fields
+  // 1=A margin, 2=B label-L/photo-L, 3=C value-L/photo-L span,
+  // 4=D gutter,  5=E label-R/photo-R, 6=F value-R/photo-R span, 7=G margin
   const GUTTER_W = 3;
   const MARGIN_W = 1.5;
+  const TOTAL_COLS = 7;
 
   ws.columns = [
-    { key: "A", width: MARGIN_W }, // 1  left margin
-    { key: "B", width: leftLabelW }, // 2  label-L / photo-L anchor
-    { key: "C", width: leftValueW }, // 3  value-L / photo-L span
-    { key: "D", width: GUTTER_W }, // 4  centre gutter
-    { key: "E", width: rightFields.length ? rightLabelW : leftLabelW }, // 5  label-R / photo-R anchor
-    { key: "F", width: rightFields.length ? rightValueW : leftValueW }, // 6  value-R / photo-R span
-    { key: "G", width: MARGIN_W }, // 7  right margin
+    { key: "A", width: MARGIN_W },
+    { key: "B", width: leftLabelW },
+    { key: "C", width: leftValueW },
+    { key: "D", width: GUTTER_W },
+    { key: "E", width: rightFields.length ? rightLabelW : leftLabelW },
+    { key: "F", width: rightFields.length ? rightValueW : leftValueW },
+    { key: "G", width: MARGIN_W },
   ];
-
-  // Total columns = 7
-  const TOTAL_COLS = 7;
 
   // ── style helper ──────────────────────────────────────────────────────────
   const style = (
@@ -179,7 +172,6 @@ async function buildReportWorkbook(
         fgColor: { argb: C.navy },
       };
 
-  // accent bar
   for (let c = 1; c <= TOTAL_COLS; c++)
     ws.getCell(4, c).fill = {
       type: "pattern",
@@ -254,7 +246,6 @@ async function buildReportWorkbook(
     writeFieldRow(FIELD_START + i, f.name, f.value, 5, 6),
   );
 
-  // outer box
   const applyOuterBox = (r1: number, c1: number, r2: number, c2: number) => {
     for (let r = r1; r <= r2; r++) {
       for (let c = c1; c <= c2; c++) {
@@ -289,26 +280,26 @@ async function buildReportWorkbook(
     vAlign: "middle",
   });
 
-  // Fetch all images in parallel
   const fetchedImages = await Promise.all(
     images.map((img) => fetchImageAsBase64(img.download_url)),
   );
 
-  // Image pixel width — derived from column widths B+C (approx 7px per char unit)
-  // Excel col width unit ≈ 7px at default font
-  const PX_PER_UNIT = 7;
-  const IMG_W = Math.round((leftLabelW + leftValueW) * PX_PER_UNIT);
+  // Excel col width unit ≈ 8px; 1px = 0.75pt for row height
+  const PX_PER_UNIT = 8;
+  const PADDING_PX = 12; // vertical padding above and below image in cell
+  const INSET_PX = 8; // horizontal inset each side for breathing room
+  const pxToPoints = (px: number) => px * 0.75;
 
-  // Convert image pixel height to Excel row height points (1pt ≈ 0.75px at 96dpi)
-  const pxToRowHeight = (px: number) => Math.round(px / 0.75);
+  // Image render width = combined column width minus inset on each side
+  const IMG_W =
+    Math.round((leftLabelW + leftValueW) * PX_PER_UNIT) - INSET_PX * 2;
 
   const CAPTION_H = 18;
   const DESC_H = 45;
   const SPACER_H = 8;
 
-  // Left photo: cols 2+3 (B+C), right photo: cols 5+6 (E+F)
-  const IMG_COL_L = 2;
-  const IMG_COL_R = 5;
+  const IMG_COL_L = 2; // left photo: cols B+C (2+3)
+  const IMG_COL_R = 5; // right photo: cols E+F (5+6)
 
   let curRow = PHOTO_SECTION_START + 1;
 
@@ -319,14 +310,13 @@ async function buildReportWorkbook(
     const leftImg = images[li];
     const rightImg = ri < images.length ? images[ri] : null;
 
-    // Actual rendered pixel height for each image at IMG_W wide
     const leftImgH = Math.round(IMG_W * (leftImg.height / leftImg.width));
     const rightImgH = rightImg
       ? Math.round(IMG_W * (rightImg.height / rightImg.width))
       : 0;
 
-    // Row height = tallest image in the pair, converted to Excel points
-    const photoRowHeight = pxToRowHeight(Math.max(leftImgH, rightImgH));
+    const tallestImgH = Math.max(leftImgH, rightImgH);
+    const photoRowHeight = pxToPoints(tallestImgH + PADDING_PX * 2);
 
     // ── caption row ────────────────────────────────────────────────────────
     ws.getRow(curRow).height = CAPTION_H;
@@ -366,12 +356,23 @@ async function buildReportWorkbook(
           base64: fetched.base64,
           extension: fetched.ext,
         });
-        const thisH = Math.round(
+        const thisImgH = Math.round(
           IMG_W * (images[idx].height / images[idx].width),
         );
+
+        // Center horizontally: INSET_PX on each side (image is already inset by INSET_PX)
+        // Center vertically: offset by half the surplus height
+        const surplusY = tallestImgH - thisImgH;
+        const offsetYPx = PADDING_PX + surplusY / 2;
+
+        // Convert px offsets to fractional col/row units for ExcelJS tl
+        const colSpanPx = (leftLabelW + leftValueW) * PX_PER_UNIT;
+        const colFrac = INSET_PX / colSpanPx;
+        const rowFrac = pxToPoints(offsetYPx) / photoRowHeight;
+
         ws.addImage(imgId, {
-          tl: { col: col - 1 + 0.05, row: photoRow - 1 + 0.05 } as any,
-          ext: { width: IMG_W, height: thisH },
+          tl: { col: col - 1 + colFrac, row: photoRow - 1 + rowFrac } as any,
+          ext: { width: IMG_W, height: thisImgH },
         });
       }
     }
