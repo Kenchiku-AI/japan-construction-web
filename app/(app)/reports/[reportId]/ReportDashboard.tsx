@@ -28,6 +28,7 @@ import FilterByTagModal from "./FilterByTagModal";
 import Image from "next/image";
 import JSZip from "jszip";
 import { useDate } from "@/public/date/useDate";
+import { useExportExcel } from "./useExportExcel";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -51,6 +52,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     selectedPhoto,
     setSelectedPhoto,
   } = useReport(reportId);
+  const { downloadExcel, isExcelDownloading } = useExportExcel();
   const { formatDate } = useDate();
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
@@ -60,7 +62,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [isMobile, setIsMobile] = useState(false);
-  const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [isPdfDownloading, setIsPdfDownloading] = useState(false);
   const fileInputRef = useRef<any>(null);
   const loadedRef = useRef(false);
@@ -277,16 +278,16 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       {report != null && (
         <>
           <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
-            <div className="flexflex-row gap-2">
+            <div className="flex flex-row gap-6">
               <Button
                 variant="tertiary"
                 label={t(isExcelDownloading ? "downloading" : "Excel")}
                 iconLeft={() => <Download />}
-                disabled={isPdfDownloading}
+                disabled={isExcelDownloading}
                 onClick={async () => {
                   if (!report) return;
 
-                  setIsExcelDownloading(true);
+                  downloadExcel(report, images ?? [], topLabel ?? "");
                 }}
                 style={{ height: "auto" }}
                 textStyle={{
