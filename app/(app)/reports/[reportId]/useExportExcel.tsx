@@ -65,10 +65,13 @@ async function buildReportWorkbook(
   topLabel: string,
 ) {
   const wb = new ExcelJS.Workbook();
-  const ws = wb.addWorksheet(report.name, {
-    pageSetup: { paperSize: 9, orientation: "portrait", fitToPage: true },
-    views: [{ showGridLines: false }],
-  });
+  const ws = wb.addWorksheet(
+    report.name.replace(/[*?:\\/\[\]]/g, "").slice(0, 31),
+    {
+      pageSetup: { paperSize: 9, orientation: "portrait", fitToPage: true },
+      views: [{ showGridLines: false }],
+    },
+  );
 
   // ── column widths ──────────────────────────────────────────────────────────
   // A=margin, B=label-L, C=value-L, D=gutter, E=label-R, F=value-R,
@@ -120,7 +123,7 @@ async function buildReportWorkbook(
       vertical: opts.vAlign ?? "middle",
       wrapText: opts.wrap ?? false,
     };
-    if (opts.border) cell.border = opts.border as any;
+    if (opts.border) cell.border = opts.border;
   };
 
   // helper – merge + fill + border (ExcelJS needs merge before styling)
@@ -135,7 +138,7 @@ async function buildReportWorkbook(
     ws.mergeCells(r1, c1, r2, c2);
     const cell = ws.getCell(r1, c1);
     cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: bg } };
-    if (bdr) cell.border = bdr as any;
+    if (bdr) cell.border = bdr;
     return cell;
   };
 
@@ -261,7 +264,7 @@ async function buildReportWorkbook(
           bottom: r === r2 ? side("medium", C.navy) : side("thin", C.border),
           left: c === c1 ? side("medium", C.navy) : side("thin", C.border),
           right: c === c2 ? side("medium", C.navy) : side("thin", C.border),
-        } as any;
+        };
       }
     }
   };
