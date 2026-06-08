@@ -120,7 +120,7 @@ async function buildReportWorkbook(
       vertical: opts.vAlign ?? "middle",
       wrapText: opts.wrap ?? false,
     };
-    if (opts.border) cell.border = opts.border;
+    if (opts.border) cell.border = opts.border as any;
   };
 
   // helper – merge + fill + border (ExcelJS needs merge before styling)
@@ -135,7 +135,7 @@ async function buildReportWorkbook(
     ws.mergeCells(r1, c1, r2, c2);
     const cell = ws.getCell(r1, c1);
     cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: bg } };
-    if (bdr) cell.border = bdr;
+    if (bdr) cell.border = bdr as any;
     return cell;
   };
 
@@ -261,7 +261,7 @@ async function buildReportWorkbook(
           bottom: r === r2 ? side("medium", C.navy) : side("thin", C.border),
           left: c === c1 ? side("medium", C.navy) : side("thin", C.border),
           right: c === c2 ? side("medium", C.navy) : side("thin", C.border),
-        };
+        } as any;
       }
     }
   };
