@@ -26,12 +26,6 @@ const thinBorder: any = {
   left: side("thin", C.border),
   right: side("thin", C.border),
 };
-const outerBorder: any = {
-  top: side("medium", C.navy),
-  bottom: side("medium", C.navy),
-  left: side("medium", C.navy),
-  right: side("medium", C.navy),
-};
 
 // ─── fetch a remote image and return { base64, extension } ───────────────────
 async function fetchImageAsBase64(
@@ -75,19 +69,13 @@ async function buildReportWorkbook(
 
   // ── column widths ──────────────────────────────────────────────────────────
   // A=margin, B=label-L, C=value-L, D=gutter, E=label-R, F=value-R,
-  // G=pad, H=photo-L, I=gutter, J=photo-R, K=margin
   ws.columns = [
-    { key: "A", width: 1.5 }, // 1
-    { key: "B", width: 14 }, // 2  label left
-    { key: "C", width: 26 }, // 3  value left
-    { key: "D", width: 2 }, // 4  gutter
-    { key: "E", width: 14 }, // 5  label right
-    { key: "F", width: 26 }, // 6  value right
-    { key: "G", width: 1.5 }, // 7
-    { key: "H", width: 36 }, // 8  photo left
-    { key: "I", width: 2 }, // 9
-    { key: "J", width: 36 }, // 10 photo right
-    { key: "K", width: 1.5 }, // 11
+    { key: "A", width: 1.5 }, // 1  left margin
+    { key: "B", width: 34 }, // 2  left content / photo-L col1
+    { key: "C", width: 6 }, // 3  photo-L col2 / label-R
+    { key: "D", width: 34 }, // 4  right content / photo-R col1
+    { key: "E", width: 6 }, // 5  photo-R col2 / value-R
+    { key: "F", width: 1.5 }, // 6  right margin
   ];
 
   // helper – set a cell's fill, font, alignment, border in one call
@@ -126,25 +114,9 @@ async function buildReportWorkbook(
     if (opts.border) cell.border = opts.border;
   };
 
-  // helper – merge + fill + border (ExcelJS needs merge before styling)
-  const mergeStyle = (
-    r1: number,
-    c1: number,
-    r2: number,
-    c2: number,
-    bg: string,
-    bdr?: import("exceljs").Borders,
-  ) => {
-    ws.mergeCells(r1, c1, r2, c2);
-    const cell = ws.getCell(r1, c1);
-    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: bg } };
-    if (bdr) cell.border = bdr;
-    return cell;
-  };
-
   // background – paint every cell pale grey for a clean canvas
   for (let r = 1; r <= 300; r++) {
-    for (let c = 1; c <= 11; c++) {
+    for (let c = 1; c <= 6; c++) {
       ws.getCell(r, c).fill = {
         type: "pattern",
         pattern: "solid",
@@ -161,7 +133,7 @@ async function buildReportWorkbook(
 
   // navy background rows 1-3
   for (let r = 1; r <= 3; r++)
-    for (let c = 1; c <= 11; c++)
+    for (let c = 1; c <= 6; c++)
       ws.getCell(r, c).fill = {
         type: "pattern",
         pattern: "solid",
@@ -169,7 +141,7 @@ async function buildReportWorkbook(
       };
 
   // title
-  ws.mergeCells(2, 2, 2, 6);
+  ws.mergeCells(2, 2, 2, 4);
   const titleCell = ws.getCell(2, 2);
   titleCell.value = report.name;
   style(titleCell, {
@@ -181,8 +153,8 @@ async function buildReportWorkbook(
   });
 
   // top-label (company / project / date)
-  ws.mergeCells(2, 8, 2, 10);
-  const lblCell = ws.getCell(2, 8);
+  ws.mergeCells(2, 5, 2, 5);
+  const lblCell = ws.getCell(2, 5);
   lblCell.value = topLabel;
   style(lblCell, {
     bg: C.navy,
@@ -193,7 +165,7 @@ async function buildReportWorkbook(
   });
 
   // accent bar row 4
-  for (let c = 1; c <= 11; c++)
+  for (let c = 1; c <= 6; c++)
     ws.getCell(4, c).fill = {
       type: "pattern",
       pattern: "solid",
@@ -204,7 +176,7 @@ async function buildReportWorkbook(
 
   // ── FIELD TABLE ────────────────────────────────────────────────────────────
   ws.getRow(6).height = 20;
-  ws.mergeCells(6, 2, 6, 6);
+  ws.mergeCells(6, 2, 6, 5);
   const secCell = ws.getCell(6, 2);
   secCell.value = "■ 作業情報";
   style(secCell, {
@@ -218,8 +190,9 @@ async function buildReportWorkbook(
   const sortedFields = [...(report.fields ?? [])].sort((a, b) =>
     a.order !== b.order ? a.order - b.order : a.id.localeCompare(b.id),
   );
-  const leftFields = sortedFields.slice(0, 6);
-  const rightFields = sortedFields.slice(6);
+  const half = Math.ceil(sortedFields.length / 2);
+  const leftFields = sortedFields.slice(0, half);
+  const rightFields = sortedFields.slice(half);
 
   const FIELD_START = 7;
   const ROW_H = 19;
@@ -250,9 +223,11 @@ async function buildReportWorkbook(
   leftFields.forEach((f, i) =>
     writeFieldRow(FIELD_START + i, f.name, f.value, 2, 3),
   );
-  rightFields.forEach((f, i) =>
-    writeFieldRow(FIELD_START + i, f.name, f.value, 5, 6),
-  );
+  if (rightFields.length > 0) {
+    rightFields.forEach((f, i) =>
+      writeFieldRow(FIELD_START + i, f.name, f.value, 4, 5),
+    );
+  }
 
   // outer box around each field column block
   const applyOuterBox = (r1: number, c1: number, r2: number, c2: number) => {
@@ -272,7 +247,10 @@ async function buildReportWorkbook(
   const FIELD_END =
     FIELD_START + Math.max(leftFields.length, rightFields.length) - 1;
   applyOuterBox(FIELD_START, 2, FIELD_END, 3);
-  applyOuterBox(FIELD_START, 5, FIELD_END, 6);
+
+  if (rightFields.length > 0) {
+    applyOuterBox(FIELD_START, 4, FIELD_END, 5);
+  }
 
   // ── PHOTO SECTION ──────────────────────────────────────────────────────────
   const PHOTO_SECTION_START = FIELD_END + 2;
@@ -296,26 +274,46 @@ async function buildReportWorkbook(
   );
 
   const CAPTION_H = 18;
-  const PHOTO_H = 130;
   const DESC_H = 45;
   const SPACER_H = 8;
   // ExcelJS image size in EMUs; col width ≈36 chars → ~270px
   const IMG_W = 270;
-  const IMG_H = 190;
-
   let curRow = PHOTO_SECTION_START + 1;
+
+  // Column B=2, C=3 for left photo; D=4, E=5 for right photo
+  // We'll use col 2 (left) and col 4 (right), merging across 2 cols each
+
+  const IMG_COL_L = 2; // left photo anchor col
+  const IMG_COL_R = 4; // right photo anchor col
 
   for (let pair = 0; pair < Math.ceil(images.length / 2); pair++) {
     const li = pair * 2;
     const ri = li + 1;
 
+    // Calculate row height from aspect ratio for left image (dominant)
+    const leftImg = images[li];
+    const rightImg = ri < images.length ? images[ri] : null;
+
+    // Height in Excel row units: IMG_W px at ~96dpi, Excel row height in points (1pt ≈ 0.75px)
+    const calcRowHeight = (img: ReportImage) => {
+      const ratio = img.height / img.width;
+      return Math.round((IMG_W * ratio) / 0.75);
+    };
+
+    const photoRowHeight = Math.max(
+      calcRowHeight(leftImg),
+      rightImg ? calcRowHeight(rightImg) : 0,
+    );
+
     // caption row
     ws.getRow(curRow).height = CAPTION_H;
     for (const [col, idx] of [
-      [2, li],
-      [4, ri],
+      [IMG_COL_L, li],
+      [IMG_COL_R, ri],
     ] as [number, number][]) {
       if (idx >= images.length) continue;
+      // merge caption across 2 cols to match photo width
+      ws.mergeCells(curRow, col, curRow, col + 1);
       const cc = ws.getCell(curRow, col);
       cc.value = `写真 ${String(idx + 1).padStart(2, "0")}`;
       style(cc, {
@@ -323,21 +321,22 @@ async function buildReportWorkbook(
         color: C.white,
         bold: true,
         hAlign: "center",
-        border: thinBorder,
+        border: thinBorder as any,
       });
     }
     curRow++;
 
-    // photo row
+    // photo row — height from aspect ratio
     const photoRow = curRow;
-    ws.getRow(photoRow).height = PHOTO_H;
+    ws.getRow(photoRow).height = photoRowHeight;
     for (const [col, idx] of [
-      [2, li],
-      [4, ri],
+      [IMG_COL_L, li],
+      [IMG_COL_R, ri],
     ] as [number, number][]) {
       if (idx >= images.length) continue;
+      ws.mergeCells(photoRow, col, photoRow, col + 1);
       const pc = ws.getCell(photoRow, col);
-      style(pc, { bg: C.white, border: thinBorder });
+      style(pc, { bg: C.white, border: thinBorder as any });
 
       const fetched = fetchedImages[idx];
       if (fetched) {
@@ -345,10 +344,12 @@ async function buildReportWorkbook(
           base64: fetched.base64,
           extension: fetched.ext,
         });
-        // ExcelJS uses 0-indexed row/col for image placement
+        const imgH = Math.round(
+          IMG_W * (images[idx].height / images[idx].width),
+        );
         ws.addImage(imgId, {
           tl: { col: col - 1 + 0.05, row: photoRow - 1 + 0.05 } as any,
-          ext: { width: IMG_W, height: IMG_H },
+          ext: { width: IMG_W, height: imgH },
         });
       }
     }
@@ -357,10 +358,11 @@ async function buildReportWorkbook(
     // description row
     ws.getRow(curRow).height = DESC_H;
     for (const [col, idx] of [
-      [2, li],
-      [4, ri],
+      [IMG_COL_L, li],
+      [IMG_COL_R, ri],
     ] as [number, number][]) {
       if (idx >= images.length) continue;
+      ws.mergeCells(curRow, col, curRow, col + 1);
       const dc = ws.getCell(curRow, col);
       dc.value = images[idx].description;
       style(dc, {
@@ -369,7 +371,7 @@ async function buildReportWorkbook(
         size: 8,
         vAlign: "top",
         wrap: true,
-        border: thinBorder,
+        border: thinBorder as any,
       });
     }
     curRow++;
@@ -381,7 +383,7 @@ async function buildReportWorkbook(
 
   // ── FOOTER ────────────────────────────────────────────────────────────────
   ws.getRow(curRow).height = 4;
-  for (let c = 1; c <= 11; c++)
+  for (let c = 1; c <= 6; c++)
     ws.getCell(curRow, c).fill = {
       type: "pattern",
       pattern: "solid",
@@ -390,7 +392,7 @@ async function buildReportWorkbook(
   curRow++;
 
   ws.getRow(curRow).height = 16;
-  ws.mergeCells(curRow, 2, curRow, 10);
+  ws.mergeCells(curRow, 2, curRow, 5);
   const ftCell = ws.getCell(curRow, 2);
   const today = new Date().toLocaleDateString("ja-JP", {
     year: "numeric",
