@@ -1,4 +1,4 @@
-import DocsSidebar from "../ui/DocsSidebar";
+import DocsSidebar from "./DocsSidebar";
 
 export default function DocsLayout({
   children,
