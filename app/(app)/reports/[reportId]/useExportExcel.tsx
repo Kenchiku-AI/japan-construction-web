@@ -367,39 +367,33 @@ async function buildReportWorkbook(
           IMG_W * (images[idx].height / images[idx].width),
         );
 
-        // tl: start INSET_PX into the anchor col
+        // The image is IMG_W wide, the full cell span is (labelW + valueW) * PX_PER_UNIT
+        // Horizontal centering offset = half the surplus
+        const colSpanPx =
+          (col === IMG_COL_L
+            ? leftLabelW + leftValueW
+            : (rightLabelW || leftLabelW) + (rightValueW || leftValueW)) *
+          PX_PER_UNIT;
+        const surplusX = colSpanPx - IMG_W;
+        const offsetXPx = surplusX / 2;
+
+        // tl col fraction is relative to the anchor column only
         const anchorColWPx =
           (col === IMG_COL_L ? leftLabelW : rightLabelW || leftLabelW) *
           PX_PER_UNIT;
-        const tlColFrac = INSET_PX / anchorColWPx;
+        const tlColFrac = offsetXPx / anchorColWPx;
 
-        // For vertical: offset by padding + half surplus
+        // vertical centering
         const surplusY = tallestImgH - thisImgH;
         const offsetYPx = PADDING_PX + surplusY / 2;
         const tlRowFrac = pxToPoints(offsetYPx) / photoRowHeight;
-
-        // br: we need to express where the image ends in col/row fractional units
-        // image ends at: anchor col + 2 cols - INSET_PX
-        // find which col the right edge falls in and what fraction
-        const spanColWPx = (leftLabelW + leftValueW) * PX_PER_UNIT;
-        const rightEdgePx = spanColWPx - INSET_PX;
-        // right edge is within the second column (col+1)
-        const firstColWPx = anchorColWPx;
-        const secondColWPx =
-          (col === IMG_COL_L ? leftValueW : rightValueW || leftValueW) *
-          PX_PER_UNIT;
-        const brColFrac = (rightEdgePx - firstColWPx) / secondColWPx;
-
-        // br row: image bottom edge
-        const imgBottomPx = offsetYPx + thisImgH;
-        const brRowFrac = pxToPoints(imgBottomPx) / photoRowHeight;
 
         ws.addImage(imgId, {
           tl: {
             col: col - 1 + tlColFrac,
             row: photoRow - 1 + tlRowFrac,
           } as any,
-          br: { col: col + brColFrac, row: photoRow - 1 + brRowFrac } as any,
+          ext: { width: IMG_W, height: thisImgH },
         });
       }
     }
