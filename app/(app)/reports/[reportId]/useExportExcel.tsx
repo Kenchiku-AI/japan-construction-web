@@ -98,7 +98,7 @@ async function buildReportWorkbook(
     : 0;
 
   const GUTTER_W = 3;
-  const MARGIN_W = 1.5;
+  const MARGIN_W = 6;
   const TOTAL_COLS = 7;
 
   ws.columns = [
@@ -275,7 +275,7 @@ async function buildReportWorkbook(
 
   // ── PHOTO SECTION ─────────────────────────────────────────────────────────
   const PHOTO_SECTION_START = FIELD_END + 2;
-  ws.getRow(PHOTO_SECTION_START - 1).height = 10;
+  ws.getRow(PHOTO_SECTION_START - 1).height = 40;
   ws.getRow(PHOTO_SECTION_START).height = 20;
 
   ws.mergeCells(PHOTO_SECTION_START, 2, PHOTO_SECTION_START, 6);
