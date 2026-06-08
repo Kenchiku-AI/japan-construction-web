@@ -279,7 +279,7 @@ async function buildReportWorkbook(
   ws.getRow(PHOTO_SECTION_START - 1).height = 10;
   ws.getRow(PHOTO_SECTION_START).height = 20;
 
-  ws.mergeCells(PHOTO_SECTION_START, 2, PHOTO_SECTION_START, 10);
+  ws.mergeCells(PHOTO_SECTION_START, 2, PHOTO_SECTION_START, 5);
   const phHdr = ws.getCell(PHOTO_SECTION_START, 2);
   phHdr.value = "■ 現場写真";
   style(phHdr, {
@@ -312,8 +312,8 @@ async function buildReportWorkbook(
     // caption row
     ws.getRow(curRow).height = CAPTION_H;
     for (const [col, idx] of [
-      [8, li],
-      [10, ri],
+      [2, li],
+      [4, ri],
     ] as [number, number][]) {
       if (idx >= images.length) continue;
       const cc = ws.getCell(curRow, col);
@@ -332,8 +332,8 @@ async function buildReportWorkbook(
     const photoRow = curRow;
     ws.getRow(photoRow).height = PHOTO_H;
     for (const [col, idx] of [
-      [8, li],
-      [10, ri],
+      [2, li],
+      [4, ri],
     ] as [number, number][]) {
       if (idx >= images.length) continue;
       const pc = ws.getCell(photoRow, col);
@@ -357,8 +357,8 @@ async function buildReportWorkbook(
     // description row
     ws.getRow(curRow).height = DESC_H;
     for (const [col, idx] of [
-      [8, li],
-      [10, ri],
+      [2, li],
+      [4, ri],
     ] as [number, number][]) {
       if (idx >= images.length) continue;
       const dc = ws.getCell(curRow, col);
