@@ -2,17 +2,21 @@ import { useCallback, useState } from "react";
 import { saveAs } from "file-saver";
 import { Report, ReportImage } from "@/types";
 
-// ─── colour palette ───────────────────────────────────────────────────────────
+// ─── colour palette (neutral greys matching app theme) ────────────────────────
 const C = {
-  navy: "FF1A3560",
-  midBlue: "FF2E5FA3",
-  paleGrey: "FFF5F7FA",
+  headerDark: "FF23303B", // fontColor1 — darkest, header background
+  headerMid: "FF3D4E58", // slightly lighter header accent bar
+  labelBg: "FFE8E9EA", // light grey for field label cells
+  valueBg: "FFFDFDFD", // bgColor1 — near-white for field value cells
+  pageBg: "FFF2F2F3", // bgColor2 — page background
+  photoCap: "FF4A5D6B", // mid-dark grey for photo caption bar
+  descBg: "FFF7F7F8", // very light grey for description cells
+  border: "FFD0D2D4", // soft grey border
+  outerBorder: "FF8A9099", // fontColor2-ish for outer box borders
+  darkText: "FF23303B", // fontColor1
+  midText: "FF5A6670", // mid grey for secondary text
+  mutedText: "FFA4A9AE", // fontColor2 — captions, footer
   white: "FFFFFFFF",
-  darkText: "FF1A1A2E",
-  midText: "FF3D4A6B",
-  accent: "FFE8F0FB",
-  border: "FFA8BBDA",
-  hdrLabel: "FFC9D9F0",
 };
 
 function side(style: "thin" | "medium", argb: string) {
@@ -25,8 +29,6 @@ const thinBorder: any = {
   right: side("thin", C.border),
 };
 
-// Estimate column width for a string:
-// full-width CJK chars count as 1.8 units, ASCII as 1.0
 function estimateColWidth(text: string, fontSize = 9): number {
   let w = 0;
   for (const ch of text) {
@@ -79,7 +81,7 @@ async function buildReportWorkbook(
 
   const MIN_LABEL_W = 10;
   const MIN_VALUE_W = 18;
-  const TOTAL_FIELD_W = 76; // combined width budget for both field columns
+  const TOTAL_FIELD_W = 76;
 
   const leftLabelW = Math.max(
     MIN_LABEL_W,
@@ -95,9 +97,6 @@ async function buildReportWorkbook(
     ? Math.max(MIN_VALUE_W, halfTotal - rightLabelW)
     : 0;
 
-  // ── column layout ─────────────────────────────────────────────────────────
-  // 1=A margin, 2=B label-L/photo-L, 3=C value-L/photo-L span,
-  // 4=D gutter,  5=E label-R/photo-R, 6=F value-R/photo-R span, 7=G margin
   const GUTTER_W = 3;
   const MARGIN_W = 1.5;
   const TOTAL_COLS = 7;
@@ -154,7 +153,7 @@ async function buildReportWorkbook(
       ws.getCell(r, c).fill = {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: C.paleGrey },
+        fgColor: { argb: C.pageBg },
       };
 
   // ── HEADER (rows 1-5) ─────────────────────────────────────────────────────
@@ -169,21 +168,22 @@ async function buildReportWorkbook(
       ws.getCell(r, c).fill = {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: C.navy },
+        fgColor: { argb: C.headerDark },
       };
 
+  // accent bar
   for (let c = 1; c <= TOTAL_COLS; c++)
     ws.getCell(4, c).fill = {
       type: "pattern",
       pattern: "solid",
-      fgColor: { argb: C.midBlue },
+      fgColor: { argb: C.headerMid },
     };
 
   ws.mergeCells(2, 2, 2, 4);
   const titleCell = ws.getCell(2, 2);
   titleCell.value = report.name;
   style(titleCell, {
-    bg: C.navy,
+    bg: C.headerDark,
     color: C.white,
     bold: true,
     size: 18,
@@ -194,8 +194,8 @@ async function buildReportWorkbook(
   const lblCell = ws.getCell(2, 5);
   lblCell.value = topLabel;
   style(lblCell, {
-    bg: C.navy,
-    color: "FFB8CCE8",
+    bg: C.headerDark,
+    color: "FFB0B6BB",
     size: 8,
     hAlign: "right",
     vAlign: "middle",
@@ -207,8 +207,8 @@ async function buildReportWorkbook(
   const secCell = ws.getCell(6, 2);
   secCell.value = "■ 作業情報";
   style(secCell, {
-    bg: C.paleGrey,
-    color: C.navy,
+    bg: C.pageBg,
+    color: C.headerDark,
     bold: true,
     size: 10,
     vAlign: "middle",
@@ -229,14 +229,19 @@ async function buildReportWorkbook(
     const lc = ws.getCell(row, labelCol);
     lc.value = label;
     style(lc, {
-      bg: C.hdrLabel,
-      color: C.midBlue,
+      bg: C.labelBg,
+      color: C.midText,
       bold: true,
       border: thinBorder,
     });
     const vc = ws.getCell(row, valCol);
     vc.value = value;
-    style(vc, { bg: C.white, border: thinBorder, wrap: true });
+    style(vc, {
+      bg: C.valueBg,
+      color: C.darkText,
+      border: thinBorder,
+      wrap: true,
+    });
   };
 
   leftFields.forEach((f, i) =>
@@ -250,10 +255,14 @@ async function buildReportWorkbook(
     for (let r = r1; r <= r2; r++) {
       for (let c = c1; c <= c2; c++) {
         ws.getCell(r, c).border = {
-          top: r === r1 ? side("medium", C.navy) : side("thin", C.border),
-          bottom: r === r2 ? side("medium", C.navy) : side("thin", C.border),
-          left: c === c1 ? side("medium", C.navy) : side("thin", C.border),
-          right: c === c2 ? side("medium", C.navy) : side("thin", C.border),
+          top:
+            r === r1 ? side("medium", C.outerBorder) : side("thin", C.border),
+          bottom:
+            r === r2 ? side("medium", C.outerBorder) : side("thin", C.border),
+          left:
+            c === c1 ? side("medium", C.outerBorder) : side("thin", C.border),
+          right:
+            c === c2 ? side("medium", C.outerBorder) : side("thin", C.border),
         } as any;
       }
     }
@@ -273,8 +282,8 @@ async function buildReportWorkbook(
   const phHdr = ws.getCell(PHOTO_SECTION_START, 2);
   phHdr.value = "■ 現場写真";
   style(phHdr, {
-    bg: C.paleGrey,
-    color: C.navy,
+    bg: C.pageBg,
+    color: C.headerDark,
     bold: true,
     size: 10,
     vAlign: "middle",
@@ -284,13 +293,11 @@ async function buildReportWorkbook(
     images.map((img) => fetchImageAsBase64(img.download_url)),
   );
 
-  // Excel col width unit ≈ 8px; 1px = 0.75pt for row height
   const PX_PER_UNIT = 8;
-  const PADDING_PX = 12; // vertical padding above and below image in cell
-  const INSET_PX = 8; // horizontal inset each side for breathing room
+  const PADDING_PX = 12;
+  const INSET_PX = 8;
   const pxToPoints = (px: number) => px * 0.75;
 
-  // Image render width = combined column width minus inset on each side
   const IMG_W =
     Math.round((leftLabelW + leftValueW) * PX_PER_UNIT) - INSET_PX * 2;
 
@@ -298,8 +305,8 @@ async function buildReportWorkbook(
   const DESC_H = 45;
   const SPACER_H = 8;
 
-  const IMG_COL_L = 2; // left photo: cols B+C (2+3)
-  const IMG_COL_R = 5; // right photo: cols E+F (5+6)
+  const IMG_COL_L = 2;
+  const IMG_COL_R = 5;
 
   let curRow = PHOTO_SECTION_START + 1;
 
@@ -329,7 +336,7 @@ async function buildReportWorkbook(
       const cc = ws.getCell(curRow, col);
       cc.value = `写真 ${String(idx + 1).padStart(2, "0")}`;
       style(cc, {
-        bg: C.midBlue,
+        bg: C.photoCap,
         color: C.white,
         bold: true,
         hAlign: "center",
@@ -360,12 +367,9 @@ async function buildReportWorkbook(
           IMG_W * (images[idx].height / images[idx].width),
         );
 
-        // Center horizontally: INSET_PX on each side (image is already inset by INSET_PX)
-        // Center vertically: offset by half the surplus height
         const surplusY = tallestImgH - thisImgH;
         const offsetYPx = PADDING_PX + surplusY / 2;
 
-        // Convert px offsets to fractional col/row units for ExcelJS tl
         const colSpanPx = (leftLabelW + leftValueW) * PX_PER_UNIT;
         const colFrac = INSET_PX / colSpanPx;
         const rowFrac = pxToPoints(offsetYPx) / photoRowHeight;
@@ -389,7 +393,7 @@ async function buildReportWorkbook(
       const dc = ws.getCell(curRow, col);
       dc.value = images[idx].description;
       style(dc, {
-        bg: C.accent,
+        bg: C.descBg,
         color: C.midText,
         size: 8,
         vAlign: "top",
@@ -410,7 +414,7 @@ async function buildReportWorkbook(
     ws.getCell(curRow, c).fill = {
       type: "pattern",
       pattern: "solid",
-      fgColor: { argb: C.midBlue },
+      fgColor: { argb: C.headerMid },
     };
   curRow++;
 
@@ -419,8 +423,8 @@ async function buildReportWorkbook(
   const ftCell = ws.getCell(curRow, 2);
   ftCell.value = `${report.company_name ?? ""}　　${report.project_name ?? ""}`;
   style(ftCell, {
-    bg: C.paleGrey,
-    color: "FF888888",
+    bg: C.pageBg,
+    color: C.mutedText,
     size: 8,
     italic: true,
     hAlign: "right",
