@@ -20,13 +20,13 @@ const C = {
 function side(style: "thin" | "medium", argb: string) {
   return { style, color: { argb } };
 }
-const thinBorder = {
+const thinBorder: any = {
   top: side("thin", C.border),
   bottom: side("thin", C.border),
   left: side("thin", C.border),
   right: side("thin", C.border),
 };
-const outerBorder = {
+const outerBorder: any = {
   top: side("medium", C.navy),
   bottom: side("medium", C.navy),
   left: side("medium", C.navy),
