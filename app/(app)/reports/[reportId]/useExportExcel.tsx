@@ -275,7 +275,7 @@ async function buildReportWorkbook(
 
   // ── PHOTO SECTION ─────────────────────────────────────────────────────────
   const PHOTO_SECTION_START = FIELD_END + 2;
-  ws.getRow(PHOTO_SECTION_START - 1).height = 40;
+  ws.getRow(PHOTO_SECTION_START - 1).height = 30;
   ws.getRow(PHOTO_SECTION_START).height = 20;
 
   ws.mergeCells(PHOTO_SECTION_START, 2, PHOTO_SECTION_START, 6);
@@ -303,7 +303,7 @@ async function buildReportWorkbook(
 
   const CAPTION_H = 18;
   const DESC_H = 45;
-  const SPACER_H = 8;
+  const SPACER_H = 16;
 
   const IMG_COL_L = 2;
   const IMG_COL_R = 5;
@@ -370,8 +370,10 @@ async function buildReportWorkbook(
         const surplusY = tallestImgH - thisImgH;
         const offsetYPx = PADDING_PX + surplusY / 2;
 
-        const colSpanPx = (leftLabelW + leftValueW) * PX_PER_UNIT;
-        const colFrac = INSET_PX / colSpanPx;
+        const anchorColW =
+          (col === IMG_COL_L ? leftLabelW : rightLabelW || leftLabelW) *
+          PX_PER_UNIT;
+        const colFrac = INSET_PX / anchorColW;
         const rowFrac = pxToPoints(offsetYPx) / photoRowHeight;
 
         ws.addImage(imgId, {
