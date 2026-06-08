@@ -205,7 +205,7 @@ async function buildReportWorkbook(
   ws.getRow(6).height = 20;
   ws.mergeCells(6, 2, 6, 6);
   const secCell = ws.getCell(6, 2);
-  secCell.value = "■ 作業情報";
+  secCell.value = "作業情報";
   style(secCell, {
     bg: C.pageBg,
     color: C.headerDark,
@@ -280,7 +280,7 @@ async function buildReportWorkbook(
 
   ws.mergeCells(PHOTO_SECTION_START, 2, PHOTO_SECTION_START, 6);
   const phHdr = ws.getCell(PHOTO_SECTION_START, 2);
-  phHdr.value = "■ 現場写真";
+  phHdr.value = "現場写真";
   style(phHdr, {
     bg: C.pageBg,
     color: C.headerDark,
@@ -367,18 +367,39 @@ async function buildReportWorkbook(
           IMG_W * (images[idx].height / images[idx].width),
         );
 
-        const surplusY = tallestImgH - thisImgH;
-        const offsetYPx = PADDING_PX + surplusY / 2;
-
-        const anchorColW =
+        // tl: start INSET_PX into the anchor col
+        const anchorColWPx =
           (col === IMG_COL_L ? leftLabelW : rightLabelW || leftLabelW) *
           PX_PER_UNIT;
-        const colFrac = INSET_PX / anchorColW;
-        const rowFrac = pxToPoints(offsetYPx) / photoRowHeight;
+        const tlColFrac = INSET_PX / anchorColWPx;
+
+        // For vertical: offset by padding + half surplus
+        const surplusY = tallestImgH - thisImgH;
+        const offsetYPx = PADDING_PX + surplusY / 2;
+        const tlRowFrac = pxToPoints(offsetYPx) / photoRowHeight;
+
+        // br: we need to express where the image ends in col/row fractional units
+        // image ends at: anchor col + 2 cols - INSET_PX
+        // find which col the right edge falls in and what fraction
+        const spanColWPx = (leftLabelW + leftValueW) * PX_PER_UNIT;
+        const rightEdgePx = spanColWPx - INSET_PX;
+        // right edge is within the second column (col+1)
+        const firstColWPx = anchorColWPx;
+        const secondColWPx =
+          (col === IMG_COL_L ? leftValueW : rightValueW || leftValueW) *
+          PX_PER_UNIT;
+        const brColFrac = (rightEdgePx - firstColWPx) / secondColWPx;
+
+        // br row: image bottom edge
+        const imgBottomPx = offsetYPx + thisImgH;
+        const brRowFrac = pxToPoints(imgBottomPx) / photoRowHeight;
 
         ws.addImage(imgId, {
-          tl: { col: col - 1 + colFrac, row: photoRow - 1 + rowFrac } as any,
-          ext: { width: IMG_W, height: thisImgH },
+          tl: {
+            col: col - 1 + tlColFrac,
+            row: photoRow - 1 + tlRowFrac,
+          } as any,
+          br: { col: col + brColFrac, row: photoRow - 1 + brRowFrac } as any,
         });
       }
     }
