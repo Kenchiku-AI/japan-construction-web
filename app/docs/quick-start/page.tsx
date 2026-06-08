@@ -5,7 +5,7 @@ export default function QuickStartPage() {
   return (
     <div className="max-w-4xl space-y-12">
       <div>
-        <Heading title="クイックスタート" />
+        <div className="text-ellipsis text-2xl">{"クイックスタート"}</div>
         <Divider />
         <p className="mt-4 text-muted-foreground">
           Kenchiku AIの基本的な利用方法をご紹介します。初めて利用する方は、
