@@ -43,7 +43,7 @@ import {
   ReportTemplate,
   ReportTemplateRequest,
 } from "@/types";
-import { authRoutes } from "../constants";
+import { authRoutes, publicRoutes } from "../constants";
 import { useModal } from "../modal/ModalContext";
 import { useTranslation } from "react-i18next";
 
@@ -64,8 +64,9 @@ export const useApiData = () => {
 
   useEffect(() => {
     const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
+    const isPublicRoute = publicRoutes.some((r) => pathname.startsWith(r));
 
-    if (!isAuthRoute) {
+    if (!isAuthRoute && !isPublicRoute) {
       refreshCurrentUser();
     }
   }, []);
