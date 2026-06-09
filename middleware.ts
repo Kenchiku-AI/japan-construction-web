@@ -7,9 +7,11 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   console.log("PATHname", pathname);
-  console.log("public routes", pathname);
+  console.log("public routes", publicRoutes);
 
   const isPublicRoute = publicRoutes.some((r) => pathname.startsWith(r));
+
+  console.log("is public", isPublicRoute);
 
   if (isPublicRoute) {
     return NextResponse.next();
