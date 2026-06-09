@@ -8,7 +8,7 @@ import { fontColor2 } from "@/lib/constants";
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
     <div className="drawer lg:drawer-open">
-      <input type="checkbox" className="drawer-toggle" />
+      <input id="docs-sidebar" type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-content flex flex-col">
         <div className="lg:hidden p-4">
@@ -26,10 +26,8 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
         <label
           htmlFor="docs-sidebar"
           aria-label="close sidebar"
-          className="drawer-overlay btn btn-circle btn-sm"
-        >
-          ☰
-        </label>
+          className="drawer-overlay"
+        />
 
         <ul className="menu bg-base-200 text-base-content min-h-full pb-8 px-4">
           <div style={{ color: fontColor2, marginTop: 10 }}>
