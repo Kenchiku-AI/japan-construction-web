@@ -15,7 +15,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
       </div>
 
       <div className="drawer-side flex">
-        <ul className="menu bg-base-200 lg:w-64 min-w-14 md:min-w-64 text-base-content min-h-full pb-8 md:px-4 px-1">
+        <ul className="menu bg-base-200 w-64 min-w-64 text-base-content min-h-full pb-8 px-4">
           <div style={{ color: fontColor2, marginTop: 10 }}>
             {"ご利用ガイド"}
           </div>
