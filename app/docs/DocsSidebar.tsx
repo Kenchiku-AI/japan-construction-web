@@ -7,11 +7,19 @@ import { fontColor2 } from "@/lib/constants";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
-    <div className="drawer drawer-open">
+    <div className="drawer lg:drawer-open">
       <input type="checkbox" className="drawer-toggle" />
 
-      <div className="drawer-content flex flex-col p-4 md:px-12 lg:px-24 md:py-12 max-w-4xl">
-        {children}
+      <div className="drawer-content flex flex-col">
+        <div className="lg:hidden p-4">
+          <label htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
+            ☰
+          </label>
+        </div>
+
+        <div className="p-4 md:px-12 lg:px-24 md:py-12 max-w-4xl">
+          {children}
+        </div>
       </div>
 
       <div className="drawer-side flex">
@@ -53,7 +61,7 @@ const SidebarItem = ({ name, path }: SidebarItemProps) => {
         onClick={() => router.push(path)}
         className="active:bg-base-300 active:opacity-40 active:text-black gap-3"
       >
-        <span>{name}</span>
+        <span className="max-md:text-sm">{name}</span>
       </a>
     </li>
   );
