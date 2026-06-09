@@ -30,7 +30,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
         />
 
         <ul className="menu bg-base-200 text-base-content min-h-full pb-8 px-4">
-          <div className="lg:hidden flex justify-end py-2">
+          <div className="lg:hidden flex justify-end">
             <label htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
               ✕
             </label>
