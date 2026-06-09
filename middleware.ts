@@ -6,6 +6,9 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get(accessTokenKey);
   const { pathname } = req.nextUrl;
 
+  console.log("PATHname", pathname);
+  console.log("public routes", pathname);
+
   const isPublicRoute = publicRoutes.some((r) => pathname.startsWith(r));
 
   if (isPublicRoute) {
