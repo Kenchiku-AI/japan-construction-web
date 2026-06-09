@@ -10,8 +10,7 @@ export default function QuickStartPage() {
         </div>
         <Divider />
         <p className="mt-4">
-          Kenchiku
-          AIの基本的な利用方法をご紹介します。初めて利用する方は、まずこのページをご確認ください。
+          Kenchiku AIの基本的な利用方法をご紹介します。初めて利用する方は、まずこのページをご確認ください。
         </p>
       </div>
 
@@ -22,8 +21,7 @@ export default function QuickStartPage() {
         <Divider style={{ background: fontColor2 }} />
         <div className="space-y-4">
           <p>
-            Kenchiku
-            AIは、報告業務の管理を行うWebアプリケーションと、現場での情報収集を行うモバイルアプリケーションを組み合わせた建設業向け報告プラットフォームです。
+            Kenchiku AIは、報告業務の管理を行うWebアプリケーションと、現場での情報収集を行うモバイルアプリケーションを組み合わせた建設業向け報告プラットフォームです。
           </p>
           <p>
             AIを活用することで、現場で収集した情報を効率的かつ統一された形式で報告書としてまとめることができます。
@@ -49,8 +47,7 @@ export default function QuickStartPage() {
               会社ユーザーとして招待される場合
             </h3>
             <p className="mt-1">
-              所属会社のKenchiku
-              AI環境に招待されます。ログイン後は、担当するプロジェクトへアクセスできます。
+              所属会社のKenchiku AI環境に招待されます。ログイン後は、担当するプロジェクトへアクセスできます。
             </p>
           </div>
 
@@ -91,8 +88,7 @@ export default function QuickStartPage() {
         <Divider style={{ background: fontColor2 }} />
         <div className="space-y-4">
           <p>
-            Kenchiku
-            AIはWebアプリとモバイルアプリの両方を提供しています。それぞれ利用する場面が異なります。
+            Kenchiku AIはWebアプリとモバイルアプリの両方を提供しています。それぞれ利用する場面が異なります。
           </p>
 
           <div

@@ -30,7 +30,6 @@ import {
   AcceptInvitationRequest,
   AcceptInvitationResponse,
   UserRole,
-  ProjectStatus,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";

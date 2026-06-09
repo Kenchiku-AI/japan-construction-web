@@ -84,9 +84,7 @@ export default function ExportsPage() {
         <Divider style={{ background: fontColor2 }} />
 
         <div className="space-y-4">
-          <p>
-            Excelエクスポートでは、テンプレートとプロジェクトの組み合わせで対象を絞り込めます。
-          </p>
+          <p>Excelエクスポートでは、テンプレートとプロジェクトの組み合わせで対象を絞り込めます。</p>
 
           <div
             className="rounded-lg border p-6 space-y-4"
@@ -129,9 +127,7 @@ export default function ExportsPage() {
           <ol className="list-decimal pl-6 space-y-2">
             <li>報告書を開く</li>
             <li>必要に応じてタグでフィルタリングする</li>
-            <li>
-              「すべてダウンロード」または「タグでダウンロード」を選択する
-            </li>
+            <li>「すべてダウンロード」または「タグでダウンロード」を選択する</li>
           </ol>
         </div>
       </section>
