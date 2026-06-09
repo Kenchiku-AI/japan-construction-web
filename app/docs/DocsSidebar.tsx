@@ -2,6 +2,8 @@
 
 import React, { FC, ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import Divider from "../ui/Divider";
+import { fontColor2 } from "@/lib/constants";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
@@ -14,6 +16,10 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
 
       <div className="drawer-side flex">
         <ul className="menu bg-base-200 lg:w-64 min-w-14 md:min-w-64 text-base-content min-h-full pb-8 md:px-4 px-1">
+          <div style={{ color: fontColor2, marginTop: 10 }}>
+            {"ご利用ガイド"}
+          </div>
+          <Divider style={{ opacity: 0.1 }} />
           <div className="space-y-1">
             <SidebarItem name="クイックスタート" path="/docs/quick-start" />
             <SidebarItem name="テンプレート" path="/docs/templates" />
