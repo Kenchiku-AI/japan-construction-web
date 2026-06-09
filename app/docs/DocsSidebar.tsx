@@ -53,7 +53,7 @@ const SidebarItem = ({ name, path }: SidebarItemProps) => {
         onClick={() => router.push(path)}
         className="active:bg-base-300 active:opacity-40 active:text-black gap-3"
       >
-        <span className="max-md:hidden">{name}</span>
+        <span>{name}</span>
       </a>
     </li>
   );
