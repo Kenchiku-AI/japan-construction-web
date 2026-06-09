@@ -87,10 +87,12 @@ export const useApiData = () => {
       !user?.projects?.length;
 
     if (shouldLogout) {
-      showModal({
-        title: t("no_projects"),
-        subtitle: t("no_projects_description"),
-      });
+      if (user) {
+        showModal({
+          title: t("no_projects"),
+          subtitle: t("no_projects_description"),
+        });
+      }
 
       logout();
       return false;
