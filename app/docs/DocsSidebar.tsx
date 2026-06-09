@@ -23,6 +23,12 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
       </div>
 
       <div className="drawer-side flex">
+        <label
+          htmlFor="docs-sidebar"
+          aria-label="close sidebar"
+          className="drawer-overlay"
+        />
+
         <ul className="menu bg-base-200 text-base-content min-h-full pb-8 px-4">
           <div style={{ color: fontColor2, marginTop: 10 }}>
             {"ご利用ガイド"}
