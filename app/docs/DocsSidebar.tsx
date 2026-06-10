@@ -7,17 +7,17 @@ import { fontColor2 } from "@/lib/constants";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer md:drawer-open">
       <input id="docs-sidebar" type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-content flex flex-col">
-        <div className="lg:hidden fixed top-4 left-4 z-50">
+        <div className="md:hidden fixed top-4 left-4 z-5">
           <label htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
             ☰
           </label>
         </div>
 
-        <div className="p-4 md:px-12 lg:px-24 md:py-12 max-w-4xl">
+        <div className="p-4 md:px-12 lg:px-24 md:py-12 py-16  max-w-4xl">
           {children}
         </div>
       </div>
@@ -29,15 +29,16 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
           className="drawer-overlay"
         />
 
-        <ul className="menu bg-base-200 text-base-content min-h-full pb-8 px-4">
-          <div className="lg:hidden flex justify-end">
+        <ul className="menu bg-base-200 text-base-content min-h-full pb-8 md:pt-4 px-4">
+          <div
+            className="md:hidden flex justify-end"
+            style={{ marginRight: -6 }}
+          >
             <label htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
               ✕
             </label>
           </div>
-          <div style={{ color: fontColor2, marginTop: 10 }}>
-            {"ご利用ガイド"}
-          </div>
+          <div style={{ color: fontColor2 }}>{"ご利用ガイド"}</div>
           <Divider style={{ opacity: 0.1 }} />
           <div className="space-y-1">
             <SidebarItem name="クイックスタート" path="/docs/quick-start" />
