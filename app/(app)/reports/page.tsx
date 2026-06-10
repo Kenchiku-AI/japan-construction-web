@@ -35,6 +35,7 @@ const ReportsPage = () => {
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const searchRef = useRef<any>(null);
   const { isMobile } = useIsMobile();
+  const hasSearchPadding = isMobile && !projectName;
 
   const isCreateEnabled = useMemo(() => {
     if (currentUser?.role === "admin") return false;
@@ -64,7 +65,7 @@ const ReportsPage = () => {
       <div
         className="flex gap-2"
         style={{
-          paddingTop: isMobile ? 0 : 24,
+          paddingTop: hasSearchPadding ? 0 : 24,
           display: showSearch ? undefined : "none",
         }}
       >
@@ -74,7 +75,7 @@ const ReportsPage = () => {
           onChange={(t) => {
             search(t, projectId);
           }}
-          style={{ height: isMobile ? 36 : 38 }}
+          style={{ height: hasSearchPadding ? 36 : 38 }}
           autoFocus
           hideLabel
         />
