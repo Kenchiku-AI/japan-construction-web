@@ -64,7 +64,7 @@ const ReportsPage = () => {
       <div
         className="flex gap-2"
         style={{
-          paddingTop: isMobile ? 24 : 0,
+          paddingTop: isMobile ? 0 : 24,
           display: showSearch ? undefined : "none",
         }}
       >
