@@ -290,6 +290,7 @@ const Tags: FC<TagsProps> = ({
               height: "auto",
               display: availableTags.length ? "flex" : "none",
             }}
+            iconOnlyMobile
           />
         )}
       </div>
