@@ -140,7 +140,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
             )}
           </div>
           <Divider />
-          <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
+          <div className="flex w-full justify-between gap-8 py-1">
             <Button
               variant="tertiary"
               label={t("download")}
@@ -168,6 +168,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
                 }
               }}
               style={{ height: "auto" }}
+              iconOnlyMobile
             />
             {!isDisabled && (
               <Button
@@ -179,6 +180,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
                 onClick={() => {
                   setIsConfirmDeleteShown(true);
                 }}
+                iconOnlyMobile
               />
             )}
           </div>
