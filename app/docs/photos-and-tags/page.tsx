@@ -219,7 +219,7 @@ export default function PhotosAndTagsPage() {
 
           <ol className="list-decimal pl-6 space-y-2">
             <li>報告書を開く</li>
-            <li>「タグでフィルター」を選択する</li>
+            <li>「タグで絞り込み」を選択する</li>
             <li>表示したいタグを選択する</li>
           </ol>
 

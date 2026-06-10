@@ -29,7 +29,7 @@ export default function ExportsPage() {
 
           <ol className="list-decimal pl-6 space-y-2">
             <li>報告書を開く</li>
-            <li>「PDFをダウンロード」を選択する</li>
+            <li>「PDFダウンロード」を選択する</li>
             <li>ダウンロードが完了するまで待つ</li>
           </ol>
 
@@ -127,7 +127,7 @@ export default function ExportsPage() {
           <ol className="list-decimal pl-6 space-y-2">
             <li>報告書を開く</li>
             <li>必要に応じてタグでフィルタリングする</li>
-            <li>「すべてダウンロード」または「タグでダウンロード」を選択する</li>
+            <li>「すべてダウンロード」または「{{tag}}の写真をダウンロード」を選択する</li>
           </ol>
         </div>
       </section>

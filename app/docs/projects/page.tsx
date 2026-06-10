@@ -31,7 +31,7 @@ export default function ProjectsPage() {
             <li>プロジェクト名・説明</li>
             <li>報告書の一覧</li>
             <li>ゲストの管理</li>
-            <li>ステータス（進行中・完了）</li>
+            <li>ステータス（アクティブ・完了）</li>
           </ul>
         </div>
       </section>
@@ -49,7 +49,7 @@ export default function ProjectsPage() {
 
           <ol className="list-decimal pl-6 space-y-2">
             <li>会社画面を開く</li>
-            <li>「プロジェクト作成」を選択する</li>
+            <li>「プロジェクト名を作成」を選択する</li>
             <li>プロジェクト名を入力する</li>
             <li>説明を入力する（任意）</li>
             <li>保存する</li>
@@ -65,7 +65,7 @@ export default function ProjectsPage() {
 
         <div className="space-y-4">
           <p>
-            プロジェクト名と説明はプロジェクト画面から編集できます。管理者とマネージャーが編集できます。ただし、完了済みのプロジェクトは管理者のみ編集できます。
+            プロジェクト名と説明はプロジェクト画面から編集できます。管理者と管理者が編集できます。ただし、完了済みのプロジェクトは管理者のみ編集できます。
           </p>
 
           <p>変更を保存するには、編集後に「更新」を選択してください。変更を破棄する場合は「キャンセル」を選択してください。</p>
@@ -87,7 +87,7 @@ export default function ProjectsPage() {
           >
             <div>
               <div className="font-semibold" style={{ color: fontColor1 }}>
-                進行中
+                アクティブ
               </div>
               <p className="mt-1">
                 通常の利用状態です。報告書の作成・編集が可能で、ゲストもアクセスできます。
@@ -99,7 +99,7 @@ export default function ProjectsPage() {
                 完了
               </div>
               <p className="mt-1">
-                工事が完了したプロジェクトに設定します。完了済みのプロジェクトでは、一般ユーザーとゲストは報告書を編集できなくなります。管理者は引き続き閲覧・操作が可能です。
+                工事が完了したプロジェクトに設定します。完了済みのプロジェクトでは、ユーザーとゲストは報告書を編集できなくなります。管理者は引き続き閲覧・操作が可能です。
               </p>
             </div>
           </div>

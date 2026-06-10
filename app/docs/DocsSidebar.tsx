@@ -70,7 +70,17 @@ const SidebarItem = ({ name, path }: SidebarItemProps) => {
   return (
     <li className={`mb-1 ${active ? "bg-base-300 rounded-md" : ""}`}>
       <a
-        onClick={() => router.push(path)}
+        onClick={() => {
+          const drawer = document.getElementById(
+            "docs-sidebar",
+          ) as HTMLInputElement | null;
+
+          if (drawer) {
+            drawer.checked = false;
+          }
+
+          router.push(path);
+        }}
         className="active:bg-base-300 active:opacity-40 active:text-black gap-3"
       >
         <span className="max-md:text-sm">{name}</span>

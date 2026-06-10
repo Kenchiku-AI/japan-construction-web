@@ -134,6 +134,14 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
     <li className={`mb-4 ${style}`}>
       <a
         onClick={() => {
+          const drawer = document.getElementById(
+            "docs-sidebar",
+          ) as HTMLInputElement | null;
+
+          if (drawer) {
+            drawer.checked = false;
+          }
+
           router.push(path);
         }}
         className={`active:bg-base-300 active:opacity-40 active:text-black gap-3`}
