@@ -3,6 +3,7 @@ import styles from "./Heading.module.css";
 import { Input } from "../Input/Input";
 import { Check, Close, Edit } from "../Icons";
 import { errorColor1 } from "@/lib/constants";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 interface HeadingProps {
   title: string;
@@ -26,6 +27,8 @@ export const Heading: FC<HeadingProps> = ({
   const [displayTitle, setDisplayTitle] = useState(title);
   const isUpdateNameEnabled = editedTitle && editedTitle !== displayTitle;
   const inputRef = useRef<any>(null);
+  const { isMobile } = useIsMobile();
+  const hideTopLabel = isMobile && !topLabel;
 
   useEffect(() => {
     setDisplayTitle(title);
@@ -39,7 +42,7 @@ export const Heading: FC<HeadingProps> = ({
 
   return (
     <div>
-      <div className={styles.topLabel}>{topLabel}</div>
+      {!hideTopLabel && <div className={styles.topLabel}>{topLabel}</div>}
 
       <div
         className="flex gap-4"

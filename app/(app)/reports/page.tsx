@@ -59,75 +59,73 @@ const ReportsPage = () => {
 
   return (
     <>
-      <div style={{ height: 62 }}>
+      <div
+        className="flex gap-2"
+        style={{ paddingTop: 24, display: showSearch ? undefined : "none" }}
+      >
+        <Input
+          ref={searchRef}
+          placeholder={t("search_reports")}
+          onChange={(t) => {
+            search(t, projectId);
+          }}
+          style={{ height: 38 }}
+          autoFocus
+          hideLabel
+        />
         <div
-          className="flex gap-2"
-          style={{ paddingTop: 24, display: showSearch ? undefined : "none" }}
+          className="cursor-pointer"
+          onClick={() => {
+            getReports();
+            setShowSearch(false);
+          }}
         >
-          <Input
-            ref={searchRef}
-            placeholder={t("search_reports")}
-            onChange={(t) => {
-              search(t, projectId);
-            }}
-            style={{ height: 40 }}
-            autoFocus
-            hideLabel
-          />
-          <div
-            className="cursor-pointer"
-            onClick={() => {
-              getReports();
-              setShowSearch(false);
-            }}
-          >
-            <Close size={36} />
-          </div>
+          <Close size={36} />
         </div>
-        <div
-          className="flex justify-between items-end"
-          style={{ display: showSearch ? "none" : undefined }}
-        >
-          <Heading title={t("reports")} topLabel={projectName} />
-          <div className="flex gap-5 md:gap-8">
-            {reports?.length && (
-              <>
-                <Button
-                  variant="tertiary"
-                  style={{ height: "auto" }}
-                  label={t(isExcelDownloading ? "downloading" : "export")}
-                  iconLeft={() => <Download />}
-                  onClick={() => {
-                    setShowDownloadExcel(true);
-                  }}
-                  disabled={isExcelDownloading}
-                  iconOnlyMobile
-                />
-                <Button
-                  variant="tertiary"
-                  style={{ height: "auto" }}
-                  label={t("search")}
-                  iconLeft={() => <Search />}
-                  onClick={() => {
-                    setShowSearch(true);
-                  }}
-                  iconOnlyMobile
-                />
-              </>
-            )}
-            {isCreateEnabled && (
+      </div>
+      <div
+        className="flex justify-between items-end"
+        style={{ display: showSearch ? "none" : undefined }}
+      >
+        <Heading title={t("reports")} topLabel={projectName} />
+        <div className="flex gap-5 md:gap-8">
+          {reports?.length && (
+            <>
               <Button
                 variant="tertiary"
                 style={{ height: "auto" }}
-                label={t("create")}
-                iconLeft={() => <Plus />}
+                label={t(isExcelDownloading ? "downloading" : "export")}
+                iconLeft={() => <Download />}
                 onClick={() => {
-                  setShowCreateReport(true);
+                  setShowDownloadExcel(true);
+                }}
+                disabled={isExcelDownloading}
+                iconOnlyMobile
+              />
+              <Button
+                variant="tertiary"
+                style={{ height: "auto" }}
+                label={t("search")}
+                iconLeft={() => <Search />}
+                onClick={() => {
+                  setShowSearch(true);
                 }}
                 iconOnlyMobile
               />
-            )}
-          </div>
+            </>
+          )}
+          {isCreateEnabled && (
+            <Button
+              variant="tertiary"
+              style={{ height: "auto" }}
+              label={t("create")}
+              iconLeft={() => <Plus />}
+              onClick={() => {
+                setShowCreateReport(true);
+              }}
+              iconOnlyMobile
+            />
+          )}
         </div>
       </div>
       <Divider />
