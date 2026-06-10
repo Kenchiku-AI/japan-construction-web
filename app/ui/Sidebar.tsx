@@ -17,17 +17,40 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const isAdmin = currentUser?.role === UserRole.Admin;
 
   return !currentUser ? null : (
-    <div className="drawer drawer-open">
-      <input type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col p-4 md:px-12 lg:px-24 md:py-12 max-w-4xl">
-        {children}
+    <div className="drawer md:drawer-open">
+      <input id="docs-sidebar" type="checkbox" className="drawer-toggle" />
+
+      <div className="drawer-content flex flex-col">
+        <div className="md:hidden fixed top-4 left-4 z-5">
+          <label htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
+            ☰
+          </label>
+        </div>
+        <div className="p-4 md:px-12 lg:px-24 md:py-12 py-16 max-w-4xl">
+          {children}
+        </div>
       </div>
       <div className="drawer-side flex">
-        <ul className="menu bg-base-200 lg:w-48 min-w-14 md:min-w-48 text-base-content min-h-full pb-4 md:px-4 px-1 justify-between">
+        <label
+          htmlFor="docs-sidebar"
+          aria-label="close sidebar"
+          className="drawer-overlay"
+        />
+
+        <ul className="menu flex flex-col bg-base-200 text-base-content min-h-full pb-4 px-4 ">
+          <div
+            className="md:hidden flex justify-end"
+            style={{ marginRight: -6 }}
+          >
+            <label htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
+              ✕
+            </label>
+          </div>
+
           {currentUser && (
-            <>
+            <div className="flex flex-col flex-1">
               <div className="space-y-2">
-                <div className="flex justify-center py-2">
+                <div className="flex justify-center pb-2 md:pt-3">
                   <Logo size={24} color={fontColor2} />
                 </div>
                 <Divider
@@ -72,34 +95,22 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                   </>
                 )}
               </div>
-              <div>
-                <span className="min-md:hidden">
-                  <Button
-                    variant="tertiary"
-                    onClick={() => {
-                      router.push(`/users/${currentUser.id}`);
-                    }}
-                    iconLeft={() => <User color={buttonColor} size={30} />}
-                    style={{ width: "100%" }}
-                  />
-                </span>
-                <span className="max-md:hidden">
-                  <Button
-                    variant="tertiary"
-                    label={`${currentUser.last_name ?? ""} ${currentUser.first_name ?? ""}`}
-                    onClick={() => {
-                      router.push(`/users/${currentUser.id}`);
-                    }}
-                    iconLeft={() => <User color={buttonColor} size={28} />}
-                    textStyle={{
-                      fontWeight: "normal",
-                      fontSize: 14,
-                      textAlign: "left",
-                    }}
-                  />
-                </span>
+              <div className="mt-auto">
+                <Button
+                  variant="tertiary"
+                  label={`${currentUser.last_name ?? ""} ${currentUser.first_name ?? ""}`}
+                  onClick={() => {
+                    router.push(`/users/${currentUser.id}`);
+                  }}
+                  iconLeft={() => <User color={buttonColor} size={28} />}
+                  textStyle={{
+                    fontWeight: "normal",
+                    fontSize: 14,
+                    textAlign: "left",
+                  }}
+                />
               </div>
-            </>
+            </div>
           )}
         </ul>
       </div>
@@ -128,7 +139,7 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
         className={`active:bg-base-300 active:opacity-40 active:text-black gap-3`}
       >
         <Icon />
-        <span className="max-md:hidden">{name}</span>
+        <span>{name}</span>
       </a>
     </li>
   );

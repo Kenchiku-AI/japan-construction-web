@@ -83,6 +83,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     setShowCreateProject(true);
                   }}
                   style={{ height: "auto" }}
+                  iconOnlyMobile
                 />
               )}
             </div>
@@ -102,6 +103,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     setShowInviteUser(true);
                   }}
                   style={{ height: "auto" }}
+                  iconOnlyMobile
                 />
               )}
             </div>
@@ -123,6 +125,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     setIsCreateTemplateModalShown(true);
                   }}
                   style={{ height: "auto" }}
+                  iconOnlyMobile
                 />
               </div>
               <Divider />
@@ -140,6 +143,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     setIsCreateTagModalShown(true);
                   }}
                   style={{ height: "auto" }}
+                  iconOnlyMobile
                 />
               </div>
               <Divider />

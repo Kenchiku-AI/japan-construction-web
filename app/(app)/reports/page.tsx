@@ -89,7 +89,7 @@ const ReportsPage = () => {
           style={{ display: showSearch ? "none" : undefined }}
         >
           <Heading title={t("reports")} topLabel={projectName} />
-          <div className="flex gap-8">
+          <div className="flex gap-5 md:gap-8">
             {reports?.length && (
               <>
                 <Button
@@ -101,6 +101,7 @@ const ReportsPage = () => {
                     setShowDownloadExcel(true);
                   }}
                   disabled={isExcelDownloading}
+                  iconOnlyMobile
                 />
                 <Button
                   variant="tertiary"
@@ -110,6 +111,7 @@ const ReportsPage = () => {
                   onClick={() => {
                     setShowSearch(true);
                   }}
+                  iconOnlyMobile
                 />
               </>
             )}
@@ -122,6 +124,7 @@ const ReportsPage = () => {
                 onClick={() => {
                   setShowCreateReport(true);
                 }}
+                iconOnlyMobile
               />
             )}
           </div>

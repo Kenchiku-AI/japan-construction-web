@@ -43,11 +43,11 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users, onRemove }) => {
               }}
               className="hover:opacity-50 cursor-pointer"
             >
-              <div className="mx-4">
+              <div className="md:mx-3">
                 <div className="flex items-center justify-between">
                   <div
                     style={{ height: 60 }}
-                    className="flex items-center gap-4"
+                    className="flex items-center gap-3"
                   >
                     <User />
                     <div className="flex flex-col">

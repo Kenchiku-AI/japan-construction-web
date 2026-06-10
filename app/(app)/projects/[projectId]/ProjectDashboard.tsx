@@ -189,6 +189,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     setShowDownloadExcel(true);
                   }}
                   disabled={isExcelDownloading}
+                  iconOnlyMobile
                 />
               )}
               {isEditable && (
@@ -200,6 +201,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     setShowCreateReport(true);
                   }}
                   style={{ height: "auto" }}
+                  iconOnlyMobile
                 />
               )}
             </div>

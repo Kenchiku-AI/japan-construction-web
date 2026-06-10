@@ -88,14 +88,16 @@ const ReportsListItem: FC<ReportsListItemProps> = ({ report, showCompany }) => {
   return (
     <div>
       <div
-        className="hover:opacity-50 cursor-pointer mx-4"
+        className="hover:opacity-50 cursor-pointer md:mx-3"
         onClick={() => {
           router.push(`/reports/${report.id}?name=${report.name}`);
         }}
       >
         <div className="flex items-center justify-between">
-          <div style={{ height: 60 }} className="flex items-center gap-6">
-            <Paper size={30} />
+          <div style={{ height: 60 }} className="flex items-center gap-3">
+            <div>
+              <Paper size={30} />
+            </div>
             <div className="flex flex-col">
               <div>{report.name}</div>
               {subtitle && <div className={styles.subtitle}>{subtitle}</div>}

@@ -29,6 +29,7 @@ import Image from "next/image";
 import JSZip from "jszip";
 import { useDate } from "@/public/date/useDate";
 import { useExportExcel } from "./useExportExcel";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -54,6 +55,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   } = useReport(reportId);
   const { downloadExcel, isExcelDownloading } = useExportExcel();
   const { formatDate } = useDate();
+  const { isMobile } = useIsMobile();
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
   const [selectedTag, setSelectedTag] = useState<ReportImageTag>();
@@ -61,7 +63,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [isPhotoModalShown, setIsPhotoModalShown] = useState(false);
   const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
-  const [isMobile, setIsMobile] = useState(false);
   const [isPdfDownloading, setIsPdfDownloading] = useState(false);
   const fileInputRef = useRef<any>(null);
   const loadedRef = useRef(false);
@@ -88,15 +89,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
 
     setFieldValues(newValues);
   }, [report]);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
-    setIsMobile(mediaQuery.matches);
-    const handler = (e: any) => setIsMobile(e.matches);
-
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, []);
 
   const topLabel = useMemo(() => {
     if (!report) return;
@@ -277,7 +269,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       <Divider />
       {report != null && (
         <>
-          <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
+          <div className="flex w-full justify-between gap-2 lg:gap-8 py-1">
             <div className="flex flex-row gap-6">
               <Button
                 variant="tertiary"
@@ -352,6 +344,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                   fontWeight: "300",
                   color: errorColor1,
                 }}
+                iconOnlyMobile
               />
             )}
           </div>

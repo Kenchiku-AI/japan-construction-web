@@ -1,5 +1,6 @@
-import { FC, useMemo, CSSProperties, useEffect } from "react";
+import { FC, useMemo, CSSProperties, useEffect, useState } from "react";
 import styles from "./Button.module.css";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 interface ButtonProps {
   label?: string;
@@ -8,6 +9,7 @@ interface ButtonProps {
   disabled?: boolean;
   iconLeft?: FC;
   iconRight?: FC;
+  iconOnlyMobile?: boolean;
   style?: CSSProperties;
   textStyle?: CSSProperties;
   loading?: boolean;
@@ -21,11 +23,13 @@ export const Button: FC<ButtonProps> = ({
   disabled,
   iconLeft,
   iconRight,
+  iconOnlyMobile,
   style,
   textStyle,
   loading,
   handleEnter,
 }) => {
+  const { isMobile } = useIsMobile();
   const IconLeft = iconLeft;
   const IconRight = iconRight;
 
@@ -51,6 +55,8 @@ export const Button: FC<ButtonProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClick, disabled, loading, handleEnter]);
 
+  const hideText = isMobile && iconOnlyMobile;
+
   return (
     <>
       <button
@@ -74,7 +80,7 @@ export const Button: FC<ButtonProps> = ({
             <IconLeft />
           </div>
         )}
-        {label && (
+        {label && !hideText && (
           <div
             className={labelStyle}
             style={{ opacity: loading ? 0 : undefined, ...textStyle }}

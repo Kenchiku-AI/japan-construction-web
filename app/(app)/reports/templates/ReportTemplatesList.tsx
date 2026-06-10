@@ -48,13 +48,13 @@ const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
         {templates.map((tp) => (
           <div key={tp.id}>
             <div
-              className="hover:opacity-50 cursor-pointer mx-4"
+              className="hover:opacity-50 cursor-pointer md:mx-3"
               onClick={() =>
                 router.push(`/reports/templates/${tp.id}?name=${tp.name}`)
               }
             >
               <div className="flex items-center justify-between">
-                <div style={{ height: 60 }} className="flex items-center gap-6">
+                <div style={{ height: 60 }} className="flex items-center gap-3">
                   <Papers size={30} />
                   <div>{tp.name}</div>
                   {isAdmin && (

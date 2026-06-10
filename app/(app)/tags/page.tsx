@@ -41,6 +41,7 @@ const ReportTemplatesPage = () => {
           onClick={() => {
             setIsCreateTagModalShown(true);
           }}
+          iconOnlyMobile
         />
       </div>
       <Divider />
