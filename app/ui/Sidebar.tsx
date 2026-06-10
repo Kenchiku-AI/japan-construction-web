@@ -30,14 +30,14 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
           {children}
         </div>
       </div>
-      <div className="drawer-side flex">
+      <div className="drawer-side flex z-100">
         <label
           htmlFor="docs-sidebar"
           aria-label="close sidebar"
           className="drawer-overlay"
         />
 
-        <ul className="menu flex flex-col bg-base-200 text-base-content min-h-full pb-4 px-4 ">
+        <ul className="menu flex flex-col bg-base-200 text-base-content min-h-full pb-4 px-4 z-100">
           <div
             className="md:hidden flex justify-end"
             style={{ marginRight: -6 }}
