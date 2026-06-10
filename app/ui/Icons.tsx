@@ -267,11 +267,7 @@ export const EyeOff = () => (
 );
 
 export const Logo = ({ size, color }: IconProps) => (
-  <svg
-    height={size ?? 100}
-    width={size ?? 100}
-    viewBox="0 0 113.05766 144.49409"
-  >
+  <svg height={size ?? 80} width={size ?? 50} viewBox="0 0 113.05766 144.49409">
     <g transform="translate(-48.980034,-46.83656)">
       <path
         fill={color}
