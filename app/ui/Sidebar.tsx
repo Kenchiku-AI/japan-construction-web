@@ -21,7 +21,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
       <input id="docs-sidebar" type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-content flex flex-col">
-        <div className="md:hidden fixed top-4 left-4 z-100">
+        <div className="md:hidden fixed top-4 left-4 z-500">
           <label htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
             ☰
           </label>
@@ -30,14 +30,14 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
           {children}
         </div>
       </div>
-      <div className="drawer-side flex z-100">
+      <div className="drawer-side flex z-500">
         <label
           htmlFor="docs-sidebar"
           aria-label="close sidebar"
           className="drawer-overlay"
         />
 
-        <ul className="menu flex flex-col bg-base-200 text-base-content min-h-full pb-4 px-4 z-100">
+        <ul className="menu flex flex-col bg-base-200 text-base-content min-h-full pb-4 px-4 z-500">
           <div
             className="md:hidden flex justify-end"
             style={{ marginRight: -6 }}
