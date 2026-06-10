@@ -1,5 +1,5 @@
-import { FC, useMemo, useState } from "react";
-import { useSSR, useTranslation } from "react-i18next";
+import { FC, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Report } from "@/types";
 import styles from "./page.module.css";
 import { Paper } from "@/app/ui/Icons";
@@ -15,6 +15,7 @@ interface ReportsListProps {
   needsTemplates?: boolean;
   showCompany?: boolean;
   maxShown?: number;
+  onClickReport?: (report: Report) => void;
   onViewAll?: () => void;
 }
 
@@ -23,6 +24,7 @@ const ReportsList: FC<ReportsListProps> = ({
   isEmpty,
   needsTemplates,
   showCompany,
+  onClickReport,
   onViewAll,
 }) => {
   const { t } = useTranslation();
@@ -44,6 +46,7 @@ const ReportsList: FC<ReportsListProps> = ({
           key={report.id}
           report={report}
           showCompany={showCompany}
+          onClick={onClickReport}
         />
       ))}
       {onViewAll && (
@@ -61,9 +64,14 @@ const ReportsList: FC<ReportsListProps> = ({
 interface ReportsListItemProps {
   report: Report;
   showCompany?: boolean;
+  onClick?: (report: Report) => void;
 }
 
-const ReportsListItem: FC<ReportsListItemProps> = ({ report, showCompany }) => {
+const ReportsListItem: FC<ReportsListItemProps> = ({
+  report,
+  showCompany,
+  onClick,
+}) => {
   const router = useRouter();
   const { t } = useTranslation();
   const { formatDate } = useDate();
@@ -90,6 +98,7 @@ const ReportsListItem: FC<ReportsListItemProps> = ({ report, showCompany }) => {
       <div
         className="hover:opacity-50 cursor-pointer md:mx-3"
         onClick={() => {
+          onClick?.(report);
           router.push(`/reports/${report.id}?name=${report.name}`);
         }}
       >

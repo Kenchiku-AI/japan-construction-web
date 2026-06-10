@@ -10,9 +10,13 @@ import { Button } from "@/app/ui/Button/Button";
 
 interface CompanyProjectsListProps {
   projects: Project[];
+  onClickProject: (project: Project) => void;
 }
 
-const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
+const CompanyProjectsList: FC<CompanyProjectsListProps> = ({
+  projects,
+  onClickProject,
+}) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [showAll, setShowAll] = useState(false);
@@ -36,6 +40,7 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({ projects }) => {
           <div key={p.id}>
             <div
               onClick={() => {
+                onClickProject?.(p);
                 router.push(`/projects/${p.id}?name=${p.name}`);
               }}
               className="hover:opacity-50 cursor-pointer"

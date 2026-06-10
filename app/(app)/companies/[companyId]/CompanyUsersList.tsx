@@ -13,9 +13,14 @@ import { useApi } from "@/lib/api/ApiContext";
 interface CompanyUsersListProps {
   users: CompanyUser[];
   onRemove: (userId: string) => void;
+  onClickUser: (user: CompanyUser) => void;
 }
 
-const CompanyUsersList: FC<CompanyUsersListProps> = ({ users, onRemove }) => {
+const CompanyUsersList: FC<CompanyUsersListProps> = ({
+  users,
+  onRemove,
+  onClickUser,
+}) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { currentUser } = useApi();
@@ -39,6 +44,7 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({ users, onRemove }) => {
             <div
               key={u.id}
               onClick={() => {
+                onClickUser?.(u);
                 router.push(`/users/${u.id}`);
               }}
               className="hover:opacity-50 cursor-pointer"

@@ -13,6 +13,7 @@ import { UserRole } from "@/types";
 import { useRouter } from "next/navigation";
 import Divider from "@/app/ui/Divider";
 import { fontColor2 } from "@/lib/constants";
+import { Loader } from "@/app/ui/Loader";
 
 const CompaniesPage = () => {
   const { t } = useTranslation();
@@ -20,6 +21,7 @@ const CompaniesPage = () => {
   const router = useRouter();
   const { currentUser } = useApi();
   const [showCreateCompany, setShowCreateCompany] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     if (currentUser && currentUser.role !== UserRole.Admin) {
@@ -52,6 +54,7 @@ const CompaniesPage = () => {
             <div
               className="hover:opacity-50 cursor-pointer mx-4"
               onClick={() => {
+                setShowLoader(true);
                 router.push(`/companies/${c.id}?name=${c.name}`);
               }}
             >
@@ -81,6 +84,7 @@ const CompaniesPage = () => {
           createCompany(request);
         }}
       />
+      {showLoader && <Loader />}
     </>
   );
 };

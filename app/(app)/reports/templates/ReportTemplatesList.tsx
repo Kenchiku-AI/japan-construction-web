@@ -13,14 +13,14 @@ interface ReportTemplatesListProps {
   templates: ReportTemplate[];
   isCollapsible?: boolean;
   isEmpty?: boolean;
-  showCompanyName?: boolean;
+  onClickTemplate?: (template: ReportTemplate) => void;
 }
 
 const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
   templates,
   isCollapsible,
   isEmpty,
-  showCompanyName,
+  onClickTemplate,
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -49,9 +49,10 @@ const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
           <div key={tp.id}>
             <div
               className="hover:opacity-50 cursor-pointer md:mx-3"
-              onClick={() =>
-                router.push(`/reports/templates/${tp.id}?name=${tp.name}`)
-              }
+              onClick={() => {
+                onClickTemplate?.(tp);
+                router.push(`/reports/templates/${tp.id}?name=${tp.name}`);
+              }}
             >
               <div className="flex items-center justify-between">
                 <div style={{ height: 60 }} className="flex items-center gap-3">

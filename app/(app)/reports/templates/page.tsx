@@ -12,6 +12,7 @@ import { UserRole } from "@/types";
 import ReportTemplatesList from "./ReportTemplatesList";
 import { redirect } from "next/navigation";
 import Divider from "@/app/ui/Divider";
+import { Loader } from "@/app/ui/Loader";
 
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
@@ -20,6 +21,7 @@ const ReportTemplatesPage = () => {
     useReportTemplates();
   const [showCreateReportTemplate, setShowCreateReportTemplate] =
     useState(false);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     getReportTemplates();
@@ -48,6 +50,9 @@ const ReportTemplatesPage = () => {
       <ReportTemplatesList
         templates={reportTemplates ?? []}
         isEmpty={!loading && reportTemplates?.length === 0}
+        onClickTemplate={() => {
+          setShowLoader(true);
+        }}
       />
       <CreateReportTemplateModal
         isOpen={showCreateReportTemplate}
@@ -59,6 +64,7 @@ const ReportTemplatesPage = () => {
           createReportTemplate(request);
         }}
       />
+      {showLoader && <Loader />}
     </>
   );
 };

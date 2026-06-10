@@ -15,7 +15,7 @@ import { useApi } from "@/lib/api/ApiContext";
 
 const ProjectsPage = () => {
   const { t } = useTranslation();
-  const { projects, loading, loaded } = useProjects();
+  const { projects, loading, loaded, setLoading } = useProjects();
   const { currentUser } = useApi();
   const router = useRouter();
 
@@ -32,6 +32,7 @@ const ProjectsPage = () => {
         <div key={p.id}>
           <div
             onClick={() => {
+              setLoading(true);
               router.push(`/projects/${p.id}?name=${p.name}`);
             }}
             className={"hover:opacity-50 cursor-pointer"}

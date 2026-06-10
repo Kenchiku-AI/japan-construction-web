@@ -31,6 +31,7 @@ const ReportsPage = () => {
   const { reportTemplates, getReportTemplates } = useReportTemplates();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const searchRef = useRef<any>(null);
@@ -139,6 +140,9 @@ const ReportsPage = () => {
         reports={reports ?? []}
         isEmpty={!loading && reports?.length === 0 && !showSearch}
         needsTemplates={reportTemplates?.length === 0}
+        onClickReport={() => {
+          setShowLoader(true);
+        }}
         showCompany
       />
       <CreateReportModal
@@ -178,7 +182,7 @@ const ReportsPage = () => {
           setIsExcelDownloading(false);
         }}
       />
-      {loading && <Loader />}
+      {(loading || showLoader) && <Loader />}
     </>
   );
 };

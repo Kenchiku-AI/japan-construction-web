@@ -1,13 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import {
   ReportTemplateRequest,
   ReportTemplate,
   ReportParentType,
 } from "@/types/reports";
-import { UserRole } from "@/types";
 import { useTranslation } from "react-i18next";
 
 export const useReportTemplates = () => {

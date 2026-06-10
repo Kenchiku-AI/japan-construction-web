@@ -42,6 +42,7 @@ export const useProjects = () => {
 
   return {
     loading,
+    setLoading,
     loaded,
     projects,
   };

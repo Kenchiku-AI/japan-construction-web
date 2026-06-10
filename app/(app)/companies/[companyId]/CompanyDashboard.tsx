@@ -23,6 +23,7 @@ import CreateTagModal from "../../tags/CreateTagModal";
 import CreateReportTemplateModal from "../../reports/templates/CreateReportTemplateModal";
 import ReportTemplatesList from "../../reports/templates/ReportTemplatesList";
 import RemoveUserModal from "./RemoveUserModal";
+import { Loader } from "@/app/ui/Loader";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -47,6 +48,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     useState(false);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
+  const [showLoader, setShowLoader] = useState(false);
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
   const { tags, updateTag, createTag, deleteTag, loading } = useTags(companyId);
@@ -88,7 +90,12 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               )}
             </div>
             <Divider />
-            <CompanyProjectsList projects={company.projects} />
+            <CompanyProjectsList
+              projects={company.projects}
+              onClickProject={() => {
+                setShowLoader(true);
+              }}
+            />
           </div>
           <div>
             <div className="flex justify-between mt-12">
@@ -111,6 +118,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
             <CompanyUsersList
               users={company.users}
               onRemove={(userId) => setUserIdToRemove(userId)}
+              onClickUser={() => {
+                setShowLoader(true);
+              }}
             />
           </div>
           {currentUser?.role === "admin" && (
@@ -132,6 +142,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               <ReportTemplatesList
                 templates={templates}
                 isEmpty={!loading && templates.length === 0}
+                onClickTemplate={() => {
+                  setShowLoader(false);
+                }}
               />
               <div className="flex justify-between mt-12">
                 <div className="self-end">{t("tags")}</div>
@@ -256,6 +269,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           deleteTag(tagId);
         }}
       />
+      {showLoader && <Loader />}
     </>
   );
 };
