@@ -414,6 +414,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                   fileInputRef.current?.click();
                 }}
                 style={{ height: "auto" }}
+                iconOnlyMobile
               />
             )}
             <input
@@ -434,7 +435,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             <div className={styles.empty}>{t("empty_photos_description")}</div>
           ) : (
             <>
-              <div className="flex w-full flex-col md:flex-row justify-between gap-2 lg:gap-8 py-1">
+              <div className="flex w-full justify-between gap-8 py-1">
                 <Button
                   variant="tertiary"
                   label={
@@ -448,6 +449,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                   textStyle={{
                     fontWeight: "300",
                   }}
+                  iconOnlyMobile
                 />
                 <Button
                   variant="tertiary"
@@ -460,6 +462,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                   textStyle={{
                     fontWeight: "300",
                   }}
+                  iconOnlyMobile
                 />
               </div>
               <Divider style={{ background: fontColor2 }} />
