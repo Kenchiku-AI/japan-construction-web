@@ -17,7 +17,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const isAdmin = currentUser?.role === UserRole.Admin;
 
   return !currentUser ? null : (
-    <div className="drawer md:drawer-open">
+    <div className="drawer md:drawer-open min-h-screen">
       <input id="docs-sidebar" type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-content flex flex-col">
