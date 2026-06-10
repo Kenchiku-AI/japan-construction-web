@@ -21,6 +21,7 @@ import { useExport } from "../../reports/useExport";
 import GuestsList from "./GuestsList";
 import AddGuestModal from "./AddGuestModal";
 import RemoveGuestModal from "./RemoveGuestModal";
+import { Loader } from "@/app/ui/Loader";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -51,6 +52,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
 
   useEffect(() => {
@@ -219,6 +221,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     );
                   }
             }
+            onClickReport={() => {
+              setShowLoader(true);
+            }}
           />
           <div className="flex justify-between mt-10">
             <div className="self-end">{t("guests")}</div>
@@ -301,6 +306,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           setGuestToRemove(undefined);
         }}
       />
+      {showLoader && <Loader />}
     </>
   );
 };
