@@ -178,7 +178,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
           <div className="flex justify-between mt-10">
             <div className="self-end">{t("reports")}</div>
-            <div className="flex gap-8">
+            <div className="flex gap-6">
               {(project.reports?.length ?? 0) > 0 && (
                 <Button
                   variant="tertiary"
@@ -231,6 +231,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   setShowAddGuest(true);
                 }}
                 style={{ height: "auto" }}
+                iconOnlyMobile
               />
             )}
           </div>

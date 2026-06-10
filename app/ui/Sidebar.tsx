@@ -100,6 +100,14 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                   variant="tertiary"
                   label={`${currentUser.last_name ?? ""} ${currentUser.first_name ?? ""}`}
                   onClick={() => {
+                    const drawer = document.getElementById(
+                      "docs-sidebar",
+                    ) as HTMLInputElement | null;
+
+                    if (drawer) {
+                      drawer.checked = false;
+                    }
+
                     router.push(`/users/${currentUser.id}`);
                   }}
                   iconLeft={() => <User color={buttonColor} size={28} />}

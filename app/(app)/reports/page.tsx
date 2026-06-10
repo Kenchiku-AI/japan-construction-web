@@ -17,6 +17,7 @@ import { Input } from "@/app/ui/Input/Input";
 import DownloadExcelModal from "./DownloadExcelModal";
 import { useExport } from "./useExport";
 import { useSearchParams } from "next/navigation";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
@@ -33,6 +34,7 @@ const ReportsPage = () => {
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const searchRef = useRef<any>(null);
+  const { isMobile } = useIsMobile();
 
   const isCreateEnabled = useMemo(() => {
     if (currentUser?.role === "admin") return false;
@@ -61,7 +63,10 @@ const ReportsPage = () => {
     <>
       <div
         className="flex gap-2"
-        style={{ paddingTop: 24, display: showSearch ? undefined : "none" }}
+        style={{
+          paddingTop: isMobile ? 24 : 0,
+          display: showSearch ? undefined : "none",
+        }}
       >
         <Input
           ref={searchRef}
@@ -69,7 +74,7 @@ const ReportsPage = () => {
           onChange={(t) => {
             search(t, projectId);
           }}
-          style={{ height: 38 }}
+          style={{ height: isMobile ? 36 : 38 }}
           autoFocus
           hideLabel
         />

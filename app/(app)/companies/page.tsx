@@ -39,6 +39,7 @@ const CompaniesPage = () => {
           onClick={() => {
             setShowCreateCompany(true);
           }}
+          iconOnlyMobile
         />
       </div>
       <Divider />
