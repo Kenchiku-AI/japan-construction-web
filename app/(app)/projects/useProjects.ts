@@ -5,7 +5,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 import { Project } from "@/types";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export const useProjects = () => {
   const [loading, setLoading] = useState(true);
