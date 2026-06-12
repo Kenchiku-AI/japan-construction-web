@@ -129,7 +129,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
               <div className="text-2xl">{t("photo_details")}</div>
               {isProcessingShown && (
                 <div className="text-2xl" style={{ color: fontColor2 }}>
-                  {t("processing")}
+                  {`(${t("processing")})`}
                 </div>
               )}
             </div>

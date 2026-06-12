@@ -52,6 +52,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
   const { tags, updateTag, createTag, deleteTag, loading } = useTags(companyId);
+  const canCreate =
+    currentUser?.role === UserRole.Admin ||
+    currentUser?.role === UserRole.Manager;
 
   const shouldRedirect =
     currentUser &&
@@ -76,7 +79,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           <div>
             <div className="flex justify-between mt-12">
               <div className="self-end">{t("projects")}</div>
-              {currentUser?.role === UserRole.Admin && (
+              {canCreate && (
                 <Button
                   variant="tertiary"
                   label={t("create_project")}
@@ -100,8 +103,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           <div>
             <div className="flex justify-between mt-12">
               <div className="self-end">{t("users")}</div>
-              {(currentUser?.role === UserRole.Admin ||
-                currentUser?.role === UserRole.Manager) && (
+              {canCreate && (
                 <Button
                   variant="tertiary"
                   label={t("invite_user")}

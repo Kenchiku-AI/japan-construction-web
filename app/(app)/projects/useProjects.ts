@@ -5,6 +5,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 import { Project } from "@/types";
+import { useRouter } from "next/router";
 
 export const useProjects = () => {
   const [loading, setLoading] = useState(true);
@@ -13,6 +14,7 @@ export const useProjects = () => {
   const { t } = useTranslation();
   const api = useApi();
   const { showModal } = useModal();
+  const router = useRouter();
 
   useEffect(() => {
     getProjects();
@@ -40,10 +42,38 @@ export const useProjects = () => {
     setLoaded(true);
   };
 
+  const createProject = async (
+    name: string,
+    description?: string,
+    companyId?: string,
+  ) => {
+    if (!companyId) return;
+
+    setLoading(true);
+
+    try {
+      const request = { name, description, company_id: companyId };
+      const response = await api.createProject(request);
+
+      if (!response) {
+        throw Error();
+      }
+
+      router.push(`/projects/${response.id}?name=${response.name}`);
+    } catch (err) {
+      setLoading(false);
+      showModal({
+        title: t("error"),
+        subtitle: t("create_project_error_description"),
+      });
+    }
+  };
+
   return {
     loading,
     setLoading,
     loaded,
     projects,
+    createProject,
   };
 };
