@@ -83,6 +83,25 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     redirect("/");
   }
 
+  const onClickPaymentMethod = async () => {
+    setLoadingPaymentMethod(true);
+
+    try {
+      const response = await setupIntent(companyId);
+
+      if (response) {
+        setPaymentMethodClientSecret(response.client_secret);
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoadingPaymentMethod(false);
+  };
+
   return (
     <>
       <Heading
@@ -105,24 +124,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     : t("add_payment_method")
                 }
                 iconLeft={() => <CreditCardPlus />}
-                onClick={async () => {
-                  setLoadingPaymentMethod(true);
-
-                  try {
-                    const response = await setupIntent(companyId);
-
-                    if (response) {
-                      setPaymentMethodClientSecret(response.client_secret);
-                    }
-                  } catch (err) {
-                    showModal({
-                      title: t("error"),
-                      subtitle: t("error_description"),
-                    });
-                  }
-
-                  setLoadingPaymentMethod(false);
-                }}
+                onClick={onClickPaymentMethod}
                 disabled={loadingPaymentMethod}
               />
             ) : (
@@ -132,8 +134,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 <Button
                   variant="tertiary"
                   iconLeft={() => <Edit />}
-                  onClick={() => {}}
-                  iconOnlyMobile
+                  onClick={onClickPaymentMethod}
+                  disabled={loadingPaymentMethod}
                 />
               </div>
             )}
