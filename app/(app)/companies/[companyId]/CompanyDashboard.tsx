@@ -154,7 +154,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                   <input
                     type="checkbox"
                     className="toggle toggle-md"
-                    checked={company?.billing_exempt}
+                    checked={!!company?.billing_exempt}
                     onClick={() => setIsBillingExemptModalShown(true)}
                   />
                 )}
