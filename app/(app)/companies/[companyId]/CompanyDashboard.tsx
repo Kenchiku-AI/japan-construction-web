@@ -55,8 +55,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
   const [isCreateTemplateModalShown, setIsCreateTemplateModalShown] =
     useState(false);
-  const [isBillingExemptModalShown, setIsBillingExemptModalShown] =
-    useState(false);
+  const [pendingBillingExempt, setPendingBillingExempt] = useState<
+    boolean | null
+  >(null);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
   const [showLoader, setShowLoader] = useState(false);
@@ -154,8 +155,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                   <input
                     type="checkbox"
                     className="toggle toggle-md"
-                    checked={!!company?.billing_exempt}
-                    onClick={() => setIsBillingExemptModalShown(true)}
+                    checked={company.billing_exempt}
+                    onChange={(e) => setPendingBillingExempt(e.target.checked)}
                   />
                 )}
               </label>
@@ -367,14 +368,24 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         }}
       />
       <BillingExemptModal
-        isOpen={isBillingExemptModalShown}
-        isEnabled={!!company?.billing_exempt}
-        onClose={() => {
-          setIsBillingExemptModalShown(false);
-        }}
+        isOpen={pendingBillingExempt !== null}
+        isEnabled={pendingBillingExempt ?? false}
+        onClose={() => setPendingBillingExempt(null)}
         onConfirm={async () => {
-          setIsBillingExemptModalShown(false);
-          await updateBillingExempt(!!company?.billing_exempt);
+          if (pendingBillingExempt === null) return;
+
+          const value = pendingBillingExempt;
+          setPendingBillingExempt(null);
+
+          try {
+            await updateBillingExempt(value);
+            await getCompany(companyId);
+          } catch (err) {
+            showModal({
+              title: t("error"),
+              subtitle: t("error_description"),
+            });
+          }
         }}
       />
       {(showLoader || companyLoading) && <Loader />}
