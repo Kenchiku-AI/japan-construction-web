@@ -49,7 +49,7 @@ export const Button: FC<ButtonProps> = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter" && handleEnter && !disabled && !loading) {
-        onClick();
+        onClick?.();
       }
     };
 
