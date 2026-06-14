@@ -60,8 +60,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
   const [showLoader, setShowLoader] = useState(false);
-  const [billingExempt, setBillingExempt] = useState(false);
-  const billingExemptRef = useRef(false);
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
   const {
@@ -76,18 +74,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
 
   const shouldRedirect =
     currentUser && !isAdmin && currentUser.company?.id !== companyId;
-
-  useEffect(() => {
-    setBillingExempt(company?.billing_exempt ?? false);
-  }, [company?.billing_exempt]);
-
-  useEffect(() => {
-    if (!companyLoading && billingExempt !== billingExemptRef.current) {
-      setIsBillingExemptModalShown(true);
-    }
-
-    billingExemptRef.current = billingExempt;
-  }, [billingExempt, companyLoading]);
 
   if (shouldRedirect) {
     redirect("/");
@@ -168,10 +154,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                   <input
                     type="checkbox"
                     className="toggle toggle-md"
-                    checked={billingExempt}
-                    onChange={() => {
-                      setBillingExempt(!billingExempt);
-                    }}
+                    checked={company?.billing_exempt}
+                    onClick={() => setIsBillingExemptModalShown(true)}
                   />
                 )}
               </label>
@@ -384,16 +368,13 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
       />
       <BillingExemptModal
         isOpen={isBillingExemptModalShown}
-        isEnabled={billingExempt}
+        isEnabled={!!company?.billing_exempt}
         onClose={() => {
           setIsBillingExemptModalShown(false);
-          setBillingExempt(!billingExempt);
         }}
-        onConfirm={() => {
+        onConfirm={async () => {
           setIsBillingExemptModalShown(false);
-          setTimeout(async () => {
-            await updateBillingExempt(billingExempt);
-          }, 500);
+          await updateBillingExempt(!!company?.billing_exempt);
         }}
       />
       {(showLoader || companyLoading) && <Loader />}
