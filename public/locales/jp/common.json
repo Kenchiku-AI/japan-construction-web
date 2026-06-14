@@ -141,6 +141,7 @@
   "passwords_do_not_match": "パスワードが一致しません。",
   "password_reset": "パスワードがリセットされました",
   "password_reset_description": "パスワードは正常にリセットされました。ログインしてください。",
+  "payment_method": "支払い方法",
   "photo_details": "写真の詳細",
   "photo_taken": "{{date}}撮影",
   "photos": "写真",

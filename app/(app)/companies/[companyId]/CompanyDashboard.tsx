@@ -95,7 +95,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
       <Divider />
       {company && (
         <div className="flex flex-col">
-          <div className="flex flex-col md:flex-row w-full justify-between py-1">
+          <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
             {!company.payment_method_name ? (
               <Button
                 variant="tertiary"
@@ -126,9 +126,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 disabled={loadingPaymentMethod}
               />
             ) : (
-              <div className="flex flex-row gap-6 items-center">
+              <div className="flex flex-row gap-4 items-center">
                 <CreditCard />
-                <div>{company.payment_method_name}</div>
+                <div>{`${t("payment_method")}: ${company.payment_method_name}`}</div>
                 <Button
                   variant="tertiary"
                   iconLeft={() => <Edit />}
