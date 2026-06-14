@@ -4,7 +4,7 @@ import { useIsMobile } from "@/lib/useIsMobile";
 
 interface ButtonProps {
   label?: string;
-  onClick: () => void;
+  onClick?: () => void;
   variant?: "primary" | "secondary" | "tertiary";
   disabled?: boolean;
   iconLeft?: FC;
@@ -13,6 +13,7 @@ interface ButtonProps {
   style?: CSSProperties;
   textStyle?: CSSProperties;
   loading?: boolean;
+  type?: "submit" | "reset" | "button";
   handleEnter?: boolean;
 }
 
@@ -27,6 +28,7 @@ export const Button: FC<ButtonProps> = ({
   style,
   textStyle,
   loading,
+  type,
   handleEnter,
 }) => {
   const { isMobile } = useIsMobile();
@@ -62,6 +64,7 @@ export const Button: FC<ButtonProps> = ({
       <button
         onClick={onClick}
         disabled={disabled || loading}
+        type={type}
         className={`btn ${containerStyle}`}
         style={{
           paddingLeft: variant === "tertiary" ? 0 : iconLeft ? 8 : 16,

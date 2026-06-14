@@ -8,6 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useTranslation } from "react-i18next";
 import { errorColor1 } from "@/lib/constants";
+import { Button } from "./Button/Button";
 
 interface PaymentMethodFormProps {
   onSuccess: () => void;
@@ -17,6 +18,7 @@ const PaymentMethodForm: FC<PaymentMethodFormProps> = ({ onSuccess }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
+  const [showSubmit, setShowSubmit] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
 
@@ -43,11 +45,21 @@ const PaymentMethodForm: FC<PaymentMethodFormProps> = ({ onSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <PaymentElement />
-      {error && <p style={{ color: errorColor1 }}>{error}</p>}
-      <button type="submit" disabled={!stripe || loading}>
-        {loading ? `${t("processing")}...` : t("register")}
-      </button>
+      <div className={loading ? "pointer-events-none opacity-50" : undefined}>
+        <div className="my-6">
+          <PaymentElement onChange={(e) => setShowSubmit(e.complete)} />
+        </div>
+        <div className="mb-6">
+          {error && <p style={{ color: errorColor1 }}>{error}</p>}
+        </div>
+      </div>
+      {showSubmit && (
+        <Button
+          type="submit"
+          disabled={!stripe || loading}
+          label={loading ? `${t("processing")}...` : t("register")}
+        />
+      )}
     </form>
   );
 };
