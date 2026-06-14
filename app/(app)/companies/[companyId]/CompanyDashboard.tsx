@@ -41,6 +41,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     getCompany,
     createProject,
     updateName,
+    updateBillingExempt,
     templates,
     createTemplate,
     removeUser,
@@ -386,6 +387,10 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         isEnabled={billingExempt}
         onClose={() => {
           setIsBillingExemptModalShown(false);
+        }}
+        onConfirm={async () => {
+          setIsBillingExemptModalShown(false);
+          await updateBillingExempt(billingExempt);
         }}
       />
       {(showLoader || companyLoading) && <Loader />}

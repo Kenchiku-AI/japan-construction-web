@@ -81,7 +81,7 @@ export const useCompany = (companyId: string) => {
         if (company && response) {
           setCompany({
             ...company,
-            name: response.name,
+            billing_exempt: response.billing_exempt,
           });
         }
       } finally {
@@ -161,6 +161,7 @@ export const useCompany = (companyId: string) => {
     company,
     createProject,
     updateName,
+    updateBillingExempt,
     templates,
     createTemplate,
     removeUser,
