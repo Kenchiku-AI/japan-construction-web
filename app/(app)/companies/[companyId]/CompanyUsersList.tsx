@@ -40,9 +40,8 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({
         }}
       >
         {users.map((u) => (
-          <>
+          <div key={u.id}>
             <div
-              key={u.id}
               onClick={() => {
                 onClickUser?.(u);
                 router.push(`/users/${u.id}`);
@@ -78,7 +77,7 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({
               </div>
             </div>
             <Divider color={fontColor2} />
-          </>
+          </div>
         ))}
       </div>
       {users.length > 5 && (

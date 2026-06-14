@@ -24,14 +24,15 @@ import CreateReportTemplateModal from "../../reports/templates/CreateReportTempl
 import ReportTemplatesList from "../../reports/templates/ReportTemplatesList";
 import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
-import { fontColor2 } from "@/lib/constants";
+import { fontColor1, fontColor2 } from "@/lib/constants";
+import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
 
 interface CompanyDashboardProps {
   companyId: string;
 }
 
 const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
-  const { currentUser, inviteUser } = useApi();
+  const { currentUser, inviteUser, setupIntent } = useApi();
   const { t } = useTranslation();
   const {
     company,
@@ -44,6 +45,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const searchParams = useSearchParams();
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showCreateProject, setShowCreateProject] = useState(false);
+  const [loadingPaymentMethod, setLoadingPaymentMethod] = useState(false);
+  const [paymentMethodClientSecret, setPaymentMethodClientSecret] =
+    useState("");
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
   const [isCreateTemplateModalShown, setIsCreateTemplateModalShown] =
     useState(false);
@@ -78,20 +82,42 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         title={company?.name ?? searchParams.get("name") ?? ""}
         topLabel={t("company")}
         placeholder={t("company_name")}
-        isEditable={}
+        isEditable={isAdmin}
         onEdit={(n) => updateName(n)}
       />
       <Divider />
-      <div className="flex flex md:flex-row w-full justify-between gap-2 lg:gap-8 py-1">
-        {!!company?.has_payment_method ? (
+      <div className="flex flex-col md:flex-row w-full justify-between py-1">
+        {!company?.has_payment_method ? (
           <Button
             variant="tertiary"
+            label={
+              loadingPaymentMethod
+                ? `${t("loading")}...`
+                : t("add_payment_method")
+            }
             iconLeft={() => <CreditCardPlus />}
-            onClick={() => t("add_payment_method")}
-            iconOnlyMobile
+            onClick={async () => {
+              setLoadingPaymentMethod(true);
+
+              try {
+                const response = await setupIntent(companyId);
+
+                if (response) {
+                  setPaymentMethodClientSecret(response.client_secret);
+                }
+              } catch (err) {
+                showModal({
+                  title: t("error"),
+                  subtitle: t("error_description"),
+                });
+              }
+
+              setLoadingPaymentMethod(false);
+            }}
+            disabled={loadingPaymentMethod}
           />
         ) : (
-          <div className="flex flex-row gap-6">
+          <div className="flex flex-row gap-6 items-center">
             <CreditCard />
             <div>{company?.payment_method_name}</div>
             <Button
@@ -102,21 +128,29 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
             />
           </div>
         )}
-        <div className="flex flex-row gap-6">
-          {(isAdmin || company?.billing_exempt) && (
-            <div>{t("billing_exempt")}</div>
-          )}
-          {isAdmin && (
-            <input
-              type="checkbox"
-              className="toggle"
-              checked={billingExempt}
-              onChange={() => {
-                setBillingExempt(!billingExempt);
-              }}
-            />
-          )}
+        <div className="py-1">
+          <Divider
+            style={{ marginTop: 10, marginBottom: 10, background: fontColor2 }}
+          />
         </div>
+        {(isAdmin || company?.billing_exempt) && (
+          <label
+            style={{ height: 40 }}
+            className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
+          >
+            <div style={{ color: fontColor1 }}>{t("billing_exempt")}</div>
+            {isAdmin && (
+              <input
+                type="checkbox"
+                className="toggle toggle-md"
+                checked={billingExempt}
+                onChange={() => {
+                  setBillingExempt(!billingExempt);
+                }}
+              />
+            )}
+          </label>
+        )}
       </div>
       <Divider style={{ background: fontColor2 }} />
       {company && (
@@ -314,6 +348,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           const tagId = deletingTag.id;
           setDeletingTag(undefined);
           deleteTag(tagId);
+        }}
+      />
+      <AddPaymentMethodModal
+        clientSecret={paymentMethodClientSecret}
+        isOpen={!!paymentMethodClientSecret}
+        onClose={() => setPaymentMethodClientSecret("")}
+        onSuccess={() => {
+          setPaymentMethodClientSecret("");
         }}
       />
       {showLoader && <Loader />}

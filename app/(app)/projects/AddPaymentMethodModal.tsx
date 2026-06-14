@@ -20,7 +20,7 @@ const AddPaymentMethodModal: FC<AddPaymentMethodModal> = ({
 }) => {
   const { t } = useTranslation();
 
-  return (
+  return !clientSecret ? null : (
     <Modal
       isOpen={isOpen}
       title={t("add_payment_method")}
@@ -33,3 +33,5 @@ const AddPaymentMethodModal: FC<AddPaymentMethodModal> = ({
     </Modal>
   );
 };
+
+export default AddPaymentMethodModal;
