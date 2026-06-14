@@ -3,30 +3,34 @@ import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import { Button } from "@/app/ui/Button/Button";
 
-interface DeleteReportModalProps {
+interface BillingExemptModalProps {
   isOpen: boolean;
+  isEnabled: boolean;
   onClose: () => void;
-  onDelete: () => void;
+  onConfirm: () => void;
 }
 
-const DeleteReportModal: FC<DeleteReportModalProps> = ({
+const BillingExemptModal: FC<BillingExemptModalProps> = ({
   isOpen,
+  isEnabled,
   onClose,
-  onDelete,
+  onConfirm,
 }) => {
   const { t } = useTranslation();
+  const prefix = isEnabled ? "disable" : "enable";
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={() => {
-        onClose();
-      }}
-      title={t("delete_report")}
-      subtitle={t("delete_report_description")}
+      onClose={onClose}
+      title={t(`${prefix}_billing_exempt`)}
+      subtitle={t(`${prefix}_billing_exempt_description`)}
     >
       <div className="mt-8 grid lg:grid-col-2 gap-2">
-        <Button label={t("delete_report")} onClick={onDelete} />
+        <Button
+          label={t(isEnabled ? "disable" : "enable")}
+          onClick={onConfirm}
+        />
         <Button
           variant="secondary"
           style={{ height: 60, width: "100%" }}
@@ -38,4 +42,4 @@ const DeleteReportModal: FC<DeleteReportModalProps> = ({
   );
 };
 
-export default DeleteReportModal;
+export default BillingExemptModal;

@@ -69,6 +69,28 @@ export const useCompany = (companyId: string) => {
     [company, companyId],
   );
 
+  const updateBillingExempt = useCallback(
+    async (billing_exempt: boolean) => {
+      setLoading(true);
+
+      try {
+        const response = await api.updateCompany(companyId, {
+          billing_exempt,
+        });
+
+        if (company && response) {
+          setCompany({
+            ...company,
+            name: response.name,
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [company, companyId],
+  );
+
   const createProject = useCallback(
     async (name: string, description?: string) => {
       if (!company) return;
@@ -142,5 +164,6 @@ export const useCompany = (companyId: string) => {
     templates,
     createTemplate,
     removeUser,
+    getCompany,
   };
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,7 @@ import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
 import { fontColor1, fontColor2 } from "@/lib/constants";
 import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
+import BillingExemptModal from "./BillingExemptModal";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -37,6 +38,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const {
     loading: companyLoading,
     company,
+    getCompany,
     createProject,
     updateName,
     templates,
@@ -52,10 +54,13 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
   const [isCreateTemplateModalShown, setIsCreateTemplateModalShown] =
     useState(false);
+  const [isBillingExemptModalShown, setIsBillingExemptModalShown] =
+    useState(false);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
   const [showLoader, setShowLoader] = useState(false);
   const [billingExempt, setBillingExempt] = useState(false);
+  const billingExemptRef = useRef(false);
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
   const {
@@ -72,12 +77,16 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     currentUser && !isAdmin && currentUser.company?.id !== companyId;
 
   useEffect(() => {
-    if (companyLoading) return;
+    setBillingExempt(company?.billing_exempt ?? false);
+  }, [company?.billing_exempt]);
 
-    if (billingExempt) {
-    } else {
+  useEffect(() => {
+    if (!companyLoading && billingExempt !== billingExemptRef.current) {
+      setIsBillingExemptModalShown(true);
     }
-  }, [billingExempt]);
+
+    billingExemptRef.current = billingExempt;
+  }, [billingExempt, companyLoading]);
 
   if (shouldRedirect) {
     redirect("/");
@@ -369,6 +378,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onClose={() => setPaymentMethodClientSecret("")}
         onSuccess={() => {
           setPaymentMethodClientSecret("");
+          getCompany(companyId);
+        }}
+      />
+      <BillingExemptModal
+        isOpen={isBillingExemptModalShown}
+        isEnabled={billingExempt}
+        onClose={() => {
+          setIsBillingExemptModalShown(false);
         }}
       />
       {(showLoader || companyLoading) && <Loader />}

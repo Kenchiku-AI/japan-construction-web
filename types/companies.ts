@@ -19,11 +19,13 @@ export type CreateCompanyRequest = {
 export type UpdateCompanyRequest = {
   name?: string;
   corporate_number?: string;
+  billing_exempt?: boolean;
 };
 
 export type UpdateCompanyResponse = {
   name: string;
   corporate_number: string;
+  billing_exempt: boolean;
 };
 
 export type SetupIntentResponse = {
