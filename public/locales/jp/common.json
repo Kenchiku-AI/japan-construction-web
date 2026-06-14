@@ -77,7 +77,7 @@
   "empty_tags_description": "まだタグはありません。",
   "empty_users_description": "まだユーザーはいません。",
   "error": "エラー",
-  "error_description": "エラーが発生しました",
+  "error_description": "エラーが発生しました。",
   "existing_company_invitation": "現在所属している会社が、この招待に関連付けられた会社と異なります。",
   "existing_company_invitation_login": "現在所属している会社が、この招待に関連付けられた会社と異なります。招待は削除されたため、次回ログイン時には使用されません。",
   "expired_invitation": "使用された招待の有効期限が切れています。",
