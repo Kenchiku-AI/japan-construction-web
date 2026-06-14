@@ -35,6 +35,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const { currentUser, inviteUser, setupIntent } = useApi();
   const { t } = useTranslation();
   const {
+    loading: companyLoading,
     company,
     createProject,
     updateName,
@@ -57,7 +58,13 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [billingExempt, setBillingExempt] = useState(false);
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
-  const { tags, updateTag, createTag, deleteTag, loading } = useTags(companyId);
+  const {
+    tags,
+    updateTag,
+    createTag,
+    deleteTag,
+    loading: tagsLoading,
+  } = useTags(companyId);
   const isAdmin = currentUser?.role === UserRole.Admin;
   const canCreate = isAdmin || currentUser?.role === UserRole.Manager;
 
@@ -65,7 +72,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     currentUser && !isAdmin && currentUser.company?.id !== companyId;
 
   useEffect(() => {
-    if (loading) return;
+    if (companyLoading) return;
 
     if (billingExempt) {
     } else {
@@ -86,75 +93,79 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onEdit={(n) => updateName(n)}
       />
       <Divider />
-      <div className="flex flex-col md:flex-row w-full justify-between py-1">
-        {!company?.has_payment_method ? (
-          <Button
-            variant="tertiary"
-            label={
-              loadingPaymentMethod
-                ? `${t("loading")}...`
-                : t("add_payment_method")
-            }
-            iconLeft={() => <CreditCardPlus />}
-            onClick={async () => {
-              setLoadingPaymentMethod(true);
-
-              try {
-                const response = await setupIntent(companyId);
-
-                if (response) {
-                  setPaymentMethodClientSecret(response.client_secret);
-                }
-              } catch (err) {
-                showModal({
-                  title: t("error"),
-                  subtitle: t("error_description"),
-                });
-              }
-
-              setLoadingPaymentMethod(false);
-            }}
-            disabled={loadingPaymentMethod}
-          />
-        ) : (
-          <div className="flex flex-row gap-6 items-center">
-            <CreditCard />
-            <div>{company?.payment_method_name}</div>
-            <Button
-              variant="tertiary"
-              iconLeft={() => <Edit />}
-              onClick={() => {}}
-              iconOnlyMobile
-            />
-          </div>
-        )}
-        <div className="py-1">
-          <Divider
-            style={{ marginTop: 10, marginBottom: 10, background: fontColor2 }}
-          />
-        </div>
-        {(isAdmin || company?.billing_exempt) && (
-          <label
-            style={{ height: 40 }}
-            className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
-          >
-            <div style={{ color: fontColor1 }}>{t("billing_exempt")}</div>
-            {isAdmin && (
-              <input
-                type="checkbox"
-                className="toggle toggle-md"
-                checked={billingExempt}
-                onChange={() => {
-                  setBillingExempt(!billingExempt);
-                }}
-              />
-            )}
-          </label>
-        )}
-      </div>
-      <Divider style={{ background: fontColor2 }} />
       {company && (
         <div className="flex flex-col">
+          <div className="flex flex-col md:flex-row w-full justify-between py-1">
+            {!company?.has_payment_method ? (
+              <Button
+                variant="tertiary"
+                label={
+                  loadingPaymentMethod
+                    ? `${t("loading")}...`
+                    : t("add_payment_method")
+                }
+                iconLeft={() => <CreditCardPlus />}
+                onClick={async () => {
+                  setLoadingPaymentMethod(true);
+
+                  try {
+                    const response = await setupIntent(companyId);
+
+                    if (response) {
+                      setPaymentMethodClientSecret(response.client_secret);
+                    }
+                  } catch (err) {
+                    showModal({
+                      title: t("error"),
+                      subtitle: t("error_description"),
+                    });
+                  }
+
+                  setLoadingPaymentMethod(false);
+                }}
+                disabled={loadingPaymentMethod}
+              />
+            ) : (
+              <div className="flex flex-row gap-6 items-center">
+                <CreditCard />
+                <div>{company?.payment_method_name}</div>
+                <Button
+                  variant="tertiary"
+                  iconLeft={() => <Edit />}
+                  onClick={() => {}}
+                  iconOnlyMobile
+                />
+              </div>
+            )}
+            <div className="py-1">
+              <Divider
+                style={{
+                  marginTop: 10,
+                  marginBottom: 10,
+                  background: fontColor2,
+                }}
+              />
+            </div>
+            {(isAdmin || company?.billing_exempt) && (
+              <label
+                style={{ height: 40 }}
+                className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
+              >
+                <div style={{ color: fontColor1 }}>{t("billing_exempt")}</div>
+                {isAdmin && (
+                  <input
+                    type="checkbox"
+                    className="toggle toggle-md"
+                    checked={billingExempt}
+                    onChange={() => {
+                      setBillingExempt(!billingExempt);
+                    }}
+                  />
+                )}
+              </label>
+            )}
+          </div>
+          <Divider style={{ background: fontColor2 }} />
           <div>
             <div className="flex justify-between mt-12">
               <div className="self-end">{t("projects")}</div>
@@ -222,7 +233,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               <Divider />
               <ReportTemplatesList
                 templates={templates}
-                isEmpty={!loading && templates.length === 0}
+                isEmpty={!companyLoading && templates.length === 0}
                 onClickTemplate={() => {
                   setShowLoader(false);
                 }}
@@ -243,7 +254,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               <Divider />
               <TagsList
                 tags={tags ?? []}
-                isEmpty={!loading && tags?.length === 0}
+                isEmpty={!tagsLoading && tags?.length === 0}
                 onEdit={(t) => setEditingTag(t)}
                 onDelete={(t) => setDeletingTag(t)}
               />
@@ -358,7 +369,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           setPaymentMethodClientSecret("");
         }}
       />
-      {showLoader && <Loader />}
+      {(showLoader || companyLoading) && <Loader />}
     </>
   );
 };
