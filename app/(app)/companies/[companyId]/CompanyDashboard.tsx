@@ -389,9 +389,11 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           setIsBillingExemptModalShown(false);
           setBillingExempt(!billingExempt);
         }}
-        onConfirm={async () => {
+        onConfirm={() => {
           setIsBillingExemptModalShown(false);
-          await updateBillingExempt(billingExempt);
+          setTimeout(async () => {
+            await updateBillingExempt(billingExempt);
+          }, 500);
         }}
       />
       {(showLoader || companyLoading) && <Loader />}
