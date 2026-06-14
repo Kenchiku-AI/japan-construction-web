@@ -30,6 +30,7 @@ import {
   AcceptInvitationRequest,
   AcceptInvitationResponse,
   UserRole,
+  SetupIntentResponse,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -199,6 +200,10 @@ export const useApiData = () => {
     async updateCompany(companyId: string, request: UpdateCompanyRequest) {
       const url = `/companies/${companyId}`;
       return call(() => http.patch<UpdateCompanyResponse>(url, request));
+    },
+    async setupIntent(companyId: string) {
+      const url = `/companies/${companyId}/billing/setup-intent`;
+      return call(() => http.patch<SetupIntentResponse>(url));
     },
     async removeUser(userId: string) {
       const url = `/users/${userId}/company`;
