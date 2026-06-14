@@ -96,7 +96,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
       {company && (
         <div className="flex flex-col">
           <div className="flex flex-col md:flex-row w-full justify-between py-1">
-            {!company?.has_payment_method ? (
+            {!company.payment_method_name ? (
               <Button
                 variant="tertiary"
                 label={
@@ -128,7 +128,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
             ) : (
               <div className="flex flex-row gap-6 items-center">
                 <CreditCard />
-                <div>{company?.payment_method_name}</div>
+                <div>{company.payment_method_name}</div>
                 <Button
                   variant="tertiary"
                   iconLeft={() => <Edit />}
@@ -146,7 +146,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 }}
               />
             </div>
-            {(isAdmin || company?.billing_exempt) && (
+            {(isAdmin || company.billing_exempt) && (
               <label
                 style={{ height: 40 }}
                 className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}

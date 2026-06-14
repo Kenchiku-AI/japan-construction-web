@@ -5,7 +5,6 @@ export type Company = {
   name: string;
   corporate_number: string;
   payment_method_name?: string;
-  has_payment_method: boolean;
   billing_exempt: boolean;
   users: CompanyUser[];
   projects: Project[];
