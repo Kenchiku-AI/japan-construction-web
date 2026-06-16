@@ -150,7 +150,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 style={{ height: 40 }}
                 className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
               >
-                <div style={{ color: fontColor1 }}>{t("billing_exempt")}</div>
+                <div style={{ color: fontColor2 }}>{t("billing_exempt")}</div>
                 {isAdmin && (
                   <input
                     type="checkbox"
