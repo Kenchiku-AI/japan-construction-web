@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
 import debounce from "lodash.debounce";
+import { useBilling } from "@/lib/useBilling";
 
 export const useReports = () => {
   const [loading, setLoading] = useState(false);
@@ -15,6 +16,7 @@ export const useReports = () => {
   const router = useRouter();
   const { showModal } = useModal();
   const { t } = useTranslation();
+  const { isBillingError } = useBilling();
 
   const getReports = useCallback(
     async (projectId?: string) => {
@@ -41,10 +43,12 @@ export const useReports = () => {
           router.push(`/reports/${response.id}?name=${response.name}`);
         }
       } catch (err) {
-        showModal({
-          title: t("error"),
-          subtitle: t("create_report_error_description"),
-        });
+        if (!isBillingError(err)) {
+          showModal({
+            title: t("error"),
+            subtitle: t("create_report_error_description"),
+          });
+        }
       }
 
       setLoading(false);

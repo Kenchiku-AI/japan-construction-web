@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 import { Project } from "@/types";
 import { useRouter } from "next/navigation";
+import { useBilling } from "@/lib/useBilling";
 
 export const useProjects = () => {
   const [loading, setLoading] = useState(true);
@@ -14,6 +15,7 @@ export const useProjects = () => {
   const { t } = useTranslation();
   const api = useApi();
   const { showModal } = useModal();
+  const { isBillingError } = useBilling();
   const router = useRouter();
 
   useEffect(() => {
@@ -62,6 +64,11 @@ export const useProjects = () => {
       router.push(`/projects/${response.id}?name=${response.name}`);
     } catch (err) {
       setLoading(false);
+
+      if (isBillingError(err)) {
+        return;
+      }
+
       showModal({
         title: t("error"),
         subtitle: t("create_project_error_description"),

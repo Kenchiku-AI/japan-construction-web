@@ -7,6 +7,7 @@ import { Report, ReportImage, ReportRequest } from "@/types/reports";
 import { useTranslation } from "react-i18next";
 import imageCompression from "browser-image-compression";
 import { useModal } from "@/lib/modal/ModalContext";
+import { useBilling } from "@/lib/useBilling";
 
 export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(true);
@@ -21,6 +22,7 @@ export const useReport = (reportId: string) => {
   const { showModal } = useModal();
   const pollingRef = useRef<Record<string, NodeJS.Timeout>>({});
   const selectedPhotoRef = useRef<ReportImage | undefined>(undefined);
+  const { isBillingError } = useBilling();
 
   useEffect(() => {
     getReport(reportId);
@@ -141,7 +143,7 @@ export const useReport = (reportId: string) => {
         const response = await api.updateReport(reportId, request);
         setReport(response);
       } catch (err) {
-        if (!silent) {
+        if (!silent && !isBillingError(err)) {
           showModal({
             title: t("error"),
             subtitle: t("update_report_error_description"),
@@ -159,10 +161,12 @@ export const useReport = (reportId: string) => {
       await api.deleteReport(reportId);
       router.replace("/reports");
     } catch (err) {
-      showModal({
-        title: t("error"),
-        subtitle: t("delete_report_error"),
-      });
+      if (!isBillingError(err)) {
+        showModal({
+          title: t("error"),
+          subtitle: t("delete_report_error"),
+        });
+      }
     }
 
     setLoading(false);
@@ -196,7 +200,12 @@ export const useReport = (reportId: string) => {
           });
         }
       } catch (err) {
-        console.log(err);
+        if (!isBillingError(err)) {
+          showModal({
+            title: t("error"),
+            subtitle: t("error_description")
+          })
+        }
       }
     },
     [images, reportId, selectedPhoto],
@@ -229,7 +238,12 @@ export const useReport = (reportId: string) => {
           });
         }
       } catch (err) {
-        console.log(err);
+        if (!isBillingError(err)) {
+          showModal({
+            title: t("error"),
+            subtitle: t("error_description")
+          })
+        }
       }
     },
     [images, reportId, selectedPhoto],
@@ -257,7 +271,12 @@ export const useReport = (reportId: string) => {
           });
         }
       } catch (err) {
-        console.log(err);
+        if (!isBillingError(err)) {
+          showModal({
+            title: t("error"),
+            subtitle: t("error_description")
+          })
+        }
       }
     },
     [images, reportId, selectedPhoto],
@@ -272,10 +291,12 @@ export const useReport = (reportId: string) => {
       await api.deleteImage(reportId, selectedPhoto.id);
       setImages(images?.filter((i) => i.id !== selectedPhoto.id));
     } catch (err) {
-      showModal({
-        title: t("error"),
-        subtitle: t("delete_photo_error"),
-      });
+      if (!isBillingError(err)) {
+        showModal({
+          title: t("error"),
+          subtitle: t("delete_photo_error"),
+        });
+      }
     }
 
     setSelectedPhoto(undefined);
@@ -322,10 +343,12 @@ export const useReport = (reportId: string) => {
 
         pollImageStatus(newImage.id);
       } catch (err) {
-        showModal({
-          title: t("error"),
-          subtitle: t("upload_image_error"),
-        });
+        if (!isBillingError(err)) {
+          showModal({
+            title: t("error"),
+            subtitle: t("upload_image_error"),
+          });
+        }
       }
 
       setLoading(false);

@@ -12,6 +12,7 @@ import {
   UserRole,
 } from "@/types";
 import { useModal } from "@/lib/modal/ModalContext";
+import { useBilling } from "@/lib/useBilling";
 
 export const useProject = (projectId: string) => {
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,7 @@ export const useProject = (projectId: string) => {
   const { t } = useTranslation();
   const { showModal } = useModal();
   const { currentUser, ...api } = useApi();
+  const { isBillingError } = useBilling();
 
   useEffect(() => {
     getProject(projectId);
@@ -115,13 +117,17 @@ export const useProject = (projectId: string) => {
           router.push(`/reports/${response.id}?name=${response.name}`);
         }
       } catch (err) {
+        setLoading(false);
+
+        if (isBillingError(err)) {
+          return;
+        }
+
         showModal({
           title: t("error"),
           subtitle: t("create_report_error_description"),
         });
       }
-
-      setLoading(false);
     },
     [api],
   );

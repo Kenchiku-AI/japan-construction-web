@@ -24,7 +24,7 @@ import CreateReportTemplateModal from "../../reports/templates/CreateReportTempl
 import ReportTemplatesList from "../../reports/templates/ReportTemplatesList";
 import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
-import { fontColor1, fontColor2 } from "@/lib/constants";
+import { errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
 import BillingExemptModal from "./BillingExemptModal";
 
@@ -72,6 +72,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   } = useTags(companyId);
   const isAdmin = currentUser?.role === UserRole.Admin;
   const canCreate = isAdmin || currentUser?.role === UserRole.Manager;
+  const paymentMethodColor = company?.is_payment_method_valid ? fontColor1 : errorColor1;
 
   const shouldRedirect =
     currentUser && !isAdmin && currentUser.company?.id !== companyId;
@@ -126,8 +127,10 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               />
             ) : (
               <div className="flex flex-row gap-4 items-center">
-                <CreditCard />
-                <div>{`${t("payment_method")}: ${company.payment_method_name}`}</div>
+                <CreditCard color={paymentMethodColor}/>
+                <div style={{ color: paymentMethodColor }}>
+                  {`${t("payment_method")}: ${company.payment_method_name}`}
+                </div>
                 <Button
                   variant="tertiary"
                   iconLeft={() => <Edit />}
