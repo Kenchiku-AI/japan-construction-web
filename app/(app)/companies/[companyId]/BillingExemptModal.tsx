@@ -17,18 +17,18 @@ const BillingExemptModal: FC<BillingExemptModalProps> = ({
   onConfirm,
 }) => {
   const { t } = useTranslation();
-  const prefix = isEnabled ? "disable" : "enable";
+  const prefix = isEnabled ? "enable" : "disable";
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={t(`${prefix}_billing_exempt`)}
-      subtitle={t(`${prefix}_billing_exempt_description`)}
+      title={t(`${prefix}_billing`)}
+      subtitle={t(`${prefix}_billing_description`)}
     >
       <div className="mt-8 grid lg:grid-col-2 gap-2">
         <Button
-          label={t(isEnabled ? "disable" : "enable")}
+          label={t(prefix)}
           onClick={onConfirm}
         />
         <Button

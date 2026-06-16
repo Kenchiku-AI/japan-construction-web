@@ -32,6 +32,11 @@ export type SetupIntentResponse = {
   client_secret: string;
 };
 
+export type BillingCheckResponse = {
+  client_secret: string;
+};
+
+
 export type InviteUserRequest = {
   email: string;
   company_id: string;

@@ -55,7 +55,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
   const [isCreateTemplateModalShown, setIsCreateTemplateModalShown] =
     useState(false);
-  const [pendingBillingExempt, setPendingBillingExempt] = useState<
+  const [pendingBillingEnabled, setPendingBillingEnabled] = useState<
     boolean | null
   >(null);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
@@ -111,7 +111,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
       <Divider />
       {company && (
         <div className="flex flex-col">
-          <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+          <div className="flex flex-col md:flex-row w-full justify-between items-center py-1 md:px-3">
             {!company.payment_method_name ? (
               <Button
                 variant="tertiary"
@@ -145,18 +145,21 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 }}
               />
             </div>
-            {(isAdmin || company.billing_exempt) && (
+            {(!isAdmin && company.billing_exempt) && (
+              <div style={{ color: fontColor2 }}>{t("billing_exempt")}</div>
+            )}
+            {isAdmin && (
               <label
                 style={{ height: 40 }}
                 className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
               >
-                <div style={{ color: fontColor2 }}>{t("billing_exempt")}</div>
+                <div style={{ color: fontColor1 }}>{t("billing_enabled")}</div>
                 {isAdmin && (
                   <input
                     type="checkbox"
                     className="toggle toggle-md"
-                    checked={company.billing_exempt}
-                    onChange={(e) => setPendingBillingExempt(e.target.checked)}
+                    checked={!company.billing_exempt}
+                    onChange={(e) => setPendingBillingEnabled(e.target.checked)}
                   />
                 )}
               </label>
@@ -368,17 +371,17 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         }}
       />
       <BillingExemptModal
-        isOpen={pendingBillingExempt !== null}
-        isEnabled={pendingBillingExempt ?? false}
-        onClose={() => setPendingBillingExempt(null)}
+        isOpen={pendingBillingEnabled !== null}
+        isEnabled={pendingBillingEnabled ?? true}
+        onClose={() => setPendingBillingEnabled(null)}
         onConfirm={async () => {
-          if (pendingBillingExempt === null) return;
+          if (pendingBillingEnabled === null) return;
 
-          const value = pendingBillingExempt;
-          setPendingBillingExempt(null);
+          const value = pendingBillingEnabled;
+          setPendingBillingEnabled(null);
 
           try {
-            await updateBillingExempt(value);
+            await updateBillingExempt(!value);
             await getCompany(companyId);
           } catch (err) {
             showModal({

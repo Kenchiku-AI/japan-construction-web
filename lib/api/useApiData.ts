@@ -205,6 +205,10 @@ export const useApiData = () => {
       const url = `/companies/${companyId}/billing/setup-intent`;
       return call(() => http.post<SetupIntentResponse>(url));
     },
+    async checkBilling(companyId: string) {
+      const url = `/companies/${companyId}/billing/check`;
+      return call(() => http.post<SetupIntentResponse>(url));
+    },
     async removeUser(userId: string) {
       const url = `/users/${userId}/company`;
       return call(() => http.delete(url));
