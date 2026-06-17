@@ -22,6 +22,7 @@ import GuestsList from "./GuestsList";
 import AddGuestModal from "./AddGuestModal";
 import RemoveGuestModal from "./RemoveGuestModal";
 import { Loader } from "@/app/ui/Loader";
+import { useModal } from "@/lib/modal/ModalContext";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -54,6 +55,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showAddGuest, setShowAddGuest] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
+  const { showModal } = useModal();
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -200,6 +202,17 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   label={t("create_report")}
                   iconLeft={() => <Plus />}
                   onClick={() => {
+                    if (
+                      currentUser?.role !== "admin" && 
+                      currentUser?.company?.needs_payment_method
+                    ) {
+                      showModal({
+                        title: t("payment_method_required"),
+                        subtitle: t("payment_method_required_description")
+                      });
+                      return;
+                    }
+                
                     setShowCreateReport(true);
                   }}
                   style={{ height: "auto" }}

@@ -14,6 +14,7 @@ import { Loader } from "@/app/ui/Loader";
 import { useApi } from "@/lib/api/ApiContext";
 import CreateProjectModal from "../companies/[companyId]/CreateProjectModal";
 import { Button } from "@/app/ui/Button/Button";
+import { useModal } from "@/lib/modal/ModalContext";
 
 const ProjectsPage = () => {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ const ProjectsPage = () => {
   const { currentUser } = useApi();
   const router = useRouter();
   const [showCreateProject, setShowCreateProject] = useState(false);
+  const { showModal } = useModal();
   const companyId =
     currentUser?.role === UserRole.Manager
       ? currentUser?.company?.id
@@ -37,6 +39,17 @@ const ProjectsPage = () => {
             label={t("create_project")}
             iconLeft={() => <Plus />}
             onClick={() => {
+              if (
+                currentUser?.role !== UserRole.Admin && 
+                currentUser?.company?.needs_payment_method
+              ) {
+                showModal({
+                  title: t("payment_method_required"),
+                  subtitle: t("payment_method_required_description")
+                });
+                return;
+              }
+
               setShowCreateProject(true);
             }}
             style={{ height: "auto" }}

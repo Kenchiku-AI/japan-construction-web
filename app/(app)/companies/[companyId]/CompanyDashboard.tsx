@@ -26,14 +26,14 @@ import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
 import { errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
-import BillingExemptModal from "./BillingExemptModal";
+import BillingEnabledModal from "./BillingEnabledModal";
 
 interface CompanyDashboardProps {
   companyId: string;
 }
 
 const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
-  const { currentUser, inviteUser, setupIntent } = useApi();
+  const { currentUser, inviteUser, setupIntent, refreshCurrentUser } = useApi();
   const { t } = useTranslation();
   const {
     loading: companyLoading,
@@ -178,6 +178,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                   label={t("create_project")}
                   iconLeft={() => <Plus />}
                   onClick={() => {
+                    if (!isAdmin && currentUser?.company?.needs_payment_method) {
+                      showModal({
+                        title: t("payment_method_required"),
+                        subtitle: t("payment_method_required_description")
+                      });
+                      return;
+                    }
+                
                     setShowCreateProject(true);
                   }}
                   style={{ height: "auto" }}
@@ -371,12 +379,15 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onSuccess={() => {
           setPaymentMethodClientSecret("");
           getCompany(companyId);
+          refreshCurrentUser();
         }}
       />
-      <BillingExemptModal
+      <BillingEnabledModal
         isOpen={pendingBillingEnabled !== null}
         isEnabled={pendingBillingEnabled ?? true}
-        onClose={() => setPendingBillingEnabled(null)}
+        onClose={() => {
+          setPendingBillingEnabled(null)
+        }}
         onConfirm={async () => {
           if (pendingBillingEnabled === null) return;
 

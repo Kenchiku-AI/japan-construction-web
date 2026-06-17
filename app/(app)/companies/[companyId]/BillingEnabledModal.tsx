@@ -1,23 +1,31 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import { Button } from "@/app/ui/Button/Button";
 
-interface BillingExemptModalProps {
+interface BillingEnabledModalProps {
   isOpen: boolean;
   isEnabled: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }
 
-const BillingExemptModal: FC<BillingExemptModalProps> = ({
+const BillingEnabledModal: FC<BillingEnabledModalProps> = ({
   isOpen,
   isEnabled,
   onClose,
   onConfirm,
 }) => {
   const { t } = useTranslation();
-  const prefix = isEnabled ? "enable" : "disable";
+  
+  const [prefix, setPrefix] = useState("disable");
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const newPrefix =  isEnabled ? "enable" : "disable";
+    setPrefix(newPrefix);
+  }, [isEnabled, isOpen]);
 
   return (
     <Modal
@@ -42,4 +50,4 @@ const BillingExemptModal: FC<BillingExemptModalProps> = ({
   );
 };
 
-export default BillingExemptModal;
+export default BillingEnabledModal;

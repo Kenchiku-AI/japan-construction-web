@@ -11,13 +11,14 @@ import { Close, Download, Plus, Search } from "@/app/ui/Icons";
 import ReportsList from "./ReportsList";
 import Divider from "@/app/ui/Divider";
 import { useApi } from "@/lib/api/ApiContext";
-import { ProjectStatus } from "@/types";
+import { ProjectStatus, UserRole } from "@/types";
 import { Loader } from "@/app/ui/Loader";
 import { Input } from "@/app/ui/Input/Input";
 import DownloadExcelModal from "./DownloadExcelModal";
 import { useExport } from "./useExport";
 import { useSearchParams } from "next/navigation";
 import { useIsMobile } from "@/lib/useIsMobile";
+import { useModal } from "@/lib/modal/ModalContext";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
@@ -36,10 +37,12 @@ const ReportsPage = () => {
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const searchRef = useRef<any>(null);
   const { isMobile } = useIsMobile();
+  const { showModal } = useModal();
   const hasSearchPadding = isMobile && !projectName;
+  const isAdmin = currentUser?.role === UserRole.Admin;
 
   const isCreateEnabled = useMemo(() => {
-    if (currentUser?.role === "admin") return false;
+    if (isAdmin) return false;
 
     const hasTemplate = !!reportTemplates?.length;
     const hasActiveProject = currentUser?.projects?.some(
@@ -96,7 +99,7 @@ const ReportsPage = () => {
       >
         <Heading title={t("reports")} topLabel={projectName} />
         <div className="flex gap-5 md:gap-8">
-          {reports?.length && (
+          {!!reports?.length && (
             <>
               <Button
                 variant="tertiary"
@@ -128,6 +131,14 @@ const ReportsPage = () => {
               label={t("create")}
               iconLeft={() => <Plus />}
               onClick={() => {
+                if (currentUser?.company?.needs_payment_method) {
+                  showModal({
+                    title: t("payment_method_required"),
+                    subtitle: t("payment_method_required_description")
+                  });
+                  return;
+                }
+
                 setShowCreateReport(true);
               }}
               iconOnlyMobile
