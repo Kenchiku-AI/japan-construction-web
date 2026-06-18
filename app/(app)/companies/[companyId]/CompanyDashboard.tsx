@@ -141,7 +141,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                       style={{ height: 40 }}
                     />
                   ) : (
-                    <div className="flex flex-row gap-4 items-center">
+                    <div className="flex flex-row gap-2 items-center">
                       <CreditCard color={paymentMethodColor} />
                       <div style={{ color: paymentMethodColor }}>
                         {`${t("payment_method")}: ${company.payment_method_name}`}
