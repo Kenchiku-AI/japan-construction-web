@@ -78,6 +78,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   } = useTags(companyId);
   const isAdmin = currentUser?.role === UserRole.Admin;
   const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
+  const companyName = company?.name ?? searchParams.get("name") ?? "";
   const paymentMethodColor = company?.is_payment_method_valid ? fontColor1 : errorColor1;
 
   const shouldRedirect =
@@ -108,212 +109,218 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
 
   return (
     <>
-      <Heading
-        title={company?.name ?? searchParams.get("name") ?? ""}
-        topLabel={t("company")}
-        placeholder={t("company_name")}
-        isEditable={isAdminOrManager}
-        onEdit={(n) => updateName(n)}
-      />
-      <Divider />
+      {!!companyName && (
+        <>
+          <Heading
+            title={companyName}
+            topLabel={t("company")}
+            placeholder={t("company_name")}
+            isEditable={isAdminOrManager}
+            onEdit={(n) => updateName(n)}
+          />
+          <Divider />
+        </>
+      )}
       {company && (
-        <div className="flex flex-col">
-          {isAdminOrManager && (
-            <>
-              <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
-                {!company.payment_method_name ? (
-                  <Button
-                    variant="tertiary"
-                    label={
-                      loadingPaymentMethod
-                        ? `${t("loading")}...`
-                        : t("add_payment_method")
-                    }
-                    iconLeft={() => <CreditCardPlus />}
-                    onClick={onClickPaymentMethod}
-                    disabled={loadingPaymentMethod}
-                    style={{ height: 40 }}
-                  />
-                ) : (
-                  <div className="flex flex-row gap-4 items-center">
-                    <CreditCard color={paymentMethodColor} />
-                    <div style={{ color: paymentMethodColor }}>
-                      {`${t("payment_method")}: ${company.payment_method_name}`}
-                    </div>
+        <>
+          <div className="flex flex-col">
+            {isAdminOrManager && (
+              <>
+                <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                  {!company.payment_method_name ? (
                     <Button
                       variant="tertiary"
-                      iconLeft={() => <Edit />}
+                      label={
+                        loadingPaymentMethod
+                          ? `${t("loading")}...`
+                          : t("add_payment_method")
+                      }
+                      iconLeft={() => <CreditCardPlus />}
                       onClick={onClickPaymentMethod}
                       disabled={loadingPaymentMethod}
-                    />
-                  </div>
-                )}
-                {(!isAdmin && company.billing_exempt) && (
-                  <>
-                    <MobileDivider />
-                    <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
-                      {t("billing_exempt")}
-                    </div>
-                  </>
-                )}
-                {isAdmin && (
-                  <>
-                    <MobileDivider />
-                    <label
                       style={{ height: 40 }}
-                      className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
-                    >
-                      <div style={{ color: fontColor1 }}>{t("billing_enabled")}</div>
-                      {isAdmin && (
-                        <input
-                          type="checkbox"
-                          className="toggle toggle-md"
-                          checked={!company.billing_exempt}
-                          onChange={(e) => setPendingBillingEnabled(e.target.checked)}
-                        />
-                      )}
-                    </label>
-                  </>
-                )}
-              </div>
-              <Divider style={{ background: fontColor2 }} />
-              <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
-                {!company.line_channel_secret_last4 ? (
-                  <Button
-                    variant="tertiary"
-                    label={t("connect_line")}
-                    iconLeft={() => <LineLogo color={buttonColor} />}
-                    onClick={() => {
-                      setShowLineSecret(true);
-                    }}
-                    style={{ height: 40 }}
-                  />
-                ) : (
-                  <>
-                    <div className="flex flex-row gap-2 items-center">
-                      <LineLogo color={fontColor1} />
-                      <div>
-                        {`${t("line_channel_secret")}: ••••${company.line_channel_secret_last4}`}
+                    />
+                  ) : (
+                    <div className="flex flex-row gap-4 items-center">
+                      <CreditCard color={paymentMethodColor} />
+                      <div style={{ color: paymentMethodColor }}>
+                        {`${t("payment_method")}: ${company.payment_method_name}`}
                       </div>
                       <Button
                         variant="tertiary"
                         iconLeft={() => <Edit />}
-                        onClick={() => {
-                          setShowLineSecret(true);
-                        }}
+                        onClick={onClickPaymentMethod}
+                        disabled={loadingPaymentMethod}
                       />
                     </div>
-                    <MobileDivider />
-                    <LineWebhookButton companyId={companyId} />
-                  </>
-                )}
-              </div>
-              <Divider style={{ background: fontColor2 }} />
-            </>
-          )}
-          <div>
-            <div className="flex justify-between mt-12">
-              <div className="self-end">{t("projects")}</div>
-              {isAdminOrManager && (
-                <Button
-                  variant="tertiary"
-                  label={t("create_project")}
-                  iconLeft={() => <Plus />}
-                  onClick={() => {
-                    if (!isAdmin && currentUser?.company?.needs_payment_method) {
-                      showModal({
-                        title: t("payment_method_required"),
-                        subtitle: t("payment_method_required_description")
-                      });
-                      return;
-                    }
-
-                    setShowCreateProject(true);
-                  }}
-                  style={{ height: "auto" }}
-                  iconOnlyMobile
-                />
-              )}
-            </div>
-            <Divider />
-            <CompanyProjectsList
-              projects={company.projects}
-              onClickProject={() => {
-                setShowLoader(true);
-              }}
-            />
-          </div>
-          <div>
-            <div className="flex justify-between mt-12">
-              <div className="self-end">{t("users")}</div>
-              {isAdminOrManager && (
-                <Button
-                  variant="tertiary"
-                  label={t("invite_user")}
-                  iconLeft={() => <Plus />}
-                  onClick={() => {
-                    setShowInviteUser(true);
-                  }}
-                  style={{ height: "auto" }}
-                  iconOnlyMobile
-                />
-              )}
-            </div>
-            <Divider />
-            <CompanyUsersList
-              users={company.users}
-              onRemove={(userId) => setUserIdToRemove(userId)}
-              onClickUser={() => {
-                setShowLoader(true);
-              }}
-            />
-          </div>
-          {isAdmin && (
+                  )}
+                  {(!isAdmin && company.billing_exempt) && (
+                    <>
+                      <MobileDivider />
+                      <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
+                        {t("billing_exempt")}
+                      </div>
+                    </>
+                  )}
+                  {isAdmin && (
+                    <>
+                      <MobileDivider />
+                      <label
+                        style={{ height: 40 }}
+                        className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
+                      >
+                        <div style={{ color: fontColor1 }}>{t("billing_enabled")}</div>
+                        {isAdmin && (
+                          <input
+                            type="checkbox"
+                            className="toggle toggle-md"
+                            checked={!company.billing_exempt}
+                            onChange={(e) => setPendingBillingEnabled(e.target.checked)}
+                          />
+                        )}
+                      </label>
+                    </>
+                  )}
+                </div>
+                <Divider style={{ background: fontColor2 }} />
+                <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                  {!company.line_channel_secret_last4 ? (
+                    <Button
+                      variant="tertiary"
+                      label={t("connect_line")}
+                      iconLeft={() => <LineLogo color={buttonColor} />}
+                      onClick={() => {
+                        setShowLineSecret(true);
+                      }}
+                      style={{ height: 40 }}
+                    />
+                  ) : (
+                    <>
+                      <div className="flex flex-row gap-2 items-center">
+                        <LineLogo color={fontColor1} />
+                        <div>
+                          {`${t("line_channel_secret")}: ••••${company.line_channel_secret_last4}`}
+                        </div>
+                        <Button
+                          variant="tertiary"
+                          iconLeft={() => <Edit />}
+                          onClick={() => {
+                            setShowLineSecret(true);
+                          }}
+                        />
+                      </div>
+                      <MobileDivider />
+                      <LineWebhookButton companyId={companyId} />
+                    </>
+                  )}
+                </div>
+                <Divider style={{ background: fontColor2 }} />
+              </>
+            )}
             <div>
               <div className="flex justify-between mt-12">
-                <div className="self-end">{t("report_templates")}</div>
-                <Button
-                  variant="tertiary"
-                  label={t("create_report_template")}
-                  iconLeft={() => <Plus />}
-                  onClick={() => {
-                    setIsCreateTemplateModalShown(true);
-                  }}
-                  style={{ height: "auto" }}
-                  iconOnlyMobile
-                />
+                <div className="self-end">{t("projects")}</div>
+                {isAdminOrManager && (
+                  <Button
+                    variant="tertiary"
+                    label={t("create_project")}
+                    iconLeft={() => <Plus />}
+                    onClick={() => {
+                      if (!isAdmin && currentUser?.company?.needs_payment_method) {
+                        showModal({
+                          title: t("payment_method_required"),
+                          subtitle: t("payment_method_required_description")
+                        });
+                        return;
+                      }
+
+                      setShowCreateProject(true);
+                    }}
+                    style={{ height: "auto" }}
+                    iconOnlyMobile
+                  />
+                )}
               </div>
               <Divider />
-              <ReportTemplatesList
-                templates={templates}
-                isEmpty={!companyLoading && templates.length === 0}
-                onClickTemplate={() => {
-                  setShowLoader(false);
+              <CompanyProjectsList
+                projects={company.projects}
+                onClickProject={() => {
+                  setShowLoader(true);
                 }}
               />
+            </div>
+            <div>
               <div className="flex justify-between mt-12">
-                <div className="self-end">{t("tags")}</div>
-                <Button
-                  variant="tertiary"
-                  label={t("create_tag")}
-                  iconLeft={() => <Plus />}
-                  onClick={() => {
-                    setIsCreateTagModalShown(true);
-                  }}
-                  style={{ height: "auto" }}
-                  iconOnlyMobile
-                />
+                <div className="self-end">{t("users")}</div>
+                {isAdminOrManager && (
+                  <Button
+                    variant="tertiary"
+                    label={t("invite_user")}
+                    iconLeft={() => <Plus />}
+                    onClick={() => {
+                      setShowInviteUser(true);
+                    }}
+                    style={{ height: "auto" }}
+                    iconOnlyMobile
+                  />
+                )}
               </div>
               <Divider />
-              <TagsList
-                tags={tags ?? []}
-                isEmpty={!tagsLoading && tags?.length === 0}
-                onEdit={(t) => setEditingTag(t)}
-                onDelete={(t) => setDeletingTag(t)}
+              <CompanyUsersList
+                users={company.users}
+                onRemove={(userId) => setUserIdToRemove(userId)}
+                onClickUser={() => {
+                  setShowLoader(true);
+                }}
               />
             </div>
-          )}
-        </div>
+            {isAdmin && (
+              <div>
+                <div className="flex justify-between mt-12">
+                  <div className="self-end">{t("report_templates")}</div>
+                  <Button
+                    variant="tertiary"
+                    label={t("create_report_template")}
+                    iconLeft={() => <Plus />}
+                    onClick={() => {
+                      setIsCreateTemplateModalShown(true);
+                    }}
+                    style={{ height: "auto" }}
+                    iconOnlyMobile
+                  />
+                </div>
+                <Divider />
+                <ReportTemplatesList
+                  templates={templates}
+                  isEmpty={!companyLoading && templates.length === 0}
+                  onClickTemplate={() => {
+                    setShowLoader(false);
+                  }}
+                />
+                <div className="flex justify-between mt-12">
+                  <div className="self-end">{t("tags")}</div>
+                  <Button
+                    variant="tertiary"
+                    label={t("create_tag")}
+                    iconLeft={() => <Plus />}
+                    onClick={() => {
+                      setIsCreateTagModalShown(true);
+                    }}
+                    style={{ height: "auto" }}
+                    iconOnlyMobile
+                  />
+                </div>
+                <Divider />
+                <TagsList
+                  tags={tags ?? []}
+                  isEmpty={!tagsLoading && tags?.length === 0}
+                  onEdit={(t) => setEditingTag(t)}
+                  onDelete={(t) => setDeletingTag(t)}
+                />
+              </div>
+            )}
+          </div>
+        </>
       )}
       <InviteUserModal
         isOpen={showInviteUser}

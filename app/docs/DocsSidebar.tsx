@@ -12,7 +12,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
 
       <div className="drawer-content flex flex-col">
         <div className="md:hidden fixed top-4 left-4 z-5">
-          <label htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
+          <label style={{ paddingBottom: 3 }} htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
             ☰
           </label>
         </div>
