@@ -8,7 +8,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { ReportImageTag, UserRole } from "@/types";
 import { redirect, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
-import { CreditCard, CreditCardPlus, Edit, Plus } from "@/app/ui/Icons";
+import { CreditCard, CreditCardPlus, Edit, LineLogo, Plus } from "@/app/ui/Icons";
 import InviteUserModal from "./InviteUserModal";
 import CompanyUsersList from "./CompanyUsersList";
 import CreateProjectModal from "./CreateProjectModal";
@@ -24,9 +24,12 @@ import CreateReportTemplateModal from "../../reports/templates/CreateReportTempl
 import ReportTemplatesList from "../../reports/templates/ReportTemplatesList";
 import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
-import { errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
+import { buttonColor, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
 import BillingEnabledModal from "./BillingEnabledModal";
+import LineChannelSecretModal from "./LineChannelSecretModal";
+import LineWebhookButton from "./LineWebhookButton";
+import LineWebhookModal from "./LineWebhookModal";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -42,6 +45,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     createProject,
     updateName,
     updateBillingExempt,
+    updateLineChannelSecret,
     templates,
     createTemplate,
     removeUser,
@@ -49,6 +53,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const searchParams = useSearchParams();
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showCreateProject, setShowCreateProject] = useState(false);
+  const [showLineSecret, setShowLineSecret] = useState(false);
   const [loadingPaymentMethod, setLoadingPaymentMethod] = useState(false);
   const [paymentMethodClientSecret, setPaymentMethodClientSecret] =
     useState("");
@@ -60,6 +65,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   >(null);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
+  const [showLineWebhook, setShowLineWebhook] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
@@ -71,7 +77,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     loading: tagsLoading,
   } = useTags(companyId);
   const isAdmin = currentUser?.role === UserRole.Admin;
-  const canCreate = isAdmin || currentUser?.role === UserRole.Manager;
+  const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
   const paymentMethodColor = company?.is_payment_method_valid ? fontColor1 : errorColor1;
 
   const shouldRedirect =
@@ -106,73 +112,109 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         title={company?.name ?? searchParams.get("name") ?? ""}
         topLabel={t("company")}
         placeholder={t("company_name")}
-        isEditable={isAdmin}
+        isEditable={isAdminOrManager}
         onEdit={(n) => updateName(n)}
       />
       <Divider />
       {company && (
         <div className="flex flex-col">
-          <div className="flex flex-col md:flex-row w-full justify-between items-center py-1 md:px-3">
-            {!company.payment_method_name ? (
-              <Button
-                variant="tertiary"
-                label={
-                  loadingPaymentMethod
-                    ? `${t("loading")}...`
-                    : t("add_payment_method")
-                }
-                iconLeft={() => <CreditCardPlus />}
-                onClick={onClickPaymentMethod}
-                disabled={loadingPaymentMethod}
-              />
-            ) : (
-              <div className="flex flex-row gap-4 items-center">
-                <CreditCard color={paymentMethodColor}/>
-                <div style={{ color: paymentMethodColor }}>
-                  {`${t("payment_method")}: ${company.payment_method_name}`}
-                </div>
-                <Button
-                  variant="tertiary"
-                  iconLeft={() => <Edit />}
-                  onClick={onClickPaymentMethod}
-                  disabled={loadingPaymentMethod}
-                />
-              </div>
-            )}
-            <div className="py-1">
-              <Divider
-                style={{
-                  marginTop: 10,
-                  marginBottom: 10,
-                  background: fontColor2,
-                }}
-              />
-            </div>
-            {(!isAdmin && company.billing_exempt) && (
-              <div style={{ color: fontColor2 }}>{t("billing_exempt")}</div>
-            )}
-            {isAdmin && (
-              <label
-                style={{ height: 40 }}
-                className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
-              >
-                <div style={{ color: fontColor1 }}>{t("billing_enabled")}</div>
-                {isAdmin && (
-                  <input
-                    type="checkbox"
-                    className="toggle toggle-md"
-                    checked={!company.billing_exempt}
-                    onChange={(e) => setPendingBillingEnabled(e.target.checked)}
+          {isAdminOrManager && (
+            <>
+              <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                {!company.payment_method_name ? (
+                  <Button
+                    variant="tertiary"
+                    label={
+                      loadingPaymentMethod
+                        ? `${t("loading")}...`
+                        : t("add_payment_method")
+                    }
+                    iconLeft={() => <CreditCardPlus />}
+                    onClick={onClickPaymentMethod}
+                    disabled={loadingPaymentMethod}
+                    style={{ height: 40 }}
                   />
+                ) : (
+                  <div className="flex flex-row gap-4 items-center">
+                    <CreditCard color={paymentMethodColor} />
+                    <div style={{ color: paymentMethodColor }}>
+                      {`${t("payment_method")}: ${company.payment_method_name}`}
+                    </div>
+                    <Button
+                      variant="tertiary"
+                      iconLeft={() => <Edit />}
+                      onClick={onClickPaymentMethod}
+                      disabled={loadingPaymentMethod}
+                    />
+                  </div>
                 )}
-              </label>
-            )}
-          </div>
-          <Divider style={{ background: fontColor2 }} />
+                {(!isAdmin && company.billing_exempt) && (
+                  <>
+                    <MobileDivider />
+                    <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
+                      {t("billing_exempt")}
+                    </div>
+                  </>
+                )}
+                {isAdmin && (
+                  <>
+                    <MobileDivider />
+                    <label
+                      style={{ height: 40 }}
+                      className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
+                    >
+                      <div style={{ color: fontColor1 }}>{t("billing_enabled")}</div>
+                      {isAdmin && (
+                        <input
+                          type="checkbox"
+                          className="toggle toggle-md"
+                          checked={!company.billing_exempt}
+                          onChange={(e) => setPendingBillingEnabled(e.target.checked)}
+                        />
+                      )}
+                    </label>
+                  </>
+                )}
+              </div>
+              <Divider style={{ background: fontColor2 }} />
+              <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                {!company.line_channel_secret_last4 ? (
+                  <Button
+                    variant="tertiary"
+                    label={t("connect_line")}
+                    iconLeft={() => <LineLogo color={buttonColor} />}
+                    onClick={() => {
+                      setShowLineSecret(true);
+                    }}
+                    style={{ height: 40 }}
+                  />
+                ) : (
+                  <>
+                    <div className="flex flex-row gap-2 items-center">
+                      <LineLogo color={fontColor1} />
+                      <div>
+                        {`${t("line_channel_secret")}: ••••${company.line_channel_secret_last4}`}
+                      </div>
+                      <Button
+                        variant="tertiary"
+                        iconLeft={() => <Edit />}
+                        onClick={() => {
+                          setShowLineSecret(true);
+                        }}
+                      />
+                    </div>
+                    <MobileDivider />
+                    <LineWebhookButton companyId={companyId} />
+                  </>
+                )}
+              </div>
+              <Divider style={{ background: fontColor2 }} />
+            </>
+          )}
           <div>
             <div className="flex justify-between mt-12">
               <div className="self-end">{t("projects")}</div>
-              {canCreate && (
+              {isAdminOrManager && (
                 <Button
                   variant="tertiary"
                   label={t("create_project")}
@@ -185,7 +227,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                       });
                       return;
                     }
-                
+
                     setShowCreateProject(true);
                   }}
                   style={{ height: "auto" }}
@@ -204,7 +246,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           <div>
             <div className="flex justify-between mt-12">
               <div className="self-end">{t("users")}</div>
-              {canCreate && (
+              {isAdminOrManager && (
                 <Button
                   variant="tertiary"
                   label={t("invite_user")}
@@ -309,7 +351,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
 
           try {
             await createProject(name, description);
-          } catch (err) {}
+          } catch (err) { }
         }}
       />
       <RemoveUserModal
@@ -405,9 +447,43 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           }
         }}
       />
+      <LineChannelSecretModal
+        isOpen={showLineSecret}
+        onClose={() => {
+          setShowLineSecret(false);
+        }}
+        onSubmit={async (secret) => {
+          const shouldShowWebhook = !company?.line_channel_secret_last4;
+
+          const success = await updateLineChannelSecret(secret);
+
+          if (success && shouldShowWebhook) {
+            setShowLineWebhook(true);
+          }
+        }}
+      />
+      <LineWebhookModal
+        companyId={companyId}
+        isOpen={showLineWebhook}
+        onClose={() => {
+          setShowLineWebhook(false);
+        }}
+      />
       {(showLoader || companyLoading) && <Loader />}
     </>
   );
 };
+
+const MobileDivider = () => (
+  <div className="py-1">
+    <Divider
+      style={{
+        marginTop: 10,
+        marginBottom: 10,
+        background: fontColor2,
+      }}
+    />
+  </div>
+);
 
 export default CompanyDashboard;

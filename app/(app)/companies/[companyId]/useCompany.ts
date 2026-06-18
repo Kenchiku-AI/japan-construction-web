@@ -44,7 +44,7 @@ export const useCompany = (companyId: string) => {
       try {
         const response = await api.getReportTemplates(companyId);
         setTemplates(response ?? []);
-      } catch (err) {}
+      } catch (err) { }
     },
     [companyId],
   );
@@ -87,6 +87,34 @@ export const useCompany = (companyId: string) => {
       } finally {
         setLoading(false);
       }
+    },
+    [company, companyId],
+  );
+
+  const updateLineChannelSecret = useCallback(
+    async (line_channel_secret: string) => {
+      let success = true;
+      setLoading(true);
+
+      try {
+        const response = await api.updateCompany(companyId, { line_channel_secret });
+
+        if (company && response) {
+          setCompany({
+            ...company,
+            line_channel_secret_last4: response.line_channel_secret_last4,
+          });
+        }
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description")
+        });
+        success = false;
+      }
+
+      setLoading(false);
+      return success;
     },
     [company, companyId],
   );
@@ -162,6 +190,7 @@ export const useCompany = (companyId: string) => {
     createProject,
     updateName,
     updateBillingExempt,
+    updateLineChannelSecret,
     templates,
     createTemplate,
     removeUser,

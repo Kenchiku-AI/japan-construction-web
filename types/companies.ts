@@ -5,6 +5,7 @@ export type Company = {
   name: string;
   corporate_number: string;
   payment_method_name?: string;
+  line_channel_secret_last4?: string;
   is_payment_method_valid: boolean;
   billing_exempt: boolean;
   users: CompanyUser[];
@@ -21,12 +22,14 @@ export type UpdateCompanyRequest = {
   name?: string;
   corporate_number?: string;
   billing_exempt?: boolean;
+  line_channel_secret?: string;
 };
 
 export type UpdateCompanyResponse = {
   name: string;
   corporate_number: string;
   billing_exempt: boolean;
+  line_channel_secret_last4?: string;
 };
 
 export type SetupIntentResponse = {
