@@ -4,6 +4,7 @@ export type Report = {
   template_id: string;
   parent_type: ReportParentType;
   parent_id: string;
+  status: ReportStatus;
   project_name?: string;
   company_id?: string;
   company_name?: string;
@@ -94,6 +95,7 @@ export type CreateReportTemplateRequest = {
 export type ReportRequest = {
   name?: string;
   field_values?: ReportFieldValues;
+  status?: ReportStatus;
 };
 
 export type ReportFieldValues = { [key: string]: string };
@@ -136,6 +138,11 @@ export type ShareReportTemplateRequest = {
 export enum ReportParentType {
   Company = "company",
   Project = "project",
+}
+
+export enum ReportStatus {
+  Open = "open",
+  Closed = "closed",
 }
 
 export type ReportImageTag = {

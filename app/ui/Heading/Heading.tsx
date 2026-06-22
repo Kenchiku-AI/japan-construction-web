@@ -83,7 +83,7 @@ export const Heading: FC<HeadingProps> = ({
         </div>
       </div>
       <div
-        className="flex text-ellipsis items-center gap-2"
+        className="flex text-ellipsis items-center gap-3"
         style={{ minHeight: 36, display: showEdit ? "none" : undefined }}
       >
         <div className="text-ellipsis text-2xl">{displayTitle}</div>

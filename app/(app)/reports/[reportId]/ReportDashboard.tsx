@@ -5,7 +5,7 @@ import { redirect, useSearchParams } from "next/navigation";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReport } from "./useReport";
-import { ReportFieldValues, ReportImageTag, UserRole } from "@/types";
+import { ReportFieldValues, ReportImageTag, ReportStatus, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
@@ -17,7 +17,7 @@ import {
 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
-import { Plus, Download, Trash, Tag, Close, Check } from "@/app/ui/Icons";
+import { Plus, Download, Trash, Tag, Close, Check, Lock, Unlock } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
@@ -30,6 +30,7 @@ import JSZip from "jszip";
 import { useDate } from "@/public/date/useDate";
 import { useExportExcel } from "./useExportExcel";
 import { useIsMobile } from "@/lib/useIsMobile";
+import ConfirmStatusModal from "./ConfirmStatusModal";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -61,12 +62,17 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [selectedTag, setSelectedTag] = useState<ReportImageTag>();
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
   const [isPhotoModalShown, setIsPhotoModalShown] = useState(false);
+  const [isStatusModalShown, setIsStatusModalShown] = useState(false);
   const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [isPdfDownloading, setIsPdfDownloading] = useState(false);
   const fileInputRef = useRef<any>(null);
   const loadedRef = useRef(false);
-  const isReportDisabled = report?.disabled && currentUser?.role !== "admin";
+  const isAdmin = currentUser?.role === "admin";
+  const isAdminOrManager = isAdmin || currentUser?.role === "manager";
+  const isReportDisabled = report?.disabled && !isAdmin;
+  const isReportClosed = report?.status === ReportStatus.Closed;
+  const isReportEditable = !isReportDisabled && !isReportClosed;
 
   useEffect(() => {
     if (report && !loadedRef.current) {
@@ -225,9 +231,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               sizes="(max-width: 768px) 50vw, 25vw"
               src={i.download_url}
               fill
-              className={`object-cover transition-opacity duration-200 ${
-                !loadedImages[i.id] ? "opacity-0" : "opacity-100"
-              }`}
+              className={`object-cover transition-opacity duration-200 ${!loadedImages[i.id] ? "opacity-0" : "opacity-100"
+                }`}
               onError={(e) => {
                 e.currentTarget.style.display = "none";
               }}
@@ -264,12 +269,33 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         onEdit={(name) => {
           updateReport({ name }, true);
         }}
-        isEditable={!isReportDisabled}
+        isEditable={isReportEditable}
       />
       <Divider />
       {report != null && (
         <>
-          <div className="flex w-full justify-between gap-2 lg:gap-8 py-1">
+          <div className="flex w-full justify-between py-1 md:px-3">
+            <div className="flex flex-row gap-2 items-center">
+              <div style={{ color: fontColor2 }}>
+                {`${t("status")}:`}
+              </div>
+              <div>
+                {t(report.status)}
+              </div>
+            </div>
+            {(isAdminOrManager && !isReportDisabled) && (
+              <Button
+                variant="tertiary"
+                label={report.status === "open" ? t("close_report") : t("open_report")}
+                iconLeft={() => (report.status === "open" ? <Lock /> : <Unlock />)}
+                onClick={() => setIsStatusModalShown(true)}
+                style={{ height: "auto" }}
+                iconOnlyMobile
+              />
+            )}
+          </div>
+          <Divider style={{ background: fontColor2 }} />
+          <div className="flex w-full justify-between gap-2 lg:gap-8 py-1 md:px-3">
             <div className="flex flex-row gap-6">
               <Button
                 variant="tertiary"
@@ -353,7 +379,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       )}
       {!!sortedFields && (
         <>
-          <div className="flex flex-col w-full gap-2">
+          <div className="flex flex-col w-full gap-2 pt-2">
             {sortedFields?.map((field) => (
               <Input
                 key={field.id}
@@ -366,7 +392,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                     return newValues;
                   });
                 }}
-                disabled={isReportDisabled}
+                disabled={!isReportEditable}
                 loading={fieldValues?.[field.id] === undefined}
               />
             ))}
@@ -402,10 +428,10 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         </>
       )}
       {images != null && (
-        <div className="mt-4 w-full">
+        <div className="mt-8 w-full">
           <div className="flex justify-between items-end">
             <div>{t("photos")}</div>
-            {!isReportDisabled && (
+            {isReportEditable && (
               <Button
                 label={t("upload_photo")}
                 iconLeft={() => <Plus />}
@@ -518,11 +544,33 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           }, 500);
         }}
         isMobile={isMobile}
-        isDisabled={isReportDisabled}
+        isDisabled={!isReportEditable}
+      />
+      <ConfirmStatusModal
+        currentStatus={report?.status ?? ReportStatus.Open}
+        isOpen={isStatusModalShown}
+        onClose={() => setIsStatusModalShown(false)}
+        onConfirm={() => {
+          setIsStatusModalShown(false);
+          const status = report?.status === ReportStatus.Open ? ReportStatus.Closed : ReportStatus.Open;
+          updateReport({ status });
+        }}
       />
       {loading && <Loader />}
     </>
   );
 };
+
+const MobileDivider = () => (
+  <div className="py-1">
+    <Divider
+      style={{
+        marginTop: 10,
+        marginBottom: 10,
+        background: fontColor2,
+      }}
+    />
+  </div>
+);
 
 export default ReportDashboard;
