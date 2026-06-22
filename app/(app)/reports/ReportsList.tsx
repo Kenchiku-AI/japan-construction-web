@@ -1,6 +1,6 @@
 import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Report } from "@/types";
+import { Report, ReportStatus } from "@/types";
 import styles from "./page.module.css";
 import { Paper } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
@@ -112,7 +112,13 @@ const ReportsListItem: FC<ReportsListItemProps> = ({
               {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
             </div>
           </div>
+          {report.status === ReportStatus.Closed && (
+            <div className="pr-2" style={{ color: fontColor2 }}>
+              {t("closed")}
+            </div>
+          )}
         </div>
+
       </div>
       <Divider color={fontColor2} />
     </div>

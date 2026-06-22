@@ -180,7 +180,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               textStyle={{ color: errorColor1 }}
             />
           </div>
-          <div className="flex justify-between mt-10">
+          <div className="flex justify-between mt-12">
             <div className="self-end">{t("reports")}</div>
             <div className="flex gap-6">
               {(project.reports?.length ?? 0) > 0 && (
@@ -203,7 +203,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   iconLeft={() => <Plus />}
                   onClick={() => {
                     if (
-                      currentUser?.role !== "admin" && 
+                      currentUser?.role !== "admin" &&
                       currentUser?.company?.needs_payment_method
                     ) {
                       showModal({
@@ -212,7 +212,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                       });
                       return;
                     }
-                
+
                     setShowCreateReport(true);
                   }}
                   style={{ height: "auto" }}
@@ -229,16 +229,16 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               (project.reports?.length ?? 0) < 6
                 ? undefined
                 : () => {
-                    router.push(
-                      `/reports?projectId=${projectId}&projectName=${project.name}`,
-                    );
-                  }
+                  router.push(
+                    `/reports?projectId=${projectId}&projectName=${project.name}`,
+                  );
+                }
             }
             onClickReport={() => {
               setShowLoader(true);
             }}
           />
-          <div className="flex justify-between mt-10">
+          <div className="flex justify-between mt-12">
             <div className="self-end">{t("guests")}</div>
             {isEditable && (
               <Button
