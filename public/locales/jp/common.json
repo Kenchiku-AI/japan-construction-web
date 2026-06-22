@@ -21,6 +21,7 @@
   "confirm_new_password": "新しいパスワードの確認",
   "confirm_password": "パスワード（確認）",
   "connect_line": "LINE連携",
+  "copy_line_link_code": "LINE連携コードをコピー",
   "copy_line_webhook": "LINE Webhook URLをコピー",
   "copied": "コピーしました！",
   "corporate_number": "法人番号",

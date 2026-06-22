@@ -34,6 +34,7 @@ export type User = {
   email: string;
   company_id?: string;
   role: UserRole;
+  line_link_code: string;
 };
 
 export type UpdateUserRequest = {
@@ -56,6 +57,7 @@ export type CurrentUser = {
   last_name: string;
   email: string;
   role: UserRole;
+  line_link_code: string;
   company?: UserCompany;
   projects: Project[];
 };

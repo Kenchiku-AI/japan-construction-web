@@ -5,7 +5,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { User } from "@/types";
+import { UpdateUserRequest, User } from "@/types";
 
 export const useUser = (userId: string) => {
   const [loading, setLoading] = useState(true);
@@ -48,7 +48,7 @@ export const useUser = (userId: string) => {
   );
 
   const updateUser = useCallback(
-    async (request: User) => {
+    async (request: UpdateUserRequest) => {
       if (!currentUser) return;
 
       try {

@@ -7,7 +7,7 @@ import { Logout } from "@/app/ui/Icons";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { useApi } from "@/lib/api/ApiContext";
-import { emailRegex } from "@/lib/constants";
+import { emailRegex, fontColor2 } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
 import { UserRole } from "@/types";
 import { redirect } from "next/navigation";
@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useUser } from "./useUser";
 import { Loader } from "@/app/ui/Loader";
 import Select from "@/app/ui/Select/Select";
+import LineLinkCodeButton from "./LineLinkCodeButton";
 
 interface UserDashboardProps {
   userId: string;
@@ -107,6 +108,14 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
       <Divider />
       {!!user && (
         <>
+          {(currentUser?.id === userId || currentUser?.role === "admin") && (
+            <>
+              <div className="md:px-3">
+                <LineLinkCodeButton code={user.line_link_code} />
+              </div>
+              <Divider style={{ background: fontColor2 }} />
+            </>
+          )}
           <div className="flex flex-col gap-3 mt-3">
             <Input
               placeholder={t("last_name")}

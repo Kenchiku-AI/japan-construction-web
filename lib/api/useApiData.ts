@@ -55,6 +55,15 @@ export const http = axios.create({
   },
 });
 
+let isRefreshing = false;
+
+type QueueItem = {
+  resolve: () => void;
+  reject: (err: any) => void;
+};
+
+let requestQueue: QueueItem[] = [];
+
 export const useApiData = () => {
   const router = useRouter();
   const pathname = usePathname();
@@ -78,7 +87,7 @@ export const useApiData = () => {
       if (validateCurrentUser(response)) {
         setCurrentUser(response);
       }
-    } catch {}
+    } catch { }
   };
 
   const validateCurrentUser = (user?: CurrentUser) => {
@@ -120,11 +129,13 @@ export const useApiData = () => {
     try {
       return await handleResponse(callback);
     } catch (err) {
-      if ((err as AxiosError).status === 401) {
+      const axiosErr = err as AxiosError;
+
+      if (axiosErr.status === 401 || axiosErr.response?.status === 401) {
         return await refresh(callback);
-      } else {
-        throw err;
       }
+
+      throw err;
     }
   };
 
@@ -137,10 +148,39 @@ export const useApiData = () => {
 
   const refresh = async <T>(callback: () => Promise<AxiosResponse<T>>) => {
     try {
+      if (isRefreshing) {
+        return new Promise<T>((resolve, reject) => {
+          requestQueue.push({
+            resolve: async () => {
+              try {
+                const res = await handleResponse(callback);
+                resolve(res);
+              } catch (err) {
+                reject(err);
+              }
+            },
+            reject,
+          });
+        });
+      }
+
+
+      isRefreshing = true;
       await http.post("/auth/refresh");
+
+      const queue = [...requestQueue];
+      requestQueue = [];
+      queue.forEach((item) => item.resolve());
+
       return await handleResponse(callback);
     } catch (err) {
+      const queue = [...requestQueue];
+      requestQueue = [];
+
+      queue.forEach((item) => item.reject(err));
       await logout();
+    } finally {
+      isRefreshing = false;
     }
   };
 
