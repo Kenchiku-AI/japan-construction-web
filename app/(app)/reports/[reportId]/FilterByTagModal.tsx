@@ -1,9 +1,6 @@
-import { FC, useState } from "react";
-import { Button } from "@/app/ui/Button/Button";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
-import { TextArea } from "@/app/ui/TextArea/TextArea";
 import { ReportImageTag } from "@/types";
 import Divider from "@/app/ui/Divider";
 import { Close, Tag } from "@/app/ui/Icons";

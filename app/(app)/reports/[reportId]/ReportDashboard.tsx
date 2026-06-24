@@ -17,7 +17,7 @@ import {
 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
-import { Plus, Download, Trash, Tag, Close, Check, Lock, Unlock } from "@/app/ui/Icons";
+import { Plus, Download, Tag, Close, Check, Menu } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
@@ -31,6 +31,7 @@ import { useDate } from "@/public/date/useDate";
 import { useExportExcel } from "./useExportExcel";
 import { useIsMobile } from "@/lib/useIsMobile";
 import ConfirmStatusModal from "./ConfirmStatusModal";
+import ActionsModal from "./ActionsModal";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -60,6 +61,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
   const [selectedTag, setSelectedTag] = useState<ReportImageTag>();
+  const [isActionsShown, setIsActionsShown] = useState(false);
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
   const [isPhotoModalShown, setIsPhotoModalShown] = useState(false);
   const [isStatusModalShown, setIsStatusModalShown] = useState(false);
@@ -286,90 +288,10 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             {(isAdminOrManager && !isReportDisabled) && (
               <Button
                 variant="tertiary"
-                label={report.status === "open" ? t("close_report") : t("open_report")}
-                iconLeft={() => (report.status === "open" ? <Lock /> : <Unlock />)}
-                onClick={() => setIsStatusModalShown(true)}
+                label={t("actions")}
+                iconRight={() => <Menu />}
+                onClick={() => setIsActionsShown(true)}
                 style={{ height: "auto" }}
-                iconOnlyMobile
-              />
-            )}
-          </div>
-          <Divider style={{ background: fontColor2 }} />
-          <div className="flex w-full justify-between gap-2 lg:gap-8 py-1 md:px-3">
-            <div className="flex flex-row gap-6">
-              <Button
-                variant="tertiary"
-                label={t(isExcelDownloading ? "downloading" : "Excel")}
-                iconLeft={() => <Download />}
-                disabled={isExcelDownloading}
-                onClick={async () => {
-                  if (!report) return;
-
-                  downloadExcel(report, images ?? [], topLabel ?? "");
-                }}
-                style={{ height: "auto" }}
-                textStyle={{
-                  fontWeight: "300",
-                }}
-              />
-              <Button
-                variant="tertiary"
-                label={t(isPdfDownloading ? "downloading" : "PDF")}
-                iconLeft={() => <Download />}
-                disabled={isPdfDownloading}
-                onClick={async () => {
-                  if (!report) return;
-
-                  setIsPdfDownloading(true);
-
-                  const { pdf } = await import("@react-pdf/renderer");
-
-                  const labelWidths = await Promise.all(
-                    report.fields.map((f) => measureTextWidth(f.name, 12)),
-                  );
-                  const labelWidth = Math.max(...labelWidths) + 40;
-
-                  const blob = await pdf(
-                    <ReportPDF
-                      report={report}
-                      topLabel={topLabel ?? ""}
-                      images={images ?? []}
-                      labelWidth={labelWidth}
-                    />,
-                  ).toBlob();
-
-                  const fileUrl = URL.createObjectURL(blob);
-
-                  const a = document.createElement("a");
-                  a.href = fileUrl;
-                  a.download = `${report.name.replace(/ /g, "_").replace(/[()]/g, "")}.pdf`;
-                  document.body.appendChild(a);
-                  a.click();
-                  a.remove();
-
-                  URL.revokeObjectURL(fileUrl);
-
-                  setIsPdfDownloading(false);
-                }}
-                style={{ height: "auto" }}
-                textStyle={{
-                  fontWeight: "300",
-                }}
-              />
-            </div>
-            {!isReportDisabled && (
-              <Button
-                variant="tertiary"
-                label={t("delete_report")}
-                iconLeft={() => <Trash />}
-                onClick={() => {
-                  setIsDeleteModalShown(true);
-                }}
-                style={{ height: "auto" }}
-                textStyle={{
-                  fontWeight: "300",
-                  color: errorColor1,
-                }}
                 iconOnlyMobile
               />
             )}
@@ -554,6 +476,25 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           setIsStatusModalShown(false);
           const status = report?.status === ReportStatus.Open ? ReportStatus.Closed : ReportStatus.Open;
           updateReport({ status });
+        }}
+      />
+      <ActionsModal
+        currentStatus={report?.status}
+        isOpen={isActionsShown}
+        onClose={() => {
+          setIsActionsShown(false);
+        }}
+        onUpdateStatus={() => {
+          setIsStatusModalShown(true);
+        }}
+        onDownloadExcel={() => {
+
+        }}
+        onDownloadPDF={() => {
+
+        }}
+        onDelete={() => {
+          setIsDeleteModalShown(true);
         }}
       />
       {loading && <Loader />}
