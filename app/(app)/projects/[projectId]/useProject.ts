@@ -75,7 +75,7 @@ export const useProject = (projectId: string) => {
 
         setProjectGuests(newProjectGuests);
         setNonProjectGuests(newNonProjectGuests);
-      } catch (err) {}
+      } catch (err) { }
     },
     [projectId],
   );

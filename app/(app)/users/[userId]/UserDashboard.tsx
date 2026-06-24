@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useUser } from "./useUser";
 import { Loader } from "@/app/ui/Loader";
 import Select from "@/app/ui/Select/Select";
-import LineLinkCodeButton from "./LineLinkCodeButton";
+import LineLinkCodeButton from "../../../ui/LineLinkCodeButton";
 
 interface UserDashboardProps {
   userId: string;

@@ -14,7 +14,7 @@ import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
-import { errorColor1 } from "@/lib/constants";
+import { errorColor1, fontColor2 } from "@/lib/constants";
 import Select from "@/app/ui/Select/Select";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
@@ -23,6 +23,7 @@ import AddGuestModal from "./AddGuestModal";
 import RemoveGuestModal from "./RemoveGuestModal";
 import { Loader } from "@/app/ui/Loader";
 import { useModal } from "@/lib/modal/ModalContext";
+import LineLinkCodeButton from "../../../ui/LineLinkCodeButton";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -122,6 +123,10 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
       <Divider />
       {project && (
         <>
+          <div className="md:px-3">
+            <LineLinkCodeButton code={project.line_link_code} />
+          </div>
+          <Divider style={{ background: fontColor2 }} />
           <div className="flex flex-col gap-2">
             <TextArea
               value={description}
