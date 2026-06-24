@@ -182,6 +182,7 @@
   "remove_user_description": "このユーザーを会社から削除してもよろしいですか？",
   "report": "報告書",
   "reports": "報告書",
+  "report_closed": "報告書完了",
   "report_name": "報告書名",
   "report_template_shared": "テンプレートを共有しました",
   "report_template_shared_description": "テンプレートが正常に共有されました。",

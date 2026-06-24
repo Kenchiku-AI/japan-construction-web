@@ -141,7 +141,13 @@ export const useReport = (reportId: string) => {
     async (request: ReportRequest, silent: boolean = false) => {
       try {
         const response = await api.updateReport(reportId, request);
-        setReport(response);
+
+        if (response) {
+          setReport({
+            ...report,
+            ...response
+          });
+        }
       } catch (err) {
         if (!silent && !isBillingError(err)) {
           showModal({
@@ -151,7 +157,7 @@ export const useReport = (reportId: string) => {
         }
       }
     },
-    [setReport, reportId],
+    [setReport, report, reportId],
   );
 
   const deleteReport = useCallback(async () => {

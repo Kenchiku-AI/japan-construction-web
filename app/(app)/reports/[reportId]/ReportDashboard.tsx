@@ -277,22 +277,22 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       {report != null && (
         <>
           <div className="flex w-full justify-between py-1 md:px-3">
-            <div className="flex flex-row gap-2 items-center">
-              <div style={{ color: fontColor2 }}>
-                {`${t("status")}:`}
-              </div>
-              <div>
-                {t(report.status)}
-              </div>
-            </div>
             {(isAdminOrManager && !isReportDisabled) && (
               <Button
                 variant="tertiary"
                 label={t("actions")}
-                iconRight={() => <Dots />}
+                iconLeft={() => <Menu />}
                 onClick={() => setIsActionsShown(true)}
                 style={{ height: "auto" }}
               />
+            )}
+            {report.status === ReportStatus.Closed && (
+              <div className="flex items-center gap-1">
+                <Close color={fontColor2} />
+                <div style={{ color: fontColor2 }}>
+                  {t("report_closed")}
+                </div>
+              </div>
             )}
           </div>
           <Divider style={{ background: fontColor2 }} />
