@@ -36,7 +36,7 @@
   "create_new_guest": "新しいゲストを作成",
   "create_project": "プロジェクト名を作成",
   "create_project_description": "プロジェクト名を作成するために、名前と説明を入力してください。",
-  "create_project_error_description": "報告書の作成中にエラーが発生しました",
+  "create_project_error_description": "プロジェクトの作成中にエラーが発生しました。",
   "create_report": "報告書を作成",
   "create_report_description": "報告書を作成するために、以下の情報を入力してください。",
   "create_report_error_description": "レポートの作成中にエラーが発生しました。",
