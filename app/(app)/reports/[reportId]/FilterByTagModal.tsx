@@ -26,7 +26,7 @@ const FilterByTagModal: FC<FilterByTagModalProps> = ({
       <Divider />
       <div>
         <div
-          className="flex px-4 h-12 items-center gap-3 hover:opacity-50 cursor-pointer"
+          className="flex px-4 py-2 items-center gap-3 hover:opacity-50 cursor-pointer"
           onClick={() => {
             onClose();
             onSelectTag(undefined);
@@ -39,7 +39,7 @@ const FilterByTagModal: FC<FilterByTagModalProps> = ({
           <div key={tag.id}>
             <Divider style={{ background: fontColor2 }} />
             <div
-              className="flex px-4 h-12 items-center gap-3 hover:opacity-50 cursor-pointer"
+              className="flex px-4 py-2 items-center gap-3 hover:opacity-50 cursor-pointer"
               onClick={() => {
                 onClose();
                 onSelectTag(tag);

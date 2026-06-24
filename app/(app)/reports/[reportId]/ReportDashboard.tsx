@@ -62,12 +62,12 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
   const [selectedTag, setSelectedTag] = useState<ReportImageTag>();
   const [isActionsShown, setIsActionsShown] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
   const [isPhotoModalShown, setIsPhotoModalShown] = useState(false);
   const [isStatusModalShown, setIsStatusModalShown] = useState(false);
   const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
-  const [isPdfDownloading, setIsPdfDownloading] = useState(false);
   const fileInputRef = useRef<any>(null);
   const loadedRef = useRef(false);
   const isAdmin = currentUser?.role === "admin";
@@ -264,36 +264,39 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
 
   return (
     <>
-      <Heading
-        title={report?.name ?? searchParams.get("name") ?? ""}
-        topLabel={topLabel}
-        placeholder={t("report_name")}
-        onEdit={(name) => {
-          updateReport({ name }, true);
-        }}
-        isEditable={isReportEditable}
-      />
+      <div className={isEditingName ? "" : "flex justify-between items-end"}>
+        <Heading
+          title={report?.name ?? searchParams.get("name") ?? ""}
+          topLabel={topLabel}
+          placeholder={t("report_name")}
+          onEdit={(name) => {
+            updateReport({ name }, true);
+            setIsEditingName(false);
+          }}
+          isEditable={false}
+          isEditing={isEditingName}
+          onCancelEdit={() => setIsEditingName(false)}
+        />
+        {!isEditingName && isAdminOrManager && !isReportDisabled && (
+          <Button
+            variant="tertiary"
+            // label={t("actions")}
+            iconRight={() => <div className="ml-1"><Menu /></div>}
+            onClick={() => setIsActionsShown(true)}
+            style={{ height: "auto" }}
+          />
+        )}
+      </div>
       <Divider />
-      {report != null && (
+      {report?.status === ReportStatus.Closed && (
         <>
           <div className="flex w-full justify-between py-1 md:px-3">
-            {(isAdminOrManager && !isReportDisabled) && (
-              <Button
-                variant="tertiary"
-                label={t("actions")}
-                iconLeft={() => <div className="mr-1"><Menu /></div>}
-                onClick={() => setIsActionsShown(true)}
-                style={{ height: "auto" }}
-              />
-            )}
-            {report.status === ReportStatus.Closed && (
-              <div className="flex items-center gap-1">
-                <Close color={fontColor2} />
-                <div style={{ color: fontColor2 }}>
-                  {t("report_closed")}
-                </div>
+            <div className="flex items-center gap-1">
+              <Close color={fontColor2} />
+              <div style={{ color: fontColor2 }}>
+                {t("report_closed")}
               </div>
-            )}
+            </div>
           </div>
           <Divider style={{ background: fontColor2 }} />
         </>
@@ -483,6 +486,9 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         onClose={() => {
           setIsActionsShown(false);
         }}
+        onEditName={() => {
+          setIsEditingName(true);
+        }}
         onUpdateStatus={() => {
           setIsStatusModalShown(true);
         }}
@@ -493,8 +499,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         }}
         onDownloadPDF={async () => {
           if (!report) return;
-
-          setIsPdfDownloading(true);
 
           const { pdf } = await import("@react-pdf/renderer");
 
@@ -522,8 +526,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           a.remove();
 
           URL.revokeObjectURL(fileUrl);
-
-          setIsPdfDownloading(false);
         }}
         onDelete={() => {
           setIsDeleteModalShown(true);

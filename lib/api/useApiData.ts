@@ -164,7 +164,6 @@ export const useApiData = () => {
         });
       }
 
-
       isRefreshing = true;
       await http.post("/auth/refresh");
 

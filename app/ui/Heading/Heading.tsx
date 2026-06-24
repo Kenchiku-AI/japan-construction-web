@@ -11,7 +11,9 @@ interface HeadingProps {
   topLabel?: string;
   placeholder?: string;
   isEditable?: boolean;
+  isEditing?: boolean;
   onEdit?: (value: string) => void;
+  onCancelEdit?: () => void;
 }
 
 export const Heading: FC<HeadingProps> = ({
@@ -20,7 +22,9 @@ export const Heading: FC<HeadingProps> = ({
   topLabel,
   placeholder,
   isEditable,
+  isEditing: isEditingExternal,
   onEdit,
+  onCancelEdit
 }) => {
   const [showEdit, setShowEdit] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
@@ -46,7 +50,7 @@ export const Heading: FC<HeadingProps> = ({
 
       <div
         className="flex gap-4"
-        style={{ display: showEdit ? undefined : "none" }}
+        style={{ display: showEdit || isEditingExternal ? undefined : "none" }}
       >
         <Input
           ref={inputRef}
@@ -75,6 +79,7 @@ export const Heading: FC<HeadingProps> = ({
           <div
             className="cursor-pointer"
             onClick={() => {
+              onCancelEdit?.();
               setShowEdit(false);
             }}
           >
@@ -84,7 +89,7 @@ export const Heading: FC<HeadingProps> = ({
       </div>
       <div
         className="flex text-ellipsis items-center gap-3"
-        style={{ minHeight: 36, display: showEdit ? "none" : undefined }}
+        style={{ minHeight: 36, display: showEdit || isEditingExternal ? "none" : undefined }}
       >
         <div className="text-ellipsis text-2xl">{displayTitle}</div>
         {isEditable && (
