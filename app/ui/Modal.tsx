@@ -32,7 +32,7 @@ const Modal: FC<ModalProps> = ({
           maxHeight: "96vh",
         }}
       >
-        <div className="flex flex-col mb-4">
+        <div className="flex flex-col mb-2">
           <button className="self-end hover:cursor-pointer" onClick={onClose}>
             <Close />
           </button>

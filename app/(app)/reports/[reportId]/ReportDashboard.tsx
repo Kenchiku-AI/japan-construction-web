@@ -17,7 +17,7 @@ import {
 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
-import { Plus, Download, Tag, Close, Check, Menu } from "@/app/ui/Icons";
+import { Plus, Download, Tag, Close, Check, Menu, Dots } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
@@ -55,7 +55,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     selectedPhoto,
     setSelectedPhoto,
   } = useReport(reportId);
-  const { downloadExcel, isExcelDownloading } = useExportExcel();
+  const { downloadExcel } = useExportExcel();
   const { formatDate } = useDate();
   const { isMobile } = useIsMobile();
   const searchParams = useSearchParams();
@@ -289,10 +289,9 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               <Button
                 variant="tertiary"
                 label={t("actions")}
-                iconRight={() => <Menu />}
+                iconRight={() => <Dots />}
                 onClick={() => setIsActionsShown(true)}
                 style={{ height: "auto" }}
-                iconOnlyMobile
               />
             )}
           </div>
@@ -487,11 +486,44 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         onUpdateStatus={() => {
           setIsStatusModalShown(true);
         }}
-        onDownloadExcel={() => {
+        onDownloadExcel={async () => {
+          if (!report) return;
 
+          downloadExcel(report, images ?? [], topLabel ?? "");
         }}
-        onDownloadPDF={() => {
+        onDownloadPDF={async () => {
+          if (!report) return;
 
+          setIsPdfDownloading(true);
+
+          const { pdf } = await import("@react-pdf/renderer");
+
+          const labelWidths = await Promise.all(
+            report.fields.map((f) => measureTextWidth(f.name, 12)),
+          );
+          const labelWidth = Math.max(...labelWidths) + 40;
+
+          const blob = await pdf(
+            <ReportPDF
+              report={report}
+              topLabel={topLabel ?? ""}
+              images={images ?? []}
+              labelWidth={labelWidth}
+            />,
+          ).toBlob();
+
+          const fileUrl = URL.createObjectURL(blob);
+
+          const a = document.createElement("a");
+          a.href = fileUrl;
+          a.download = `${report.name.replace(/ /g, "_").replace(/[()]/g, "")}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+
+          URL.revokeObjectURL(fileUrl);
+
+          setIsPdfDownloading(false);
         }}
         onDelete={() => {
           setIsDeleteModalShown(true);
