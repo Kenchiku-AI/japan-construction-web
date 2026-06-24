@@ -281,7 +281,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           <Button
             variant="tertiary"
             // label={t("actions")}
-            iconRight={() => <Menu size={32} />}
+            iconRight={() => <Menu size={36} />}
             onClick={() => setIsActionsShown(true)}
             style={{ height: "auto" }}
           />
