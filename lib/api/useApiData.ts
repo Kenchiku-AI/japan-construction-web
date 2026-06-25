@@ -120,7 +120,7 @@ export const useApiData = () => {
       const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
 
       if (!isAuthRoute) {
-        router.push("/login");
+        router.push("/");
       }
     }
   }, [pathname]);

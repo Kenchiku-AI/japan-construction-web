@@ -12,14 +12,14 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
+  const isAuthRoute = pathname === "/" || authRoutes.some((r) => pathname.startsWith(r));
 
   if (!token && !isAuthRoute) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
   if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/home", req.url));
   }
 
   return NextResponse.next();

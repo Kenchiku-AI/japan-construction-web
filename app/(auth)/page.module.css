@@ -1,0 +1,703 @@
+/* ── Reset & tokens ──────────────────────────────────────────────────────── */
+.section,
+.hero,
+.footer {
+	box-sizing: border-box;
+}
+
+:root {
+	--bg: #fdfdfd;
+	--text1: #23303b;
+	--text2: #a4a9ae;
+	--green: #6fb37a;
+	--green-dark: #5a9e65;
+	--green-pale: #e8f5ea;
+	--section-alt: #f5f6f7;
+	--border: #e4e6e8;
+}
+
+/* ── Nav ─────────────────────────────────────────────────────────────────── */
+.nav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+	background: rgba(253, 253, 253, 0.92);
+	backdrop-filter: blur(8px);
+	border-bottom: 1px solid var(--border);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 40px;
+	height: 64px;
+}
+
+.navLogo {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	text-decoration: none;
+	color: var(--text1);
+}
+
+.navLogoSvg {
+	width: 28px;
+	height: auto;
+}
+
+.navLogoText {
+	font-size: 17px;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+}
+
+.navActions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: opacity 0.15s, transform 0.1s, background 0.15s;
+	border: none;
+	text-decoration: none;
+	padding: 10px 20px;
+	white-space: nowrap;
+}
+
+.btn:active {
+	transform: scale(0.98);
+}
+
+.btnPrimary {
+	background: var(--green);
+	color: #fff;
+}
+
+.btnPrimary:hover {
+	background: var(--green-dark);
+}
+
+.btnSecondary {
+	background: transparent;
+	color: var(--text1);
+	border: 1.5px solid var(--border);
+}
+
+.btnSecondary:hover {
+	background: var(--section-alt);
+}
+
+.btnLg {
+	font-size: 16px;
+	padding: 14px 32px;
+	border-radius: 10px;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+.hero {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	position: relative;
+	overflow: hidden;
+	background: var(--bg);
+}
+
+/* Blueprint grid — signature element */
+.heroGrid {
+	position: absolute;
+	inset: 0;
+	background-image:
+		linear-gradient(rgba(111, 179, 122, 0.2) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(111, 179, 122, 0.2) 1px, transparent 1px);
+	background-size: 48px 48px;
+	background-position: center center;
+	pointer-events: none;
+}
+
+.heroGrid::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(ellipse 60% 55% at 50% 50%, transparent 30%, var(--bg) 75%);
+}
+
+.heroInner {
+	position: relative;
+	z-index: 1;
+	max-width: 720px;
+	padding: 0 24px;
+	animation: fadeUp 0.7s ease both;
+}
+
+@keyframes fadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.heroLogo {
+	width: 56px;
+	height: auto;
+	margin: 0 auto 28px;
+	display: block;
+}
+
+.heroEyebrow {
+	font-size: 12px;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: var(--green);
+	margin-bottom: 16px;
+	font-weight: 700;
+}
+
+.heroHeadline {
+	font-size: clamp(32px, 5vw, 56px);
+	font-weight: 700;
+	color: var(--text1);
+	line-height: 1.25;
+	margin-bottom: 12px;
+	letter-spacing: -0.01em;
+}
+
+.heroHeadlineAccent {
+	color: var(--green);
+}
+
+.heroSubJp {
+	font-size: 15px;
+	color: var(--text2);
+	margin-bottom: 8px;
+}
+
+.heroDescription {
+	font-size: 17px;
+	color: var(--text2);
+	max-width: 540px;
+	margin: 0 auto 36px;
+	line-height: 1.8;
+}
+
+.heroCta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	justify-content: center;
+}
+
+.heroScrollHint {
+	position: absolute;
+	bottom: 32px;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	color: var(--text2);
+	font-size: 16px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+	0%,
+	100% {
+		transform: translateX(-50%) translateY(0);
+	}
+
+	50% {
+		transform: translateX(-50%) translateY(6px);
+	}
+}
+
+/* ── Screenshot placeholder ──────────────────────────────────────────────── */
+.screenshotWrap {
+	padding: 0 24px 80px;
+	max-width: 960px;
+	margin: 0 auto;
+	animation: fadeUp 0.7s 0.15s ease both;
+}
+
+.screenshotPlaceholder {
+	width: 100%;
+	background: var(--section-alt);
+	border: 1.5px solid var(--border);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	color: var(--text2);
+	font-size: 13px;
+	text-align: center;
+}
+
+.screenshotPlaceholder svg {
+	opacity: 0.35;
+}
+
+/* ── Sections ────────────────────────────────────────────────────────────── */
+.section {
+	padding: 80px 24px;
+	background: var(--bg);
+}
+
+.sectionAlt {
+	background: var(--section-alt);
+}
+
+.sectionInner {
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+.sectionEyebrow {
+	font-size: 11px;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--green);
+	font-weight: 700;
+	margin-bottom: 12px;
+}
+
+.sectionTitle {
+	font-size: clamp(24px, 3.5vw, 36px);
+	font-weight: 700;
+	color: var(--text1);
+	margin-bottom: 8px;
+	line-height: 1.3;
+}
+
+.sectionSub {
+	font-size: 13px;
+	color: var(--text2);
+	margin-bottom: 16px;
+}
+
+.sectionLead {
+	font-size: 16px;
+	color: var(--text2);
+	max-width: 600px;
+	line-height: 1.85;
+	margin-bottom: 48px;
+}
+
+.centered {
+	text-align: center;
+	justify-content: center;
+}
+
+/* ── Features ────────────────────────────────────────────────────────────── */
+.featuresGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 24px;
+}
+
+.featureCard {
+	background: var(--bg);
+	border: 1.5px solid var(--border);
+	border-radius: 14px;
+	padding: 28px;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.featureCard:hover {
+	border-color: var(--green);
+	box-shadow: 0 4px 24px rgba(111, 179, 122, 0.12);
+}
+
+.featureIcon {
+	width: 40px;
+	height: 40px;
+	background: var(--green-pale);
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 16px;
+	color: var(--green);
+}
+
+.featureTitle {
+	font-size: 16px;
+	font-weight: 700;
+	color: var(--text1);
+	margin-bottom: 8px;
+}
+
+.featureSub {
+	font-size: 12px;
+	color: var(--green);
+	margin-bottom: 8px;
+}
+
+.featureDesc {
+	font-size: 14px;
+	color: var(--text2);
+	line-height: 1.75;
+}
+
+/* ── Steps ───────────────────────────────────────────────────────────────── */
+.steps {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	position: relative;
+}
+
+.step {
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12px;
+	position: relative;
+}
+
+.step:not(:last-child)::after {
+	content: '→';
+	position: absolute;
+	right: -10px;
+	top: 30px;
+	font-size: 18px;
+	color: var(--border);
+}
+
+.stepNum {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background: var(--green);
+	color: #fff;
+	font-size: 14px;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.stepTitle {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--text1);
+	line-height: 1.4;
+}
+
+.stepDesc {
+	font-size: 13px;
+	color: var(--text2);
+	line-height: 1.7;
+}
+
+/* ── App / Web split ─────────────────────────────────────────────────────── */
+.twoCol {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 32px;
+	align-items: start;
+}
+
+.appCard {
+	background: var(--bg);
+	border: 1.5px solid var(--border);
+	border-radius: 16px;
+	padding: 32px;
+}
+
+.appCardTitle {
+	font-size: 18px;
+	font-weight: 700;
+	color: var(--text1);
+	margin-bottom: 8px;
+}
+
+.appCardLabel {
+	font-size: 11px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--green);
+	font-weight: 700;
+	margin-bottom: 20px;
+}
+
+.appCardIntro {
+	font-size: 13px;
+	color: var(--text2);
+	margin-bottom: 20px;
+}
+
+.appCardList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.appCardList li {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	font-size: 14px;
+	color: var(--text2);
+	line-height: 1.5;
+}
+
+.appCardList li::before {
+	content: '';
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--green);
+	margin-top: 7px;
+	flex-shrink: 0;
+}
+
+.appScreenshotWrap {
+	margin-top: 24px;
+}
+
+.mobileScreenshotWrap {
+	margin-top: 24px;
+	display: flex;
+	justify-content: center;
+}
+
+.mobilePlaceholder {
+	width: 100%;
+	aspect-ratio: 9/16;
+	max-width: 200px;
+	background: var(--section-alt);
+	border: 1.5px solid var(--border);
+	border-radius: 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	color: var(--text2);
+	font-size: 12px;
+	text-align: center;
+	padding: 12px;
+}
+
+/* ── LINE ────────────────────────────────────────────────────────────────── */
+.lineBanner {
+	background: var(--green-pale);
+	border: 1.5px solid rgba(111, 179, 122, 0.3);
+	border-radius: 16px;
+	padding: 40px;
+	display: flex;
+	align-items: flex-start;
+	gap: 32px;
+}
+
+.lineBannerIcon {
+	flex-shrink: 0;
+	width: 56px;
+	height: 56px;
+	background: #06c755;
+	border-radius: 14px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	font-size: 24px;
+	font-weight: 900;
+}
+
+.lineBannerBody h3 {
+	font-size: 20px;
+	font-weight: 700;
+	color: var(--text1);
+	margin-bottom: 8px;
+}
+
+.lineBannerBody p {
+	font-size: 15px;
+	color: var(--text2);
+	line-height: 1.8;
+}
+
+/* ── Roles ───────────────────────────────────────────────────────────────── */
+.rolesGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 20px;
+}
+
+.roleCard {
+	border: 1.5px solid var(--border);
+	border-radius: 12px;
+	padding: 24px;
+	background: var(--bg);
+}
+
+.roleCardTitle {
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--text1);
+	margin-bottom: 4px;
+}
+
+.roleCardSub {
+	font-size: 12px;
+	color: var(--text2);
+	margin-bottom: 14px;
+}
+
+.roleCardList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 7px;
+}
+
+.roleCardList li {
+	font-size: 13px;
+	color: var(--text2);
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.roleCardList li::before {
+	content: '✓';
+	color: var(--green);
+	font-weight: 700;
+	flex-shrink: 0;
+}
+
+/* ── CTA band ────────────────────────────────────────────────────────────── */
+.ctaBand {
+	padding-top: 100px;
+	padding-bottom: 100px;
+}
+
+.ctaBandLead {
+	font-size: 16px;
+	color: var(--text2);
+	margin-bottom: 36px;
+	line-height: 1.8;
+}
+
+.btnGroup {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.footer {
+	border-top: 1px solid var(--border);
+	padding: 40px 24px;
+	background: var(--bg);
+}
+
+.footerInner {
+	max-width: 960px;
+	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.footerBrand {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--text1);
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 15px;
+}
+
+.footerBrandSvg {
+	width: 22px;
+	height: auto;
+}
+
+.footerLinks {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+}
+
+.footerLinks a {
+	font-size: 13px;
+	color: var(--text2);
+	text-decoration: none;
+	transition: color 0.15s;
+}
+
+.footerLinks a:hover {
+	color: var(--text1);
+}
+
+.footerCopy {
+	font-size: 12px;
+	color: var(--text2);
+	width: 100%;
+	margin-top: 16px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+	.nav {
+		padding: 0 20px;
+	}
+
+	.twoCol {
+		grid-template-columns: 1fr;
+	}
+
+	.step:not(:last-child)::after {
+		display: none;
+	}
+
+	.lineBanner {
+		flex-direction: column;
+		gap: 20px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.heroInner,
+	.screenshotWrap {
+		animation: none;
+	}
+
+	.heroScrollHint {
+		animation: none;
+	}
+}

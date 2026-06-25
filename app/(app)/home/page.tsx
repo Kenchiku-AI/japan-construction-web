@@ -1,8 +1,8 @@
 "use client";
 
 import { UserRole } from "@/types";
-import { useApi } from "../../lib/api/ApiContext";
-import CompanyDashboard from "./companies/[companyId]/CompanyDashboard";
+import { useApi } from "../../../lib/api/ApiContext";
+import CompanyDashboard from "../companies/[companyId]/CompanyDashboard";
 import { redirect } from "next/navigation";
 
 export default function Home() {
