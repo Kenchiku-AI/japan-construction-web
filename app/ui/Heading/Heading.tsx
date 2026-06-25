@@ -39,10 +39,10 @@ export const Heading: FC<HeadingProps> = ({
   }, [title]);
 
   useEffect(() => {
-    if (showEdit) {
+    if (showEdit || isEditingExternal) {
       inputRef.current?.focus();
     }
-  }, [showEdit]);
+  }, [showEdit, isEditingExternal]);
 
   return (
     <div>
