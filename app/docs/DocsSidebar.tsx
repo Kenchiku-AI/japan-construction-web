@@ -49,6 +49,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
             <SidebarItem name="ダウンロード" path="/docs/exports" />
             <SidebarItem name="ゲスト" path="/docs/guests" />
             <SidebarItem name="管理者向け" path="/docs/admin" />
+            <SidebarItem name="LINE連携" path="/docs/line" />
           </div>
         </ul>
       </div>
