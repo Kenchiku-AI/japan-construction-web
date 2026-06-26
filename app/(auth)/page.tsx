@@ -1,37 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import Script from "next/script";
-import type { Metadata } from "next";
+import { useState } from "react";
 import styles from "./page.module.css";
 import { Logo } from "../ui/Icons";
-import Image from "next/image";
 
-export const metadata: Metadata = {
-  title: "Kenchiku AI｜建設業向けAI報告書プラットフォーム",
-  description:
-    "Kenchiku AIは、建設現場の報告業務をAIで効率化するクラウドプラットフォームです。音声入力・写真管理・LINE連携・PDF/Excelエクスポートに対応。現場とオフィスをつなぐ次世代の施工管理ツール。",
-  keywords: [
-    "建設業", "報告書", "AI", "施工管理", "現場管理", "クラウド",
-    "LINE連携", "音声入力", "PDF出力", "Excel出力", "construction management Japan",
-  ],
-  robots: { index: true, follow: true },
-  alternates: { canonical: "https://kenchiku.ai/" },
-  openGraph: {
-    type: "website",
-    url: "https://kenchiku.ai/",
-    title: "Kenchiku AI｜建設業向けAI報告書プラットフォーム",
-    description:
-      "建設現場の報告業務をAIで自動化。音声・写真・LINEから報告書を生成し、PDF・Excelで出力。チーム全体の生産性を向上させるクラウドツール。",
-    images: [{ url: "https://kenchiku.ai/og-image.png", width: 1200, height: 630 }],
-    locale: "ja_JP",
-    siteName: "Kenchiku AI",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Kenchiku AI｜建設業向けAI報告書プラットフォーム",
-    description: "建設現場の報告業務をAIで自動化。音声・写真・LINEから報告書を生成。",
-    images: ["https://kenchiku.ai/og-image.png"],
-  },
-};
+// ── Move this metadata export to your layout.tsx or a separate metadata.ts ──
+// export const metadata: Metadata = { ... }
 
 const structuredDataApp = {
   "@context": "https://schema.org",
@@ -90,6 +66,8 @@ function ScreenshotPlaceholder({
 }
 
 export default function LandingPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <>
       <Script id="structured-data-app" type="application/ld+json"
@@ -121,14 +99,46 @@ export default function LandingPage() {
         </div>
 
         <div className={styles.navActions}>
-          <Link href="/login" className={styles.navLoginLink}>
-            ログイン
-          </Link>
+          <Link href="/login" className={styles.navLoginLink}>ログイン</Link>
           <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary}`}>
             無料で試してみる →
           </Link>
+          {/* Hamburger — mobile only */}
+          <button
+            className={styles.hamburger}
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label={menuOpen ? "メニューを閉じる" : "メニューを開く"}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M3 12h18M3 6h18M3 18h18" />
+              </svg>
+            )}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile menu drawer */}
+      {menuOpen && (
+        <div className={styles.mobileMenu} role="dialog" aria-label="ナビゲーションメニュー">
+          <Link href="#features" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>機能</Link>
+          <Link href="#how-it-works" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>活用シーン</Link>
+          <Link href="#signup" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金プラン</Link>
+          <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>導入事例</Link>
+          <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>会社概要</Link>
+          <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>資料ダウンロード</Link>
+          <div className={styles.mobileMenuDivider} />
+          <Link href="/login" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ログイン</Link>
+          <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.mobileMenuCta}`} onClick={() => setMenuOpen(false)}>
+            無料で試してみる →
+          </Link>
+        </div>
+      )}
 
       {/* ── Hero ── */}
       <header className={styles.hero} role="banner">
@@ -175,7 +185,7 @@ export default function LandingPage() {
           </div>
 
           {/* ── Right column: app mockup + callout cards ── */}
-          <div className={styles.heroRight} aria-hidden="true">
+          <div className={styles.heroRight}>
 
             {/* Feature callout cards — top right */}
             <div className={styles.heroCallouts}>
@@ -216,14 +226,7 @@ export default function LandingPage() {
 
             {/* Phone mockup */}
             <div className={styles.phoneMockup}>
-              <Image
-                src="/app-screenshot.png"
-                alt="Kenchiku AIモバイルアプリの画面"
-                width={220}
-                height={476}
-                priority
-                style={{ borderRadius: 40, width: "100%", height: "auto" }}
-              />
+              <ScreenshotPlaceholder aspectRatio="9/19" label="モバイルアプリのスクリーンショット" borderRadius={40} />
             </div>
 
           </div>
@@ -234,8 +237,8 @@ export default function LandingPage() {
           {[
             { icon: <><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>, label: "作業時間を", value: "最大 70% 削減" },
             { icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M16 13H8M16 17H8" /></>, label: "転記ミス・", value: "報告漏れを防止" },
-            { icon: <><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" /></>, label: "クラウドで", value: "どこでも共有" },
-            { icon: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><polyline points="9 12 11 14 15 10" /></>, label: "万全の", value: "セキュリティ" },
+            { icon: <><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" /><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" /></>, label: "クラウドで", value: "どこでも共有" },
+            { icon: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></>, label: "万全の", value: "セキュリティ" },
           ].map((s) => (
             <div key={s.value} className={styles.statItem} role="listitem">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={styles.statIcon} aria-hidden="true">
