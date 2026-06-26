@@ -179,6 +179,10 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                           />
                         )}
                       </label>
+                      <MobileDivider />
+                      <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
+                        {t("billing_exempt")}
+                      </div>
                     </>
                   )}
                 </div>
