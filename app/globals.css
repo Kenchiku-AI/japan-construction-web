@@ -78,6 +78,6 @@ dialog {
   color: white;
 }
 
-.react-day-picker .rdp-selected > button {
+.react-day-picker .rdp-selected>button {
   background: black !important;
 }
