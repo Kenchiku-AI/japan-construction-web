@@ -14,8 +14,8 @@ export type Company = {
 
 export type CreateCompanyRequest = {
   name: string;
-  corporate_number: string;
-  manager_email?: string;
+  corporate_number?: string;
+  manager_email: string;
 };
 
 export type UpdateCompanyRequest = {

@@ -41,11 +41,11 @@ const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
     >
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("name")} onChange={setName} />
-        <Input
+        {/* <Input
           value={corporateNumber}
           placeholder={t("corporate_number")}
           onChange={setCorporateNumber}
-        />
+        /> */}
         <Input
           value={managerEmail}
           placeholder={t("manager_email")}
@@ -53,13 +53,13 @@ const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
         />
       </div>
       <Button
-        disabled={!name || !corporateNumber}
+        disabled={!name || !managerEmail}
         label={t("create")}
         onClick={() => {
           onSubmit({
             name,
-            corporate_number: corporateNumber,
-            manager_email: managerEmail || undefined,
+            // corporate_number: corporateNumber,
+            manager_email: managerEmail,
           });
 
           reset();

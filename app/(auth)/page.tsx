@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 import styles from "./page.module.css";
 import { Logo } from "../ui/Icons";
+import CreateCompanyModal from "../(app)/companies/CreateCompanyModal";
 
 // ── Move this metadata export to your layout.tsx or a separate metadata.ts ──
 // export const metadata: Metadata = { ... }
@@ -68,6 +69,7 @@ function ScreenshotPlaceholder({
 
 export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
 
   return (
     <>
@@ -101,9 +103,11 @@ export default function LandingPage() {
 
         <div className={styles.navActions}>
           <Link href="/login" className={styles.navLoginLink}>ログイン</Link>
-          <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary}`}>
+          <div onClick={() => {
+            setShowSignup(true);
+          }} className={`${styles.btn} ${styles.btnPrimary}`}>
             無料で試してみる →
-          </Link>
+          </div>
           {/* Hamburger — mobile only */}
           <button
             className={styles.hamburger}
@@ -484,6 +488,19 @@ export default function LandingPage() {
           <p className={styles.footerCopy}>© 2025 Kenchiku AI. All rights reserved.</p>
         </div>
       </footer>
+
+
+      <CreateCompanyModal
+        isOpen={showSignup}
+        onClose={() => {
+          setShowSignup(false);
+        }}
+        onSubmit={(request) => {
+          setShowSignup(false);
+          // createCompany(request);
+        }}
+      />
+
     </>
   );
 }

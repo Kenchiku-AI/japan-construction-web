@@ -9,6 +9,7 @@ import { UserRole } from "@/types";
 import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo } from "./Icons";
 import { buttonColor, fontColor2 } from "@/lib/constants";
 import Divider from "./Divider";
+import Link from "next/link";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
@@ -158,6 +159,34 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
         <span>{name}</span>
       </a>
     </li>
+  );
+};
+
+const LinkSidebarItem = ({ name, icon, path }: SidebarItemProps) => {
+  const currentPath = usePathname();
+  const router = useRouter();
+  const Icon = icon;
+  const style = currentPath === path ? "bg-base-300 rounded-md" : "";
+
+  return (
+    <Link href={path} onClick={() => {
+      const drawer = document.getElementById(
+        "docs-sidebar",
+      ) as HTMLInputElement | null;
+
+      if (drawer) {
+        drawer.checked = false;
+      }
+    }}>
+      <li className={`mb-4 ${style}`}>
+        <div
+          className="active:bg-base-300 active:opacity-40 active:text-black gap-3"
+        >
+          <Icon />
+          <span>{name}</span>
+        </div>
+      </li>
+    </Link >
   );
 };
 
