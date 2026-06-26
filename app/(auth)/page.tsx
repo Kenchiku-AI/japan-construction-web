@@ -3,8 +3,8 @@ import Script from "next/script";
 import type { Metadata } from "next";
 import styles from "./page.module.css";
 import { Logo } from "../ui/Icons";
+import Image from "next/image";
 
-// ── Export this from your page.tsx (or wherever you mount this component) ──
 export const metadata: Metadata = {
   title: "Kenchiku AI｜建設業向けAI報告書プラットフォーム",
   description:
@@ -64,7 +64,6 @@ const structuredDataOrg = {
   },
 };
 
-// ── Placeholder (swap for next/image when you have real screenshots) ─────────
 function ScreenshotPlaceholder({
   aspectRatio = "16/9",
   label,
@@ -90,21 +89,13 @@ function ScreenshotPlaceholder({
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
 export default function LandingPage() {
   return (
     <>
-      {/* Structured data */}
-      <Script
-        id="structured-data-app"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredDataApp) }}
-      />
-      <Script
-        id="structured-data-org"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredDataOrg) }}
-      />
+      <Script id="structured-data-app" type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredDataApp) }} />
+      <Script id="structured-data-org" type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredDataOrg) }} />
 
       {/* ── Nav ── */}
       <nav className={styles.nav} aria-label="メインナビゲーション">
@@ -112,53 +103,153 @@ export default function LandingPage() {
           <Logo size={36} />
           <span className={styles.navLogoText}>Kenchiku AI</span>
         </Link>
+
+        <div className={styles.navLinks}>
+          <div className={styles.navDropdown}>
+            <span className={styles.navLink}>
+              機能
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </span>
+          </div>
+          <Link href="#how-it-works" className={styles.navLink}>活用シーン</Link>
+          <Link href="#signup" className={styles.navLink}>料金プラン</Link>
+          <Link href="#roles" className={styles.navLink}>導入事例</Link>
+          <Link href="#apps" className={styles.navLink}>会社概要</Link>
+          <Link href="/docs" className={styles.navLink}>資料ダウンロード</Link>
+        </div>
+
         <div className={styles.navActions}>
-          <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`}>
+          <Link href="/login" className={styles.navLoginLink}>
             ログイン
           </Link>
           <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary}`}>
-            無料で始める
+            無料で試してみる →
           </Link>
         </div>
       </nav>
 
       {/* ── Hero ── */}
       <header className={styles.hero} role="banner">
-        <div className={styles.heroGrid} aria-hidden="true" />
-        <div className={styles.heroInner}>
-          <div className={styles.heroLogo}>
-            <Logo />
-          </div>
-          <p className={styles.heroEyebrow}>建設業向け AI プラットフォーム</p>
-          <h1 className={styles.heroHeadline}>
-            現場の声を、<br />
-            <span className={styles.heroHeadlineAccent}>報告書</span>に変える。
-          </h1>
-          <p className={styles.heroSubJp}>Construction Report Automation</p>
-          <p className={styles.heroDescription}>
-            Kenchiku AIは、音声入力・写真・LINEメッセージからAIが情報を整理し、統一された報告書を自動生成するクラウドプラットフォームです。現場とオフィスをリアルタイムでつなぎます。
-          </p>
-          <div className={styles.heroCta}>
-            <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
-              無料アカウントを作成
-            </Link>
-            <Link href="/docs" className={`${styles.btn} ${styles.btnSecondary} ${styles.btnLg}`}>
-              ドキュメントを見る
-            </Link>
-          </div>
-        </div>
-        <div className={styles.heroScrollHint} aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 5v14M5 12l7 7 7-7" />
-          </svg>
-          scroll
-        </div>
-      </header>
 
-      {/* ── Hero screenshot ── */}
-      <div className={styles.screenshotWrap} aria-hidden="true">
-        <ScreenshotPlaceholder label="Kenchiku AIウェブアプリのスクリーンショット" />
-      </div>
+        {/* Background photo — replace src with your actual construction site photo */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/hero-bg.png"
+          alt=""
+          aria-hidden="true"
+          className={styles.heroBg}
+        />
+        {/* Overlay so text is readable over the photo */}
+        <div className={styles.heroOverlay} aria-hidden="true" />
+
+        <div className={styles.heroContent}>
+          {/* ── Left column: text ── */}
+          <div className={styles.heroLeft}>
+            <span className={styles.heroBadge}>建設現場の報告業務を、AIで自動化</span>
+
+            <h1 className={styles.heroHeadline}>
+              音声と写真だけで<br />
+              現場レポートを<br />
+              <span className={styles.heroHeadlineAccent}>AIが自動生成。</span>
+            </h1>
+
+            <p className={styles.heroDescription}>
+              現場での写真撮影や音声メモだけで、日報・作業報告書・<br />
+              安全管理記録などをAIが自動で作成。<br />
+              手間を削減し、ミスを防ぎ、もっと「建設」に集中できる時間へ。
+            </p>
+
+            <div className={styles.heroCta}>
+              <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
+                無料で試してみる →
+              </Link>
+              <Link href="/docs" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
+                </svg>
+                3分でわかる Kenchiku AI
+              </Link>
+            </div>
+          </div>
+
+          {/* ── Right column: app mockup + callout cards ── */}
+          <div className={styles.heroRight} aria-hidden="true">
+
+            {/* Feature callout cards — top right */}
+            <div className={styles.heroCallouts}>
+              <div className={styles.calloutCard}>
+                <div className={styles.calloutIcon}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" />
+                  </svg>
+                </div>
+                <div>
+                  <p className={styles.calloutTitle}>写真を撮るだけ</p>
+                  <p className={styles.calloutDesc}>現場の写真を撮影するだけで<br />AIが内容を解析します</p>
+                </div>
+              </div>
+              <div className={styles.calloutCard}>
+                <div className={styles.calloutIcon}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8" />
+                  </svg>
+                </div>
+                <div>
+                  <p className={styles.calloutTitle}>話すだけで記録</p>
+                  <p className={styles.calloutDesc}>音声で状況をメモすれば<br />文字起こし&amp;要約します</p>
+                </div>
+              </div>
+              <div className={styles.calloutCard}>
+                <div className={styles.calloutIcon}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M16 13H8M16 17H8" />
+                  </svg>
+                </div>
+                <div>
+                  <p className={styles.calloutTitle}>AIがレポートを自動生成</p>
+                  <p className={styles.calloutDesc}>必要な項目を整理し<br />見やすいレポートを自動作成</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Phone mockup */}
+            <div className={styles.phoneMockup}>
+              <Image
+                src="/app-screenshot.png"
+                alt="Kenchiku AIモバイルアプリの画面"
+                width={220}
+                height={476}
+                priority
+                style={{ borderRadius: 40, width: "100%", height: "auto" }}
+              />
+            </div>
+
+          </div>
+        </div>
+
+        {/* Stats bar */}
+        <div className={styles.heroStats} role="list">
+          {[
+            { icon: <><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>, label: "作業時間を", value: "最大 70% 削減" },
+            { icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M16 13H8M16 17H8" /></>, label: "転記ミス・", value: "報告漏れを防止" },
+            { icon: <><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" /></>, label: "クラウドで", value: "どこでも共有" },
+            { icon: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><polyline points="9 12 11 14 15 10" /></>, label: "万全の", value: "セキュリティ" },
+          ].map((s) => (
+            <div key={s.value} className={styles.statItem} role="listitem">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={styles.statIcon} aria-hidden="true">
+                {s.icon}
+              </svg>
+              <div>
+                <p className={styles.statLabel}>{s.label}</p>
+                <p className={styles.statValue}>{s.value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </header>
 
       {/* ── Features ── */}
       <section id="features" className={styles.section}>
@@ -275,7 +366,6 @@ export default function LandingPage() {
                 <ScreenshotPlaceholder aspectRatio="4/3" label="Webアプリのスクリーンショット" borderRadius={10} />
               </div>
             </div>
-
             <div className={styles.appCard}>
               <p className={styles.appCardLabel}>Mobile Application (iOS / Android)</p>
               <h3 className={styles.appCardTitle}>モバイルアプリ</h3>
@@ -288,8 +378,7 @@ export default function LandingPage() {
               <div className={styles.mobileScreenshotWrap} aria-hidden="true">
                 <div className={styles.mobilePlaceholder}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                    <rect x="5" y="2" width="14" height="20" rx="2" />
-                    <circle cx="12" cy="17" r="1" />
+                    <rect x="5" y="2" width="14" height="20" rx="2" /><circle cx="12" cy="17" r="1" />
                   </svg>
                   <span>Mobile screenshot<br />（ここに差し替え）</span>
                 </div>
@@ -359,7 +448,7 @@ export default function LandingPage() {
           </p>
           <div className={`${styles.btnGroup} ${styles.centered}`}>
             <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
-              無料アカウントを作成
+              無料で試してみる →
             </Link>
             <Link href="/login" className={`${styles.btn} ${styles.btnSecondary} ${styles.btnLg}`}>
               既存アカウントでログイン

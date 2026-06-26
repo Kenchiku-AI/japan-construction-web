@@ -1,8 +1,11 @@
-import { Kosugi_Maru } from "next/font/google";
+import { Noto_Sans_JP } from "next/font/google";
 import RootProvider from "../lib/RootProvider";
 import "./globals.css";
 
-const kosugi = Kosugi_Maru({ weight: "400" });
+const notoSansJP = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
 
 export default function RootLayout({
   children,
@@ -11,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="light">
-      <body className={kosugi.className}>
+      <body className={notoSansJP.className}>
         <RootProvider>{children}</RootProvider>
       </body>
     </html>
