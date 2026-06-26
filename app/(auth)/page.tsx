@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Script from "next/script";
+import Image from "next/image";
 import { useState } from "react";
 import styles from "./page.module.css";
 import { Logo } from "../ui/Icons";
@@ -226,7 +227,14 @@ export default function LandingPage() {
 
             {/* Phone mockup */}
             <div className={styles.phoneMockup}>
-              <ScreenshotPlaceholder aspectRatio="9/19" label="モバイルアプリのスクリーンショット" borderRadius={40} />
+              <Image
+                src="/app-screenshot.png"
+                alt="Kenchiku AIモバイルアプリの画面"
+                width={220}
+                height={476}
+                priority
+                style={{ borderRadius: 40, width: "100%", height: "auto" }}
+              />
             </div>
 
           </div>
@@ -237,8 +245,8 @@ export default function LandingPage() {
           {[
             { icon: <><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>, label: "作業時間を", value: "最大 70% 削減" },
             { icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M16 13H8M16 17H8" /></>, label: "転記ミス・", value: "報告漏れを防止" },
-            { icon: <><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" /><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" /></>, label: "クラウドで", value: "どこでも共有" },
-            { icon: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></>, label: "万全の", value: "セキュリティ" },
+            { icon: <><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></>, label: "クラウドで", value: "どこでも共有" },
+            { icon: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><polyline points="9 12 11 14 15 10" /></>, label: "万全の", value: "セキュリティ" },
           ].map((s) => (
             <div key={s.value} className={styles.statItem} role="listitem">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={styles.statIcon} aria-hidden="true">

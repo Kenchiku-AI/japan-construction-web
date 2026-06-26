@@ -9,6 +9,7 @@
 .primaryLabel {
   color: white;
   font-size: 18px;
+  font-weight: 400;
 }
 
 .secondaryContainer {
@@ -22,6 +23,7 @@
 .secondaryLabel {
   color: var(--button-color);
   font-size: 18px;
+  font-weight: 400;
 }
 
 .tertiaryContainer {
@@ -35,4 +37,5 @@
 .tertiaryLabel {
   color: var(--button-color);
   font-size: 18px;
+  font-weight: 400;
 }
