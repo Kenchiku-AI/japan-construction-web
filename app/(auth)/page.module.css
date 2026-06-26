@@ -100,6 +100,67 @@
 	gap: 8px;
 }
 
+/* Hamburger — hidden on desktop */
+.hamburger {
+	display: none;
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: var(--text1);
+	padding: 4px;
+	border-radius: 6px;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.15s;
+}
+
+.hamburger:hover {
+	background: var(--section-alt);
+}
+
+/* Mobile menu drawer — hidden on desktop */
+.mobileMenu {
+	display: none;
+	position: fixed;
+	top: 64px;
+	left: 0;
+	right: 0;
+	z-index: 99;
+	background: var(--bg);
+	border-bottom: 1px solid var(--border);
+	padding: 12px 20px 20px;
+	flex-direction: column;
+	gap: 2px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.mobileMenuLink {
+	display: block;
+	font-size: 15px;
+	font-weight: 500;
+	color: var(--text1);
+	text-decoration: none;
+	padding: 12px 8px;
+	border-radius: 8px;
+	transition: background 0.15s;
+}
+
+.mobileMenuLink:hover {
+	background: var(--section-alt);
+}
+
+.mobileMenuDivider {
+	height: 1px;
+	background: var(--border);
+	margin: 8px 0;
+}
+
+.mobileMenuCta {
+	margin-top: 8px;
+	width: 100%;
+	justify-content: center;
+}
+
 /* ── Buttons ─────────────────────────────────────────────────────────────── */
 .btn {
 	display: inline-flex;
@@ -788,13 +849,36 @@
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
+
+	/* Hero stacks vertically */
 	.heroContent {
 		grid-template-columns: 1fr;
 		padding: 40px 24px 32px;
+		gap: 48px;
 	}
 
+	/* Right col always visible on mobile — stacks below text */
 	.heroRight {
-		display: none;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 20px;
+		min-height: unset;
+	}
+
+	/* On mobile: phone mockup centered, full width up to 280px */
+	.phoneMockup {
+		width: 100%;
+		max-width: 280px;
+		margin-right: 0;
+	}
+
+	/* Callout cards go below the phone, horizontal scroll row */
+	.heroCallouts {
+		position: static;
+		width: 100%;
+		flex-direction: column;
+		gap: 10px;
 	}
 
 	.heroStats {
@@ -811,7 +895,26 @@
 		border-right: 1px solid var(--border);
 	}
 
+	/* Hide desktop nav links, show hamburger */
 	.navLinks {
+		display: none;
+	}
+
+	.navLoginLink {
+		display: none;
+	}
+
+	.hamburger {
+		display: flex;
+	}
+
+	/* Show mobile menu when rendered */
+	.mobileMenu {
+		display: flex;
+	}
+
+	/* Hide desktop-only signup in nav on mobile */
+	.navActions .btn {
 		display: none;
 	}
 }
