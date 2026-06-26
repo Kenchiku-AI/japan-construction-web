@@ -5,27 +5,25 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 
-interface CreateCompanyModalProps {
+interface SignupModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (request: CreateCompanyRequest) => void;
 }
 
-const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
+const SignupModal: FC<SignupModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
 }) => {
   const [name, setName] = useState("");
-  const [corporateNumber, setCorporateNumber] = useState("");
-  const [managerEmail, setManagerEmail] = useState("");
+  const [email, setEmail] = useState("");
   const { t } = useTranslation();
 
   const reset = () => {
     setTimeout(() => {
       setName("");
-      setCorporateNumber("");
-      setManagerEmail("");
+      setEmail("");
     }, 500);
   };
 
@@ -36,30 +34,24 @@ const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
         onClose();
         reset();
       }}
-      title={t("create_company")}
-      subtitle={t("create_company_description")}
+      title={t("sign_up")}
+      subtitle={t("sign_up_modal_description")}
     >
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("name")} onChange={setName} />
         <Input
-          value={corporateNumber}
-          placeholder={t("corporate_number")}
-          onChange={setCorporateNumber}
-        />
-        <Input
-          value={managerEmail}
-          placeholder={t("manager_email")}
-          onChange={setManagerEmail}
+          value={email}
+          placeholder={t("email")}
+          onChange={setEmail}
         />
       </div>
       <Button
-        disabled={!name || !corporateNumber}
+        disabled={!name || !email}
         label={t("create")}
         onClick={() => {
           onSubmit({
             name,
-            corporate_number: corporateNumber,
-            manager_email: managerEmail || undefined,
+            manager_email: email,
           });
 
           reset();
@@ -69,4 +61,4 @@ const CreateCompanyModal: FC<CreateCompanyModalProps> = ({
   );
 };
 
-export default CreateCompanyModal;
+export default SignupModal;

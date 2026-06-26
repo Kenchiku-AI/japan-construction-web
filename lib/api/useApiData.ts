@@ -236,6 +236,10 @@ export const useApiData = () => {
       const url = "/companies";
       return call(() => http.post(url, request));
     },
+    async signupCompany(request: CreateCompanyRequest) {
+      const url = "/companies";
+      return handleResponse(() => http.post(url, request));
+    },
     async updateCompany(companyId: string, request: UpdateCompanyRequest) {
       const url = `/companies/${companyId}`;
       return call(() => http.patch<UpdateCompanyResponse>(url, request));

@@ -5,8 +5,13 @@ import Script from "next/script";
 import Image from "next/image";
 import { useState } from "react";
 import styles from "./page.module.css";
-import { Logo } from "../ui/Icons";
+import { LineLogo, Logo } from "../ui/Icons";
 import CreateCompanyModal from "../(app)/companies/CreateCompanyModal";
+import SignupModal from "./signup/SignupModal";
+import { Loader } from "../ui/Loader";
+import { useApi } from "@/lib/api/ApiContext";
+import { useModal } from "@/lib/modal/ModalContext";
+import { useTranslation } from "react-i18next";
 
 // ── Move this metadata export to your layout.tsx or a separate metadata.ts ──
 // export const metadata: Metadata = { ... }
@@ -70,6 +75,10 @@ function ScreenshotPlaceholder({
 export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { signupCompany } = useApi();
+  const { showModal } = useModal();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -139,9 +148,11 @@ export default function LandingPage() {
           <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>資料ダウンロード</Link>
           <div className={styles.mobileMenuDivider} />
           <Link href="/login" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ログイン</Link>
-          <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.mobileMenuCta}`} onClick={() => setMenuOpen(false)}>
+          <div onClick={() => {
+            setShowSignup(true);
+          }} className={`${styles.btn} ${styles.btnPrimary}`}>
             無料で試してみる →
-          </Link>
+          </div>
         </div>
       )}
 
@@ -177,9 +188,11 @@ export default function LandingPage() {
             </p>
 
             <div className={styles.heroCta}>
-              <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
+              <div onClick={() => {
+                setShowSignup(true);
+              }} className={`${styles.btn} ${styles.btnPrimary}`}>
                 無料で試してみる →
-              </Link>
+              </div>
               <Link href="/docs" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
@@ -413,7 +426,9 @@ export default function LandingPage() {
             現場担当者がわざわざアプリを覚え直す必要はありません。日常的に使っているLINEから報告書を作成できます。
           </p>
           <div className={styles.lineBanner} role="region" aria-label="LINE連携の説明">
-            <div className={styles.lineBannerIcon} aria-hidden="true">L</div>
+            <div className={styles.lineBannerIcon} aria-hidden="true">
+              <LineLogo color="white" size={40} />
+            </div>
             <div className={styles.lineBannerBody}>
               <h3>LINEのメッセージが、そのまま報告書の項目になる</h3>
               <p>
@@ -462,9 +477,11 @@ export default function LandingPage() {
             管理者が招待リンクを発行するだけで、チーム全員がすぐに使えます。
           </p>
           <div className={`${styles.btnGroup} ${styles.centered}`}>
-            <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
+            <div onClick={() => {
+              setShowSignup(true);
+            }} className={`${styles.btn} ${styles.btnPrimary}`}>
               無料で試してみる →
-            </Link>
+            </div>
             <Link href="/login" className={`${styles.btn} ${styles.btnSecondary} ${styles.btnLg}`}>
               既存アカウントでログイン
             </Link>
@@ -485,22 +502,41 @@ export default function LandingPage() {
             <Link href="/login">ログイン</Link>
             <Link href="/signup">新規登録</Link>
           </nav>
-          <p className={styles.footerCopy}>© 2025 Kenchiku AI. All rights reserved.</p>
+          <p className={styles.footerCopy}>© 2026 Kenchiku AI. All rights reserved.</p>
         </div>
       </footer>
 
-
-      <CreateCompanyModal
+      <SignupModal
         isOpen={showSignup}
         onClose={() => {
           setShowSignup(false);
         }}
-        onSubmit={(request) => {
+        onSubmit={async (request) => {
           setShowSignup(false);
-          // createCompany(request);
+
+          setLoading(true);
+
+          try {
+            await signupCompany(request);
+
+            setLoading(false);
+            setShowSignup(false);
+            showModal({
+              title: t("company_created"),
+              subtitle: t("company_created_description"),
+            });
+
+          } catch (err) {
+            setLoading(false);
+            setShowSignup(false);
+            showModal({
+              title: t("error"),
+              subtitle: t("sign_up_error"),
+            });
+          }
         }}
       />
-
+      {loading && <Loader />}
     </>
   );
 }

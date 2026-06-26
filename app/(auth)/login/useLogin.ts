@@ -40,7 +40,7 @@ export const useLogin = () => {
 
         if (api.validateCurrentUser(user)) {
           api.setCurrentUser(user);
-          const url = user.role === UserRole.Admin ? "/companies" : "/";
+          const url = user.role === UserRole.Admin ? "/companies" : "/home";
           router.push(url);
         }
       } catch (err) {
