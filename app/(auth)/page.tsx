@@ -95,14 +95,7 @@ export default function LandingPage() {
         </Link>
 
         <div className={styles.navLinks}>
-          <div className={styles.navDropdown}>
-            <span className={styles.navLink}>
-              機能
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </span>
-          </div>
+          <Link href="#features" className={styles.navLink}>機能</Link>
           <Link href="#how-it-works" className={styles.navLink}>活用シーン</Link>
           <Link href="#signup" className={styles.navLink}>料金プラン</Link>
           <Link href="#roles" className={styles.navLink}>導入事例</Link>
@@ -167,6 +160,7 @@ export default function LandingPage() {
           aria-hidden="true"
           className={styles.heroBg}
         />
+        <div className={styles.heroBlurOverlay} aria-hidden="true" />
         {/* Overlay so text is readable over the photo */}
         <div className={styles.heroOverlay} aria-hidden="true" />
 
@@ -283,46 +277,95 @@ export default function LandingPage() {
       <section id="features" className={styles.section}>
         <div className={styles.sectionInner}>
           <p className={styles.sectionEyebrow}>機能</p>
-          <h2 className={styles.sectionTitle}>現場で必要なものが、すべて揃っています</h2>
-          <p className={styles.sectionSub}>Features designed for Japanese construction workflows</p>
+          <h2 className={styles.sectionTitle}>現場報告業務を、AIで圧倒的に効率化</h2>
           <p className={styles.sectionLead}>
-            施工管理の現場で本当に必要な機能だけを、使いやすい形で提供します。複雑な設定なしに、すぐに使い始めることができます。
+            写真を撮る。話す。あとはAIに任せる。
           </p>
           <div className={styles.featuresGrid}>
             {[
               {
                 icon: <><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8" /></>,
-                sub: "音声入力 / Voice Input",
+                // sub: "音声入力 / Voice Input",
                 title: "話すだけで記録完了",
                 desc: "現場で手が離せないときでも、音声で情報を入力できます。AIが自動で内容を整理し、適切なフィールドに振り分けます。",
               },
               {
                 icon: <><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></>,
-                sub: "写真管理 / Photo Management",
-                title: "写真・タグで現場を記録",
-                desc: "現場写真をモバイルアプリで撮影し、タグを付けて整理。報告書に自動的に紐付けられ、PDF・Excelにも出力されます。",
+                // sub: "写真管理 / Photo Management",
+                title: "写真解析",
+                desc: (
+                  <>
+                    現場写真をアップロードすると、AIが工事内容や進捗状況を自動解析。
+                    <ul>
+                      <li>配筋</li>
+                      <li>型枠</li>
+                      <li>コンクリート打設</li>
+                      <li>内装工事</li>
+                      <li>外構工事</li>
+                    </ul>
+                    などを自動判別。
+                  </>
+                ),
               },
               {
                 icon: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
-                sub: "LINE連携 / LINE Integration",
-                title: "LINEから報告書を作成",
-                desc: "LINEのDMやグループで送信したメッセージをAIが解析し、自動で報告書に反映。現場担当者が使い慣れたLINEを活かせます。",
+                // sub: "LINE連携 / LINE Integration",
+                title: "LINE連携",
+                desc: (
+                  <>
+                    LINEからそのまま報告。現場スタッフは新しいアプリを覚える必要なし。
+                    <div className="mt-3">
+                      LINEで
+                    </div>
+                    <ul>
+                      <li>写真送信</li>
+                      <li>音声送信</li>
+                    </ul>
+                    するだけでAIがレポート生成。
+                  </>
+                )
               },
               {
                 icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" /></>,
-                sub: "エクスポート / Export",
-                title: "PDF・Excelで即出力",
-                desc: "完成した報告書はワンクリックでPDFまたはExcel形式にエクスポート。発注者や協力会社への提出もスムーズです。",
+                // sub: "エクスポート / Export",
+                title: "AIレポート生成",
+                desc: (
+                  <>
+                    日報・週報・報告書を自動作成
+                    <ul>
+                      <li>工事日報</li>
+                      <li>安全報告書</li>
+                      <li>作業報告書</li>
+                      <li>写真台帳</li>
+                    </ul>
+                    を数秒で作成。Excel・PDF形式で簡単に出力できます。
+                  </>
+                ),
               },
               {
-                icon: <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" /></>,
-                sub: "テンプレート / Templates",
-                title: "自社フォーマットに対応",
-                desc: "報告書のテンプレートを自由に設計できます。日常点検・安全管理・品質検査など、用途に合わせたフォームを作成可能です。",
+                icon: <><line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="20" y2="18" /><circle cx="8" cy="6" r="2" fill="currentColor" stroke="none" /><circle cx="14" cy="12" r="2" fill="currentColor" stroke="none" /><circle cx="10" cy="18" r="2" fill="currentColor" stroke="none" /></>,
+                // sub: "テンプレート / Templates",
+                title: "柔軟なカスタマイズ",
+                desc: (
+                  <>
+                    建設会社ごとに業務や運用は異なります。
+                    <div className="mt-3">
+                      Kenchiku AIでは
+                    </div>
+                    <ul>
+                      <li>独自帳票</li>
+                      <li>承認フロー</li>
+                      <li>社内システム連携</li>
+                      <li>API連携</li>
+                    </ul>
+
+                    など、御社の業務に合わせたカスタマイズや開発にも対応しています。
+                  </>
+                )
               },
               {
                 icon: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>,
-                sub: "ゲストアクセス / Guest Access",
+                // sub: "ゲストアクセス / Guest Access",
                 title: "協力会社・発注者と共有",
                 desc: "社外のゲストを特定プロジェクトに招待できます。権限を限定した安全な情報共有で、関係者全員が最新情報にアクセスできます。",
               },
@@ -335,7 +378,7 @@ export default function LandingPage() {
                 </div>
                 <p className={styles.featureSub}>{f.sub}</p>
                 <h3 className={styles.featureTitle}>{f.title}</h3>
-                <p className={styles.featureDesc}>{f.desc}</p>
+                <div className={styles.featureDesc}>{f.desc}</div>
               </article>
             ))}
           </div>
