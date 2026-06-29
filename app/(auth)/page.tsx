@@ -160,7 +160,7 @@ export default function LandingPage() {
           aria-hidden="true"
           className={styles.heroBg}
         />
-        <div className={styles.heroBlurOverlay} aria-hidden="true" />
+
         {/* Overlay so text is readable over the photo */}
         <div className={styles.heroOverlay} aria-hidden="true" />
 
@@ -376,7 +376,7 @@ export default function LandingPage() {
                     {f.icon}
                   </svg>
                 </div>
-                <p className={styles.featureSub}>{f.sub}</p>
+                {/* <p className={styles.featureSub}>{f.sub}</p> */}
                 <h3 className={styles.featureTitle}>{f.title}</h3>
                 <div className={styles.featureDesc}>{f.desc}</div>
               </article>
@@ -388,19 +388,18 @@ export default function LandingPage() {
       {/* ── How it works ── */}
       <section id="how-it-works" className={`${styles.section} ${styles.sectionAlt}`}>
         <div className={styles.sectionInner}>
-          <p className={styles.sectionEyebrow}>利用の流れ</p>
-          <h2 className={styles.sectionTitle}>シンプルな5ステップで報告書が完成</h2>
-          <p className={styles.sectionSub}>From field to finished report in minutes</p>
+          <p className={styles.sectionEyebrow}>ご利用の流れ</p>
+          <h2 className={styles.sectionTitle}>たった5ステップで報告書を作成</h2>
           <p className={styles.sectionLead}>
-            テンプレートを一度作成すれば、現場担当者はすぐに報告書の作成を開始できます。
+            テンプレートを一度作るだけ。現場担当者はすぐに報告書を作成できます。
           </p>
           <div className={styles.steps} role="list">
             {[
-              { title: "テンプレートを作成", desc: "管理者がWebアプリでフォームを設計します。" },
-              { title: "現場で情報を収集", desc: "音声・写真・LINE・直接入力で記録。" },
-              { title: "AIが自動整理", desc: "入力内容をAIが解析し各項目に反映。" },
-              { title: "内容を確認・保存", desc: "必要があれば修正してそのまま保存。" },
-              { title: "PDF・Excelで出力", desc: "提出用ファイルをワンクリックで生成。" },
+              { title: "テンプレートを作成", desc: "管理者が入力フォームを作成します。" },
+              { title: "現場で情報を収集", desc: "音声・写真・LINE・手入力で記録。" },
+              { title: "AIが自動整理", desc: "AIが入力内容を整理し、各項目へ自動入力。" },
+              { title: "内容を確認・保存", desc: "必要に応じて修正し、そのまま保存。" },
+              { title: "PDF・Excelで出力", desc: "提出用のPDF・Excelをワンクリックで出力。" },
             ].map((s, i) => (
               <div key={s.title} className={styles.step} role="listitem">
                 <div className={styles.stepNum} aria-hidden="true">{i + 1}</div>
