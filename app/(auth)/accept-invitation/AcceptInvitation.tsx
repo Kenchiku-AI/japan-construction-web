@@ -42,7 +42,9 @@ const AcceptInvitation = () => {
         sessionStorage.removeItem(existingUserInvitationTokenKey);
         const user = await api.getCurrentUser();
 
-        showMobileAppModal();
+        if (user?.role === UserRole.User) {
+          showMobileAppModal();
+        }
 
         if (!user) {
           router.replace("/login");

@@ -2,6 +2,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { invitationTokenKey } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
+import { UserRole } from "@/types";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -41,7 +42,10 @@ export const useSignup = () => {
         api.setCurrentUser(user);
         sessionStorage.removeItem(invitationTokenKey);
         router.push("/");
-        showMobileAppModal();
+
+        if (user.role === UserRole.User) {
+          showMobileAppModal();
+        }
       } catch (err) {
         setLoading(false);
 

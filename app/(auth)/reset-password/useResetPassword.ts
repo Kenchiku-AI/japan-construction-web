@@ -27,6 +27,7 @@ export const useResetPassword = () => {
         router.replace("/login");
 
         if (newUser) {
+          // new user will always be guest
           showMobileAppModal();
         } else {
           showModal({
