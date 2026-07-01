@@ -61,10 +61,10 @@ const BillingPlansPage = () => {
                   className="flex items-center gap-3"
                 >
                   <div>
-                    <CreditCard size={30} />
+                    <CreditCard color={fontColor1} strokeWidth={1} />
                   </div>
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ color: fontColor1 }}>{`${b.name} • ¥${b.amount_jpy}/${t("month")}`}</div>
+                    <div style={{ color: fontColor1 }}>{b.name}<span className="ml-2">{`(¥${b.amount_jpy}/${t("month")})`}</span></div>
                     <div className={styles.subtitle}>{b.description}</div>
                   </div>
                 </div>

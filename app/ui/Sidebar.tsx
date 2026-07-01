@@ -98,7 +98,11 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 {isAdmin && (
                   <SidebarItem
                     name={t("billing_plans")}
-                    icon={() => <CreditCard size={24} />}
+                    icon={() => (
+                      <div style={{ paddingLeft: 5, paddingRight: 5 }}>
+                        <CreditCard size={18} color="black" strokeWidth={0.85} />
+                      </div>
+                    )}
                     path={"/billing-plans"}
                   />
                 )}

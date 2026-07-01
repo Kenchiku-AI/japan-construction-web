@@ -18,9 +18,9 @@ const CreateBillingPlanModal: FC<CreateBillingPlanModalProps> = ({
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [yen, setYen] = useState("0");
+  const [yen, setYen] = useState("");
   const [stripePriceId, setStripePriceId] = useState("");
-  const [sortOrder, setSortOrder] = useState("0");
+  const [sortOrder, setSortOrder] = useState("");
   const [isHidden, setIsHidden] = useState(false);
   const [isDefault, setIsDefault] = useState(false);
   const { t } = useTranslation();
@@ -29,9 +29,9 @@ const CreateBillingPlanModal: FC<CreateBillingPlanModalProps> = ({
     setTimeout(() => {
       setName("");
       setDescription("");
-      setYen("0");
+      setYen("");
       setStripePriceId("");
-      setSortOrder("0");
+      setSortOrder("");
       setIsHidden(false);
       setIsDefault(false);
     }, 500);
@@ -51,7 +51,8 @@ const CreateBillingPlanModal: FC<CreateBillingPlanModalProps> = ({
         <Input value={description} placeholder={t("description")} onChange={setDescription} />
         <Input value={yen} placeholder={t("amount_yen")} type="number" onChange={setYen} />
         <Input value={stripePriceId} placeholder={t("stripe_price_id")} onChange={setStripePriceId} />
-        <div>
+        <Input value={sortOrder} placeholder={t("sort_order")} type="number" onChange={setSortOrder} />
+        <div className="flex items-center justify-between gap-4 pt-3">
           <div>{t("hidden")}</div>
           <input
             type="checkbox"
@@ -60,7 +61,7 @@ const CreateBillingPlanModal: FC<CreateBillingPlanModalProps> = ({
             onChange={(e) => setIsHidden(e.target.checked)}
           />
         </div>
-        <div>
+        <div className="flex items-center justify-between gap-4 pt-3">
           <div>{t("default")}</div>
           <input
             type="checkbox"

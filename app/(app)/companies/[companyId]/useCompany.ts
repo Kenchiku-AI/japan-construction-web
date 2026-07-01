@@ -69,28 +69,6 @@ export const useCompany = (companyId: string) => {
     [company, companyId],
   );
 
-  const updateBillingExempt = useCallback(
-    async (billing_exempt: boolean) => {
-      setLoading(true);
-
-      try {
-        const response = await api.updateCompany(companyId, {
-          billing_exempt,
-        });
-
-        if (company && response) {
-          setCompany({
-            ...company,
-            billing_exempt: response.billing_exempt,
-          });
-        }
-      } finally {
-        setLoading(false);
-      }
-    },
-    [company, companyId],
-  );
-
   const updateLineChannelSecret = useCallback(
     async (line_channel_secret: string) => {
       let success = true;
@@ -189,7 +167,6 @@ export const useCompany = (companyId: string) => {
     company,
     createProject,
     updateName,
-    updateBillingExempt,
     updateLineChannelSecret,
     templates,
     createTemplate,

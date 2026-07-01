@@ -26,7 +26,6 @@ import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
 import { buttonColor, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
-import BillingEnabledModal from "./BillingEnabledModal";
 import LineChannelSecretModal from "./LineChannelSecretModal";
 import LineWebhookButton from "./LineWebhookButton";
 import LineWebhookModal from "./LineWebhookModal";
@@ -44,7 +43,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     getCompany,
     createProject,
     updateName,
-    updateBillingExempt,
     updateLineChannelSecret,
     templates,
     createTemplate,
@@ -60,9 +58,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
   const [isCreateTemplateModalShown, setIsCreateTemplateModalShown] =
     useState(false);
-  const [pendingBillingEnabled, setPendingBillingEnabled] = useState<
-    boolean | null
-  >(null);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
   const [showLineWebhook, setShowLineWebhook] = useState(false);
@@ -154,31 +149,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                       />
                     </div>
                   )}
-                  {(!isAdmin && company.billing_exempt) && (
+                  {!company.billing_plan_id && (
                     <>
-                      <MobileDivider />
-                      <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
-                        {t("billing_exempt")}
-                      </div>
-                    </>
-                  )}
-                  {isAdmin && (
-                    <>
-                      <MobileDivider />
-                      <label
-                        style={{ height: 40 }}
-                        className={`flex items-center gap-3${isAdmin ? " cursor-pointer" : ""}`}
-                      >
-                        <div style={{ color: fontColor1 }}>{t("billing_enabled")}</div>
-                        {isAdmin && (
-                          <input
-                            type="checkbox"
-                            className="toggle toggle-md"
-                            checked={!company.billing_exempt}
-                            onChange={(e) => setPendingBillingEnabled(e.target.checked)}
-                          />
-                        )}
-                      </label>
                       <MobileDivider />
                       <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
                         {t("billing_exempt")}
@@ -433,29 +405,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           setPaymentMethodClientSecret("");
           getCompany(companyId);
           refreshCurrentUser();
-        }}
-      />
-      <BillingEnabledModal
-        isOpen={pendingBillingEnabled !== null}
-        isEnabled={pendingBillingEnabled ?? true}
-        onClose={() => {
-          setPendingBillingEnabled(null)
-        }}
-        onConfirm={async () => {
-          if (pendingBillingEnabled === null) return;
-
-          const value = pendingBillingEnabled;
-          setPendingBillingEnabled(null);
-
-          try {
-            await updateBillingExempt(!value);
-            await getCompany(companyId);
-          } catch (err) {
-            showModal({
-              title: t("error"),
-              subtitle: t("error_description"),
-            });
-          }
         }}
       />
       <LineChannelSecretModal
