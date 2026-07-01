@@ -16,6 +16,7 @@ import { BillingPlan } from "@/types/billingPlans";
 import { Button } from "@/app/ui/Button/Button";
 import CreateBillingPlanModal from "./CreateBillingPlanModal";
 import DeleteBillingPlanModal from "./DeleteBillingPlanModal";
+import EditBillingPlanModal from "./EditBillingPlanModal";
 
 const BillingPlansPage = () => {
   const { t } = useTranslation();
@@ -94,6 +95,29 @@ const BillingPlansPage = () => {
         onSubmit={(request) => {
           setShowCreateBillingPlan(false);
           createBillingPlan(request);
+        }}
+      />
+      <CreateBillingPlanModal
+        isOpen={showCreateBillingPlan}
+        onClose={() => {
+          setShowCreateBillingPlan(false);
+        }}
+        onSubmit={(request) => {
+          setShowCreateBillingPlan(false);
+          createBillingPlan(request);
+        }}
+      />
+      <EditBillingPlanModal
+        isOpen={!!editBillingPlan}
+        billingPlan={editBillingPlan}
+        onClose={() => {
+          setEditBillingPlan(undefined);
+        }}
+        onSubmit={(request) => {
+          if (!editBillingPlan) return;
+
+          updateBillingPlan(editBillingPlan.id, request);
+          setEditBillingPlan(undefined);
         }}
       />
       <DeleteBillingPlanModal

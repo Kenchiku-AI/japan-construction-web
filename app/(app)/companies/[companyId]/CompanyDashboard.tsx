@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -29,6 +29,8 @@ import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
 import LineChannelSecretModal from "./LineChannelSecretModal";
 import LineWebhookButton from "./LineWebhookButton";
 import LineWebhookModal from "./LineWebhookModal";
+import { useBillingPlans } from "../../billing-plans/useBillingPlans";
+import Select from "@/app/ui/Select/Select";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -64,6 +66,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [showLoader, setShowLoader] = useState(false);
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
+  const { billingPlans } = useBillingPlans();
   const {
     tags,
     updateTag,
@@ -102,6 +105,16 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     setLoadingPaymentMethod(false);
   };
 
+  const billingPlanOptions = useMemo(() => {
+    if (!billingPlans) return [];
+
+    return billingPlans.map(b => ({ label: b.name, value: b.id }));
+  }, [billingPlans]);
+
+  const selectedBillingPlan = useMemo(() => {
+    return billingPlans?.find((b) => b.id === company?.billing_plan_id);
+  }, [billingPlans]);
+
   return (
     <>
       {!!companyName && (
@@ -121,6 +134,20 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           <div className="flex flex-col">
             {isAdminOrManager && (
               <>
+                {billingPlans && (
+                  <>
+                    {isAdmin ? (
+                      <Select
+                        options={billingPlanOptions} />
+                    ) : (
+
+                      <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+
+                      </div>
+                    )}
+                    <Divider style={{ background: fontColor2 }} />
+                  </>
+                )}
                 <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
                   {!company.payment_method_name ? (
                     <Button
@@ -148,14 +175,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                         disabled={loadingPaymentMethod}
                       />
                     </div>
-                  )}
-                  {!company.billing_plan_id && (
-                    <>
-                      <MobileDivider />
-                      <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
-                        {t("billing_exempt")}
-                      </div>
-                    </>
                   )}
                 </div>
                 <Divider style={{ background: fontColor2 }} />
