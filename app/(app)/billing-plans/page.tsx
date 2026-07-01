@@ -15,12 +15,13 @@ import { useBillingPlans } from "./useBillingPlans";
 import { BillingPlan } from "@/types/billingPlans";
 import { Button } from "@/app/ui/Button/Button";
 import CreateBillingPlanModal from "./CreateBillingPlanModal";
+import DeleteBillingPlanModal from "./DeleteBillingPlanModal";
 
 const BillingPlansPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { currentUser } = useApi();
-  const { billingPlans, createBillingPlan, updateBillingPlan, } = useBillingPlans();
+  const { billingPlans, createBillingPlan, updateBillingPlan, deleteBillingPlan } = useBillingPlans();
   const [showCreateBillingPlan, setShowCreateBillingPlan] = useState(false);
   const [editBillingPlan, setEditBillingPlan] = useState<BillingPlan | undefined>();
   const [deleteBillingPlanId, setDeleteBillingPlanId] = useState("");
@@ -93,6 +94,14 @@ const BillingPlansPage = () => {
         onSubmit={(request) => {
           setShowCreateBillingPlan(false);
           createBillingPlan(request);
+        }}
+      />
+      <DeleteBillingPlanModal
+        isOpen={!!deleteBillingPlanId}
+        onClose={() => setDeleteBillingPlanId("")}
+        onDelete={() => {
+          deleteBillingPlan(deleteBillingPlanId);
+          setDeleteBillingPlanId("");
         }}
       />
       {showLoader && <Loader />}

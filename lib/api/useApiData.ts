@@ -265,6 +265,10 @@ export const useApiData = () => {
       const url = `/billing-plans/${billingPlanId}`;
       return call(() => http.patch(url, request));
     },
+    async deleteBillingPlan(billingPlanId: string) {
+      const url = `/billing-plans/${billingPlanId}`;
+      return call(() => http.delete(url));
+    },
     async removeUser(userId: string) {
       const url = `/users/${userId}/company`;
       return call(() => http.delete(url));

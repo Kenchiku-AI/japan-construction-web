@@ -57,6 +57,8 @@
   "day": "日",
   "default": "デフォルト",
   "delete": "削除",
+  "delete_billing_plan": "料金プランを削除",
+  "delete_billing_plan_description": "この料金プランを削除してもよろしいですか？",
   "delete_photo": "写真削除",
   "delete_photo_error": "写真の削除中にエラーが発生しました。",
   "delete_report": "報告書を削除",
