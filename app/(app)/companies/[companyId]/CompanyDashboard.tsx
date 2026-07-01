@@ -46,6 +46,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     createProject,
     updateName,
     updateLineChannelSecret,
+    updateBillingPlan,
     templates,
     createTemplate,
     removeUser,
@@ -108,7 +109,10 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const billingPlanOptions = useMemo(() => {
     if (!billingPlans) return [];
 
-    return billingPlans.map(b => ({ label: b.name, value: b.id }));
+    return [
+      { label: t("none"), value: "" },
+      ...billingPlans.map(b => ({ label: b.name, value: b.id }))
+    ];
   }, [billingPlans]);
 
   const selectedBillingPlan = useMemo(() => {
@@ -138,11 +142,29 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                   <>
                     {isAdmin ? (
                       <Select
-                        options={billingPlanOptions} />
+                        options={billingPlanOptions}
+                        placeholder={t("billing_plan")}
+                        value={selectedBillingPlan?.id}
+                        onChange={(value) => {
+                          updateBillingPlan(value as string);
+                        }}
+                      />
                     ) : (
-
                       <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
-
+                        {!selectedBillingPlan ? (
+                          <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
+                            {t("billing_exempt")}
+                          </div>
+                        ) : (
+                          <div className="flex items-center" style={{ color: fontColor1, height: 40 }}>
+                            <div style={{ color: fontColor1 }}>
+                              {selectedBillingPlan.name}
+                              <span className="ml-2">
+                                {`(¥${selectedBillingPlan.amount_jpy}/${t("month")})`}
+                              </span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                     <Divider style={{ background: fontColor2 }} />

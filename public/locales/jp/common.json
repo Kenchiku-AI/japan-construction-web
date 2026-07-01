@@ -12,6 +12,7 @@
   "amount_yen": "月額（円）",
   "billing_enabled": "月額請求有効",
   "billing_exempt": "月額請求停止中",
+  "billing_plan": "料金プラン",
   "billing_plans": "料金プラン",
   "cancel": "キャンセル",
   "close": "完了",

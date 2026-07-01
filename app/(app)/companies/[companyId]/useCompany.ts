@@ -97,6 +97,26 @@ export const useCompany = (companyId: string) => {
     [company, companyId],
   );
 
+  const updateBillingPlan = useCallback(
+    async (billing_plan_id: string) => {
+      setLoading(true);
+
+      try {
+        const response = await api.updateCompany(companyId, { billing_plan_id });
+
+        if (company && response) {
+          setCompany({
+            ...company,
+            billing_plan_id: response.billing_plan_id,
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [company, companyId],
+  );
+
   const createProject = useCallback(
     async (name: string, description?: string) => {
       if (!company) return;
@@ -168,6 +188,7 @@ export const useCompany = (companyId: string) => {
     createProject,
     updateName,
     updateLineChannelSecret,
+    updateBillingPlan,
     templates,
     createTemplate,
     removeUser,
