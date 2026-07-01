@@ -94,7 +94,7 @@ export const Heading: FC<HeadingProps> = ({
         <div className="text-ellipsis text-2xl">{displayTitle}</div>
         {isEditable && (
           <div
-            className="cursor-pointer"
+            className="cursor-pointer pt-1"
             onClick={() => {
               setEditedTitle(displayTitle);
               setShowEdit(true);
