@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo } from "./Icons";
+import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard } from "./Icons";
 import { buttonColor, fontColor2 } from "@/lib/constants";
 import Divider from "./Divider";
 import Link from "next/link";
@@ -94,6 +94,13 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                       path={"/tags"}
                     />
                   </>
+                )}
+                {isAdmin && (
+                  <SidebarItem
+                    name={t("billing_plans")}
+                    icon={() => <CreditCard size={24} />}
+                    path={"/billing-plans"}
+                  />
                 )}
               </div>
               <div className="mt-auto">

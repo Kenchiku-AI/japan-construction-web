@@ -25,7 +25,7 @@ const CompaniesPage = () => {
 
   useEffect(() => {
     if (currentUser && currentUser.role !== UserRole.Admin) {
-      router.push("/");
+      router.push("/home");
     }
   }, [currentUser]);
 

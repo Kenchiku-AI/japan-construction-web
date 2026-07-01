@@ -1,0 +1,19 @@
+.title {
+  font-size: 32px;
+}
+
+.subtitle {
+  color: var(--text-color-2);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty {
+  color: var(--text-color-2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+}

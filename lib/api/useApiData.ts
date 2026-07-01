@@ -46,6 +46,7 @@ import {
 import { authRoutes, publicRoutes } from "../constants";
 import { useModal } from "../modal/ModalContext";
 import { useTranslation } from "react-i18next";
+import { BillingPlan, CreateBillingPlanRequest, UpdateBillingPlanRequest } from "@/types/billingPlans";
 
 export const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -251,6 +252,18 @@ export const useApiData = () => {
     async checkBilling(companyId: string) {
       const url = `/companies/${companyId}/billing/check`;
       return call(() => http.post<SetupIntentResponse>(url));
+    },
+    async getBillingPlans() {
+      const url = "/billing-plans";
+      return call(() => http.get<BillingPlan[]>(url));
+    },
+    async createBillingPlan(request: CreateBillingPlanRequest) {
+      const url = "/billing-plans";
+      return call(() => http.post(url, request));
+    },
+    async updateBillingPlan(billingPlanId: string, request: UpdateBillingPlanRequest) {
+      const url = `/billing-plans/${billingPlanId}`;
+      return call(() => http.patch(url, request));
     },
     async removeUser(userId: string) {
       const url = `/users/${userId}/company`;
