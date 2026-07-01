@@ -111,7 +111,10 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
 
     return [
       { label: t("none"), value: "none" },
-      ...billingPlans.map(b => ({ label: b.name, value: b.id }))
+      ...billingPlans.map(b => ({
+        label: `${b.name} (¥${b.amount_jpy}/${t("month")})`,
+        value: b.id
+      }))
     ];
   }, [billingPlans]);
 
@@ -184,7 +187,10 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     <>
                       <MobileDivider />
                       <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
-                        {t("billing_exempt")}
+                        {selectedBillingPlan ?
+                          `${selectedBillingPlan.name} (¥${selectedBillingPlan.amount_jpy}/${t("month")})` :
+                          t("billing_exempt")
+                        }
                       </div>
                     </>
                   )}
