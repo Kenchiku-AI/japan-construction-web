@@ -13,7 +13,7 @@
 	--green-dark: #5a9e65;
 	--green-pale: #e8f5ea;
 	--section-alt: #f5f6f7;
-	--border: #e4e6e8;
+	--border-color: #e4e6e8;
 }
 
 /* ── Nav ─────────────────────────────────────────────────────────────────── */
@@ -25,7 +25,7 @@
 	z-index: 100;
 	background: rgba(253, 253, 253, 0.92);
 	backdrop-filter: blur(8px);
-	border-bottom: 1px solid var(--border);
+	border-bottom: 1px solid var(--border-color);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -127,7 +127,7 @@
 	right: 0;
 	z-index: 99;
 	background: var(--bg);
-	border-bottom: 1px solid var(--border);
+	border-bottom: 1px solid var(--border-color);
 	padding: 12px 20px 20px;
 	flex-direction: column;
 	gap: 2px;
@@ -151,7 +151,7 @@
 
 .mobileMenuDivider {
 	height: 1px;
-	background: var(--border);
+	background: var(--border-color);
 	margin: 8px 0;
 }
 
@@ -194,7 +194,7 @@
 .btnSecondary {
 	background: transparent;
 	color: var(--text1);
-	border: 1.5px solid var(--border);
+	border: 1.5px solid var(--border-color);
 }
 
 .btnSecondary:hover {
@@ -395,7 +395,7 @@
 	display: flex;
 	align-items: stretch;
 	background: rgba(253, 253, 253, 0.97);
-	border-top: 1px solid var(--border);
+	border-top: 1px solid var(--border-color);
 	margin-top: auto;
 }
 
@@ -405,7 +405,7 @@
 	align-items: center;
 	gap: 12px;
 	padding: 20px 28px;
-	border-right: 1px solid var(--border);
+	border-right: 1px solid var(--border-color);
 }
 
 .statItem:last-child {
@@ -434,7 +434,7 @@
 .screenshotPlaceholder {
 	width: 100%;
 	background: var(--section-alt);
-	border: 1.5px solid var(--border);
+	border: 1.5px solid var(--border-color);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -509,7 +509,7 @@
 
 .featureCard {
 	background: var(--bg);
-	border: 1.5px solid var(--border);
+	border: 1.5px solid var(--border-color);
 	border-radius: 14px;
 	padding: 28px;
 	transition: border-color 0.2s, box-shadow 0.2s;
@@ -630,7 +630,7 @@
 
 .appCard {
 	background: var(--bg);
-	border: 1.5px solid var(--border);
+	border: 1.5px solid var(--border-color);
 	border-radius: 16px;
 	padding: 32px;
 }
@@ -700,7 +700,7 @@
 	aspect-ratio: 9/16;
 	max-width: 200px;
 	background: var(--section-alt);
-	border: 1.5px solid var(--border);
+	border: 1.5px solid var(--border-color);
 	border-radius: 24px;
 	display: flex;
 	flex-direction: column;
@@ -759,7 +759,7 @@
 }
 
 .roleCard {
-	border: 1.5px solid var(--border);
+	border: 1.5px solid var(--border-color);
 	border-radius: 12px;
 	padding: 24px;
 	background: var(--bg);
@@ -823,7 +823,7 @@
 
 /* ── Footer ──────────────────────────────────────────────────────────────── */
 .footer {
-	border-top: 1px solid var(--border);
+	border-top: 1px solid var(--border-color);
 	padding: 40px 24px;
 	background: var(--bg);
 }
@@ -913,11 +913,11 @@
 	.statItem {
 		flex: 1 1 50%;
 		border-right: none;
-		border-bottom: 1px solid var(--border);
+		border-bottom: 1px solid var(--border-color);
 	}
 
 	.statItem:nth-child(odd) {
-		border-right: 1px solid var(--border);
+		border-right: 1px solid var(--border-color);
 	}
 
 	/* Hide desktop nav links, show hamburger */

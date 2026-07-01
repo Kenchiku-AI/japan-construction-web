@@ -46,6 +46,12 @@ input:not([type="checkbox"]):not([type="radio"]),
   transition: padding-top 0.075s ease-in-out;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 textarea {
   border-width: 0;
   padding: 16px;
