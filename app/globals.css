@@ -46,6 +46,16 @@ input:not([type="checkbox"]):not([type="radio"]),
   transition: padding-top 0.075s ease-in-out;
 }
 
+input[type="checkbox"].toggle {
+  width: unset;
+  height: unset;
+  padding: unset;
+  border-width: unset;
+  border-radius: unset;
+  font-size: unset;
+  outline-color: unset;
+}
+
 textarea {
   border-width: 0;
   padding: 16px;

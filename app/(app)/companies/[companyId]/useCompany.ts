@@ -98,10 +98,11 @@ export const useCompany = (companyId: string) => {
   );
 
   const updateBillingPlan = useCallback(
-    async (billing_plan_id: string) => {
+    async (billingPlanId: string) => {
       setLoading(true);
 
       try {
+        const billing_plan_id = billingPlanId === "none" ? null : billingPlanId;
         const response = await api.updateCompany(companyId, { billing_plan_id });
 
         if (company && response) {

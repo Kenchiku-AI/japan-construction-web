@@ -35,18 +35,13 @@ const Select: FC<SelectProps> = ({
   style,
   disabled,
 }) => {
-  const [isUnselected, setIsUnselected] = useState(!value);
-  const [isEmpty, setIsEmpty] = useState(true);
   const [open, setOpen] = useState(false);
-  const valueRef = useRef(value);
   const triggerRef = useRef<HTMLDivElement>(null);
   const [dropdownStyles, setDropdownStyles] = useState<CSSProperties>({});
 
   const selectedOption = useMemo(() => {
     return options.find((o) => o.value === value);
   }, [value, options]);
-
-  const labelShown = !isEmpty;
 
   const backgroundColor = useMemo(() => {
     if (error) return errorColor2;
@@ -55,26 +50,11 @@ const Select: FC<SelectProps> = ({
   }, [error, disabled]);
 
   useEffect(() => {
-    setIsUnselected(!value);
-
-    if (value) {
-      setIsEmpty(false);
-    } else if (!!valueRef.current) {
-      setIsEmpty(true);
-    }
-
-    valueRef.current = value;
-  }, [value]);
-
-  useEffect(() => {
     if (open && triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
-
       const spaceBelow = window.innerHeight - rect.bottom;
       const spaceAbove = rect.top;
-
       const maxHeight = Math.max(spaceBelow, spaceAbove) - 8; // padding from edge
-
       const openUpward = spaceBelow < 200 && spaceAbove > spaceBelow;
 
       setDropdownStyles({
@@ -94,13 +74,12 @@ const Select: FC<SelectProps> = ({
     if (disabled) return;
 
     onChange?.(option?.value);
-    setIsUnselected(!option?.value);
     setOpen(false);
   };
 
   return (
     <div className="relative flex">
-      <div className={styles.label} style={{ opacity: labelShown ? 1 : 0 }}>
+      <div className={styles.label} style={{ opacity: !value ? 0 : 1 }}>
         {placeholder}
       </div>
       <div
@@ -111,8 +90,8 @@ const Select: FC<SelectProps> = ({
         onBlur={() => setOpen(false)}
         style={{
           backgroundColor,
-          color: isUnselected ? fontColor2 : fontColor1,
-          paddingTop: labelShown ? 16 : undefined,
+          color: !value ? fontColor2 : fontColor1,
+          paddingTop: !value ? undefined : 16,
           pointerEvents: disabled ? "none" : undefined,
           outlineColor: "var(--text-color-1)",
           borderBottomLeftRadius: open ? 0 : undefined,

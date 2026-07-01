@@ -73,8 +73,8 @@ const DownloadExcelModal: FC<DownloadExcelModalProps> = ({
 
     return [
       {
-        label: t("none"),
-        value: "",
+        label: t("all_projects"),
+        value: "all",
       },
       ...options,
     ];
@@ -118,7 +118,7 @@ const DownloadExcelModal: FC<DownloadExcelModalProps> = ({
         disabled={!templateId}
         label={t("download")}
         onClick={() => {
-          onSubmit(templateId, disableProject ? undefined : projectId);
+          onSubmit(templateId, disableProject || projectId === "all" ? undefined : projectId);
           reset();
         }}
       />

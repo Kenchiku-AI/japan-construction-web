@@ -10,6 +10,7 @@
   "add_payment_method_description": "プロジェクトを作成するには、お支払い方法の登録が必要です。",
   "add_tag": "タグを追加",
   "amount_yen": "月額（円）",
+  "all_projects": "すべてのプロジェクト",
   "billing_enabled": "月額請求有効",
   "billing_exempt": "月額請求停止中",
   "billing_plan": "料金プラン",

@@ -22,7 +22,7 @@ export type UpdateCompanyRequest = {
   name?: string;
   corporate_number?: string;
   line_channel_secret?: string;
-  billing_plan_id?: string;
+  billing_plan_id?: string | null;
 };
 
 export type UpdateCompanyResponse = {

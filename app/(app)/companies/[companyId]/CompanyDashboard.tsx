@@ -110,14 +110,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     if (!billingPlans) return [];
 
     return [
-      { label: t("none"), value: "" },
+      { label: t("none"), value: "none" },
       ...billingPlans.map(b => ({ label: b.name, value: b.id }))
     ];
   }, [billingPlans]);
 
   const selectedBillingPlan = useMemo(() => {
     return billingPlans?.find((b) => b.id === company?.billing_plan_id);
-  }, [billingPlans]);
+  }, [billingPlans, company?.billing_plan_id]);
 
   return (
     <>
@@ -138,35 +138,17 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           <div className="flex flex-col">
             {isAdminOrManager && (
               <>
-                {billingPlans && (
+                {billingPlans && isAdmin && (
                   <>
-                    {isAdmin ? (
-                      <Select
-                        options={billingPlanOptions}
-                        placeholder={t("billing_plan")}
-                        value={selectedBillingPlan?.id}
-                        onChange={(value) => {
-                          updateBillingPlan(value as string);
-                        }}
-                      />
-                    ) : (
-                      <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
-                        {!selectedBillingPlan ? (
-                          <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
-                            {t("billing_exempt")}
-                          </div>
-                        ) : (
-                          <div className="flex items-center" style={{ color: fontColor1, height: 40 }}>
-                            <div style={{ color: fontColor1 }}>
-                              {selectedBillingPlan.name}
-                              <span className="ml-2">
-                                {`(¥${selectedBillingPlan.amount_jpy}/${t("month")})`}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
+
+                    <Select
+                      options={billingPlanOptions}
+                      placeholder={t("billing_plan")}
+                      value={selectedBillingPlan?.id ?? "none"}
+                      onChange={(value) => {
+                        updateBillingPlan(value as string);
+                      }}
+                    />
                     <Divider style={{ background: fontColor2 }} />
                   </>
                 )}
@@ -197,6 +179,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                         disabled={loadingPaymentMethod}
                       />
                     </div>
+                  )}
+                  {!isAdmin && (
+                    <>
+                      <MobileDivider />
+                      <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
+                        {t("billing_exempt")}
+                      </div>
+                    </>
                   )}
                 </div>
                 <Divider style={{ background: fontColor2 }} />
