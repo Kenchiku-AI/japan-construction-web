@@ -1,5 +1,5 @@
 import { useApi } from "@/lib/api/ApiContext";
-import { invitationTokenKey } from "@/lib/constants";
+import { createCompanyInvitationIdKey, invitationTokenKey } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
 import { UserRole } from "@/types";
@@ -41,6 +41,7 @@ export const useSignup = () => {
         });
         api.setCurrentUser(user);
         sessionStorage.removeItem(invitationTokenKey);
+        sessionStorage.removeItem(createCompanyInvitationIdKey);
         router.push("/");
 
         if (user.role === UserRole.User) {

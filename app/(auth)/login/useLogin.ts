@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 import { UserRole } from "@/types";
-import { existingUserInvitationTokenKey } from "@/lib/constants";
+import { createCompanyInvitationIdKey, existingUserInvitationTokenKey } from "@/lib/constants";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -28,6 +28,7 @@ export const useLogin = () => {
         if (token) {
           await api.acceptInvitation({ token });
           sessionStorage.removeItem(existingUserInvitationTokenKey);
+          sessionStorage.removeItem(createCompanyInvitationIdKey);
 
           const userResponse = await api.getCurrentUser();
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Script from "next/script";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { LineLogo, Logo } from "../ui/Icons";
 import SignupModal from "./signup/SignupModal";
@@ -11,6 +11,7 @@ import { Loader } from "../ui/Loader";
 import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
+import { createCompanyInvitationIdKey } from "@/lib/constants";
 
 // ── Move this metadata export to your layout.tsx or a separate metadata.ts ──
 // export const metadata: Metadata = { ... }
@@ -75,9 +76,38 @@ export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signupCompany } = useApi();
+  const [invitationId, setInvitationId] = useState("");
+  const { signupCompany, resendInvite } = useApi();
   const { showModal } = useModal();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const invId = sessionStorage.getItem(createCompanyInvitationIdKey);
+
+    if (invId) {
+      setInvitationId(invId);
+    }
+  }, []);
+
+  const resendInvitation = async (id: string) => {
+    setLoading(true);
+
+    try {
+      await resendInvite(id);
+
+      showModal({
+        title: t("sign_up_email_sent"),
+        subtitle: t("sign_up_email_sent_description"),
+      });
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
 
   return (
     <>
@@ -104,10 +134,17 @@ export default function LandingPage() {
 
         <div className={styles.navActions}>
           <Link href="/login" className={styles.navLoginLink}>ログイン</Link>
-          <div onClick={() => {
-            setShowSignup(true);
-          }} className={`${styles.btn} ${styles.btnPrimary}`}>
-            無料で試してみる →
+          <div
+            onClick={async () => {
+              if (invitationId) {
+                resendInvitation(invitationId);
+              } else {
+                setShowSignup(true);
+              }
+            }}
+            className={`${styles.btn} ${styles.btnPrimary}`}
+          >
+            {invitationId ? "メールを再送信する" : "無料で試してみる →"}
           </div>
           {/* Hamburger — mobile only */}
           <button
@@ -140,10 +177,17 @@ export default function LandingPage() {
           <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ドキュメント</Link>
           <div className={styles.mobileMenuDivider} />
           <Link href="/login" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ログイン</Link>
-          <div onClick={() => {
-            setShowSignup(true);
-          }} className={`${styles.btn} ${styles.btnPrimary}`}>
-            無料で試してみる →
+          <div
+            onClick={async () => {
+              if (invitationId) {
+                resendInvitation(invitationId);
+              } else {
+                setShowSignup(true);
+              }
+            }}
+            className={`${styles.btn} ${styles.btnPrimary}`}
+          >
+            {invitationId ? "メールを再送信する" : "無料で試してみる →"}
           </div>
         </div>
       )}
@@ -181,10 +225,17 @@ export default function LandingPage() {
             </p>
 
             <div className={styles.heroCta}>
-              <div onClick={() => {
-                setShowSignup(true);
-              }} className={`${styles.btn} ${styles.btnPrimary}`}>
-                無料で試してみる →
+              <div
+                onClick={async () => {
+                  if (invitationId) {
+                    resendInvitation(invitationId);
+                  } else {
+                    setShowSignup(true);
+                  }
+                }}
+                className={`${styles.btn} ${styles.btnPrimary}`}
+              >
+                {invitationId ? "メールを再送信する" : "無料で試してみる →"}
               </div>
               {/* <Link href="/docs" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -530,10 +581,17 @@ export default function LandingPage() {
             管理者が招待リンクを発行するだけで、チーム全員がすぐに使えます。
           </p>
           <div className={`${styles.btnGroup} ${styles.centered}`}>
-            <div onClick={() => {
-              setShowSignup(true);
-            }} className={`${styles.btn} ${styles.btnPrimary}`}>
-              無料で試してみる →
+            <div
+              onClick={async () => {
+                if (invitationId) {
+                  resendInvitation(invitationId);
+                } else {
+                  setShowSignup(true);
+                }
+              }}
+              className={`${styles.btn} ${styles.btnPrimary}`}
+            >
+              {invitationId ? "メールを再送信する" : "無料で試してみる →"}
             </div>
             <Link href="/login" className={`${styles.btn} ${styles.btnSecondary} ${styles.btnLg}`}>
               既存アカウントでログイン
@@ -555,7 +613,7 @@ export default function LandingPage() {
             <Link href="/login">ログイン</Link>
             <Link href="/signup">新規登録</Link>
           </nav>
-          <p className={styles.footerCopy}>© 2026 Kenchiku AI. All rights reserved.</p>
+          <p className={styles.footerCopy}>© 2026 Kenchiku AI</p>
         </div>
       </footer>
 
@@ -570,7 +628,13 @@ export default function LandingPage() {
           setLoading(true);
 
           try {
-            await signupCompany(request);
+            const response = await signupCompany(request);
+            const invId = response.invitation_id;
+
+            if (invId) {
+              sessionStorage.setItem(createCompanyInvitationIdKey, invId);
+              setInvitationId(invId);
+            }
 
             setLoading(false);
             setShowSignup(false);

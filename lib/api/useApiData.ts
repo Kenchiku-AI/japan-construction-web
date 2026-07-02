@@ -31,6 +31,7 @@ import {
   AcceptInvitationResponse,
   UserRole,
   SetupIntentResponse,
+  CreateCompanyResponse,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -239,7 +240,7 @@ export const useApiData = () => {
     },
     async signupCompany(request: CreateCompanyRequest) {
       const url = "/companies";
-      return handleResponse(() => http.post(url, request));
+      return handleResponse(() => http.post<CreateCompanyResponse>(url, request));
     },
     async updateCompany(companyId: string, request: UpdateCompanyRequest) {
       const url = `/companies/${companyId}`;
@@ -404,6 +405,10 @@ export const useApiData = () => {
     async inviteGuest(request: InviteGuestRequest) {
       const url = "/invitations/project-guest";
       return call(() => http.post(url, request));
+    },
+    async resendInvite(invitationId: string) {
+      const url = `/invitations/${invitationId}/resend`;
+      return handleResponse(() => http.post(url));
     },
     async removeGuest(projectId: string, linkId: string) {
       const url = `/projects/${projectId}/guests/${linkId}`;

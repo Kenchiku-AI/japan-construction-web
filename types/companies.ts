@@ -18,6 +18,10 @@ export type CreateCompanyRequest = {
   manager_email?: string;
 };
 
+export type CreateCompanyResponse = {
+  invitation_id?: string;
+};
+
 export type UpdateCompanyRequest = {
   name?: string;
   corporate_number?: string;

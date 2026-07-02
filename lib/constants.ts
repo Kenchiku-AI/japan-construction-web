@@ -13,6 +13,7 @@ export const publicRoutes = [
 export const accessTokenKey = "accessToken";
 export const refreshTokenKey = "refreshToken";
 export const invitationTokenKey = "invitationToken";
+export const createCompanyInvitationIdKey = "createCompanyInvitationId";
 export const existingUserInvitationTokenKey = "existingUserInvitationToken";
 export const bgColor1 = "#FDFDFD";
 export const bgColor2 = "#F2F2F3";
