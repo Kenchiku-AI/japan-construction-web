@@ -98,9 +98,9 @@ export default function LandingPage() {
           <Link href="#features" className={styles.navLink}>機能</Link>
           <Link href="#how-it-works" className={styles.navLink}>ご利用の流れ</Link>
           <Link href="#apps" className={styles.navLink}>アプリ</Link>
-          <Link href="#roles" className={styles.navLink}>導入事例</Link>
-          <Link href="#apps" className={styles.navLink}>会社概要</Link>
-          <Link href="/docs" className={styles.navLink}>資料ダウンロード</Link>
+          <Link href="#line" className={styles.navLink}>LINE連携</Link>
+          <Link href="#roles" className={styles.navLink}>利用対象</Link>
+          <Link href="/docs" className={styles.navLink}>ドキュメント</Link>
         </div>
 
         <div className={styles.navActions}>
@@ -136,9 +136,9 @@ export default function LandingPage() {
           <Link href="#features" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>機能</Link>
           <Link href="#how-it-works" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ご利用の流れ</Link>
           <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>アプリ</Link>
-          <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>導入事例</Link>
-          <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>会社概要</Link>
-          <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>資料ダウンロード</Link>
+          <Link href="#line" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>LINE連携</Link>
+          <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>利用対象</Link>
+          <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ドキュメント</Link>
           <div className={styles.mobileMenuDivider} />
           <Link href="/login" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ログイン</Link>
           <div onClick={() => {
@@ -187,12 +187,12 @@ export default function LandingPage() {
               }} className={`${styles.btn} ${styles.btnPrimary}`}>
                 無料で試してみる →
               </div>
-              <Link href="/docs" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
+              {/* <Link href="/docs" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
                 </svg>
                 3分でわかる Kenchiku AI
-              </Link>
+              </Link> */}
             </div>
           </div>
 
@@ -462,7 +462,7 @@ export default function LandingPage() {
         <div className={styles.sectionInner}>
           <p className={styles.sectionEyebrow}>LINE連携</p>
           <h2 className={styles.sectionTitle}>使い慣れたLINEが、そのまま現場ツールに</h2>
-          <p className={styles.sectionSub}>LINE Messaging API integration for field teams</p>
+          {/* <p className={styles.sectionSub}>LINE Messaging API integration for field teams</p> */}
           <p className={styles.sectionLead}>
             現場担当者がわざわざアプリを覚え直す必要はありません。日常的に使っているLINEから報告書を作成できます。
           </p>
@@ -483,9 +483,8 @@ export default function LandingPage() {
       {/* ── Roles ── */}
       <section id="roles" className={styles.section}>
         <div className={styles.sectionInner}>
-          <p className={styles.sectionEyebrow}>対象ユーザー</p>
+          <p className={styles.sectionEyebrow}>利用対象</p>
           <h2 className={styles.sectionTitle}>建設現場のすべての関係者へ</h2>
-          <p className={styles.sectionSub}>Designed for every role on the job site</p>
           <p className={styles.sectionLead}>
             Kenchiku AIは、施工管理者から協力会社まで、プロジェクトに関わるすべての立場の方が使えるよう設計されています。
           </p>
@@ -498,7 +497,7 @@ export default function LandingPage() {
             ].map((r) => (
               <div key={r.title} className={styles.roleCard}>
                 <h3 className={styles.roleCardTitle}>{r.title}</h3>
-                <p className={styles.roleCardSub}>{r.sub}</p>
+                {/* <p className={styles.roleCardSub}>{r.sub}</p> */}
                 <ul className={styles.roleCardList}>
                   {r.items.map((item) => <li key={item}>{item}</li>)}
                 </ul>
