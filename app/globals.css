@@ -7,7 +7,9 @@
   --foreground: #171717;
   --text-color-1: #23303b;
   --text-color-2: #a4a9ae;
-  --button-color: #6fb37a;
+  --text-color-3: #54585c;
+  --button-color: #4d9458;
+  /* --button-color: #6fb37a; */
   --error-color: #ff6363;
   color-scheme: light;
 }

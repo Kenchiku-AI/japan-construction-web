@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 import { Close } from "@/app/ui/Icons";
 import { Button } from "./Button/Button";
 import { useTranslation } from "react-i18next";
-import { fontColor2 } from "@/lib/constants";
+import { fontColor2, fontColor3 } from "@/lib/constants";
 
 interface ModalProps {
   title?: string;
@@ -39,7 +39,7 @@ const Modal: FC<ModalProps> = ({
         </div>
         {title && <div className="text-ellipsis text-2xl">{title}</div>}
         {subtitle && (
-          <div className="mt-2" style={{ color: fontColor2 }}>
+          <div className="mt-2" style={{ color: fontColor3, whiteSpace: "pre-line" }}>
             {subtitle}
           </div>
         )}

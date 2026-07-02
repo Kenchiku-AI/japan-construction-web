@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useState } from "react";
 import styles from "./page.module.css";
 import { LineLogo, Logo } from "../ui/Icons";
-import CreateCompanyModal from "../(app)/companies/CreateCompanyModal";
 import SignupModal from "./signup/SignupModal";
 import { Loader } from "../ui/Loader";
 import { useApi } from "@/lib/api/ApiContext";
@@ -437,7 +436,7 @@ export default function LandingPage() {
               <div className={styles.appScreenshotWrap}>
                 {/* <ScreenshotPlaceholder aspectRatio="4/3" label="Webアプリのスクリーンショット" borderRadius={10} /> */}
                 <Image
-                  src="/desktop-screenshot.jpeg"
+                  src="/desktop-screenshot.png"
                   alt="Kenchiku AIウェブアプリの管理画面"
                   width={800}
                   height={600}
@@ -576,8 +575,8 @@ export default function LandingPage() {
             setLoading(false);
             setShowSignup(false);
             showModal({
-              title: t("signup_email_sent"),
-              subtitle: t("signup_email_sent_description"),
+              title: t("sign_up_email_sent"),
+              subtitle: t("sign_up_email_sent_description"),
             });
 
           } catch (err) {

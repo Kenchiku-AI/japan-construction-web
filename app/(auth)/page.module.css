@@ -8,8 +8,9 @@
 :root {
 	--bg: #fdfdfd;
 	--text1: #23303b;
-	--text2: #23303b;
-	--green: #6fb37a;
+	--text2: #54585c;
+	--green: #4d9458;
+	/* --green: #6fb37a; */
 	--green-dark: #5a9e65;
 	--green-pale: #e8f5ea;
 	--section-alt: #f5f6f7;
@@ -307,7 +308,7 @@
 }
 
 .heroHeadlineAccent {
-	color: var(--green);
+	color: #a8ddb0;
 }
 
 .heroDescription {
@@ -334,7 +335,7 @@
 	right: 100px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
 	.heroRight {
 		right: 0
 	}
