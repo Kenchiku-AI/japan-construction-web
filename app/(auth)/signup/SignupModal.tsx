@@ -38,16 +38,16 @@ const SignupModal: FC<SignupModalProps> = ({
       subtitle={t("sign_up_modal_description")}
     >
       <div className="my-8 flex flex-col gap-3">
-        <Input value={name} placeholder={t("name")} onChange={setName} />
+        <Input value={name} placeholder={t("company")} onChange={setName} />
         <Input
           value={email}
-          placeholder={t("email")}
+          placeholder={t("company_email")}
           onChange={setEmail}
         />
       </div>
       <Button
         disabled={!name || !email}
-        label={t("create")}
+        label={t("send_registration_link")}
         onClick={() => {
           onSubmit({
             name,
