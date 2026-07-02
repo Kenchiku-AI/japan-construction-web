@@ -68,7 +68,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                   <SidebarItem
                     name={t("home")}
                     icon={() => <Home size={24} />}
-                    path={"/"}
+                    path={"/home"}
                   />
                 )}
                 <SidebarItem
