@@ -41,40 +41,38 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({
       >
         {users.map((u) => (
           <div key={u.id}>
-            <div
-              onClick={() => {
-                onClickUser?.(u);
-                router.push(`/users/${u.id}`);
-              }}
-              className="hover:opacity-50 cursor-pointer"
-            >
-              <div className="md:mx-3">
-                <div className="flex items-center justify-between">
-                  <div
-                    style={{ height: 60 }}
-                    className="flex items-center gap-3"
-                  >
-                    <User />
-                    <div className="flex flex-col">
-                      <div>{`${u.last_name} ${u.first_name}`}</div>
-                      <div
-                        className={styles.subtitle}
-                      >{`${u.email}${u.role === UserRole.Manager ? ` • ${t("manager")}` : ""}`}</div>
-                    </div>
-                  </div>
-                  {currentUser?.role !== "user" && (
+            <div className="md:mx-3 flex items-center justify-between gap-4">
+              <div
+                onClick={() => {
+                  onClickUser?.(u);
+                  router.push(`/users/${u.id}`);
+                }}
+                className="hover:opacity-50 cursor-pointer flex flex-1"
+              >
+                <div
+                  style={{ height: 60 }}
+                  className="flex items-center gap-3"
+                >
+                  <User />
+                  <div className="flex flex-col">
+                    <div>{`${u.last_name} ${u.first_name}`}</div>
                     <div
-                      className="cursor-pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRemove(u.id);
-                      }}
-                    >
-                      <Trash />
-                    </div>
-                  )}
+                      className={styles.subtitle}
+                    >{`${u.email}${u.role === UserRole.Manager ? ` • ${t("manager")}` : ""}`}</div>
+                  </div>
                 </div>
               </div>
+              {currentUser?.role !== "user" && (
+                <div
+                  className="cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(u.id);
+                  }}
+                >
+                  <Trash />
+                </div>
+              )}
             </div>
             <Divider color={fontColor2} />
           </div>
