@@ -640,6 +640,7 @@
 	font-weight: 700;
 	color: var(--text1);
 	margin-bottom: 8px;
+	margin-top: 12px;
 }
 
 .appCardLabel {

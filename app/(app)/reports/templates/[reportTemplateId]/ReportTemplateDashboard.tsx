@@ -15,6 +15,7 @@ import { useReportTemplates } from "../useReportTemplates";
 import { AddUser } from "@/app/ui/Icons";
 import ShareReportTemplateModal from "./ShareReportTemplateModal";
 import Divider from "@/app/ui/Divider";
+import { fontColor2 } from "@/lib/constants";
 
 interface ReportTemplateDashboardProps {
   reportTemplateId: string;
@@ -42,8 +43,8 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
   const isLoaded = useRef(false);
   const canShare =
     reportTemplate?.is_global && currentUser?.role === UserRole.Admin;
-  const canEdit =
-    currentUser?.role === UserRole.Admin || !reportTemplate?.is_global;
+  const canEdit = true;
+  // currentUser?.role === UserRole.Admin || !reportTemplate?.is_global;
 
   useEffect(() => {
     if (isLoaded.current || !reportTemplate) return;
@@ -106,17 +107,20 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
       />
       <Divider />
       {canShare && (
-        <div className="mb-3">
-          <Button
-            variant="tertiary"
-            label={t("share_report_template")}
-            iconLeft={() => <AddUser />}
-            onClick={() => {
-              setShowShare(true);
-            }}
-            style={{ height: 40 }}
-          />
-        </div>
+        <>
+          <div className="mb-3">
+            <Button
+              variant="tertiary"
+              label={t("share_report_template")}
+              iconLeft={() => <AddUser />}
+              onClick={() => {
+                setShowShare(true);
+              }}
+              style={{ height: 40 }}
+            />
+          </div>
+          <Divider style={{ background: fontColor2 }} />
+        </>
       )}
       {!!reportTemplate && (
         <>

@@ -239,7 +239,7 @@ export default function LandingPage() {
             {/* Phone mockup */}
             <div className={styles.phoneMockup}>
               <Image
-                src="/app-screenshot.png"
+                src="/mobile-screenshot-1.png"
                 alt="Kenchiku AIモバイルアプリの画面"
                 width={220}
                 height={476}
@@ -423,7 +423,10 @@ export default function LandingPage() {
           </p>
           <div className={styles.twoCol}>
             <div className={styles.appCard}>
-              <p className={styles.appCardLabel}>Web Application</p>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={styles.statIcon} aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
+              </svg>
+              {/* <p className={styles.appCardLabel}>Web Application</p> */}
               <h3 className={styles.appCardTitle}>Webアプリ</h3>
               <p className={styles.appCardIntro}>オフィス・事務所での管理業務に</p>
               <ul className={styles.appCardList}>
@@ -431,26 +434,37 @@ export default function LandingPage() {
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-              <div className={styles.appScreenshotWrap} aria-hidden="true">
-                <ScreenshotPlaceholder aspectRatio="4/3" label="Webアプリのスクリーンショット" borderRadius={10} />
+              <div className={styles.appScreenshotWrap}>
+                {/* <ScreenshotPlaceholder aspectRatio="4/3" label="Webアプリのスクリーンショット" borderRadius={10} /> */}
+                <Image
+                  src="/desktop-screenshot.jpeg"
+                  alt="Kenchiku AIウェブアプリの管理画面"
+                  width={800}
+                  height={600}
+                  style={{ width: "100%", height: "auto", borderRadius: 10, border: "1.5px solid var(--border-color)" }}
+                />
               </div>
             </div>
             <div className={styles.appCard}>
-              <p className={styles.appCardLabel}>Mobile Application (iOS / Android)</p>
-              <h3 className={styles.appCardTitle}>モバイルアプリ</h3>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={styles.statIcon} aria-hidden="true">
+                <rect x="5" y="2" width="14" height="20" rx="2" /><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none" />
+              </svg>
+              {/* <p className={styles.appCardLabel}>Mobile Application (iOS / Android)</p> */}
+              <h3 className={styles.appCardTitle}>iOS・Androidアプリ</h3>
               <p className={styles.appCardIntro}>現場での情報収集に</p>
               <ul className={styles.appCardList}>
                 {["報告書の新規作成・編集", "音声入力による記録", "写真の撮影・アップロード", "AIによる内容自動整理", "現場からのリアルタイム更新"].map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-              <div className={styles.mobileScreenshotWrap} aria-hidden="true">
-                <div className={styles.mobilePlaceholder}>
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                    <rect x="5" y="2" width="14" height="20" rx="2" /><circle cx="12" cy="17" r="1" />
-                  </svg>
-                  <span>Mobile screenshot<br />（ここに差し替え）</span>
-                </div>
+              <div className={styles.mobileScreenshotWrap}>
+                <Image
+                  src="/mobile-screenshot-2.png"
+                  alt="Kenchiku AIモバイルアプリの画面"
+                  width={400}
+                  height={711}
+                  style={{ width: "100%", maxWidth: 200, height: "auto", borderRadius: 24, border: "1.5px solid var(--border-color)" }}
+                />
               </div>
             </div>
           </div>
