@@ -576,8 +576,8 @@ export default function LandingPage() {
             setLoading(false);
             setShowSignup(false);
             showModal({
-              title: t("company_created"),
-              subtitle: t("company_created_description"),
+              title: t("signup_email_sent"),
+              subtitle: t("signup_email_sent_description"),
             });
 
           } catch (err) {
