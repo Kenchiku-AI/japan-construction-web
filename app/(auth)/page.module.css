@@ -337,6 +337,18 @@
 
 @media (max-width: 1100px) {
 	.heroRight {
+		right: 50
+	}
+}
+
+@media (max-width: 1000px) {
+	.heroRight {
+		right: 20
+	}
+}
+
+@media (max-width: 900px) {
+	.heroRight {
 		right: 0
 	}
 }
