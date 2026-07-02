@@ -331,6 +331,13 @@
 	align-items: center;
 	justify-content: center;
 	min-height: 500px;
+	right: 100px;
+}
+
+@media (max-width: 900px) {
+	.heroRight {
+		right: 0
+	}
 }
 
 /* Callout cards — stacked top-right */
