@@ -578,7 +578,6 @@ export default function LandingPage() {
               title: t("sign_up_email_sent"),
               subtitle: t("sign_up_email_sent_description"),
             });
-
           } catch (err) {
             setLoading(false);
             setShowSignup(false);

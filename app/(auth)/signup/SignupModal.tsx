@@ -4,6 +4,7 @@ import { CreateCompanyRequest } from "@/types/companies";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
+import { emailRegex } from "@/lib/constants";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ const SignupModal: FC<SignupModalProps> = ({
 }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const { t } = useTranslation();
 
   const reset = () => {
@@ -42,13 +44,22 @@ const SignupModal: FC<SignupModalProps> = ({
         <Input
           value={email}
           placeholder={t("company_email")}
-          onChange={setEmail}
+          onChange={(e) => {
+            setEmail(e);
+            setIsEmailInvalid(false);
+          }}
+          error={isEmailInvalid}
         />
       </div>
       <Button
         disabled={!name || !email}
         label={t("send_registration_link")}
         onClick={() => {
+          if (!emailRegex.test(email)) {
+            setIsEmailInvalid(true);
+            return;
+          }
+
           onSubmit({
             name,
             manager_email: email,
