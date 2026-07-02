@@ -96,8 +96,8 @@ export default function LandingPage() {
 
         <div className={styles.navLinks}>
           <Link href="#features" className={styles.navLink}>機能</Link>
-          <Link href="#how-it-works" className={styles.navLink}>活用シーン</Link>
-          <Link href="#signup" className={styles.navLink}>料金プラン</Link>
+          <Link href="#how-it-works" className={styles.navLink}>ご利用の流れ</Link>
+          <Link href="#apps" className={styles.navLink}>アプリ</Link>
           <Link href="#roles" className={styles.navLink}>導入事例</Link>
           <Link href="#apps" className={styles.navLink}>会社概要</Link>
           <Link href="/docs" className={styles.navLink}>資料ダウンロード</Link>
@@ -134,8 +134,8 @@ export default function LandingPage() {
       {menuOpen && (
         <div className={styles.mobileMenu} role="dialog" aria-label="ナビゲーションメニュー">
           <Link href="#features" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>機能</Link>
-          <Link href="#how-it-works" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>活用シーン</Link>
-          <Link href="#signup" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金プラン</Link>
+          <Link href="#how-it-works" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ご利用の流れ</Link>
+          <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>アプリ</Link>
           <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>導入事例</Link>
           <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>会社概要</Link>
           <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>資料ダウンロード</Link>
@@ -416,9 +416,8 @@ export default function LandingPage() {
       {/* ── Web + Mobile ── */}
       <section id="apps" className={styles.section}>
         <div className={styles.sectionInner}>
-          <p className={styles.sectionEyebrow}>Webアプリ &amp; モバイルアプリ</p>
+          <p className={styles.sectionEyebrow}>アプリ</p>
           <h2 className={styles.sectionTitle}>オフィスでも現場でも使えるツール</h2>
-          <p className={styles.sectionSub}>Seamless across web and mobile</p>
           <p className={styles.sectionLead}>
             Webアプリは管理・確認に、モバイルアプリは現場での入力に。両方がリアルタイムで同期します。
           </p>
