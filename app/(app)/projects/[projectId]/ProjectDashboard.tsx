@@ -290,8 +290,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
           <Divider />
           <WorkItemsList
-            workItems={project.workItems?.slice(0, 5) ?? []}
-            isEmpty={(project.workItems ?? []).length === 0}
+            workItems={project.work_items?.slice(0, 5) ?? []}
+            isEmpty={(project.work_items ?? []).length === 0}
             onEdit={(workItem) => {
               setEditWorkItem(workItem);
             }}
