@@ -39,7 +39,7 @@ const WorkItems: FC<WorkItemsProps> = ({ projectId }) => {
       />
       <Divider />
       <WorkItemsList
-        workItems={project?.workItems?.slice(0, 5) ?? []}
+        workItems={project?.workItems ?? []}
         isEmpty={(project?.workItems ?? []).length === 0}
         onEdit={(workItem) => {
           setEditWorkItem(workItem);
