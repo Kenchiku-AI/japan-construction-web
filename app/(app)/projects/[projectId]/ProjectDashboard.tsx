@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { CompanyGuest, UserRole } from "@/types";
+import { CompanyGuest, UserRole, WorkItem } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Check, Close, Download, Plus } from "@/app/ui/Icons";
@@ -24,6 +24,9 @@ import RemoveGuestModal from "./RemoveGuestModal";
 import { Loader } from "@/app/ui/Loader";
 import { useModal } from "@/lib/modal/ModalContext";
 import LineLinkCodeButton from "../../../ui/LineLinkCodeButton";
+import WorkItemsList from "./WorkItemsList";
+import CreateWorkItemModal from "./CreateWorkItemModal";
+import EditWorkItemModal from "./EditWorkItemModal";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -54,6 +57,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
+  const [showCreateWorkItem, setShowCreateWorkItem] = useState(false);
+  const [editWorkItem, setEditWorkItem] = useState<WorkItem>();
+  const [workItemToDelete, setWorkItemToDelete] = useState<WorkItem>();
   const [showLoader, setShowLoader] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
   const { showModal } = useModal();
@@ -267,6 +273,35 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               setGuestToRemove(guest);
             }}
           />
+          <div className="flex justify-between mt-12">
+            <div className="self-end">{t("work_items")}</div>
+            {isEditable && (
+              <Button
+                variant="tertiary"
+                label={t("create_work_item")}
+                iconLeft={() => <Plus />}
+                onClick={() => {
+                  setShowCreateWorkItem(true);
+                }}
+                style={{ height: "auto" }}
+                iconOnlyMobile
+              />
+            )}
+          </div>
+          <Divider />
+          <WorkItemsList
+            workItems={project.workItems?.slice(0, 5) ?? []}
+            isEmpty={(project.workItems ?? []).length === 0}
+            onEdit={(workItem) => {
+              setEditWorkItem(workItem);
+            }}
+            onDelete={(workItem) => {
+              setWorkItemToDelete(workItem);
+            }}
+            onViewAll={() => {
+              router.push(`projects/${projectId}/work-items`);
+            }}
+          />
         </>
       )}
       <CreateReportModal
@@ -322,6 +357,25 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
 
           removeGuest(guestToRemove);
           setGuestToRemove(undefined);
+        }}
+      />
+      <CreateWorkItemModal
+        isOpen={showCreateWorkItem}
+        onClose={() => {
+          setShowCreateWorkItem(false);
+        }}
+        onCreate={(name, description) => {
+
+        }}
+      />
+      <EditWorkItemModal
+        isOpen={!!editWorkItem}
+        workItem={editWorkItem}
+        onClose={() => {
+          setEditWorkItem(undefined);
+        }}
+        onSubmit={(request) => {
+
         }}
       />
       {showLoader && <Loader />}
