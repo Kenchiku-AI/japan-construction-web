@@ -278,7 +278,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             {isEditable && (
               <Button
                 variant="tertiary"
-                label={t("create_work_item")}
+                label={t("create_action_item")}
                 iconLeft={() => <Plus />}
                 onClick={() => {
                   setShowCreateActionItem(true);

@@ -34,7 +34,7 @@ const CreateActionItemModal: FC<CreateActionItemModalProps> = ({
         onClose();
         reset();
       }}
-      title={t("create_work_item")}
+      title={t("create_action_item")}
     >
       <div className="flex flex-col gap-3 mb-6">
         <Input
