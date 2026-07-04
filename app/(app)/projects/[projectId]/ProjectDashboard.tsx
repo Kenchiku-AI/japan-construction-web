@@ -299,7 +299,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               setActionItemToDelete(actionItem);
             }}
             onViewAll={() => {
-              router.push(`projects/${projectId}/work-items`);
+              router.push(`projects/${projectId}/action-items`);
             }}
           />
         </>
