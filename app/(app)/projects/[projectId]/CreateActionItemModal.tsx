@@ -5,13 +5,13 @@ import { Input } from "@/app/ui/Input/Input";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Modal from "@/app/ui/Modal";
 
-interface CreateWorkItemModalProps {
+interface CreateActionItemModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCreate: (name: string, description: string) => void;
 }
 
-const CreateWorkItemModal: FC<CreateWorkItemModalProps> = ({
+const CreateActionItemModal: FC<CreateActionItemModalProps> = ({
   isOpen,
   onClose,
   onCreate,
@@ -64,4 +64,4 @@ const CreateWorkItemModal: FC<CreateWorkItemModalProps> = ({
   );
 };
 
-export default CreateWorkItemModal;
+export default CreateActionItemModal;

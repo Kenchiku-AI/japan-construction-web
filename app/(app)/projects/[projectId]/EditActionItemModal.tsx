@@ -3,45 +3,45 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
-import { UpdateWorkItemRequest, WorkItem, WorkItemStatus } from "@/types";
+import { UpdateActionItemRequest, ActionItem, ActionItemStatus } from "@/types";
 import Select from "@/app/ui/Select/Select";
 
-interface EditWorkItemModalProps {
+interface EditActionItemModalProps {
   isOpen: boolean;
-  workItem?: WorkItem;
+  actionItem?: ActionItem;
   onClose: () => void;
-  onSubmit: (request: UpdateWorkItemRequest) => void;
+  onSubmit: (request: UpdateActionItemRequest) => void;
 }
 
-const EditWorkItemModal: FC<EditWorkItemModalProps> = ({
+const EditActionItemModal: FC<EditActionItemModalProps> = ({
   isOpen,
-  workItem,
+  actionItem,
   onClose,
   onSubmit,
 }) => {
-  const [name, setName] = useState(workItem?.name ?? "");
-  const [description, setDescription] = useState(workItem?.description ?? "");
-  const [status, setStatus] = useState<WorkItemStatus>(workItem?.status ?? WorkItemStatus.New);
+  const [name, setName] = useState(actionItem?.name ?? "");
+  const [description, setDescription] = useState(actionItem?.description ?? "");
+  const [status, setStatus] = useState<ActionItemStatus>(actionItem?.status ?? ActionItemStatus.New);
   const { t } = useTranslation();
 
   const reset = () => {
     setTimeout(() => {
       setName("");
       setDescription("");
-      setStatus(WorkItemStatus.New);
+      setStatus(ActionItemStatus.New);
     }, 500);
   };
 
   useEffect(() => {
-    if (isOpen && workItem) {
-      setName(workItem.name);
-      setDescription(workItem.description);
-      setStatus(workItem.status);
+    if (isOpen && actionItem) {
+      setName(actionItem.name);
+      setDescription(actionItem.description);
+      setStatus(actionItem.status);
     }
   }, [isOpen]);
 
   const statusOptions = useMemo(() => {
-    const values = Object.values(WorkItemStatus);
+    const values = Object.values(ActionItemStatus);
 
     return values.map((v) => ({
       label: t(v),
@@ -84,4 +84,4 @@ const EditWorkItemModal: FC<EditWorkItemModalProps> = ({
   );
 };
 
-export default EditWorkItemModal;
+export default EditActionItemModal;

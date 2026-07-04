@@ -1,22 +1,22 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { WorkItem } from "@/types";
+import { ActionItem } from "@/types";
 import styles from "./page.module.css";
 import { ClipboardCheck, Edit, Tag, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { fontColor1, fontColor2 } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 
-interface WorkItemsListProps {
-  workItems: WorkItem[];
+interface ActionItemsListProps {
+  actionItems: ActionItem[];
   isEmpty?: boolean;
-  onEdit?: (workItem: WorkItem) => void;
-  onDelete?: (workItem: WorkItem) => void;
+  onEdit?: (actionItem: ActionItem) => void;
+  onDelete?: (actionItem: ActionItem) => void;
   onViewAll?: () => void;
 }
 
-const WorkItemsList: FC<WorkItemsListProps> = ({
-  workItems,
+const ActionItemsList: FC<ActionItemsListProps> = ({
+  actionItems,
   isEmpty,
   onEdit,
   onDelete,
@@ -36,7 +36,7 @@ const WorkItemsList: FC<WorkItemsListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {workItems.map((w) => (
+        {actionItems.map((w) => (
           <div key={w.id}>
             <div className="md:mx-3">
               <div className="flex items-center justify-between">
@@ -85,4 +85,4 @@ const WorkItemsList: FC<WorkItemsListProps> = ({
   );
 };
 
-export default WorkItemsList;
+export default ActionItemsList;

@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { CompanyGuest, UserRole, WorkItem } from "@/types";
+import { CompanyGuest, UserRole, ActionItem } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Check, Close, Download, Plus } from "@/app/ui/Icons";
@@ -24,9 +24,9 @@ import RemoveGuestModal from "./RemoveGuestModal";
 import { Loader } from "@/app/ui/Loader";
 import { useModal } from "@/lib/modal/ModalContext";
 import LineLinkCodeButton from "../../../ui/LineLinkCodeButton";
-import WorkItemsList from "./WorkItemsList";
-import CreateWorkItemModal from "./CreateWorkItemModal";
-import EditWorkItemModal from "./EditWorkItemModal";
+import ActionItemsList from "./ActionItemsList";
+import CreateActionItemModal from "./CreateActionItemModal";
+import EditActionItemModal from "./EditActionItemModal";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -57,9 +57,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
-  const [showCreateWorkItem, setShowCreateWorkItem] = useState(false);
-  const [editWorkItem, setEditWorkItem] = useState<WorkItem>();
-  const [workItemToDelete, setWorkItemToDelete] = useState<WorkItem>();
+  const [showCreateActionItem, setShowCreateActionItem] = useState(false);
+  const [editActionItem, setEditActionItem] = useState<ActionItem>();
+  const [actionItemToDelete, setActionItemToDelete] = useState<ActionItem>();
   const [showLoader, setShowLoader] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
   const { showModal } = useModal();
@@ -274,14 +274,14 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             }}
           />
           <div className="flex justify-between mt-12">
-            <div className="self-end">{t("work_items")}</div>
+            <div className="self-end">{t("action_items")}</div>
             {isEditable && (
               <Button
                 variant="tertiary"
                 label={t("create_work_item")}
                 iconLeft={() => <Plus />}
                 onClick={() => {
-                  setShowCreateWorkItem(true);
+                  setShowCreateActionItem(true);
                 }}
                 style={{ height: "auto" }}
                 iconOnlyMobile
@@ -289,14 +289,14 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             )}
           </div>
           <Divider />
-          <WorkItemsList
-            workItems={project.work_items?.slice(0, 5) ?? []}
-            isEmpty={(project.work_items ?? []).length === 0}
-            onEdit={(workItem) => {
-              setEditWorkItem(workItem);
+          <ActionItemsList
+            actionItems={project.action_items?.slice(0, 5) ?? []}
+            isEmpty={(project.action_items ?? []).length === 0}
+            onEdit={(actionItem) => {
+              setEditActionItem(actionItem);
             }}
-            onDelete={(workItem) => {
-              setWorkItemToDelete(workItem);
+            onDelete={(actionItem) => {
+              setActionItemToDelete(actionItem);
             }}
             onViewAll={() => {
               router.push(`projects/${projectId}/work-items`);
@@ -359,20 +359,20 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           setGuestToRemove(undefined);
         }}
       />
-      <CreateWorkItemModal
-        isOpen={showCreateWorkItem}
+      <CreateActionItemModal
+        isOpen={showCreateActionItem}
         onClose={() => {
-          setShowCreateWorkItem(false);
+          setShowCreateActionItem(false);
         }}
         onCreate={(name, description) => {
 
         }}
       />
-      <EditWorkItemModal
-        isOpen={!!editWorkItem}
-        workItem={editWorkItem}
+      <EditActionItemModal
+        isOpen={!!editActionItem}
+        actionItem={editActionItem}
         onClose={() => {
-          setEditWorkItem(undefined);
+          setEditActionItem(undefined);
         }}
         onSubmit={(request) => {
 

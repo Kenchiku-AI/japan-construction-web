@@ -6,7 +6,7 @@ export type Project = {
   description: string;
   line_link_code: string;
   reports?: Report[];
-  work_items?: WorkItem[];
+  action_items?: ActionItem[];
   status: ProjectStatus;
   company_id: string;
   company_name?: string;
@@ -30,27 +30,27 @@ export type UpdateProjectRequest = {
   status?: string;
 };
 
-export type WorkItem = {
+export type ActionItem = {
   id: string;
   name: string;
   description: string;
-  status: WorkItemStatus;
+  status: ActionItemStatus;
   created_at: string;
   updated_at: string;
 }
 
-export type CreateWorkItemRequest = {
+export type CreateActionItemRequest = {
   name: string;
   description: string;
 }
 
-export type UpdateWorkItemRequest = {
+export type UpdateActionItemRequest = {
   name: string;
   description: string;
-  status: WorkItemStatus;
+  status: ActionItemStatus;
 }
 
-export enum WorkItemStatus {
+export enum ActionItemStatus {
   New = "new",
   Scheduled = "scheduled",
   InProgress = "in_progress",
