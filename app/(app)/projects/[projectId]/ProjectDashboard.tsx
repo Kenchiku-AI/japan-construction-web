@@ -292,11 +292,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           <ActionItemsList
             actionItems={project.action_items?.slice(0, 5) ?? []}
             isEmpty={(project.action_items ?? []).length === 0}
-            onEdit={(actionItem) => {
+            onClickActionItem={(actionItem) => {
               setEditActionItem(actionItem);
-            }}
-            onDelete={(actionItem) => {
-              setActionItemToDelete(actionItem);
             }}
             onViewAll={() => {
               router.push(`projects/${projectId}/action-items`);

@@ -9,17 +9,15 @@ import { Button } from "@/app/ui/Button/Button";
 
 interface ActionItemsListProps {
   actionItems: ActionItem[];
-  isEmpty?: boolean;
-  onEdit?: (actionItem: ActionItem) => void;
-  onDelete?: (actionItem: ActionItem) => void;
+  isEmpty: boolean;
+  onClickActionItem: (actionItem: ActionItem) => void;
   onViewAll?: () => void;
 }
 
 const ActionItemsList: FC<ActionItemsListProps> = ({
   actionItems,
   isEmpty,
-  onEdit,
-  onDelete,
+  onClickActionItem,
   onViewAll
 }) => {
   const { t } = useTranslation();
@@ -36,36 +34,31 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {actionItems.map((w) => (
-          <div key={w.id}>
-            <div className="md:mx-3">
-              <div className="flex items-center justify-between">
-                <div
-                  style={{ height: 60, minWidth: 0 }}
-                  className="flex items-center gap-3"
-                >
-                  <div>
-                    <ClipboardCheck />
-                  </div>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ color: fontColor1 }}>{w.name}</div>
-                    <div className={styles.subtitle}>{w.description}</div>
-                  </div>
-                </div>
-                <div className="flex gap-3 md:gap-5 items-center">
-                  {onEdit && (
-                    <div
-                      className="cursor-pointer pb-1"
-                      onClick={() => onEdit(w)}
-                    >
-                      <Edit />
+        {actionItems.map((a) => (
+          <div key={a.id}>
+            <div
+              onClick={() => {
+                onClickActionItem(a);
+              }}
+              className={"hover:opacity-50 cursor-pointer"}
+            >
+              <div className="md:mx-3">
+                <div className="flex items-center justify-between">
+                  <div
+                    style={{ height: 60, minWidth: 0 }}
+                    className="flex items-center gap-3"
+                  >
+                    <div>
+                      <ClipboardCheck />
                     </div>
-                  )}
-                  {onDelete && (
-                    <div className="cursor-pointer" onClick={() => onDelete(w)}>
-                      <Trash />
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ color: fontColor1 }}>{a.name}</div>
+                      <div className={styles.subtitle}>{a.description}</div>
                     </div>
-                  )}
+                  </div>
+                  <div className="flex items-center">
+                    {t(a.status)}
+                  </div>
                 </div>
               </div>
             </div>
