@@ -41,11 +41,8 @@ const ActionItems: FC<ActionItemsProps> = ({ projectId }) => {
       <ActionItemsList
         actionItems={project?.action_items ?? []}
         isEmpty={(project?.action_items ?? []).length === 0}
-        onEdit={(actionItem) => {
+        onClickActionItem={(actionItem) => {
           setEditActionItem(actionItem);
-        }}
-        onDelete={(actionItem) => {
-          setActionItemToDelete(actionItem);
         }}
       />
       <CreateActionItemModal
