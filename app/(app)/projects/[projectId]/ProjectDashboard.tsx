@@ -192,6 +192,32 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             />
           </div>
           <div className="flex justify-between mt-12">
+            <div className="self-end">{t("action_items")}</div>
+            {isEditable && (
+              <Button
+                variant="tertiary"
+                label={t("create_action_item")}
+                iconLeft={() => <Plus />}
+                onClick={() => {
+                  setShowCreateActionItem(true);
+                }}
+                style={{ height: "auto" }}
+                iconOnlyMobile
+              />
+            )}
+          </div>
+          <Divider />
+          <ActionItemsList
+            actionItems={project.action_items?.slice(0, 5) ?? []}
+            isEmpty={(project.action_items ?? []).length === 0}
+            onClickActionItem={(actionItem) => {
+              setEditActionItem(actionItem);
+            }}
+            onViewAll={() => {
+              router.push(`projects/${projectId}/action-items`);
+            }}
+          />
+          <div className="flex justify-between mt-12">
             <div className="self-end">{t("reports")}</div>
             <div className="flex gap-6">
               {(project.reports?.length ?? 0) > 0 && (
@@ -271,32 +297,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             isEmpty={projectGuests.length === 0}
             onDelete={(guest) => {
               setGuestToRemove(guest);
-            }}
-          />
-          <div className="flex justify-between mt-12">
-            <div className="self-end">{t("action_items")}</div>
-            {isEditable && (
-              <Button
-                variant="tertiary"
-                label={t("create_action_item")}
-                iconLeft={() => <Plus />}
-                onClick={() => {
-                  setShowCreateActionItem(true);
-                }}
-                style={{ height: "auto" }}
-                iconOnlyMobile
-              />
-            )}
-          </div>
-          <Divider />
-          <ActionItemsList
-            actionItems={project.action_items?.slice(0, 5) ?? []}
-            isEmpty={(project.action_items ?? []).length === 0}
-            onClickActionItem={(actionItem) => {
-              setEditActionItem(actionItem);
-            }}
-            onViewAll={() => {
-              router.push(`projects/${projectId}/action-items`);
             }}
           />
         </>
