@@ -823,6 +823,208 @@
 	flex-shrink: 0;
 }
 
+/* ── Pricing ─────────────────────────────────────────────────────────────── */
+.pricingWrap {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	max-width: 860px;
+}
+
+.pricingBanner {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: #fef9e7;
+	border: 1.5px solid #f5d87a;
+	color: #8a6a00;
+	font-size: 13px;
+	font-weight: 700;
+	padding: 8px 16px;
+	border-radius: 8px;
+	align-self: flex-start;
+}
+
+.pricingCard {
+	background: var(--bg);
+	border: 1.5px solid var(--border);
+	border-radius: 20px;
+	display: grid;
+	grid-template-columns: 300px auto 1fr;
+	overflow: hidden;
+	box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
+}
+
+.pricingLeft {
+	padding: 36px 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.pricingBadge {
+	display: inline-block;
+	background: var(--green);
+	color: #fff;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	padding: 4px 12px;
+	border-radius: 20px;
+	align-self: flex-start;
+}
+
+.pricingName {
+	font-size: 22px;
+	font-weight: 700;
+	color: var(--text1);
+	margin: 0;
+}
+
+.pricingPrice {
+	display: flex;
+	align-items: baseline;
+	gap: 4px;
+	line-height: 1;
+}
+
+.pricingCurrency {
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--text1);
+}
+
+.pricingAmount {
+	font-size: 48px;
+	font-weight: 700;
+	color: var(--text1);
+	letter-spacing: -0.02em;
+}
+
+.pricingPer {
+	font-size: 14px;
+	color: var(--text2);
+}
+
+.pricingTrialNote {
+	font-size: 13px;
+	color: var(--text2);
+	margin: -8px 0 0;
+}
+
+.pricingMeta {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.pricingMetaItem {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	color: var(--text2);
+}
+
+.pricingMetaItem svg {
+	color: var(--green);
+	flex-shrink: 0;
+}
+
+.pricingCta {
+	margin-top: 4px;
+}
+
+.pricingCta a {
+	width: 100%;
+	justify-content: center;
+}
+
+.pricingEarlyAdopter {
+	background: var(--green-pale);
+	border: 1px solid rgba(30, 90, 168, 0.15);
+	border-radius: 10px;
+	padding: 14px 16px;
+	margin-top: 4px;
+}
+
+.pricingEarlyAdopterTitle {
+	font-size: 13px;
+	font-weight: 700;
+	color: var(--text1);
+	margin-bottom: 4px;
+}
+
+.pricingEarlyAdopterDesc {
+	font-size: 12px;
+	color: var(--text2);
+	line-height: 1.7;
+}
+
+.pricingDivider {
+	width: 1px;
+	background: var(--border);
+	margin: 24px 0;
+}
+
+.pricingRight {
+	padding: 36px 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+}
+
+.pricingRecommendTitle {
+	font-size: 13px;
+	font-weight: 700;
+	color: var(--text1);
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	margin-bottom: 12px;
+}
+
+.pricingList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.pricingListItem {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	font-size: 14px;
+	color: var(--text2);
+	line-height: 1.5;
+}
+
+.pricingCheck {
+	color: var(--green);
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+.pricingCheckAlt {
+	color: var(--text2);
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+@media (max-width: 900px) {
+	.pricingCard {
+		grid-template-columns: 1fr;
+	}
+
+	.pricingDivider {
+		width: auto;
+		height: 1px;
+		margin: 0 24px;
+	}
+}
+
 /* ── CTA band ────────────────────────────────────────────────────────────── */
 .ctaBand {
 	padding-top: 100px;
