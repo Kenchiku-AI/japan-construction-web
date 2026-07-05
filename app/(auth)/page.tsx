@@ -129,6 +129,7 @@ export default function LandingPage() {
           <Link href="#apps" className={styles.navLink}>アプリ</Link>
           <Link href="#line" className={styles.navLink}>LINE連携</Link>
           <Link href="#roles" className={styles.navLink}>利用対象</Link>
+          <Link href="#pricing" className={styles.navLink}>料金プラン</Link>
           <Link href="/docs" className={styles.navLink}>ドキュメント</Link>
         </div>
 
@@ -174,6 +175,7 @@ export default function LandingPage() {
           <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>アプリ</Link>
           <Link href="#line" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>LINE連携</Link>
           <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>利用対象</Link>
+          <Link href="#pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金プラン</Link>
           <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ドキュメント</Link>
           <div className={styles.mobileMenuDivider} />
           <Link href="/login" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ログイン</Link>
@@ -567,6 +569,118 @@ export default function LandingPage() {
                 </ul>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pricing ── */}
+      <section id="pricing" className={`${styles.section} ${styles.sectionAlt}`}>
+        <div className={styles.sectionInner}>
+          <p className={styles.sectionEyebrow}>料金</p>
+          <h2 className={styles.sectionTitle}>シンプルな料金プラン</h2>
+          <p className={styles.sectionSub}>Simple, transparent pricing</p>
+
+          <div className={styles.pricingWrap}>
+
+            {/* Early adopter banner */}
+            <div className={styles.pricingBanner}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="none" />
+              </svg>
+              早期導入企業募集中 — 現在の料金で継続してご利用いただけます
+            </div>
+
+            <div className={styles.pricingCard}>
+
+              {/* Left: plan details */}
+              <div className={styles.pricingLeft}>
+                <div className={styles.pricingBadge}>30日間無料</div>
+                <h3 className={styles.pricingName}>スタータープラン</h3>
+                <div className={styles.pricingPrice}>
+                  <span className={styles.pricingCurrency}>¥</span>
+                  <span className={styles.pricingAmount}>19,800</span>
+                  <span className={styles.pricingPer}>/月（税込）</span>
+                </div>
+                <p className={styles.pricingTrialNote}>30日間無料でお試しいただけます</p>
+
+                <div className={styles.pricingMeta}>
+                  <span className={styles.pricingMetaItem}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                      <polyline points="9 12 11 14 15 10" /><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    初期費用：無料
+                  </span>
+                  <span className={styles.pricingMetaItem}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    契約期間の縛り：なし
+                  </span>
+                </div>
+
+                <div className={styles.pricingCta}>
+                  <a href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
+                    30日間無料で試す →
+                  </a>
+                </div>
+
+                <div className={styles.pricingEarlyAdopter}>
+                  <p className={styles.pricingEarlyAdopterTitle}>早期導入企業募集中</p>
+                  <p className={styles.pricingEarlyAdopterDesc}>
+                    現在、初期導入企業様と一緒にサービスを改善しています。早期導入企業様は現在の料金で継続してご利用いただけます。
+                  </p>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className={styles.pricingDivider} aria-hidden="true" />
+
+              {/* Right: two columns of features */}
+              <div className={styles.pricingRight}>
+                <div className={styles.pricingRecommend}>
+                  <p className={styles.pricingRecommendTitle}>こんな会社におすすめです</p>
+                  <ul className={styles.pricingList}>
+                    {[
+                      "小規模〜中規模の建設会社",
+                      "電気・設備・空調・配管・リフォーム工事",
+                      "現場の報告書作成を効率化したい会社",
+                    ].map((item) => (
+                      <li key={item} className={styles.pricingListItem}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={styles.pricingCheckAlt} aria-hidden="true">
+                          <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className={styles.pricingFeatures}>
+                  <p className={styles.pricingRecommendTitle}>プラン内容</p>
+                  <ul className={styles.pricingList}>
+                    {[
+                      "AI報告書作成",
+                      "LINE連携",
+                      "音声入力・文字起こし",
+                      "写真のAI説明・タグ付け",
+                      "カスタム報告書テンプレート",
+                      "プロジェクト管理",
+                      "ゲストユーザー招待",
+                      "AIによるLINEからのタスク抽出",
+                      "メールサポート",
+                    ].map((item) => (
+                      <li key={item} className={styles.pricingListItem}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={styles.pricingCheck} aria-hidden="true">
+                          <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </section>
