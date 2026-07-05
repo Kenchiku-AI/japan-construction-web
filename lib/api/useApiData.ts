@@ -149,23 +149,23 @@ export const useApiData = () => {
   };
 
   const refresh = async <T>(callback: () => Promise<AxiosResponse<T>>) => {
-    try {
-      if (isRefreshing) {
-        return new Promise<T>((resolve, reject) => {
-          requestQueue.push({
-            resolve: async () => {
-              try {
-                const res = await handleResponse(callback);
-                resolve(res);
-              } catch (err) {
-                reject(err);
-              }
-            },
-            reject,
-          });
+    if (isRefreshing) {
+      return new Promise<T>((resolve, reject) => {
+        requestQueue.push({
+          resolve: async () => {
+            try {
+              const res = await handleResponse(callback);
+              resolve(res);
+            } catch (err) {
+              reject(err);
+            }
+          },
+          reject,
         });
-      }
+      });
+    }
 
+    try {
       isRefreshing = true;
       await http.post("/auth/refresh");
 
@@ -179,7 +179,10 @@ export const useApiData = () => {
       requestQueue = [];
 
       queue.forEach((item) => item.reject(err));
-      await logout();
+
+      if (!isRefreshing) {
+        await logout();
+      }
     } finally {
       isRefreshing = false;
     }

@@ -52,12 +52,15 @@ const ReportsList: FC<ReportsListProps> = ({
         </div>
       ))}
       {onViewAll && (
-        <Button
-          variant="tertiary"
-          style={{ marginLeft: 20 }}
-          label={t("view_all")}
-          onClick={onViewAll}
-        />
+        <>
+          <Divider />
+          <Button
+            variant="tertiary"
+            style={{ marginLeft: 20 }}
+            label={t("view_all")}
+            onClick={onViewAll}
+          />
+        </>
       )}
     </>
   );
