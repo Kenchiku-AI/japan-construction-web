@@ -139,7 +139,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
               </div>
             )}
           </div>
-          <Divider />
+          <Divider style={{ background: fontColor2 }} />
           <div className="flex w-full justify-between gap-8 py-1">
             <Button
               variant="tertiary"
@@ -184,7 +184,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
               />
             )}
           </div>
-          <Divider style={{ background: fontColor2 }} />
+          <Divider />
           <div className="md:hidden mb-4" style={photoStyle}>
             <Photo image={image} />
           </div>
@@ -228,9 +228,8 @@ const Photo: FC<PhotoProps> = ({ image }) => {
       src={image.download_url}
       fill
       sizes="(max-width: 564px) 100vw"
-      className={`object-cover transition-opacity duration-200 ${
-        loaded ? "opacity-100" : "opacity-0"
-      }`}
+      className={`object-cover transition-opacity duration-200 ${loaded ? "opacity-100" : "opacity-0"
+        }`}
       onError={(e) => {
         e.currentTarget.style.display = "none";
       }}
@@ -294,7 +293,7 @@ const Tags: FC<TagsProps> = ({
           />
         )}
       </div>
-      <Divider />
+      <Divider style={{ background: fontColor2 }} />
       {!imageTags?.length ? (
         <div className={styles.empty}>{t("empty_tags_description")}</div>
       ) : (
@@ -356,11 +355,11 @@ const Tags: FC<TagsProps> = ({
                 <Close />
               </div>
             </div>
-            <Divider style={{ margin: 0 }} />
+            <Divider style={{ margin: 0, background: fontColor2, }} />
             {availableTags.map((t, i) => (
               <div key={`add_tag_${t.id}`}>
                 {i !== 0 && (
-                  <Divider style={{ background: fontColor2, margin: 0 }} />
+                  <Divider style={{ margin: 0 }} />
                 )}
                 <div
                   className="flex gap-2 cursor-pointer px-2 items-center"
