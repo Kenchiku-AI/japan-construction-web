@@ -6,7 +6,7 @@ import { useProjects } from "./useProjects";
 import { useRouter } from "next/navigation";
 import { Hardhat, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { fontColor2 } from "@/lib/constants";
+import { cardClass, fontColor2 } from "@/lib/constants";
 import { FC, useState } from "react";
 import { Project, ProjectStatus, UserRole } from "@/types";
 import styles from "./page.module.css";
@@ -40,7 +40,7 @@ const ProjectsPage = () => {
             iconLeft={() => <Plus />}
             onClick={() => {
               if (
-                currentUser?.role !== UserRole.Admin && 
+                currentUser?.role !== UserRole.Admin &&
                 currentUser?.company?.needs_payment_method
               ) {
                 showModal({
@@ -57,35 +57,36 @@ const ProjectsPage = () => {
           />
         )}
       </div>
-      <Divider />
-      {loaded && projects?.length === 0 && (
-        <div className={styles.empty}>{t("empty_projects_description")}</div>
-      )}
-      {projects.map((p) => (
-        <div key={p.id}>
-          <div
-            onClick={() => {
-              setLoading(true);
-              router.push(`/projects/${p.id}?name=${p.name}`);
-            }}
-            className={"hover:opacity-50 cursor-pointer"}
-          >
-            <div className="flex items-center justify-between md:mx-3">
-              <div style={{ height: 60 }} className="flex items-center gap-3">
-                <Hardhat />
-                <div>
-                  <div>{p.name}</div>
-                  {currentUser?.role === "admin" && p.company_name && (
-                    <div className={styles.subtitle}>{p.company_name}</div>
-                  )}
+      <div className={cardClass}>
+        {loaded && projects?.length === 0 && (
+          <div className={styles.empty}>{t("empty_projects_description")}</div>
+        )}
+        {projects.map((p, i) => (
+          <div key={p.id}>
+            {i > 0 && <Divider />}
+            <div
+              onClick={() => {
+                setLoading(true);
+                router.push(`/projects/${p.id}?name=${p.name}`);
+              }}
+              className={"hover:opacity-50 cursor-pointer"}
+            >
+              <div className="flex items-center justify-between md:mx-3">
+                <div style={{ height: 60 }} className="flex items-center gap-3">
+                  <Hardhat />
+                  <div>
+                    <div>{p.name}</div>
+                    {currentUser?.role === "admin" && p.company_name && (
+                      <div className={styles.subtitle}>{p.company_name}</div>
+                    )}
+                  </div>
                 </div>
+                <StatusLabel project={p} />
               </div>
-              <StatusLabel project={p} />
             </div>
           </div>
-          <Divider color={fontColor2} />
-        </div>
-      ))}
+        ))}
+      </div>
       <CreateProjectModal
         isOpen={showCreateProject}
         onClose={() => {
@@ -96,7 +97,7 @@ const ProjectsPage = () => {
 
           try {
             await createProject(name, description, companyId);
-          } catch (err) {}
+          } catch (err) { }
         }}
       />
       {loading && <Loader />}

@@ -14,7 +14,7 @@ import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
-import { errorColor1, fontColor2 } from "@/lib/constants";
+import { cardClass, errorColor1, fontColor2 } from "@/lib/constants";
 import Select from "@/app/ui/Select/Select";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
@@ -126,70 +126,75 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           updateProject({ name });
         }}
       />
-      <Divider />
       {project && (
         <>
-          <div className="md:px-3">
-            <LineLinkCodeButton code={project.line_link_code} />
-          </div>
-          <Divider style={{ background: fontColor2 }} />
-          <div className="flex flex-col gap-2">
-            <TextArea
-              value={description}
-              placeholder={t("description")}
-              onChange={setDescription}
-              disabled={!isEditable}
-            />
-            {currentUser?.role === "admin" && (
-              <Select
-                options={statusOptions}
-                value={status}
-                placeholder={t("status")}
-                onChange={(s) => {
-                  setStatus(s as string);
+          <div className={cardClass}>
+            <div className="md:px-3">
+              <LineLinkCodeButton code={project.line_link_code} />
+            </div>
+            <Divider />
+            <div className="flex flex-col">
+              <TextArea
+                value={description}
+                placeholder={t("description")}
+                onChange={setDescription}
+                disabled={!isEditable}
+              />
+              {currentUser?.role === "admin" && (
+                <>
+                  <Divider />
+                  <Select
+                    options={statusOptions}
+                    value={status}
+                    placeholder={t("status")}
+                    onChange={(s) => {
+                      setStatus(s as string);
+                    }}
+                  />
+                </>
+              )}
+            </div>
+
+            <div
+              style={{
+                height: isEdited ? 40 : 0,
+                opacity: isEdited ? 1 : 0,
+                overflow: "hidden",
+                transition:
+                  "height 0.075s ease-in-out, opacity 0.15s ease-in-out",
+                display: "flex",
+                alignItems: "flex-end",
+                gap: 24,
+              }}
+            >
+              <Button
+                variant="tertiary"
+                iconLeft={() => <Check />}
+                style={{ height: "auto" }}
+                label={t("update")}
+                onClick={() => {
+                  if (currentUser?.role === "admin") {
+                    updateProject({ description, status });
+                  } else {
+                    updateProject({ description });
+                  }
                 }}
               />
-            )}
-          </div>
-          <div
-            style={{
-              height: isEdited ? 36 : 0,
-              opacity: isEdited ? 1 : 0,
-              overflow: "hidden",
-              transition:
-                "height 0.075s ease-in-out, opacity 0.15s ease-in-out",
-              display: "flex",
-              alignItems: "flex-end",
-              gap: 24,
-            }}
-          >
-            <Button
-              variant="tertiary"
-              iconLeft={() => <Check />}
-              style={{ height: "auto" }}
-              label={t("update")}
-              onClick={() => {
-                if (currentUser?.role === "admin") {
-                  updateProject({ description, status });
-                } else {
-                  updateProject({ description });
-                }
-              }}
-            />
-            <Button
-              variant="tertiary"
-              iconLeft={() => (
-                <div style={{ marginRight: -3 }}>
-                  <Close color={errorColor1} />
-                </div>
-              )}
-              style={{ height: "auto" }}
-              label={t("cancel")}
-              onClick={() => {
-                setDescription(project.description);
-              }}
-              textStyle={{ color: errorColor1 }}
-            />
+              <Button
+                variant="tertiary"
+                iconLeft={() => (
+                  <div style={{ marginRight: -3 }}>
+                    <Close color={errorColor1} />
+                  </div>
+                )}
+                style={{ height: "auto" }}
+                label={t("cancel")}
+                onClick={() => {
+                  setDescription(project.description);
+                }}
+                textStyle={{ color: errorColor1 }}
+              />
+            </div>
           </div>
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("action_items")}</div>
@@ -206,17 +211,18 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               />
             )}
           </div>
-          <Divider />
-          <ActionItemsList
-            actionItems={project.action_items?.slice(0, 5) ?? []}
-            isEmpty={(project.action_items ?? []).length === 0}
-            onClickActionItem={(actionItem) => {
-              setEditActionItem(actionItem);
-            }}
-            onViewAll={() => {
-              router.push(`projects/${projectId}/action-items`);
-            }}
-          />
+          <div className={cardClass}>
+            <ActionItemsList
+              actionItems={project.action_items?.slice(0, 5) ?? []}
+              isEmpty={(project.action_items ?? []).length === 0}
+              onClickActionItem={(actionItem) => {
+                setEditActionItem(actionItem);
+              }}
+              onViewAll={() => {
+                router.push(`projects/${projectId}/action-items`);
+              }}
+            />
+          </div>
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("reports")}</div>
             <div className="flex gap-6">
@@ -258,23 +264,24 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               )}
             </div>
           </div>
-          <Divider />
-          <ReportsList
-            reports={project.reports?.slice(0, 5) ?? []}
-            isEmpty={project.reports?.length === 0}
-            onViewAll={
-              (project.reports?.length ?? 0) < 6
-                ? undefined
-                : () => {
-                  router.push(
-                    `/reports?projectId=${projectId}&projectName=${project.name}`,
-                  );
-                }
-            }
-            onClickReport={() => {
-              setShowLoader(true);
-            }}
-          />
+          <div className={cardClass}>
+            <ReportsList
+              reports={project.reports?.slice(0, 5) ?? []}
+              isEmpty={project.reports?.length === 0}
+              onViewAll={
+                (project.reports?.length ?? 0) < 6
+                  ? undefined
+                  : () => {
+                    router.push(
+                      `/reports?projectId=${projectId}&projectName=${project.name}`,
+                    );
+                  }
+              }
+              onClickReport={() => {
+                setShowLoader(true);
+              }}
+            />
+          </div>
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("guests")}</div>
             {isEditable && (
@@ -290,15 +297,16 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               />
             )}
           </div>
-          <Divider />
-          <GuestsList
-            guests={projectGuests}
-            projectId={projectId}
-            isEmpty={projectGuests.length === 0}
-            onDelete={(guest) => {
-              setGuestToRemove(guest);
-            }}
-          />
+          <div className={cardClass}>
+            <GuestsList
+              guests={projectGuests}
+              projectId={projectId}
+              isEmpty={projectGuests.length === 0}
+              onDelete={(guest) => {
+                setGuestToRemove(guest);
+              }}
+            />
+          </div>
         </>
       )}
       <CreateReportModal

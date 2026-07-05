@@ -14,6 +14,7 @@ import CreateTagModal from "./CreateTagModal";
 import UpdateTagModal from "./UpdateTagModal";
 import DeleteTagModal from "./DeleteTagModal";
 import Divider from "@/app/ui/Divider";
+import { cardClass } from "@/lib/constants";
 
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
@@ -44,13 +45,14 @@ const ReportTemplatesPage = () => {
           iconOnlyMobile
         />
       </div>
-      <Divider />
-      <TagsList
-        tags={tags ?? []}
-        isEmpty={!loading && tags?.length === 0}
-        onEdit={(t) => setEditingTag(t)}
-        onDelete={(t) => setDeletingTag(t)}
-      />
+      <div className={cardClass}>
+        <TagsList
+          tags={tags ?? []}
+          isEmpty={!loading && tags?.length === 0}
+          onEdit={(t) => setEditingTag(t)}
+          onDelete={(t) => setDeletingTag(t)}
+        />
+      </div>
       <CreateTagModal
         isOpen={isCreateTagModalShown}
         onClose={() => {

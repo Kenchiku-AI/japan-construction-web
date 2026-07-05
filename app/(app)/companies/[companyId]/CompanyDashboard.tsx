@@ -252,13 +252,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                   />
                 )}
               </div>
-              <Divider />
-              <CompanyProjectsList
-                projects={company.projects}
-                onClickProject={() => {
-                  setShowLoader(true);
-                }}
-              />
+              <div className={cardClass}>
+                <CompanyProjectsList
+                  projects={company.projects}
+                  onClickProject={() => {
+                    setShowLoader(true);
+                  }}
+                />
+              </div>
             </div>
             <div>
               <div className="flex justify-between mt-12">
@@ -276,14 +277,15 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                   />
                 )}
               </div>
-              <Divider />
-              <CompanyUsersList
-                users={company.users}
-                onRemove={(userId) => setUserIdToRemove(userId)}
-                onClickUser={() => {
-                  setShowLoader(true);
-                }}
-              />
+              <div className={cardClass}>
+                <CompanyUsersList
+                  users={company.users}
+                  onRemove={(userId) => setUserIdToRemove(userId)}
+                  onClickUser={() => {
+                    setShowLoader(true);
+                  }}
+                />
+              </div>
             </div>
             {isAdmin && (
               <div>
@@ -300,14 +302,15 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     iconOnlyMobile
                   />
                 </div>
-                <Divider />
-                <ReportTemplatesList
-                  templates={templates}
-                  isEmpty={!companyLoading && templates.length === 0}
-                  onClickTemplate={() => {
-                    setShowLoader(false);
-                  }}
-                />
+                <div className={cardClass}>
+                  <ReportTemplatesList
+                    templates={templates}
+                    isEmpty={!companyLoading && templates.length === 0}
+                    onClickTemplate={() => {
+                      setShowLoader(false);
+                    }}
+                  />
+                </div>
                 <div className="flex justify-between mt-12">
                   <div className="self-end">{t("tags")}</div>
                   <Button
@@ -321,13 +324,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     iconOnlyMobile
                   />
                 </div>
-                <Divider />
-                <TagsList
-                  tags={tags ?? []}
-                  isEmpty={!tagsLoading && tags?.length === 0}
-                  onEdit={(t) => setEditingTag(t)}
-                  onDelete={(t) => setDeletingTag(t)}
-                />
+                <div className={cardClass}>
+                  <TagsList
+                    tags={tags ?? []}
+                    isEmpty={!tagsLoading && tags?.length === 0}
+                    onEdit={(t) => setEditingTag(t)}
+                    onDelete={(t) => setDeletingTag(t)}
+                  />
+                </div>
               </div>
             )}
           </div>

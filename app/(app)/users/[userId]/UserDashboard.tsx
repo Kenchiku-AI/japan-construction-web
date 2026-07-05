@@ -7,7 +7,7 @@ import { Logout } from "@/app/ui/Icons";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { useApi } from "@/lib/api/ApiContext";
-import { emailRegex, fontColor2 } from "@/lib/constants";
+import { cardClass, emailRegex, fontColor2 } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
 import { UserRole } from "@/types";
 import { redirect } from "next/navigation";
@@ -105,78 +105,79 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
           />
         )}
       </div>
-      <Divider />
-      {!!user && (
-        <>
-          {(currentUser?.id === userId || currentUser?.role === "admin") && (
-            <>
-              <div className="md:px-3">
-                <LineLinkCodeButton code={user.line_link_code} />
-              </div>
-              <Divider style={{ background: fontColor2 }} />
-            </>
-          )}
-          <div className="flex flex-col gap-3 mt-3">
-            <Input
-              placeholder={t("last_name")}
-              value={lastName}
-              onChange={(t) => {
-                setLastName(t);
-              }}
-              disabled={isEditDisabled}
-            />
-            <Input
-              placeholder={t("first_name")}
-              value={firstName}
-              onChange={(t) => {
-                setFirstName(t);
-              }}
-              disabled={isEditDisabled}
-            />
-            <Input
-              placeholder={t("email")}
-              value={email}
-              onChange={(t) => {
-                setEmail(t);
-              }}
-              disabled={isEditDisabled}
-            />
-            <Select
-              placeholder={t("role")}
-              options={roleOptions}
-              value={role}
-              onChange={(r) => setRole(r as UserRole)}
-              disabled={isRoleDisabled}
-            />
-          </div>
-          {showUpdateButton && (
-            <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
-              <Button
-                label={t("update_user")}
-                onClick={() => {
-                  if (!role) return;
-
-                  if (!emailRegex.test(email)) {
-                    showModal({
-                      title: t("invalid_email"),
-                      subtitle: t("invalid_email_description"),
-                    });
-                    return;
-                  }
-
-                  updateUser({
-                    first_name: firstName,
-                    last_name: lastName,
-                    email: email,
-                    role: role,
-                  });
+      <div className={cardClass}>
+        {!!user && (
+          <>
+            {(currentUser?.id === userId || currentUser?.role === "admin") && (
+              <>
+                <div className="md:px-3">
+                  <LineLinkCodeButton code={user.line_link_code} />
+                </div>
+                <Divider />
+              </>
+            )}
+            <div className="flex flex-col gap-3 mt-3">
+              <Input
+                placeholder={t("last_name")}
+                value={lastName}
+                onChange={(t) => {
+                  setLastName(t);
                 }}
-                disabled={isUpdateDisabled}
+                disabled={isEditDisabled}
+              />
+              <Input
+                placeholder={t("first_name")}
+                value={firstName}
+                onChange={(t) => {
+                  setFirstName(t);
+                }}
+                disabled={isEditDisabled}
+              />
+              <Input
+                placeholder={t("email")}
+                value={email}
+                onChange={(t) => {
+                  setEmail(t);
+                }}
+                disabled={isEditDisabled}
+              />
+              <Select
+                placeholder={t("role")}
+                options={roleOptions}
+                value={role}
+                onChange={(r) => setRole(r as UserRole)}
+                disabled={isRoleDisabled}
               />
             </div>
-          )}
-        </>
-      )}
+            {showUpdateButton && (
+              <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
+                <Button
+                  label={t("update_user")}
+                  onClick={() => {
+                    if (!role) return;
+
+                    if (!emailRegex.test(email)) {
+                      showModal({
+                        title: t("invalid_email"),
+                        subtitle: t("invalid_email_description"),
+                      });
+                      return;
+                    }
+
+                    updateUser({
+                      first_name: firstName,
+                      last_name: lastName,
+                      email: email,
+                      role: role,
+                    });
+                  }}
+                  disabled={isUpdateDisabled}
+                />
+              </div>
+            )}
+          </>
+        )}
+      </div>
       <Modal
         title={t("confirm_logout")}
         subtitle={t("confirm_logout_description")}

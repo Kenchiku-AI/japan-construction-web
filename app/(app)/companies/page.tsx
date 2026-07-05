@@ -12,7 +12,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { useRouter } from "next/navigation";
 import Divider from "@/app/ui/Divider";
-import { fontColor2 } from "@/lib/constants";
+import { cardClass, fontColor2 } from "@/lib/constants";
 import { Loader } from "@/app/ui/Loader";
 
 const CompaniesPage = () => {
@@ -44,13 +44,13 @@ const CompaniesPage = () => {
           iconOnlyMobile
         />
       </div>
-      <Divider />
-      <div className="flex flex-col">
+      <div className={cardClass}>
         {companies?.length === 0 && (
           <div className={styles.empty}>{t("empty_companies_description")}</div>
         )}
-        {companies?.map((c) => (
+        {companies?.map((c, i) => (
           <div key={c.id}>
+            {i > 0 && <Divider />}
             <div
               className="hover:opacity-50 cursor-pointer mx-4"
               onClick={() => {
@@ -70,7 +70,6 @@ const CompaniesPage = () => {
                 </div>
               </div>
             </div>
-            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

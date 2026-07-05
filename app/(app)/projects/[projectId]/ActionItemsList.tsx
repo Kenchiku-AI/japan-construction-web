@@ -23,7 +23,7 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
   const { t } = useTranslation();
 
   if (isEmpty) {
-    return <div className={styles.empty}>{t("empty_tags_description")}</div>;
+    return <div className={styles.empty}>{t("empty_action_items_description")}</div>;
   }
 
   return (
@@ -34,8 +34,9 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {actionItems.map((a) => (
+        {actionItems.map((a, i) => (
           <div key={a.id}>
+            {i > 0 && <Divider />}
             <div
               onClick={() => {
                 onClickActionItem(a);
@@ -62,7 +63,6 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
                 </div>
               </div>
             </div>
-            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

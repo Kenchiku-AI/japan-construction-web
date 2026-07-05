@@ -29,7 +29,7 @@ const GuestsList: FC<GuestsListProps> = ({
 
   return (
     <>
-      {guests.map((guest) => {
+      {guests.map((guest, i) => {
         const canDelete =
           currentUser?.role === "manager" ||
           currentUser?.role === "admin" ||
@@ -37,6 +37,7 @@ const GuestsList: FC<GuestsListProps> = ({
 
         return (
           <div key={guest.id}>
+            {i > 0 && <Divider />}
             <div className="mx-4 flex items-center justify-between">
               <div style={{ height: 60 }} className="flex items-center gap-4">
                 <User />
@@ -56,8 +57,6 @@ const GuestsList: FC<GuestsListProps> = ({
                 </div>
               )}
             </div>
-
-            <Divider color={fontColor2} />
           </div>
         );
       })}

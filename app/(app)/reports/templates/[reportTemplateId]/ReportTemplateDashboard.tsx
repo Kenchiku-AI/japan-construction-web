@@ -15,7 +15,7 @@ import { useReportTemplates } from "../useReportTemplates";
 import { AddUser } from "@/app/ui/Icons";
 import ShareReportTemplateModal from "./ShareReportTemplateModal";
 import Divider from "@/app/ui/Divider";
-import { fontColor2 } from "@/lib/constants";
+import { cardClass, fontColor2 } from "@/lib/constants";
 
 interface ReportTemplateDashboardProps {
   reportTemplateId: string;
@@ -105,7 +105,6 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
         }}
         isEditable={!!reportTemplate && canEdit}
       />
-      <Divider />
       {canShare && (
         <>
           <div className="mb-3">
@@ -119,27 +118,29 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
               style={{ height: 40 }}
             />
           </div>
-          <Divider style={{ background: fontColor2 }} />
+          <Divider />
         </>
       )}
       {!!reportTemplate && (
         <>
-          <div className="flex flex-col gap-2">
-            <TextArea
-              placeholder={t("description")}
-              value={
-                !isLoaded.current ? reportTemplate.description : description
-              }
-              onChange={setDescription}
-              disabled={!canEdit}
-            />
-            <Select
-              placeholder={t("type")}
-              options={parentTypeOptions}
-              value={parentType}
-              onChange={(pt) => setParentType(pt as ReportParentType)}
-              disabled={!canEdit}
-            />
+          <div className={cardClass}>
+            <div className="flex flex-col gap-2">
+              <TextArea
+                placeholder={t("description")}
+                value={
+                  !isLoaded.current ? reportTemplate.description : description
+                }
+                onChange={setDescription}
+                disabled={!canEdit}
+              />
+              <Select
+                placeholder={t("type")}
+                options={parentTypeOptions}
+                value={parentType}
+                onChange={(pt) => setParentType(pt as ReportParentType)}
+                disabled={!canEdit}
+              />
+            </div>
           </div>
           <div className="mt-12">
             <ReportTemplateFields

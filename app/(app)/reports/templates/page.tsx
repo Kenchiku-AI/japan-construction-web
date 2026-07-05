@@ -13,6 +13,7 @@ import ReportTemplatesList from "./ReportTemplatesList";
 import { redirect } from "next/navigation";
 import Divider from "@/app/ui/Divider";
 import { Loader } from "@/app/ui/Loader";
+import { cardClass } from "@/lib/constants";
 
 const ReportTemplatesPage = () => {
   const { t } = useTranslation();
@@ -46,14 +47,15 @@ const ReportTemplatesPage = () => {
           iconOnlyMobile
         />
       </div>
-      <Divider />
-      <ReportTemplatesList
-        templates={reportTemplates ?? []}
-        isEmpty={!loading && reportTemplates?.length === 0}
-        onClickTemplate={() => {
-          setShowLoader(true);
-        }}
-      />
+      <div className={cardClass}>
+        <ReportTemplatesList
+          templates={reportTemplates ?? []}
+          isEmpty={!loading && reportTemplates?.length === 0}
+          onClickTemplate={() => {
+            setShowLoader(true);
+          }}
+        />
+      </div>
       <CreateReportTemplateModal
         isOpen={showCreateReportTemplate}
         onClose={() => {

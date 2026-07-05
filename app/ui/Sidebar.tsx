@@ -7,7 +7,7 @@ import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard } from "./Icons";
-import { bgColor4, buttonColor, fontColor2 } from "@/lib/constants";
+import { bgColor4, bgColor5, buttonColor, fontColor2 } from "@/lib/constants";
 import Divider from "./Divider";
 import Link from "next/link";
 
@@ -23,7 +23,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
 
       <div className="drawer-content flex flex-col">
         <div className="md:hidden fixed top-4 left-4 z-500">
-          <label style={{ paddingBottom: 3 }} htmlFor="docs-sidebar" className="btn btn-circle btn-sm">
+          <label style={{ paddingBottom: 3 }} htmlFor="docs-sidebar" className="btn btn-circle btn-sm bg-white">
             ☰
           </label>
         </div>
@@ -38,7 +38,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
           className="drawer-overlay"
         />
 
-        <ul className="menu flex flex-col bg-base-200 text-base-content min-h-full pb-4 px-4 z-500">
+        <ul className="menu flex flex-col text-base-content min-h-full pb-4 px-4 z-500 bg-white shadow-xl" style={{ borderRightWidth: 1, borderColor: bgColor5 }}>
           <div
             className="md:hidden flex justify-end"
             style={{ marginRight: -6 }}
@@ -54,9 +54,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 <div className="flex justify-center pb-2 md:pt-3">
                   <Logo size={24} color={fontColor2} />
                 </div>
-                <Divider
-                  style={{ opacity: 0.1, marginBottom: 18, marginTop: 0 }}
-                />
+                <Divider />
                 {isAdmin && (
                   <SidebarItem
                     name={t("companies")}
@@ -148,28 +146,31 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
   const currentPath = usePathname();
   const router = useRouter();
   const Icon = icon;
-  const style = currentPath === path ? "bg-base-300 rounded-md" : "";
 
   return (
-    <li className={`mb-4 ${style}`}>
-      <a
-        onClick={() => {
-          const drawer = document.getElementById(
-            "docs-sidebar",
-          ) as HTMLInputElement | null;
+    <>
 
-          if (drawer) {
-            drawer.checked = false;
-          }
+      <li className="rounded-sm">
+        <a
+          onClick={() => {
+            const drawer = document.getElementById(
+              "docs-sidebar",
+            ) as HTMLInputElement | null;
 
-          router.push(path);
-        }}
-        className={`active:bg-base-300 active:opacity-40 active:text-black gap-3`}
-      >
-        <Icon />
-        <span>{name}</span>
-      </a>
-    </li>
+            if (drawer) {
+              drawer.checked = false;
+            }
+
+            router.push(path);
+          }}
+          className={`active:bg-base-300 active:opacity-40 active:text-black gap-3`}
+        >
+          <Icon />
+          <span>{name}</span>
+        </a>
+      </li>
+      <Divider />
+    </>
   );
 };
 

@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import { Plus, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { fontColor2 } from "@/lib/constants";
+import { cardClass, fontColor2 } from "@/lib/constants";
 import styles from "./page.module.css";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import { ReportTemplateFieldInfo } from "@/types";
@@ -57,53 +57,54 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
           <div style={{ color: fontColor2 }}>{t("drag_to_reorder")}</div>
         )}
       </div>
-      <Divider style={{ margin: "8px 0 0" }} />
-      <div className={"flex flex-col"}>
-        <DndContext
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={fields.map((f) => f.id)}
-            strategy={verticalListSortingStrategy}
+      <div className={cardClass}>
+        <div className={"flex flex-col"}>
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
           >
-            {fields.map((field, index) => (
-              <ReportTemplateFieldCell
-                key={field.id}
-                field={field}
-                index={index}
-                onChange={(updatedField) => {
-                  const newFields = fields.map((f) =>
-                    f.id === updatedField.id ? updatedField : f,
-                  );
-                  onChange(newFields);
-                }}
-                onRemove={() => {
-                  const newFields = fields.filter((f) => f.id !== field.id);
-                  onChange(newFields);
-                }}
-                disabled={disabled}
-              />
-            ))}
-          </SortableContext>
-        </DndContext>
-        {!disabled && (
-          <Button
-            variant="tertiary"
-            onClick={() => {
-              const newField = {
-                id: crypto.randomUUID(),
-                name: "",
-                description: "",
-                order: fields.length,
-              };
-              onChange([...fields, newField]);
-            }}
-            label={t("add_field")}
-            iconLeft={() => <Plus />}
-            style={{ height: 60, justifyContent: "center" }}
-          />
-        )}
+            <SortableContext
+              items={fields.map((f) => f.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {fields.map((field, index) => (
+                <ReportTemplateFieldCell
+                  key={field.id}
+                  field={field}
+                  index={index}
+                  onChange={(updatedField) => {
+                    const newFields = fields.map((f) =>
+                      f.id === updatedField.id ? updatedField : f,
+                    );
+                    onChange(newFields);
+                  }}
+                  onRemove={() => {
+                    const newFields = fields.filter((f) => f.id !== field.id);
+                    onChange(newFields);
+                  }}
+                  disabled={disabled}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
+          {!disabled && (
+            <Button
+              variant="tertiary"
+              onClick={() => {
+                const newField = {
+                  id: crypto.randomUUID(),
+                  name: "",
+                  description: "",
+                  order: fields.length,
+                };
+                onChange([...fields, newField]);
+              }}
+              label={t("add_field")}
+              iconLeft={() => <Plus />}
+              style={{ height: 60, justifyContent: "center" }}
+            />
+          )}
+        </div>
       </div>
     </>
   );
@@ -136,10 +137,10 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
       <div
         ref={disabled ? null : setNodeRef}
         style={{
-          padding: "0 16px",
           position: "relative",
           transform: DndCSS.Transform.toString(transform),
           background: "white",
+          padding: "0 16px"
         }}
         className={isDragging ? "shadow z-500" : ""}
       >
@@ -194,7 +195,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
           </div>
         </div>
       </div>
-      <Divider color={fontColor2} style={{ margin: "0" }} />
+      <Divider />
     </>
   );
 };

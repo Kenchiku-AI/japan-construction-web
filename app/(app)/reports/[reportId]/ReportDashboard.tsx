@@ -12,6 +12,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import {
   bgColor2,
   buttonColor,
+  cardClass,
   errorColor1,
   fontColor2,
 } from "@/lib/constants";
@@ -287,70 +288,71 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           />
         )}
       </div>
-      <Divider />
-      {report?.status === ReportStatus.Closed && (
-        <>
-          <div className="flex w-full justify-between py-1 md:px-3">
-            <div className="flex items-center gap-1">
-              <Close color={fontColor2} />
-              <div style={{ color: fontColor2 }}>
-                {t("report_closed")}
+      <div className={cardClass}>
+        {report?.status === ReportStatus.Closed && (
+          <>
+            <div className="flex w-full justify-between py-1 md:px-3">
+              <div className="flex items-center gap-1">
+                <Close color={fontColor2} />
+                <div style={{ color: fontColor2 }}>
+                  {t("report_closed")}
+                </div>
               </div>
             </div>
-          </div>
-          <Divider style={{ background: fontColor2 }} />
-        </>
-      )}
-      {!!sortedFields && (
-        <>
-          <div className="flex flex-col w-full gap-2 pt-2">
-            {sortedFields?.map((field) => (
-              <Input
-                key={field.id}
-                placeholder={field.name}
-                value={fieldValues?.[field.id] ?? ""}
-                onChange={(value) => {
-                  setFieldValues((prev) => {
-                    const newValues = { ...prev };
-                    newValues[field.id] = value;
-                    return newValues;
-                  });
+            <Divider />
+          </>
+        )}
+        {!!sortedFields && (
+          <>
+            <div className="flex flex-col w-full gap-2">
+              {sortedFields?.map((field) => (
+                <Input
+                  key={field.id}
+                  placeholder={field.name}
+                  value={fieldValues?.[field.id] ?? ""}
+                  onChange={(value) => {
+                    setFieldValues((prev) => {
+                      const newValues = { ...prev };
+                      newValues[field.id] = value;
+                      return newValues;
+                    });
+                  }}
+                  disabled={!isReportEditable}
+                  loading={fieldValues?.[field.id] === undefined}
+                />
+              ))}
+            </div>
+            <div
+              style={{
+                height: isDisabled ? 0 : isMobile ? 132 : 68,
+                opacity: isDisabled ? 0 : 1,
+                overflow: "hidden",
+                transition: "height 0.2s ease-in-out, opacity 0.2s ease-in-out, padding 0.2s ease-in-out",
+              }}
+              className={`${isDisabled ? "" : "pt-4"} w-full grid grid-cols-1 md:grid-cols-2 md:gap-3`}
+            >
+              <Button
+                label={t("update_report")}
+                onClick={() => {
+                  updateReport({ field_values: fieldValues });
                 }}
-                disabled={!isReportEditable}
-                loading={fieldValues?.[field.id] === undefined}
+                iconLeft={() => <Check color="white" />}
+                style={{ height: 50 }}
               />
-            ))}
-          </div>
-          <div
-            style={{
-              height: isDisabled ? 0 : isMobile ? 136 : 80,
-              opacity: isDisabled ? 0 : 1,
-              overflow: "hidden",
-              transition: "height 0.2s ease-in-out, opacity 0.2s ease-in-out",
-            }}
-            className="pt-4 w-full grid grid-cols-1 md:grid-cols-2 md:gap-3"
-          >
-            <Button
-              label={t("update_report")}
-              onClick={() => {
-                updateReport({ field_values: fieldValues });
-              }}
-              iconLeft={() => <Check color="white" />}
-              style={{ height: 50 }}
-            />
-            <Button
-              variant="secondary"
-              label={t("discard_changes")}
-              onClick={() => {
-                resetFieldValues();
-              }}
-              iconLeft={() => <Close color={errorColor1} />}
-              style={{ borderColor: errorColor1 }}
-              textStyle={{ color: errorColor1 }}
-            />
-          </div>
-        </>
-      )}
+              <Button
+                variant="secondary"
+                label={t("discard_changes")}
+                onClick={() => {
+                  resetFieldValues();
+                }}
+                iconLeft={() => <Close color={errorColor1} />}
+                style={{ borderColor: errorColor1 }}
+                textStyle={{ color: errorColor1 }}
+              />
+            </div>
+          </>
+        )}
+      </div>
       {images != null && (
         <div className="mt-8 w-full">
           <div className="flex justify-between items-end">
@@ -380,50 +382,51 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               style={{ display: "none" }}
             />
           </div>
-          <Divider />
-          {!!images && images.length === 0 ? (
-            <div className={styles.empty}>{t("empty_photos_description")}</div>
-          ) : (
-            <>
-              <div className="flex w-full justify-between gap-8 py-1">
-                <Button
-                  variant="tertiary"
-                  label={
-                    selectedTag
-                      ? t("download_tag", { tag: selectedTag.name })
-                      : t("download_all")
-                  }
-                  iconLeft={() => <Download />}
-                  onClick={downloadAllImages}
-                  style={{ height: "auto" }}
-                  textStyle={{
-                    fontWeight: "300",
-                  }}
-                  iconOnlyMobile
-                />
-                <Button
-                  variant="tertiary"
-                  label={selectedTag?.name ?? t("filter_by_tag")}
-                  iconLeft={() => <Tag color={buttonColor} size={30} />}
-                  onClick={() => {
-                    setIsFilterByTagModalShown(true);
-                  }}
-                  style={{ height: "auto" }}
-                  textStyle={{
-                    fontWeight: "300",
-                  }}
-                  iconOnlyMobile
-                />
-              </div>
-              <Divider style={{ background: fontColor2 }} />
-              {filteredImages.length === 0 && (
-                <div className={styles.empty}>
-                  {t("empty_tag_photos_description")}
+          <div className={cardClass}>
+            {!!images && images.length === 0 ? (
+              <div className={styles.empty}>{t("empty_photos_description")}</div>
+            ) : (
+              <>
+                <div className="flex w-full justify-between gap-8 py-1">
+                  <Button
+                    variant="tertiary"
+                    label={
+                      selectedTag
+                        ? t("download_tag", { tag: selectedTag.name })
+                        : t("download_all")
+                    }
+                    iconLeft={() => <Download />}
+                    onClick={downloadAllImages}
+                    style={{ height: "auto" }}
+                    textStyle={{
+                      fontWeight: "300",
+                    }}
+                    iconOnlyMobile
+                  />
+                  <Button
+                    variant="tertiary"
+                    label={selectedTag?.name ?? t("filter_by_tag")}
+                    iconLeft={() => <Tag color={buttonColor} size={30} />}
+                    onClick={() => {
+                      setIsFilterByTagModalShown(true);
+                    }}
+                    style={{ height: "auto" }}
+                    textStyle={{
+                      fontWeight: "300",
+                    }}
+                    iconOnlyMobile
+                  />
                 </div>
-              )}
-              {ImageList}
-            </>
-          )}
+                <Divider style={{ background: fontColor2 }} />
+                {filteredImages.length === 0 && (
+                  <div className={styles.empty}>
+                    {t("empty_tag_photos_description")}
+                  </div>
+                )}
+                {ImageList}
+              </>
+            )}
+          </div>
         </div>
       )}
       <DeleteReportModal

@@ -9,7 +9,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { useRouter } from "next/navigation";
 import Divider from "@/app/ui/Divider";
-import { fontColor1, fontColor2 } from "@/lib/constants";
+import { cardClass, fontColor1, fontColor2 } from "@/lib/constants";
 import { Loader } from "@/app/ui/Loader";
 import { useBillingPlans } from "./useBillingPlans";
 import { BillingPlan } from "@/types/billingPlans";
@@ -49,13 +49,13 @@ const BillingPlansPage = () => {
           iconOnlyMobile
         />
       </div>
-      <Divider />
-      <div className="flex flex-col">
+      <div className={cardClass}>
         {billingPlans?.length === 0 && (
           <div className={styles.empty}>{t("empty_billing_plans_description")}</div>
         )}
-        {billingPlans?.map((b) => (
+        {billingPlans?.map((b, i) => (
           <div key={b.id}>
+            {i > 0 && <Divider />}
             <div className="md:mx-3">
               <div className="flex items-center justify-between">
                 <div
@@ -83,7 +83,6 @@ const BillingPlansPage = () => {
                 </div>
               </div>
             </div>
-            <Divider color={fontColor2} />
           </div>
         ))}
       </div>
