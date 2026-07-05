@@ -619,8 +619,14 @@ export default function LandingPage() {
                 </div>
 
                 <div className={styles.pricingCta}>
-                  <a href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
-                    30日間無料で試す →
+                  <a onClick={async () => {
+                    if (invitationId) {
+                      resendInvitation(invitationId);
+                    } else {
+                      setShowSignup(true);
+                    }
+                  }} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
+                    {invitationId ? "メールを再送信する" : "30日間無料で試す →"}
                   </a>
                 </div>
 
