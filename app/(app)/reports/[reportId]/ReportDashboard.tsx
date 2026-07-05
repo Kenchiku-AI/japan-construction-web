@@ -417,7 +417,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                     iconOnlyMobile
                   />
                 </div>
-                <Divider style={{ background: fontColor2 }} />
+                <Divider />
                 {filteredImages.length === 0 && (
                   <div className={styles.empty}>
                     {t("empty_tag_photos_description")}
