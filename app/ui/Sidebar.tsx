@@ -7,7 +7,7 @@ import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard } from "./Icons";
-import { buttonColor, fontColor2 } from "@/lib/constants";
+import { bgColor4, buttonColor, fontColor2 } from "@/lib/constants";
 import Divider from "./Divider";
 import Link from "next/link";
 
@@ -18,7 +18,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const isAdmin = currentUser?.role === UserRole.Admin;
 
   return !currentUser ? null : (
-    <div className="drawer md:drawer-open min-h-screen">
+    <div className="drawer md:drawer-open min-h-screen" style={{ background: bgColor4 }}>
       <input id="docs-sidebar" type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-content flex flex-col">

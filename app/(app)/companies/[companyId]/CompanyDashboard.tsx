@@ -24,7 +24,7 @@ import CreateReportTemplateModal from "../../reports/templates/CreateReportTempl
 import ReportTemplatesList from "../../reports/templates/ReportTemplatesList";
 import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
-import { buttonColor, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
+import { bgColor2, buttonColor, cardClass, errorColor1, fontColor1, fontColor2, fontColor3 } from "@/lib/constants";
 import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
 import LineChannelSecretModal from "./LineChannelSecretModal";
 import LineWebhookButton from "./LineWebhookButton";
@@ -133,17 +133,15 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
             isEditable={isAdminOrManager}
             onEdit={(n) => updateName(n)}
           />
-          <Divider />
         </>
       )}
       {company && (
         <>
           <div className="flex flex-col">
             {isAdminOrManager && (
-              <>
+              <div className={cardClass}>
                 {billingPlans && isAdmin && (
                   <>
-
                     <Select
                       options={billingPlanOptions}
                       placeholder={t("billing_plan")}
@@ -152,7 +150,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                         updateBillingPlan(value as string);
                       }}
                     />
-                    <Divider style={{ background: fontColor2 }} />
+                    <Divider />
                   </>
                 )}
                 <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
@@ -195,7 +193,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     </>
                   )}
                 </div>
-                <Divider style={{ background: fontColor2 }} />
+                <Divider />
                 <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
                   {!company.line_channel_secret_last4 ? (
                     <Button
@@ -227,8 +225,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     </>
                   )}
                 </div>
-                <Divider style={{ background: fontColor2 }} />
-              </>
+                {/* <Divider style={{ background: fontColor2 }} /> */}
+              </div>
             )}
             <div>
               <div className="flex justify-between mt-12">
@@ -476,8 +474,7 @@ const MobileDivider = () => (
     <Divider
       style={{
         marginTop: 10,
-        marginBottom: 10,
-        background: fontColor2,
+        marginBottom: 10
       }}
     />
   </div>

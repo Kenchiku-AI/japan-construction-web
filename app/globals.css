@@ -3,7 +3,7 @@
 @plugin "daisyui";
 
 :root {
-  --background: #fdfdfd;
+  /* --background: #fdfdfd; */
   --foreground: #171717;
   --text-color-1: #23303b;
   --text-color-2: #a4a9ae;
