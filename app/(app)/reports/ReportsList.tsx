@@ -41,13 +41,15 @@ const ReportsList: FC<ReportsListProps> = ({
 
   return (
     <>
-      {reports.map((report) => (
-        <ReportsListItem
-          key={report.id}
-          report={report}
-          showCompany={showCompany}
-          onClick={onClickReport}
-        />
+      {reports.map((report, i) => (
+        <div key={report.id}>
+          {i > 0 && <Divider />}
+          <ReportsListItem
+            report={report}
+            showCompany={showCompany}
+            onClick={onClickReport}
+          />
+        </div>
       ))}
       {onViewAll && (
         <Button
@@ -118,9 +120,7 @@ const ReportsListItem: FC<ReportsListItemProps> = ({
             </div>
           )}
         </div>
-
       </div>
-      <Divider color={fontColor2} />
     </div>
   );
 };

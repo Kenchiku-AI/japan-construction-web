@@ -39,8 +39,9 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {users.map((u) => (
+        {users.map((u, i) => (
           <div key={u.id}>
+            {i > 0 && <Divider />}
             <div className="md:mx-3 flex items-center justify-between gap-4">
               <div
                 onClick={() => {
@@ -74,7 +75,6 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({
                 </div>
               )}
             </div>
-            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

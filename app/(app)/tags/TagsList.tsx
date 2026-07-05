@@ -38,8 +38,9 @@ const TagsList: FC<TagsListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {tags.map((t) => (
+        {tags.map((t, i) => (
           <div key={t.id}>
+            {i > 0 && <Divider />}
             <div className="md:mx-3">
               <div className="flex items-center justify-between">
                 <div
@@ -71,7 +72,6 @@ const TagsList: FC<TagsListProps> = ({
                 </div>
               </div>
             </div>
-            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

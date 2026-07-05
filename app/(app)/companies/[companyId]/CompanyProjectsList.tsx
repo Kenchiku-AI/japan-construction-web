@@ -36,8 +36,9 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {projects.map((p) => (
+        {projects.map((p, i) => (
           <div key={p.id}>
+            {i > 0 && <Divider />}
             <div
               onClick={() => {
                 onClickProject?.(p);
@@ -53,7 +54,6 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({
                 <StatusLabel project={p} />
               </div>
             </div>
-            <Divider color={fontColor2} />
           </div>
         ))}
       </div>

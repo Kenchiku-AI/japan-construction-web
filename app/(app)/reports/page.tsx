@@ -19,6 +19,7 @@ import { useExport } from "./useExport";
 import { useSearchParams } from "next/navigation";
 import { useIsMobile } from "@/lib/useIsMobile";
 import { useModal } from "@/lib/modal/ModalContext";
+import { cardClass } from "@/lib/constants";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
@@ -146,16 +147,17 @@ const ReportsPage = () => {
           )}
         </div>
       </div>
-      <Divider />
-      <ReportsList
-        reports={reports ?? []}
-        isEmpty={!loading && reports?.length === 0 && !showSearch}
-        needsTemplates={reportTemplates?.length === 0}
-        onClickReport={() => {
-          setShowLoader(true);
-        }}
-        showCompany
-      />
+      <div className={reports?.length ? cardClass : ""}>
+        <ReportsList
+          reports={reports ?? []}
+          isEmpty={!loading && reports?.length === 0 && !showSearch}
+          needsTemplates={reportTemplates?.length === 0}
+          onClickReport={() => {
+            setShowLoader(true);
+          }}
+          showCompany
+        />
+      </div>
       <CreateReportModal
         templates={reportTemplates ?? []}
         isOpen={showCreateReport}

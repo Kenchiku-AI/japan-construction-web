@@ -32,7 +32,7 @@ const ActionsModal: FC<ActionsModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t("actions")} >
-      <Divider />
+      <Divider style={{ background: fontColor2 }} />
       {isReportOpen && (
         <>
           <div
@@ -45,7 +45,7 @@ const ActionsModal: FC<ActionsModalProps> = ({
             <Edit />
             <div style={{ color: buttonColor }}>{t("edit_report_name")}</div>
           </div>
-          <Divider style={{ background: fontColor2 }} />
+          <Divider />
         </>
       )}
       <div
@@ -58,7 +58,7 @@ const ActionsModal: FC<ActionsModalProps> = ({
         {isReportOpen ? <Lock color={buttonColor} /> : <Unlock color={buttonColor} />}
         <div style={{ color: buttonColor }}>{t(isReportOpen ? "close_report" : "open_report")}</div>
       </div>
-      <Divider style={{ background: fontColor2 }} />
+      <Divider />
       <div
         className="flex px-4 py-2 items-center gap-3 hover:opacity-50 cursor-pointer"
         onClick={() => {
@@ -69,7 +69,7 @@ const ActionsModal: FC<ActionsModalProps> = ({
         <Download color={buttonColor} />
         <div style={{ color: buttonColor }}>{t("download_excel")}</div>
       </div>
-      <Divider style={{ background: fontColor2 }} />
+      <Divider />
       <div
         className="flex px-4 py-2 items-center gap-3 hover:opacity-50 cursor-pointer"
         onClick={() => {
@@ -80,7 +80,7 @@ const ActionsModal: FC<ActionsModalProps> = ({
         <Download color={buttonColor} />
         <div style={{ color: buttonColor }}>{t("download_pdf")}</div>
       </div>
-      <Divider style={{ background: fontColor2 }} />
+      <Divider />
       <div
         className="flex px-4 py-2 items-center gap-3 hover:opacity-50 cursor-pointer"
         onClick={() => {
