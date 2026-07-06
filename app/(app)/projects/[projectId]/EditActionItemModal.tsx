@@ -170,21 +170,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
         placeholder={t("status")}
         onChange={(s) => setStatus(s as any)}
       />
-      <div className="mt-6 grid lg:grid-col-2 gap-2">
-        <Button
-          disabled={!actionItem || !name || !description || !status || unchanged}
-          iconLeft={() => <Check color="white" />}
-          label={t("update")}
-          onClick={() => {
-            onSubmit({
-              name,
-              description,
-              status
-            });
-
-            closeAndReset();
-          }}
-        />
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
         <Button
           variant="secondary"
           iconLeft={() => <Trash />}
@@ -195,6 +181,20 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
             if (actionItem) {
               onDelete(actionItem);
             }
+
+            closeAndReset();
+          }}
+        />
+        <Button
+          disabled={!actionItem || !name || !description || !status || unchanged}
+          iconLeft={() => <Check color="white" />}
+          label={t("update")}
+          onClick={() => {
+            onSubmit({
+              name,
+              description,
+              status
+            });
 
             closeAndReset();
           }}
