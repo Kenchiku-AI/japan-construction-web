@@ -33,7 +33,7 @@ const ReportsList: FC<ReportsListProps> = ({
     let emptyMessage = t("empty_reports_description");
 
     if (needsTemplates) {
-      emptyMessage = `${emptyMessage} ${t("needs_templates")}`;
+      emptyMessage = `${emptyMessage}\n\n${t("needs_templates")}`;
     }
 
     return (
