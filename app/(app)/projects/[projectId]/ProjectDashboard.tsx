@@ -8,7 +8,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { CompanyGuest, UserRole, ActionItem } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Check, Close, Download, Plus } from "@/app/ui/Icons";
+import { Check, Close, Download, LineLogo, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
@@ -134,7 +134,20 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         <>
           <div className={cardClass}>
             <div className="md:px-3">
-              <LineLinkCodeButton code={project.line_link_code} />
+              {project.line_group_id ? (
+                <div className="flex flex-row justify-between">
+                  <div>
+                    <div>
+                      <LineLogo />
+                      <Check size={10} />
+                    </div>
+                    {t("line_connected")}
+                  </div>
+                  <LineLinkCodeButton code={project.line_link_code} shorten />
+                </div>
+              ) : (
+                <LineLinkCodeButton code={project.line_link_code} />
+              )}
             </div>
             <Divider />
             <div className="flex flex-col">

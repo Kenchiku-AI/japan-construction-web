@@ -158,6 +158,7 @@
   "last_name": "姓",
   "line_channel_secret": "LINEチャネルシークレット",
   "line_channel_secret_description": "LINEチャネルシークレットを入力してください。この値は、LINE Official Account Manager の「設定」→「Messaging API」から確認できます。また、LINE Developersコンソールのチャネル設定からも確認できます。",
+  "line_connected": "LINE連携済み",
   "line_message": "LINEメッセージ",
   "line_webhook": "LINE Webhook",
   "line_webhook_description": "以下のボタンから LINE Webhook URL をコピーしてください。その後、LINE Official Account Manager の「設定」→「Messaging API」に貼り付けて保存してください。また、LINE Developersコンソールのチャネル設定から更新することもできます。",

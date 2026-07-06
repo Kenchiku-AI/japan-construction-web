@@ -5,6 +5,7 @@ export type Project = {
   name: string;
   description: string;
   line_link_code: string;
+  line_group_id?: string;
   reports?: Report[];
   action_items?: ActionItem[];
   status: ProjectStatus;

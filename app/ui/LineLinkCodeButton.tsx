@@ -6,9 +6,10 @@ import { useTranslation } from "react-i18next";
 
 interface LineLinkCodeButtonProps {
   code: string;
+  shorten?: boolean;
 }
 
-const LineLinkCodeButton: FC<LineLinkCodeButtonProps> = ({ code }) => {
+const LineLinkCodeButton: FC<LineLinkCodeButtonProps> = ({ code, shorten }) => {
   const [copied, setCopied] = useState(false);
   const { t } = useTranslation();
 
@@ -24,7 +25,7 @@ const LineLinkCodeButton: FC<LineLinkCodeButtonProps> = ({ code }) => {
       ) : (
         <Button
           variant="tertiary"
-          label={`${t("copy_line_link_code")}: ${code}`}
+          label={shorten ? code : `${t("copy_line_link_code")}: ${code}`}
           iconLeft={() => <Copy color={buttonColor} />}
           onClick={async () => {
             try {

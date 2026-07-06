@@ -21,7 +21,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
     <div className="drawer md:drawer-open min-h-screen" style={{ background: bgColor4 }}>
       <input id="docs-sidebar" type="checkbox" className="drawer-toggle" />
 
-      <div className="drawer-content flex flex-col">
+      <div className="drawer-content flex flex-col items-center">
         <div className="md:hidden fixed top-4 left-4 z-500">
           <label style={{ paddingBottom: 3 }} htmlFor="docs-sidebar" className="btn btn-circle btn-sm bg-white">
             ☰

@@ -172,20 +172,6 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       />
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
         <Button
-          variant="secondary"
-          iconLeft={() => <Trash />}
-          style={{ borderColor: errorColor1, height: 60 }}
-          textStyle={{ color: errorColor1 }}
-          label={t("delete")}
-          onClick={() => {
-            if (actionItem) {
-              onDelete(actionItem);
-            }
-
-            closeAndReset();
-          }}
-        />
-        <Button
           disabled={!actionItem || !name || !description || !status || unchanged}
           iconLeft={() => <Check color="white" />}
           label={t("update")}
@@ -195,6 +181,20 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
               description,
               status
             });
+
+            closeAndReset();
+          }}
+        />
+        <Button
+          variant="secondary"
+          iconLeft={() => <Trash />}
+          style={{ borderColor: errorColor1, height: 60 }}
+          textStyle={{ color: errorColor1 }}
+          label={t("delete")}
+          onClick={() => {
+            if (actionItem) {
+              onDelete(actionItem);
+            }
 
             closeAndReset();
           }}
