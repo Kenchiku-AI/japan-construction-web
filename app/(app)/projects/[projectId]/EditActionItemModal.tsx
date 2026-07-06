@@ -61,24 +61,24 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       title={t("action_item")}
     >
       <Divider />
-      <div>
+      <div className="flex flex-row">
         <div>
           <div>{t("name")}</div>
           <div>{name}</div>
         </div>
-        <Button
-          iconLeft={() => <Edit />}
-        />
+        <div>
+          <Edit />
+        </div>
       </div>
       <Divider />
-      <div>
+      <div className="flex flex-row">
         <div>
           <div>{t("description")}</div>
           <div>{description}</div>
         </div>
-        <Button
-          iconLeft={() => <Edit />}
-        />
+        <div>
+          <Edit />
+        </div>
       </div>
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("name")} onChange={setName} />
