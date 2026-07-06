@@ -37,7 +37,9 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
   const { t } = useTranslation();
   const { formatDateAndTime } = useDate();
 
-  const reset = () => {
+  const closeAndReset = () => {
+    onClose();
+
     setTimeout(() => {
       setName("");
       setDescription("");
@@ -82,10 +84,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={() => {
-        onClose();
-        reset();
-      }}
+      onClose={closeAndReset}
       title={t("action_item")}
       width={640}
     >
@@ -183,7 +182,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
               status
             });
 
-            reset();
+            closeAndReset();
           }}
         />
         <Button
@@ -197,7 +196,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
               onDelete(actionItem);
             }
 
-            reset();
+            closeAndReset();
           }}
         />
       </div>
