@@ -136,12 +136,14 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             <div className="md:px-3">
               {project.line_group_id ? (
                 <div className="flex flex-row justify-between">
-                  <div>
-                    <div>
-                      <LineLogo />
-                      <Check size={10} />
+                  <div className="flex flex-row gap-1">
+                    <div className="flex flex-row" >
+                      <LineLogo color={fontColor2} />
+                      <Check color={fontColor2} size={12} />
                     </div>
-                    {t("line_connected")}
+                    <div style={{ color: fontColor2 }}>
+                      {t("line_connected")}
+                    </div>
                   </div>
                   <LineLinkCodeButton code={project.line_link_code} shorten />
                 </div>
