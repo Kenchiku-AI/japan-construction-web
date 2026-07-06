@@ -153,19 +153,21 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
         placeholder={t("status")}
         onChange={(s) => setStatus(s as any)}
       />
-      <Button
-        disabled={!name || !description || !status || unchanged}
-        label={t("create")}
-        onClick={() => {
-          onSubmit({
-            name,
-            description,
-            status
-          });
+      <div className="mt-6">
+        <Button
+          disabled={!name || !description || !status || unchanged}
+          label={t("create")}
+          onClick={() => {
+            onSubmit({
+              name,
+              description,
+              status
+            });
 
-          reset();
-        }}
-      />
+            reset();
+          }}
+        />
+      </div>
     </Modal>
   );
 };
