@@ -134,7 +134,7 @@ export default function LandingPage() {
         </div>
 
         <div className={styles.navActions}>
-          <Link href="/login" className={styles.navLoginLink}>ログイン</Link>
+          <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`}>ログイン</Link>
           <div
             onClick={async () => {
               if (invitationId) {
@@ -178,7 +178,7 @@ export default function LandingPage() {
           <Link href="#pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金プラン</Link>
           <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ドキュメント</Link>
           <div className={styles.mobileMenuDivider} />
-          <Link href="/login" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ログイン</Link>
+          <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => setMenuOpen(false)}>ログイン</Link>
           <div
             onClick={async () => {
               if (invitationId) {
@@ -187,7 +187,7 @@ export default function LandingPage() {
                 setShowSignup(true);
               }
             }}
-            className={`${styles.btn} ${styles.btnPrimary}`}
+            className={`${styles.btn} ${styles.btnPrimary} mt-2`}
           >
             {invitationId ? "メールを再送信する" : "無料で試してみる →"}
           </div>

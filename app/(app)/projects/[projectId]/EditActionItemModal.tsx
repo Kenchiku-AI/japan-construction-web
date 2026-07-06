@@ -172,7 +172,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       />
       <div className="mt-6 grid lg:grid-col-2 gap-2">
         <Button
-          disabled={!name || !description || !status || unchanged}
+          disabled={!actionItem || !name || !description || !status || unchanged}
           iconLeft={() => <Check color="white" />}
           label={t("update")}
           onClick={() => {
