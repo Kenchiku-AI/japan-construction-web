@@ -36,7 +36,7 @@
   "confirm_password": "パスワード（確認）",
   "connect_line": "LINE連携",
   "copy_line_link_code": "LINE連携コードをコピー",
-  "copy_line_webhook": "LINE Webhook URLをコピー",
+  "copy_line_webhook": "Webhook URL",
   "copied": "コピーしました！",
   "corporate_number": "法人番号",
   "create": "作成",
