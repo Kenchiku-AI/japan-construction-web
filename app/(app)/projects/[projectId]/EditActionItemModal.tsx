@@ -88,6 +88,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
             className="hover:opacity-50 cursor-pointer"
             onClick={() => {
               setShowEditName(false);
+              setName(actionItem?.name ?? "");
             }}>
             <Close color={errorColor1} size={32} />
           </div>
@@ -115,6 +116,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
             className="hover:opacity-50 cursor-pointer"
             onClick={() => {
               setShowEditDescription(false);
+              setDescription(actionItem?.description ?? "");
             }}>
             <Close color={errorColor1} size={32} />
           </div>
