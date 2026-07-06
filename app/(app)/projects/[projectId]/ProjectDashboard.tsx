@@ -218,9 +218,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               onClickActionItem={(actionItem) => {
                 setEditActionItem(actionItem);
               }}
-              onViewAll={() => {
+              onViewAll={(project.action_items?.length ?? 0) > 5 ? () => {
                 router.push(`${projectId}/action-items`);
-              }}
+              } : undefined}
             />
           </div>
           <div className="flex justify-between mt-12">
