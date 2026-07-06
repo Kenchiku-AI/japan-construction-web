@@ -9,7 +9,6 @@ import { useReports } from "./useReports";
 import { useReportTemplates } from "./templates/useReportTemplates";
 import { Close, Download, Plus, Search } from "@/app/ui/Icons";
 import ReportsList from "./ReportsList";
-import Divider from "@/app/ui/Divider";
 import { useApi } from "@/lib/api/ApiContext";
 import { ProjectStatus, UserRole } from "@/types";
 import { Loader } from "@/app/ui/Loader";
@@ -147,7 +146,7 @@ const ReportsPage = () => {
           )}
         </div>
       </div>
-      <div className={reports?.length ? cardClass : ""}>
+      <div className={!reports?.length && showSearch ? "" : cardClass}>
         <ReportsList
           reports={reports ?? []}
           isEmpty={!loading && reports?.length === 0 && !showSearch}

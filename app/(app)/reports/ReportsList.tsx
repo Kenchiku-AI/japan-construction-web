@@ -4,7 +4,7 @@ import { Report, ReportStatus } from "@/types";
 import styles from "./page.module.css";
 import { Paper } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { fontColor2 } from "@/lib/constants";
+import { cardClass, fontColor2 } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 import { Button } from "@/app/ui/Button/Button";
 import { useDate } from "@/public/date/useDate";
@@ -36,7 +36,9 @@ const ReportsList: FC<ReportsListProps> = ({
       emptyMessage = `${emptyMessage} ${t("needs_templates")}`;
     }
 
-    return <div className={styles.empty}>{emptyMessage}</div>;
+    return (
+      <div className={styles.empty}>{emptyMessage}</div>
+    );
   }
 
   return (

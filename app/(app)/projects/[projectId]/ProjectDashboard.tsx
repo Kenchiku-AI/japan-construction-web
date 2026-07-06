@@ -260,7 +260,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   iconOnlyMobile
                 />
               )}
-              {isEditable && (
+              {(isEditable && reportTemplates?.length !== 0) && (
                 <Button
                   variant="tertiary"
                   label={t("create_report")}
@@ -298,6 +298,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     );
                   }
               }
+              needsTemplates={reportTemplates?.length === 0}
               onClickReport={() => {
                 setShowLoader(true);
               }}
