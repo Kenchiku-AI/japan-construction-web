@@ -67,12 +67,10 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
                   <div
                     className="flex items-center px-2"
                     style={{
-                      color: fontColor2,
                       fontSize: 12,
                       padding: "5px 10px",
                       borderRadius: 18,
-                      borderWidth: 1,
-                      borderColor: bgColor5
+                      background: bgColor5
                     }}
                   >
                     {t(a.status)}
