@@ -219,7 +219,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                 setEditActionItem(actionItem);
               }}
               onViewAll={() => {
-                router.push(`/${projectId}/action-items`);
+                router.push(`${projectId}/action-items`);
               }}
             />
           </div>
