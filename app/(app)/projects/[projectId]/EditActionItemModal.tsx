@@ -31,6 +31,8 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
   const [showEditName, setShowEditName] = useState(false);
   const [description, setDescription] = useState(actionItem?.description ?? "");
   const [showEditDescription, setShowEditDescription] = useState(false);
+  const [lineMessage, setLineMessage] = useState(actionItem?.source_message_text ?? "");
+  const [lineMessageTimestamp, setLineMessageTimestamp] = useState(actionItem?.line_timestamp ?? "");
   const [status, setStatus] = useState<ActionItemStatus>(actionItem?.status ?? ActionItemStatus.New);
   const { t } = useTranslation();
   const { formatDateAndTime } = useDate();
@@ -40,6 +42,8 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       setName("");
       setDescription("");
       setStatus(ActionItemStatus.New);
+      setLineMessage("");
+      setLineMessageTimestamp("");
     }, 500);
   };
 
@@ -48,6 +52,8 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       setName(actionItem.name);
       setDescription(actionItem.description);
       setStatus(actionItem.status);
+      setLineMessage(actionItem.source_message_text ?? "");
+      setLineMessageTimestamp(actionItem.line_timestamp ?? "");
     }
   }, [isOpen]);
 
@@ -139,21 +145,21 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
           </div>
         </div>
       )}
-      {actionItem?.source_message_text && (
+      {lineMessage && (
         <>
           <Divider />
           <div className="flex flex-row justify-between">
             <div className={styles.subtitle}>
               {`${t("line_message")}`}
             </div>
-            {actionItem.line_timestamp && (
+            {lineMessageTimestamp && (
               <div className={styles.subtitle}>
-                {formatDateAndTime(actionItem.line_timestamp)}
+                {formatDateAndTime(lineMessageTimestamp)}
               </div>
             )}
           </div>
           <div className="pt-1">
-            「{actionItem.source_message_text}」
+            「{lineMessage}」
           </div>
         </>
       )
