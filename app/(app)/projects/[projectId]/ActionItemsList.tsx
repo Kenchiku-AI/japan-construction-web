@@ -26,7 +26,7 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
     return <div className={styles.empty}>{t("empty_action_items_description")}</div>;
   }
 
-  const truncateText = (text: string, maxLength: number) {
+  const truncateText = (text: string, maxLength: number) => {
     if (text.length > maxLength) {
       return text.slice(0, maxLength) + '...';
     }
