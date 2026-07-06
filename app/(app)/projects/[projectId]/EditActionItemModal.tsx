@@ -8,7 +8,7 @@ import Select from "@/app/ui/Select/Select";
 import Divider from "@/app/ui/Divider";
 import { Close, Edit } from "@/app/ui/Icons";
 import styles from "./page.module.css";
-import { errorColor1 } from "@/lib/constants";
+import { errorColor1, fontColor2 } from "@/lib/constants";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import { useDate } from "@/public/date/useDate";
 
@@ -122,12 +122,17 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
         </div>
       )}
       {actionItem?.source_message_text && (
-        <div>
-          <div className={styles.subtitle}>
-            {`${t("line_message")}${actionItem.line_timestamp ? ` (${t('sent_at')}: ${formatDateAndTime(actionItem.line_timestamp)})` : ''}`}
+        <>
+          <Divider />
+          <div>
+            <div className={styles.subtitle}>
+              {`${t("line_message")}${actionItem.line_timestamp ? ` (${t('sent_at')}: ${formatDateAndTime(actionItem.line_timestamp)})` : ''}`}
+            </div>
+            <div style={{ color: fontColor2 }}>
+              「{actionItem.source_message_text}」
+            </div>
           </div>
-          <div>{actionItem.source_message_text}</div>
-        </div>
+        </>
       )}
       <Divider />
       <Select
