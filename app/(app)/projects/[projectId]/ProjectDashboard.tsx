@@ -398,6 +398,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           }
         }}
         onDelete={(actionItem) => {
+          setEditActionItem(undefined);
+
           setTimeout(() => {
             setActionItemToDelete(actionItem);
           }, 1000);

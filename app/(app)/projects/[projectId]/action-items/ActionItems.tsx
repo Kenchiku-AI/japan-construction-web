@@ -104,6 +104,8 @@ const ActionItems: FC<ActionItemsProps> = ({ projectId }) => {
           }
         }}
         onDelete={(actionItem) => {
+          setEditActionItem(undefined);
+
           setTimeout(() => {
             setActionItemToDelete(actionItem);
           }, 1000);
