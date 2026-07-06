@@ -54,7 +54,7 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
                 <div className="flex items-center justify-between gap-4">
                   <div
                     style={{ minHeight: 60, minWidth: 0 }}
-                    className="flex flex-1 items-center gap-3"
+                    className="flex flex-1 items-center gap-3 py-1"
                   >
                     <div>
                       <ClipboardCheck />
