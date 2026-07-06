@@ -18,7 +18,24 @@ export const useDate = () => {
     [i18n.language],
   );
 
+  const formatDateAndTime = useCallback(
+    (dateString: string) => {
+      const date = new Date(dateString);
+
+      if (i18n.language === "jp") {
+        return dayjs(date).locale("ja").format("YYYY年M月D日 HH:mm");
+      }
+
+      return date.toLocaleString(undefined, {
+        dateStyle: "medium",
+        timeStyle: "short",
+      });
+    },
+    [i18n.language],
+  );
+
   return {
     formatDate,
+    formatDateAndTime
   };
 };

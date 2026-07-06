@@ -10,6 +10,7 @@ import { Close, Edit } from "@/app/ui/Icons";
 import styles from "./page.module.css";
 import { errorColor1 } from "@/lib/constants";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
+import { useDate } from "@/public/date/useDate";
 
 interface EditActionItemModalProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
   const [showEditDescription, setShowEditDescription] = useState(false);
   const [status, setStatus] = useState<ActionItemStatus>(actionItem?.status ?? ActionItemStatus.New);
   const { t } = useTranslation();
+  const { formatDateAndTime } = useDate();
 
   const reset = () => {
     setTimeout(() => {
@@ -117,6 +119,14 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
             }}>
             <Edit />
           </div>
+        </div>
+      )}
+      {actionItem?.source_message_text && (
+        <div>
+          <div className={styles.subtitle}>
+            {`${t("line_message")}${actionItem.line_timestamp ? ` (${t('sent_at')}: ${formatDateAndTime(actionItem.line_timestamp)})` : ''}`}
+          </div>
+          <div>{actionItem.source_message_text}</div>
         </div>
       )}
       <Divider />

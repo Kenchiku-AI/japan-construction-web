@@ -34,6 +34,8 @@ export type ActionItem = {
   id: string;
   name: string;
   description: string;
+  source_message_text?: string;
+  line_timestamp?: string;
   status: ActionItemStatus;
   created_at: string;
   updated_at: string;
