@@ -1,4 +1,6 @@
 {
+  "action_item": "対応事項",
+  "action_items": "対応事項",
   "actions": "操作",
   "active": "アクティブ",
   "add_field": "項目を追加",
@@ -38,6 +40,7 @@
   "copied": "コピーしました！",
   "corporate_number": "法人番号",
   "create": "作成",
+  "create_action_item": "対応事項を作成",
   "create_billing_plan": "料金プランを作成",
   "create_company": "会社を作成",
   "create_company_description": "新しい会社を作成するため、以下の項目を入力してください。",
@@ -91,6 +94,7 @@
   "email_registered": "そのメールアドレスは既に登録されています。",
   "email_sent": "メールを送信しました",
   "email_sent_description": "パスワードをリセットするためのリンクをメールで送信しましたので、ご確認ください。",
+  "empty_action_items_description": "対応事項がまだありません。",
   "empty_billing_plans_description": "課金プランがまだありません。",
   "empty_companies_description": "会社がまだありません。",
   "empty_companies_search_description": "検索条件に一致する会社がありません。",

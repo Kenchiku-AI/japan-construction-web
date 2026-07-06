@@ -56,7 +56,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
         onClose();
         reset();
       }}
-      title={t("edit_action_item")}
+      title={t("action_item")}
     >
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("name")} onChange={setName} />

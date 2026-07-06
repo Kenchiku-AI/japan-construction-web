@@ -163,7 +163,7 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
 
             router.push(path);
           }}
-          className={`active:bg-base-300 active:opacity-40 active:text-black gap-3`}
+          className={`active:bg-white hover:bg-white hover:opacity-60 active:opacity-40 active:text-black gap-3`}
         >
           <Icon />
           <span>{name}</span>

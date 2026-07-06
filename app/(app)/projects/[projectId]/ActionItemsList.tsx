@@ -71,7 +71,6 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
           <Divider />
           <Button
             variant="tertiary"
-            style={{ marginLeft: 20 }}
             label={t("view_all")}
             onClick={onViewAll}
           />
