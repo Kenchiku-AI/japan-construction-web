@@ -22,7 +22,6 @@ interface ActionItemsProps {
 const ActionItems: FC<ActionItemsProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const isLoaded = useRef(false);
   const {
     project,
     loading,
@@ -37,7 +36,7 @@ const ActionItems: FC<ActionItemsProps> = ({ projectId }) => {
   const topLabel = useMemo(() => {
     if (!isLoaded.current) return "";
     return project?.name ?? "";
-  }, [isLoaded.current, project?.company_name]);
+  }, [project?.name]);
 
   const isEditable = useMemo(() => {
     if (currentUser?.role === UserRole.Admin) return true;
@@ -108,7 +107,7 @@ const ActionItems: FC<ActionItemsProps> = ({ projectId }) => {
 
           setTimeout(() => {
             setActionItemToDelete(actionItem);
-          }, 1000);
+          }, 500);
         }}
       />
       <DeleteActionItemModal

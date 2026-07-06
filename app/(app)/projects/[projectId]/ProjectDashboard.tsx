@@ -402,7 +402,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
 
           setTimeout(() => {
             setActionItemToDelete(actionItem);
-          }, 1000);
+          }, 500);
         }}
       />
       <DeleteActionItemModal
