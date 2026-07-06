@@ -32,6 +32,9 @@ import {
   UserRole,
   SetupIntentResponse,
   CreateCompanyResponse,
+  CreateActionItemRequest,
+  ActionItem,
+  UpdateActionItemRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -312,6 +315,18 @@ export const useApiData = () => {
     async createProject(request: CreateProjectRequest) {
       const url = "/projects";
       return call(() => http.post<Project>(url, request));
+    },
+    async createActionItem(request: CreateActionItemRequest) {
+      const url = "/action-items";
+      return call(() => http.post<ActionItem>(url, request));
+    },
+    async updateActionItem(actionItemId: string, request: UpdateActionItemRequest) {
+      const url = `/action-items/${actionItemId}`;
+      return call(() => http.patch<ActionItem>(url, request));
+    },
+    async deleteActionItem(actionItemId: string) {
+      const url = `/action-items/${actionItemId}`;
+      return call(() => http.delete(url));
     },
     async getReports(projectId?: string, query?: string) {
       const p = new URLSearchParams();

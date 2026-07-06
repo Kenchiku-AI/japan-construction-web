@@ -42,6 +42,7 @@ export type ActionItem = {
 }
 
 export type CreateActionItemRequest = {
+  project_id: string;
   name: string;
   description: string;
 }

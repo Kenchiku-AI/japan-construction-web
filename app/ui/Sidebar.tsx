@@ -52,7 +52,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
             <div className="flex flex-col flex-1">
               <div className="space-y-2">
                 <div className="flex justify-center pb-2 md:pt-3">
-                  <Logo size={24} color={fontColor2} />
+                  <Logo size={24} />
                 </div>
                 <Divider />
                 {isAdmin && (

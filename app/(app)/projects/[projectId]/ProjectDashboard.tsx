@@ -27,6 +27,7 @@ import LineLinkCodeButton from "../../../ui/LineLinkCodeButton";
 import ActionItemsList from "./ActionItemsList";
 import CreateActionItemModal from "./CreateActionItemModal";
 import EditActionItemModal from "./EditActionItemModal";
+import DeleteActionItemModal from "./DeleteActionItemModal";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -47,6 +48,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     getCompanyGuests,
     inviteGuest,
     removeGuest,
+    createActionItem,
+    updateActionItem,
+    deleteActionItem
   } = useProject(projectId);
   const { downloadExcel } = useExport();
   const isLoaded = useRef(false);
@@ -370,7 +374,11 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           setShowCreateActionItem(false);
         }}
         onCreate={(name, description) => {
-
+          createActionItem({
+            project_id: projectId,
+            name,
+            description
+          });
         }}
       />
       <EditActionItemModal
@@ -380,7 +388,30 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           setEditActionItem(undefined);
         }}
         onSubmit={(request) => {
+          if (editActionItem) {
+            updateActionItem(
+              editActionItem.id,
+              request
+            );
+          }
+        }}
+        onDelete={(actionItem) => {
+          setTimeout(() => {
+            setActionItemToDelete(actionItem);
+          }, 1000);
+        }}
+      />
+      <DeleteActionItemModal
+        isOpen={!!actionItemToDelete}
+        onClose={() => {
+          setActionItemToDelete(undefined);
+        }}
+        onDelete={() => {
+          if (actionItemToDelete) {
+            deleteActionItem(actionItemToDelete.id);
+          }
 
+          setActionItemToDelete(undefined);
         }}
       />
       {showLoader && <Loader />}

@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
   CompanyGuest,
+  CreateActionItemRequest,
   CreateReportRequest,
   Project,
+  UpdateActionItemRequest,
   UpdateProjectRequest,
   UserRole,
 } from "@/types";
@@ -104,6 +106,75 @@ export const useProject = (projectId: string) => {
       setLoading(false);
     },
     [project, api],
+  );
+
+  const createActionItem = useCallback(
+    async (request: CreateActionItemRequest) => {
+      setLoading(true);
+
+      try {
+        await api.createActionItem(request);
+        getProject(projectId);
+      } catch (err) {
+        setLoading(false);
+
+        if (isBillingError(err)) {
+          return;
+        }
+
+        showModal({
+          title: t("error"),
+          subtitle: t("create_action_item_error_description"),
+        });
+      }
+    },
+    [api],
+  );
+
+  const updateActionItem = useCallback(
+    async (actionItemId: string, request: UpdateActionItemRequest) => {
+      setLoading(true);
+
+      try {
+        await api.updateActionItem(actionItemId, request);
+        getProject(projectId);
+      } catch (err) {
+        setLoading(false);
+
+        if (isBillingError(err)) {
+          return;
+        }
+
+        showModal({
+          title: t("error"),
+          subtitle: t("update_action_item_error_description"),
+        });
+      }
+    },
+    [api],
+  );
+
+  const deleteActionItem = useCallback(
+    async (actionItemId: string) => {
+      setLoading(true);
+
+      try {
+        await api.deleteActionItem(actionItemId);
+        getProject(projectId);
+      } catch (err) {
+        setLoading(false);
+
+        if (isBillingError(err)) {
+          return;
+        }
+
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+    },
+    [api],
   );
 
   const createReport = useCallback(
@@ -209,5 +280,8 @@ export const useProject = (projectId: string) => {
     getCompanyGuests,
     inviteGuest,
     removeGuest,
+    createActionItem,
+    updateActionItem,
+    deleteActionItem
   };
 };

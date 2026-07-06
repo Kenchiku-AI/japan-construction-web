@@ -36,7 +36,7 @@ const CreateActionItemModal: FC<CreateActionItemModalProps> = ({
       }}
       title={t("create_action_item")}
     >
-      <div className="flex flex-col gap-3 mb-6">
+      <div className="flex flex-col gap-3 my-6">
         <Input
           value={name}
           placeholder={t("name")}

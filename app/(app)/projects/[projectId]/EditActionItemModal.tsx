@@ -6,7 +6,7 @@ import Modal from "@/app/ui/Modal";
 import { UpdateActionItemRequest, ActionItem, ActionItemStatus } from "@/types";
 import Select from "@/app/ui/Select/Select";
 import Divider from "@/app/ui/Divider";
-import { Close, Edit } from "@/app/ui/Icons";
+import { Check, Close, Edit, Trash } from "@/app/ui/Icons";
 import styles from "./page.module.css";
 import { errorColor1, fontColor2 } from "@/lib/constants";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
@@ -17,6 +17,7 @@ interface EditActionItemModalProps {
   actionItem?: ActionItem;
   onClose: () => void;
   onSubmit: (request: UpdateActionItemRequest) => void;
+  onDelete: (actionItem: ActionItem) => void;
 }
 
 const EditActionItemModal: FC<EditActionItemModalProps> = ({
@@ -24,6 +25,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
   actionItem,
   onClose,
   onSubmit,
+  onDelete,
 }) => {
   const [name, setName] = useState(actionItem?.name ?? "");
   const [showEditName, setShowEditName] = useState(false);
@@ -162,16 +164,29 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
         placeholder={t("status")}
         onChange={(s) => setStatus(s as any)}
       />
-      <div className="mt-6">
+      <div className="mt- grid lg:grid-col-2 gap-2">
         <Button
           disabled={!name || !description || !status || unchanged}
-          label={t("create")}
+          iconLeft={() => <Check color="whit" />}
+          label={t("update")}
           onClick={() => {
             onSubmit({
               name,
               description,
               status
             });
+
+            reset();
+          }}
+        />
+        <Button
+          variant="secondary"
+          iconLeft={() => <Trash />}
+          label={t("delete")}
+          onClick={() => {
+            if (actionItem) {
+              onDelete(actionItem);
+            }
 
             reset();
           }}

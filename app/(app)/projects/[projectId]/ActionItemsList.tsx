@@ -57,7 +57,7 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
                       <div className={styles.subtitle}>{a.description}</div>
                     </div>
                   </div>
-                  <div className="flex items-center px-4" style={{ color: fontColor2 }}>
+                  <div className="flex items-center px-2" style={{ color: fontColor2 }}>
                     {t(a.status)}
                   </div>
                 </div>
