@@ -34,7 +34,6 @@ const ActionItems: FC<ActionItemsProps> = ({ projectId }) => {
   const [actionItemToDelete, setActionItemToDelete] = useState<ActionItem>();
 
   const topLabel = useMemo(() => {
-    if (!isLoaded.current) return "";
     return project?.name ?? "";
   }, [project?.name]);
 
