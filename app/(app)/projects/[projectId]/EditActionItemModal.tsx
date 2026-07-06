@@ -81,6 +81,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
         reset();
       }}
       title={t("action_item")}
+      width={640}
     >
       <Divider />
       {showEditName ? (
