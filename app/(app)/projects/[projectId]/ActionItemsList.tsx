@@ -44,10 +44,10 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
               className={"hover:opacity-50 cursor-pointer"}
             >
               <div className="md:mx-3">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <div
-                    style={{ height: 60, minWidth: 0 }}
-                    className="flex items-center gap-3"
+                    style={{ minHeight: 60, minWidth: 0 }}
+                    className="flex flex-1 items-center gap-3"
                   >
                     <div>
                       <ClipboardCheck />
