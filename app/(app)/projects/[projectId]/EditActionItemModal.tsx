@@ -82,7 +82,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
     >
       <Divider />
       {showEditName ? (
-        <div className="flex flex-row">
+        <div className="flex flex-row gap-2">
           <Input value={name} placeholder={t("name")} onChange={setName} />
           <div
             className="hover:opacity-50 cursor-pointer"
@@ -139,19 +139,26 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       {actionItem?.source_message_text && (
         <>
           <Divider />
-          <div>
+          <div className="flex flex-row justify-between">
             <div className={styles.subtitle}>
-              {`${t("line_message")}${actionItem.line_timestamp ? ` (${t('sent_at')}: ${formatDateAndTime(actionItem.line_timestamp)})` : ''}`}
+              {`${t("line_message")}`}
             </div>
-            <div>
-              「{actionItem.source_message_text}」
-            </div>
+            {actionItem.line_timestamp && (
+              <div className={styles.subtitle}>
+                {formatDateAndTime(actionItem.line_timestamp)}
+              </div>
+            )}
+          </div>
+          <div className="pt-1">
+            「{actionItem.source_message_text}」
           </div>
         </>
-      )}
+      )
+      }
       <Divider />
       <Select
         options={statusOptions}
+        value={status}
         placeholder={t("status")}
         onChange={(s) => setStatus(s as any)}
       />
@@ -170,7 +177,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
           }}
         />
       </div>
-    </Modal>
+    </Modal >
   );
 };
 
