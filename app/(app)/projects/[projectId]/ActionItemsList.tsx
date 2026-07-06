@@ -4,7 +4,7 @@ import { ActionItem } from "@/types";
 import styles from "./page.module.css";
 import { ClipboardCheck, Edit, Tag, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { fontColor1, fontColor2 } from "@/lib/constants";
+import { bgColor5, fontColor1, fontColor2 } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 
 interface ActionItemsListProps {
@@ -24,6 +24,13 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
 
   if (isEmpty) {
     return <div className={styles.empty}>{t("empty_action_items_description")}</div>;
+  }
+
+  const truncateText = (text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
   }
 
   return (
@@ -54,10 +61,20 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
                     </div>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ color: fontColor1 }}>{a.name}</div>
-                      <div className={styles.subtitle}>{a.description}</div>
+                      <div className={styles.subtitle}>{truncateText(a.description, 100)}</div>
                     </div>
                   </div>
-                  <div className="flex items-center px-2" style={{ color: fontColor2 }}>
+                  <div
+                    className="flex items-center px-2"
+                    style={{
+                      color: fontColor2,
+                      fontSize: 12,
+                      padding: "5px 10px",
+                      borderRadius: 18,
+                      borderWidth: 1,
+                      borderColor: bgColor5
+                    }}
+                  >
                     {t(a.status)}
                   </div>
                 </div>
