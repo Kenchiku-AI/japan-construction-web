@@ -61,12 +61,16 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       title={t("action_item")}
     >
       <Divider />
-      <div className="flex flex-row">
+      <div className="flex flex-row justify-between">
         <div>
           <div>{t("name")}</div>
           <div>{name}</div>
         </div>
-        <div>
+        <div
+          className="hover:opacity-50 cursor-pointer"
+          onClick={() => {
+
+          }}>
           <Edit />
         </div>
       </div>
