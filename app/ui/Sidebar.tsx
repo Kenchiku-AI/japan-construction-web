@@ -27,7 +27,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
             ☰
           </label>
         </div>
-        <div className="p-4 md:px-12 lg:px-24 md:py-12 py-16 max-w-4xl">
+        <div className="p-4 md:px-12 lg:px-24 md:py-12 py-16 max-w-4xl w-full">
           {children}
         </div>
       </div>
