@@ -30,14 +30,17 @@ const ReportsList: FC<ReportsListProps> = ({
   const { t } = useTranslation();
 
   if (isEmpty) {
-    let emptyMessage = t("empty_reports_description");
-
-    if (needsTemplates) {
-      emptyMessage = `${emptyMessage}\n\n${t("needs_templates")}`;
-    }
-
     return (
-      <div className={styles.empty}>{emptyMessage}</div>
+      <div className={styles.empty}>
+        <div>
+          {t("empty_reports_description")}
+        </div>
+        {needsTemplates && (
+          <div>
+            {t("needs_templates")}
+          </div>
+        )}
+      </div>
     );
   }
 
