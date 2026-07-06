@@ -6,7 +6,9 @@ import Modal from "@/app/ui/Modal";
 import { UpdateActionItemRequest, ActionItem, ActionItemStatus } from "@/types";
 import Select from "@/app/ui/Select/Select";
 import Divider from "@/app/ui/Divider";
-import { Edit } from "@/app/ui/Icons";
+import { Close, Edit } from "@/app/ui/Icons";
+import styles from "./page.module.css";
+import { errorColor1 } from "@/lib/constants";
 
 interface EditActionItemModalProps {
   isOpen: boolean;
@@ -22,7 +24,9 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
   onSubmit,
 }) => {
   const [name, setName] = useState(actionItem?.name ?? "");
+  const [showEditName, setShowEditName] = useState(false);
   const [description, setDescription] = useState(actionItem?.description ?? "");
+  const [showEditDescription, setShowEditDescription] = useState(false);
   const [status, setStatus] = useState<ActionItemStatus>(actionItem?.status ?? ActionItemStatus.New);
   const { t } = useTranslation();
 
@@ -61,10 +65,38 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       title={t("action_item")}
     >
       <Divider />
+      {showEditName ? (
+        <div>
+          <Input value={name} placeholder={t("name")} onChange={setName} />
+          <div
+            className="hover:opacity-50 cursor-pointer"
+            onClick={() => {
+              setShowEditName(false);
+            }}>
+            <Close color={errorColor1} />
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-row justify-between">
+          <div>
+            <div className={styles.subtitle}>{t("name")}</div>
+            <div>{name}</div>
+          </div>
+          <div
+            className="hover:opacity-50 cursor-pointer"
+            onClick={() => {
+              setShowEditName(true);
+            }}>
+            <Edit />
+          </div>
+        </div>
+      )}
+
+      <Divider />
       <div className="flex flex-row justify-between">
         <div>
-          <div>{t("name")}</div>
-          <div>{name}</div>
+          <div className={styles.subtitle}>{t("description")}</div>
+          <div>{description}</div>
         </div>
         <div
           className="hover:opacity-50 cursor-pointer"
@@ -74,18 +106,8 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
           <Edit />
         </div>
       </div>
-      <Divider />
-      <div className="flex flex-row">
-        <div>
-          <div>{t("description")}</div>
-          <div>{description}</div>
-        </div>
-        <div>
-          <Edit />
-        </div>
-      </div>
       <div className="my-8 flex flex-col gap-3">
-        <Input value={name} placeholder={t("name")} onChange={setName} />
+
         <Input value={description} placeholder={t("description")} onChange={setDescription} />
         <Select
           options={statusOptions}
