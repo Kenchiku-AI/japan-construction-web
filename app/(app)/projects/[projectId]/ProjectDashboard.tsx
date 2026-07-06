@@ -14,7 +14,7 @@ import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
-import { cardClass, errorColor1, fontColor2 } from "@/lib/constants";
+import { cardClass, errorColor1, fontColor2, fontColor3 } from "@/lib/constants";
 import Select from "@/app/ui/Select/Select";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
@@ -136,12 +136,14 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             <div className="md:px-3">
               {project.line_group_id ? (
                 <div className="flex flex-row justify-between">
-                  <div className="flex flex-row gap-1">
+                  <div className="flex flex-row gap-1 items-center">
                     <div className="flex flex-row" >
-                      <LineLogo color={fontColor2} />
-                      <Check color={fontColor2} size={12} />
+                      <LineLogo color={fontColor3} />
+                      <div style={{ marginTop: -2, marginLeft: -2 }}>
+                        <Check color={fontColor3} size={14} />
+                      </div>
                     </div>
-                    <div style={{ color: fontColor2 }}>
+                    <div style={{ color: fontColor3 }}>
                       {t("line_connected")}
                     </div>
                   </div>
@@ -159,7 +161,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                 onChange={setDescription}
                 disabled={!isEditable}
               />
-              {currentUser?.role === "admin" && (
+              {/* {currentUser?.role === "admin" && (
                 <>
                   <Divider />
                   <Select
@@ -171,7 +173,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     }}
                   />
                 </>
-              )}
+              )} */}
             </div>
 
             <div
