@@ -28,6 +28,8 @@ export const useProject = (projectId: string) => {
   const { isBillingError } = useBilling();
 
   useEffect(() => {
+    if (!projectId) return;
+
     getProject(projectId);
   }, [projectId]);
 
