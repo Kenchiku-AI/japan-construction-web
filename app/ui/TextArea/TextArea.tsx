@@ -74,7 +74,7 @@ export const TextArea: FC<TextAreaProps> = ({
   }
 
   return (
-    <div className="relative" style={{ marginBottom: -6 }}>
+    <div className="relative w-full" style={{ marginBottom: -6 }}>
       <div
         className={styles.label}
         style={{

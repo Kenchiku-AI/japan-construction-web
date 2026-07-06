@@ -74,7 +74,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
             onClick={() => {
               setShowEditName(false);
             }}>
-            <Close color={errorColor1} />
+            <Close color={errorColor1} size={32} />
           </div>
         </div>
       ) : (
@@ -94,14 +94,14 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       )}
       <Divider />
       {showEditDescription ? (
-        <div className="flex flex-row">
+        <div className="flex flex-row gap-2">
           <TextArea value={description} placeholder={t("description")} onChange={setDescription} />
           <div
             className="hover:opacity-50 cursor-pointer"
             onClick={() => {
               setShowEditDescription(false);
             }}>
-            <Close color={errorColor1} />
+            <Close color={errorColor1} size={32} />
           </div>
         </div>
       ) : (
