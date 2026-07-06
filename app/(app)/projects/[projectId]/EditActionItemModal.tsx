@@ -9,6 +9,7 @@ import Divider from "@/app/ui/Divider";
 import { Close, Edit } from "@/app/ui/Icons";
 import styles from "./page.module.css";
 import { errorColor1 } from "@/lib/constants";
+import { TextArea } from "@/app/ui/TextArea/TextArea";
 
 interface EditActionItemModalProps {
   isOpen: boolean;
@@ -66,7 +67,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
     >
       <Divider />
       {showEditName ? (
-        <div>
+        <div className="flex flex-row">
           <Input value={name} placeholder={t("name")} onChange={setName} />
           <div
             className="hover:opacity-50 cursor-pointer"
@@ -91,30 +92,39 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
           </div>
         </div>
       )}
-
       <Divider />
-      <div className="flex flex-row justify-between">
-        <div>
-          <div className={styles.subtitle}>{t("description")}</div>
-          <div>{description}</div>
+      {showEditDescription ? (
+        <div className="flex flex-row">
+          <TextArea value={description} placeholder={t("description")} onChange={setDescription} />
+          <div
+            className="hover:opacity-50 cursor-pointer"
+            onClick={() => {
+              setShowEditDescription(false);
+            }}>
+            <Close color={errorColor1} />
+          </div>
         </div>
-        <div
-          className="hover:opacity-50 cursor-pointer"
-          onClick={() => {
-
-          }}>
-          <Edit />
+      ) : (
+        <div className="flex flex-row justify-between">
+          <div>
+            <div className={styles.subtitle}>{t("description")}</div>
+            <div>{description}</div>
+          </div>
+          <div
+            className="hover:opacity-50 cursor-pointer"
+            onClick={() => {
+              setShowEditDescription(true);
+            }}>
+            <Edit />
+          </div>
         </div>
-      </div>
-      <div className="my-8 flex flex-col gap-3">
-
-        <Input value={description} placeholder={t("description")} onChange={setDescription} />
-        <Select
-          options={statusOptions}
-          placeholder={t("status")}
-          onChange={(s) => setStatus(s as any)}
-        />
-      </div>
+      )}
+      <Divider />
+      <Select
+        options={statusOptions}
+        placeholder={t("status")}
+        onChange={(s) => setStatus(s as any)}
+      />
       <Button
         disabled={!name || !description || !status}
         label={t("create")}

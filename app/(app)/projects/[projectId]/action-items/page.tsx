@@ -10,6 +10,7 @@ import ActionItemsList from "../ActionItemsList";
 import CreateActionItemModal from "../CreateActionItemModal";
 import EditActionItemModal from "../EditActionItemModal";
 import { useProject } from "../useProject";
+import { cardClass } from "@/lib/constants";
 
 interface ActionItemsProps {
   projectId: string;
@@ -37,14 +38,15 @@ const ActionItems: FC<ActionItemsProps> = ({ projectId }) => {
         title={t("action_items")}
         topLabel={topLabel}
       />
-      <Divider />
-      <ActionItemsList
-        actionItems={project?.action_items ?? []}
-        isEmpty={(project?.action_items ?? []).length === 0}
-        onClickActionItem={(actionItem) => {
-          setEditActionItem(actionItem);
-        }}
-      />
+      <div className={cardClass}>
+        <ActionItemsList
+          actionItems={project?.action_items ?? []}
+          isEmpty={(project?.action_items ?? []).length === 0}
+          onClickActionItem={(actionItem) => {
+            setEditActionItem(actionItem);
+          }}
+        />
+      </div>
       <CreateActionItemModal
         isOpen={showCreateActionItem}
         onClose={() => {
