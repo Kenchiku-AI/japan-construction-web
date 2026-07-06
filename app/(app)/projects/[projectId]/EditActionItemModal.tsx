@@ -5,6 +5,8 @@ import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { UpdateActionItemRequest, ActionItem, ActionItemStatus } from "@/types";
 import Select from "@/app/ui/Select/Select";
+import Divider from "@/app/ui/Divider";
+import { Edit } from "@/app/ui/Icons";
 
 interface EditActionItemModalProps {
   isOpen: boolean;
@@ -58,6 +60,26 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       }}
       title={t("action_item")}
     >
+      <Divider />
+      <div>
+        <div>
+          <div>{t("name")}</div>
+          <div>{name}</div>
+        </div>
+        <Button
+          iconLeft={() => <Edit />}
+        />
+      </div>
+      <Divider />
+      <div>
+        <div>
+          <div>{t("description")}</div>
+          <div>{description}</div>
+        </div>
+        <Button
+          iconLeft={() => <Edit />}
+        />
+      </div>
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("name")} onChange={setName} />
         <Input value={description} placeholder={t("description")} onChange={setDescription} />
