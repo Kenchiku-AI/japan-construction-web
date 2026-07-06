@@ -80,7 +80,13 @@ const ActionItems: FC<ActionItemsProps> = ({ projectId }) => {
           setShowCreateActionItem(false);
         }}
         onCreate={(name, description) => {
+          setShowCreateActionItem(false);
 
+          createActionItem({
+            project_id: projectId,
+            name,
+            description
+          });
         }}
       />
       <EditActionItemModal

@@ -374,6 +374,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           setShowCreateActionItem(false);
         }}
         onCreate={(name, description) => {
+          setShowCreateActionItem(false);
+
           createActionItem({
             project_id: projectId,
             name,
