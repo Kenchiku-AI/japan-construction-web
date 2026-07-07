@@ -196,6 +196,8 @@
 	background: transparent;
 	color: var(--text1);
 	border: 1.5px solid var(--border-color);
+	background: var(--bg);
+
 }
 
 .btnSecondary:hover {

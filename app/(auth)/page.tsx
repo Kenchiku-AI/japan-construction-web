@@ -135,17 +135,23 @@ export default function LandingPage() {
 
         <div className={styles.navActions}>
           <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`}>ログイン</Link>
-          <div
-            onClick={async () => {
-              if (invitationId) {
+          {invitationId && (
+            <div
+              onClick={() => {
                 resendInvitation(invitationId);
-              } else {
-                setShowSignup(true);
-              }
+              }}
+              className={`${styles.btn} ${styles.btnSecondary}`}
+            >
+              メールを再送信する
+            </div>
+          )}
+          <div
+            onClick={() => {
+              setShowSignup(true);
             }}
             className={`${styles.btn} ${styles.btnPrimary}`}
           >
-            {invitationId ? "メールを再送信する" : "無料で試してみる →"}
+            無料で試してみる →
           </div>
           {/* Hamburger — mobile only */}
           <button
@@ -165,34 +171,42 @@ export default function LandingPage() {
             )}
           </button>
         </div>
-      </nav>
+      </nav >
 
       {/* Mobile menu drawer */}
-      {menuOpen && (
-        <div className={styles.mobileMenu} role="dialog" aria-label="ナビゲーションメニュー">
-          <Link href="#features" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>機能</Link>
-          <Link href="#how-it-works" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ご利用の流れ</Link>
-          <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>アプリ</Link>
-          <Link href="#line" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>LINE連携</Link>
-          <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>利用対象</Link>
-          <Link href="#pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金プラン</Link>
-          <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ドキュメント</Link>
-          <div className={styles.mobileMenuDivider} />
-          <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => setMenuOpen(false)}>ログイン</Link>
-          <div
-            onClick={async () => {
-              if (invitationId) {
-                resendInvitation(invitationId);
-              } else {
+      {
+        menuOpen && (
+          <div className={styles.mobileMenu} role="dialog" aria-label="ナビゲーションメニュー">
+            <Link href="#features" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>機能</Link>
+            <Link href="#how-it-works" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ご利用の流れ</Link>
+            <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>アプリ</Link>
+            <Link href="#line" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>LINE連携</Link>
+            <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>利用対象</Link>
+            <Link href="#pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金プラン</Link>
+            <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ドキュメント</Link>
+            <div className={styles.mobileMenuDivider} />
+            <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => setMenuOpen(false)}>ログイン</Link>
+            {invitationId && (
+              <div
+                onClick={() => {
+                  resendInvitation(invitationId);
+                }}
+                className={`${styles.btn} ${styles.btnSecondary}`}
+              >
+                メールを再送信する
+              </div>
+            )}
+            <div
+              onClick={() => {
                 setShowSignup(true);
-              }
-            }}
-            className={`${styles.btn} ${styles.btnPrimary} mt-2`}
-          >
-            {invitationId ? "メールを再送信する" : "無料で試してみる →"}
+              }}
+              className={`${styles.btn} ${styles.btnPrimary}`}
+            >
+              無料で試してみる →
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* ── Hero ── */}
       <header className={styles.hero} role="banner">
@@ -227,17 +241,23 @@ export default function LandingPage() {
             </p>
 
             <div className={styles.heroCta}>
-              <div
-                onClick={async () => {
-                  if (invitationId) {
+              {invitationId && (
+                <div
+                  onClick={() => {
                     resendInvitation(invitationId);
-                  } else {
-                    setShowSignup(true);
-                  }
+                  }}
+                  className={`${styles.btn} ${styles.btnSecondary}`}
+                >
+                  メールを再送信する
+                </div>
+              )}
+              <div
+                onClick={() => {
+                  setShowSignup(true);
                 }}
                 className={`${styles.btn} ${styles.btnPrimary}`}
               >
-                {invitationId ? "メールを再送信する" : "無料で試してみる →"}
+                無料で試してみる →
               </div>
               {/* <Link href="/docs" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -701,17 +721,23 @@ export default function LandingPage() {
             管理者が招待リンクを発行するだけで、チーム全員がすぐに使えます。
           </p>
           <div className={`${styles.btnGroup} ${styles.centered}`}>
-            <div
-              onClick={async () => {
-                if (invitationId) {
+            {invitationId && (
+              <div
+                onClick={() => {
                   resendInvitation(invitationId);
-                } else {
-                  setShowSignup(true);
-                }
+                }}
+                className={`${styles.btn} ${styles.btnSecondary}`}
+              >
+                メールを再送信する
+              </div>
+            )}
+            <div
+              onClick={() => {
+                setShowSignup(true);
               }}
               className={`${styles.btn} ${styles.btnPrimary}`}
             >
-              {invitationId ? "メールを再送信する" : "無料で試してみる →"}
+              無料で試してみる →
             </div>
             <Link href="/login" className={`${styles.btn} ${styles.btnSecondary} ${styles.btnLg}`}>
               既存アカウントでログイン
