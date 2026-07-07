@@ -24,7 +24,7 @@ const LineWebhookButton: FC<LineWebhookButtonProps> = ({ companyId }) => {
       ) : (
         <Button
           variant="tertiary"
-          label={t("copy_line_webhook")}
+          label={t("webhook_url")}
           iconLeft={() => <Copy color={buttonColor} />}
           onClick={async () => {
             try {

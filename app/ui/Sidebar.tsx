@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard } from "./Icons";
+import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard, LineLogo } from "./Icons";
 import { bgColor4, bgColor5, buttonColor, fontColor2 } from "@/lib/constants";
 import Divider from "./Divider";
 import Link from "next/link";
@@ -90,6 +90,11 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                       name={t("tags")}
                       icon={() => <Tag size={22} />}
                       path={"/tags"}
+                    />
+                    <SidebarItem
+                      name={t("line_integration")}
+                      icon={() => <LineLogo size={18} strokeWidth={1.5} />}
+                      path={"/line"}
                     />
                   </>
                 )}
