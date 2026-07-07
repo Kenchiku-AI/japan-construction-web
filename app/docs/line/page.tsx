@@ -263,53 +263,13 @@ export default function LinePage() {
 
       <section>
         <div className="text-2xl" style={{ color: fontColor1 }}>
-          ユーザーアカウントの連携
-        </div>
-        <Divider style={{ background: fontColor2 }} />
-
-        <div className="space-y-4">
-          <p>
-            LINEから報告書を更新するには、各ユーザーが自分のKenchiku AIアカウントとLINEアカウントを連携する必要があります。この設定は会社ごとに行います。
-          </p>
-
-          <ol className="list-decimal pl-6 space-y-3">
-            <li>
-              Kenchiku AIのユーザー画面を開きます。
-            </li>
-
-            <li>
-              <strong style={{ color: fontColor1 }}>
-                「LINE連携コードをコピー」
-              </strong>
-              をクリックし、表示された連携コード（例：
-              <code style={{ color: fontColor1 }}>U-XXXX</code>
-              ）をコピーします。
-            </li>
-
-            <li>
-              LINEで会社のLINE公式アカウントとの1対1のトークを開き、コピーしたコードを送信します。
-            </li>
-          </ol>
-
-          <p>
-            コードを送信すると、登録済みのメールアドレスに確認メールが届きます。メール内の案内に従って手続きを完了してください。
-          </p>
-
-          <p>
-            複数の会社でKenchiku AIを利用している場合は、会社ごとに同じ手順でアカウントを連携してください。
-          </p>
-        </div>
-      </section>
-
-      <section>
-        <div className="text-2xl" style={{ color: fontColor1 }}>
           LINEグループとプロジェクトの連携
         </div>
         <Divider style={{ background: fontColor2 }} />
 
         <div className="space-y-4">
           <p>
-            現場ごとにLINEグループを利用している場合は、LINEグループとKenchiku AIのプロジェクトを連携することで、グループ内のメッセージを自動的に該当するプロジェクトの報告書へ反映できます。
+            LINEグループをKenchiku AIのプロジェクトと連携すると、そのグループが対象プロジェクトとして認識されます。
           </p>
 
           <ol className="list-decimal pl-6 space-y-3">
@@ -332,7 +292,11 @@ export default function LinePage() {
           </ol>
 
           <p>
-            このコードは、対象のプロジェクトとLINEグループの両方にアクセスできるユーザーであれば送信できます。
+            プロジェクト連携コードは、対象のプロジェクトを閲覧できるユーザーであれば誰でも送信できます。
+          </p>
+
+          <p>
+            連携するLINEグループには、会社のLINE公式アカウントが参加している必要があります。
           </p>
 
           <p>
@@ -343,94 +307,40 @@ export default function LinePage() {
 
       <section>
         <div className="text-2xl" style={{ color: fontColor1 }}>
-          LINEメッセージによる報告書の更新
+          ユーザーアカウントの連携
         </div>
         <Divider style={{ background: fontColor2 }} />
 
         <div className="space-y-4">
           <p>
-            アカウント連携が完了したユーザーがLINEでメッセージを送信すると、Kenchiku AIが内容を解析し、該当する報告書を自動的に更新します。更新の流れは以下のとおりです。
+            LINEからKenchiku AIを利用するには、まず自分のLINEアカウントとKenchiku AIのユーザーアカウントを連携します。
           </p>
 
-          <div
-            className="rounded-lg border p-6 space-y-4"
-            style={{ borderColor: fontColor2 }}
-          >
-            <div>
-              <div className="font-semibold" style={{ color: fontColor1 }}>
-                1. 更新対象の報告書を特定
-              </div>
+          <ol className="list-decimal pl-6 space-y-3">
+            <li>
+              Kenchiku AIのユーザー画面を開きます。
+            </li>
 
-              <p className="mt-1">
-                メッセージを受信すると、送信者に関連付けられたプロジェクト内の「オープン」の報告書を最大10件検索します。AIがメッセージの内容と各報告書の情報をもとに、最も適した報告書を自動的に選択します。
-              </p>
-            </div>
+            <li>
+              <strong style={{ color: fontColor1 }}>
+                「LINE連携コードをコピー」
+              </strong>
+              をクリックし、表示された連携コード（例：
+              <code style={{ color: fontColor1 }}>U-XXXX</code>
+              ）をコピーします。
+            </li>
 
-            <div>
-              <div className="font-semibold" style={{ color: fontColor1 }}>
-                2. 報告書を更新
-              </div>
-
-              <p className="mt-1">
-                AIがメッセージの内容を解析し、該当する項目を自動的に更新します。例えば、「今日の作業員数は8名」と送信すると、作業員数の項目が更新されます。
-              </p>
-            </div>
-
-            <div>
-              <div className="font-semibold" style={{ color: fontColor1 }}>
-                LINEグループから送信した場合
-              </div>
-
-              <p className="mt-1">
-                プロジェクトと連携済みのLINEグループでは、そのプロジェクトの最新の「オープン」の報告書が更新対象になります。なお、メッセージを送信したユーザーもKenchiku AIとLINEアカウントを連携している必要があります。
-              </p>
-            </div>
-          </div>
+            <li>
+              ご自身のLINEアカウントから、会社のLINE公式アカウントとの1対1のトーク、または会社のLINE公式アカウントが参加しているLINEグループへ、コピーしたコードを送信します。
+            </li>
+          </ol>
 
           <p>
-            更新は自動的に行われます。反映後は、Kenchiku AIのWebアプリまたはモバイルアプリで内容をご確認ください。
+            コードを送信すると、LINEアカウントとKenchiku AIのユーザーアカウントの連携が完了します。
           </p>
         </div>
       </section>
 
-      <section>
-        <div className="text-2xl" style={{ color: fontColor1 }}>
-          注意事項
-        </div>
-        <Divider style={{ background: fontColor2 }} />
-
-        <div className="space-y-4">
-          <ul className="list-disc pl-6 space-y-2">
-            <li>
-              LINEから更新できるのは、ステータスが「オープン」の報告書のみです。クローズ済みの報告書は更新されません。
-            </li>
-
-            <li>
-              メッセージの内容が報告書内のどの項目にも該当しない場合、報告書は更新されません。
-            </li>
-
-            <li>
-              LINEグループからメッセージを反映するには、送信者のLINEアカウントがKenchiku AIと連携済みであり、LINEグループがプロジェクトと連携済みである必要があります。
-            </li>
-
-            <li>
-              <strong style={{ color: fontColor1 }}>Channel secret</strong>
-              は安全に管理してください。第三者に知られると、不正なリクエストが送信されるおそれがあります。
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section>
-        <div className="text-2xl" style={{ color: fontColor1 }}>
-          まとめ
-        </div>
-        <Divider style={{ background: fontColor2 }} />
-
-        <p>
-          LINE連携を利用することで、現場のメンバーはKenchiku AIを直接操作しなくても、普段使っているLINEから報告書を更新できます。さらに、ユーザーアカウントとLINEグループの両方を設定することで、現場ごとの報告内容をより正確に管理できます。
-        </p>
-      </section>
     </div>
   );
 }

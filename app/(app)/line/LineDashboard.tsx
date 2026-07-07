@@ -33,7 +33,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
             variant="tertiary"
             iconLeft={() => <Edit />}
             onClick={() => {
-              setShowLineSecret(true);
+
             }}
           />
         </div>
