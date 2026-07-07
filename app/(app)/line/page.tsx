@@ -10,6 +10,7 @@ const LinePage: FC = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
 
+
   return (
     <>
       <Heading

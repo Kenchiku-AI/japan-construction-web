@@ -6,9 +6,10 @@ import { useTranslation } from "react-i18next";
 
 interface LineWebhookButtonProps {
   companyId: string;
+  shorten?: boolean;
 }
 
-const LineWebhookButton: FC<LineWebhookButtonProps> = ({ companyId }) => {
+const LineWebhookButton: FC<LineWebhookButtonProps> = ({ companyId, shorten }) => {
   const [webookCopied, setWebookCopied] = useState(false);
   const { t } = useTranslation();
 
@@ -24,7 +25,7 @@ const LineWebhookButton: FC<LineWebhookButtonProps> = ({ companyId }) => {
       ) : (
         <Button
           variant="tertiary"
-          label={t("webhook_url")}
+          label={t(shorten ? "webhook_url" : "copy_webhook_url")}
           iconLeft={() => <Copy color={buttonColor} />}
           onClick={async () => {
             try {

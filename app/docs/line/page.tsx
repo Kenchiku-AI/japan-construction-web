@@ -282,7 +282,7 @@ export default function LinePage() {
                 「LINE連携コードをコピー」
               </strong>
               をクリックし、プロジェクト連携コード（例：
-              <code style={{ color: fontColor1 }}>P-XXXX</code>
+              <code style={{ color: fontColor1 }}>P-XXXXXX</code>
               ）をコピーします。
             </li>
 

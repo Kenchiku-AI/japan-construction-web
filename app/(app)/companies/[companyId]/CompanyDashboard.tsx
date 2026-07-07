@@ -221,7 +221,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                         />
                       </div>
                       <MobileDivider />
-                      <LineWebhookButton companyId={companyId} />
+                      <LineWebhookButton companyId={companyId} shorten />
                     </>
                   )}
                 </div>

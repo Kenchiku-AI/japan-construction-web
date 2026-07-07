@@ -39,7 +39,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
             </label>
           </div>
           <div style={{ color: fontColor2 }}>{"ご利用ガイド"}</div>
-          <Divider style={{ opacity: 0.1 }} />
+          <Divider />
           <div className="space-y-1">
             <SidebarItem name="クイックスタート" path="/docs/quick-start" />
             <SidebarItem name="テンプレート" path="/docs/templates" />
