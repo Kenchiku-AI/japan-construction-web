@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { ReportImageTag, UserRole } from "@/types";
+import { Company, ReportImageTag, UserRole } from "@/types";
 import { redirect, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
 import { CreditCard, CreditCardPlus, Edit, LineLogo, Plus } from "@/app/ui/Icons";
@@ -31,6 +31,7 @@ import LineWebhookButton from "./LineWebhookButton";
 import LineWebhookModal from "./LineWebhookModal";
 import { useBillingPlans } from "../../billing-plans/useBillingPlans";
 import Select from "@/app/ui/Select/Select";
+import { BillingPlan } from "@/types/billingPlans";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -182,21 +183,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     </div>
                   )}
                   <MobileDivider />
-                  <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
-                    {(company?.free_trial_days_left ?? 0) > 0 ? (
-                      <>
-                        {t("free_trial", { days: company.free_trial_days_left })}
-                      </>
-                    ) : (
-                      <>
-                        {selectedBillingPlan ?
-                          `${selectedBillingPlan.name} (¥${selectedBillingPlan.amount_jpy}/${t("month")})` :
-                          t("billing_exempt")
-                        }
-                      </>
-                    )}
+                  <div className="flex items-center" style={{ color: fontColor3, height: 40 }}>
+                    <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
                   </div>
-
                 </div>
                 <Divider />
                 <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
@@ -481,5 +470,46 @@ const MobileDivider = () => (
     />
   </div>
 );
+
+interface PaymentLabelProps {
+  company?: Company;
+  billingPlan?: BillingPlan;
+}
+
+const PaymentLabel: FC<PaymentLabelProps> = ({ company, billingPlan }) => {
+  const { t } = useTranslation();
+
+  if (company?.is_payment_method_valid === false) {
+    return (
+      <div style={{ color: errorColor1 }}>
+        {t('payment_required')}
+      </div>
+    );
+  }
+
+  const daysLeft = company?.free_trial_days_left ?? 0;
+
+  if (daysLeft > 0) {
+    return (
+      <>
+        {t("free_trial", { days: daysLeft })}
+      </>
+    )
+  }
+
+  if (billingPlan) {
+    return (
+      <>
+        {`${billingPlan.name} (¥${billingPlan.amount_jpy}/${t("month")})`}
+      </>
+    )
+  }
+
+  return (
+    <>
+      {t("billing_exempt")}
+    </>
+  )
+};
 
 export default CompanyDashboard;

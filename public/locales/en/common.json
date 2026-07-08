@@ -103,6 +103,7 @@
   "none": "None",
   "number": "Number",
   "ok": "OK",
+  "payment_required": "お支払いが必要です",
   "photo": "Photo",
   "password": "Password",
   "passwords_do_not_match": "Passwords do not match.",
