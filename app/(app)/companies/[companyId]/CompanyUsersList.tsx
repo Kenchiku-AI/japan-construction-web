@@ -54,7 +54,9 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({
                   style={{ height: 60 }}
                   className="flex items-center gap-3"
                 >
-                  <User />
+                  <div className="hidden md:block">
+                    <User />
+                  </div>
                   <div className="flex flex-col">
                     <div>{`${u.last_name} ${u.first_name}`}</div>
                     <div

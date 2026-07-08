@@ -56,7 +56,7 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
                     style={{ minHeight: 60, minWidth: 0 }}
                     className="flex flex-1 items-center gap-3 py-1"
                   >
-                    <div>
+                    <div className="hidden md:block">
                       <ClipboardCheck />
                     </div>
                     <div style={{ minWidth: 0 }}>
@@ -65,7 +65,7 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
                     </div>
                   </div>
                   <div
-                    className="flex items-center px-2"
+                    className="flex items-center px-2 hidden md:block"
                     style={{
                       fontSize: 12,
                       padding: "5px 10px",
