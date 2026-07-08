@@ -481,7 +481,7 @@ const PaymentLabel: FC<PaymentLabelProps> = ({ company, billingPlan }) => {
 
   if (company?.is_payment_method_valid === false) {
     return (
-      <div className="flex gap-2" style={{ color: errorColor1 }}>
+      <div className="flex gap-2 items-end" style={{ color: errorColor1 }}>
         <Alert color={errorColor1} />
         {t('payment_required')}
       </div>
