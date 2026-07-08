@@ -13,9 +13,12 @@ import { Loader } from "@/app/ui/Loader";
 import { Logo } from "@/app/ui/Icons";
 
 const Signup = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get(invitationTokenKey);
+  const defaultEmail = searchParams.get("email");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(defaultEmail);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
@@ -23,9 +26,6 @@ const Signup = () => {
   const { loading, signup } = useSignup();
   const router = useRouter();
   const { t } = useTranslation();
-
-  const searchParams = useSearchParams();
-  const token = searchParams.get(invitationTokenKey);
 
   useEffect(() => {
     if (!token) {
@@ -44,6 +44,15 @@ const Signup = () => {
         <Heading title={t("welcome")} subtitle={t("sign_up_description")} />
         <div className={styles.fields}>
           <Input
+            placeholder={t("email")}
+            value={email ?? ""}
+            onChange={(t) => {
+              setEmail(t);
+              setIsEmailInvalid(false);
+            }}
+            error={isEmailInvalid}
+          />
+          <Input
             placeholder={t("last_name")}
             onChange={(t) => {
               setLastName(t);
@@ -54,14 +63,6 @@ const Signup = () => {
             onChange={(t) => {
               setFirstName(t);
             }}
-          />
-          <Input
-            placeholder={t("email")}
-            onChange={(t) => {
-              setEmail(t);
-              setIsEmailInvalid(false);
-            }}
-            error={isEmailInvalid}
           />
           <Input
             placeholder={t("password")}
