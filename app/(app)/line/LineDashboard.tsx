@@ -52,7 +52,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
   return (
     <>
       <div className={cardClass}>
-        <div className="px-3 flex items-center gap-3" style={{ color: fontColor3, minHeight: 50 }}>
+        <div className="md:px-3 flex items-center gap-3" style={{ color: fontColor3, minHeight: 50 }}>
           <div>
             <Info color={fontColor3} />
           </div>
@@ -63,7 +63,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
         <Divider />
         <div className="flex items-center justify-between gap-3 py-1">
           {!company?.line_channel_secret_last4 ? (
-            <div className="flex flex-1 px-2">
+            <div className="flex flex-1 md:px-2">
               <Input
                 placeholder={t("channel_secret")}
                 value={channelSecret}
@@ -82,7 +82,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
               )}
             </div>
           ) : (
-            <div className="flex items-center gap-3 px-4">
+            <div className="flex items-center gap-3 md:px-4">
               <div>
                 {`${t("channel_secret")}: ••••${company.line_channel_secret_last4}`}
               </div>
@@ -97,7 +97,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
           )}
         </div>
         <Divider />
-        <div className="px-4 py-1">
+        <div className="md:px-4 py-1">
           <LineWebhookButton companyId={companyId} />
         </div>
       </div>
@@ -125,7 +125,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
             {unlinkedProjects.map((p, i) => (
               <>
                 {i > 0 && <Divider />}
-                <div className="px-4 flex justify-between items-center">
+                <div className="md:px-4 flex justify-between items-center">
                   <div className="flex items-center gap-3">
                     <Hardhat />
                     <div>
