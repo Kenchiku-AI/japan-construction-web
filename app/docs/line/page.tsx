@@ -63,18 +63,16 @@ export default function LinePage() {
             />
 
             <li>
+              Developerアカウントをまだ作成していない場合は、
               <strong style={{ color: fontColor1 }}>名前</strong>
               と
               <strong style={{ color: fontColor1 }}>メールアドレス</strong>
-              を入力し、Developerアカウントを作成します。
+              を入力してDeveloperアカウントを作成します。すでに作成済みの場合は、この手順は表示されません。
             </li>
 
             <li>
-              続いて、
-              <strong style={{ color: fontColor1 }}>
-                プロバイダーを作成
-              </strong>
-              でプロバイダー名を入力し、プロバイダーを作成します。
+              <strong style={{ color: fontColor1 }}>プロバイダーを作成</strong>
+              が表示された場合は、プロバイダー名を入力してプロバイダーを作成します。すでにプロバイダーがある場合は、そのまま次へ進んでください。
             </li>
 
             <li>
