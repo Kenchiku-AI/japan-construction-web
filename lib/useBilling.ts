@@ -1,8 +1,10 @@
 import axios, { AxiosError } from "axios";
 import { useModal } from "./modal/ModalContext";
+import { useTranslation } from "react-i18next";
 
 export const useBilling = () => {
   const { showModal } = useModal();
+  const { t } = useTranslation();
 
   const isBillingError = (err: any) => {
     if (!axios.isAxiosError(err)) return false;
@@ -14,14 +16,14 @@ export const useBilling = () => {
 
   const handleBillingReason = (reason: string) => {
     const reasons = [
-      "payment_method_required", 
+      "payment_method_required",
       "subscription_past_due"
     ];
 
     if (reasons.includes(reason)) {
       showModal({
-        title: reason,
-        subtitle: `${reason}_description`
+        title: t(reason),
+        subtitle: t(`${reason}_description`)
       });
       return true;
     }
