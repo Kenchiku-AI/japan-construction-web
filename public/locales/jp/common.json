@@ -196,6 +196,7 @@
   "payment_method": "支払い方法",
   "payment_method_required": "お支払い方法が必要です",
   "payment_method_required_description": "続行する前に、会社に有効なお支払い方法が登録されていることを確認してください。",
+  "payment_required": "お支払いが必要です",
   "photo_details": "写真の詳細",
   "photo_taken": "{{date}}撮影",
   "photos": "写真",
