@@ -16,9 +16,9 @@ const Signup = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get(invitationTokenKey);
   const defaultEmail = searchParams.get("email");
+  const [email, setEmail] = useState(defaultEmail ?? "");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState(defaultEmail);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
@@ -45,7 +45,7 @@ const Signup = () => {
         <div className={styles.fields}>
           <Input
             placeholder={t("email")}
-            value={email ?? ""}
+            value={email}
             onChange={(t) => {
               setEmail(t);
               setIsEmailInvalid(false);
