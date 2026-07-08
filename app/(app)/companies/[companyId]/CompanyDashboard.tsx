@@ -24,7 +24,7 @@ import CreateReportTemplateModal from "../../reports/templates/CreateReportTempl
 import ReportTemplatesList from "../../reports/templates/ReportTemplatesList";
 import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
-import { bgColor2, buttonColor, cardClass, errorColor1, fontColor1, fontColor2, fontColor3 } from "@/lib/constants";
+import { buttonColor, cardClass, errorColor1, fontColor1, fontColor3 } from "@/lib/constants";
 import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
 import LineChannelSecretModal from "./LineChannelSecretModal";
 import LineWebhookButton from "./LineWebhookButton";
@@ -79,7 +79,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const isAdmin = currentUser?.role === UserRole.Admin;
   const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
   const companyName = company?.name ?? searchParams.get("name") ?? "";
-  const paymentMethodColor = company?.is_payment_method_valid ? fontColor1 : errorColor1;
 
   const shouldRedirect =
     currentUser && !isAdmin && currentUser.company?.id !== companyId;
@@ -170,8 +169,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     />
                   ) : (
                     <div className="flex flex-row gap-2 items-center">
-                      <CreditCard color={paymentMethodColor} />
-                      <div style={{ color: paymentMethodColor }}>
+                      <CreditCard color={fontColor1} />
+                      <div >
                         {`${t("payment_method")}: ${company.payment_method_name}`}
                       </div>
                       <Button
