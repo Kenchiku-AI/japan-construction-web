@@ -48,7 +48,6 @@ export type UserCompany = {
   id: string;
   name: string;
   corporate_number?: string;
-  needs_payment_method: boolean;
 };
 
 export type CurrentUser = {

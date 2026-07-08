@@ -131,14 +131,6 @@ const ReportsPage = () => {
               label={t("create")}
               iconLeft={() => <Plus />}
               onClick={() => {
-                if (currentUser?.company?.needs_payment_method) {
-                  showModal({
-                    title: t("payment_method_required"),
-                    subtitle: t("payment_method_required_description")
-                  });
-                  return;
-                }
-
                 setShowCreateReport(true);
               }}
               iconOnlyMobile

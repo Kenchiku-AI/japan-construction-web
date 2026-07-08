@@ -181,17 +181,22 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                       />
                     </div>
                   )}
-                  {!isAdmin && (
-                    <>
-                      <MobileDivider />
-                      <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
+                  <MobileDivider />
+                  <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
+                    {(company?.free_trial_days_left ?? 0) > 0 ? (
+                      <>
+                        {t("free_trial", { days: company.free_trial_days_left })}
+                      </>
+                    ) : (
+                      <>
                         {selectedBillingPlan ?
                           `${selectedBillingPlan.name} (¥${selectedBillingPlan.amount_jpy}/${t("month")})` :
                           t("billing_exempt")
                         }
-                      </div>
-                    </>
-                  )}
+                      </>
+                    )}
+                  </div>
+
                 </div>
                 <Divider />
                 <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
@@ -237,14 +242,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     label={t("create_project")}
                     iconLeft={() => <Plus />}
                     onClick={() => {
-                      if (!isAdmin && currentUser?.company?.needs_payment_method) {
-                        showModal({
-                          title: t("payment_method_required"),
-                          subtitle: t("payment_method_required_description")
-                        });
-                        return;
-                      }
-
                       setShowCreateProject(true);
                     }}
                     style={{ height: "auto" }}
@@ -336,7 +333,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
             )}
           </div>
         </>
-      )}
+      )
+      }
       <InviteUserModal
         isOpen={showInviteUser}
         onClose={() => {

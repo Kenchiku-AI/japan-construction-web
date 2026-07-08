@@ -266,17 +266,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   label={t("create_report")}
                   iconLeft={() => <Plus />}
                   onClick={() => {
-                    if (
-                      currentUser?.role !== "admin" &&
-                      currentUser?.company?.needs_payment_method
-                    ) {
-                      showModal({
-                        title: t("payment_method_required"),
-                        subtitle: t("payment_method_required_description")
-                      });
-                      return;
-                    }
-
                     setShowCreateReport(true);
                   }}
                   style={{ height: "auto" }}

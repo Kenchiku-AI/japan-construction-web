@@ -39,17 +39,6 @@ const ProjectsPage = () => {
             label={t("create_project")}
             iconLeft={() => <Plus />}
             onClick={() => {
-              if (
-                currentUser?.role !== UserRole.Admin &&
-                currentUser?.company?.needs_payment_method
-              ) {
-                showModal({
-                  title: t("payment_method_required"),
-                  subtitle: t("payment_method_required_description")
-                });
-                return;
-              }
-
               setShowCreateProject(true);
             }}
             style={{ height: "auto" }}

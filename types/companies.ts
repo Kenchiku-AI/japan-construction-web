@@ -7,6 +7,7 @@ export type Company = {
   payment_method_name?: string;
   line_channel_secret_last4?: string;
   is_payment_method_valid: boolean;
+  free_trial_days_left?: number;
   billing_plan_id?: string;
   users: CompanyUser[];
   projects: Project[];
