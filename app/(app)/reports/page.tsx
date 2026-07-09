@@ -138,7 +138,7 @@ const ReportsPage = () => {
           )}
         </div>
       </div>
-      <div className={!reports?.length && showSearch ? "" : cardClass}>
+      <div className={((!reports?.length && showSearch) || loading) ? "" : cardClass}>
         <ReportsList
           reports={reports ?? []}
           isEmpty={!loading && reports?.length === 0 && !showSearch}
