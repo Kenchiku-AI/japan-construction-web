@@ -483,8 +483,8 @@ export default function LandingPage() {
                 <Image
                   src="/web-screenshot.png"
                   alt="Kenchiku AIウェブアプリの管理画面"
-                  width={800}
-                  height={600}
+                  width={2560}
+                  height={1648}
                   style={{ width: "100%", height: "auto", borderRadius: 10, border: "1.5px solid var(--border-color)" }}
                 />
               </div>
