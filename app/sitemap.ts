@@ -6,7 +6,8 @@ function getDocsSlugs(): string[] {
   const docsDir = path.join(process.cwd(), "app/docs");
   return fs.readdirSync(docsDir, { withFileTypes: true })
     .filter((d) => d.isDirectory())
-    .map((d) => d.name);
+    .map((d) => d.name)
+    .filter((name) => !name.startsWith("["));
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
