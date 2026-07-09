@@ -125,7 +125,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
             {unlinkedProjects.map((p, i) => (
               <>
                 {i > 0 && <Divider />}
-                <div className="md:px-4 flex justify-between items-center">
+                <div className="md:px-4 py-2 flex justify-between items-center">
                   <div className="flex items-center gap-3">
                     <Hardhat />
                     <div>
