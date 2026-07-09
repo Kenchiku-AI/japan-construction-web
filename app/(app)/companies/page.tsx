@@ -61,7 +61,9 @@ const CompaniesPage = () => {
               >
                 <div className="flex items-center justify-between">
                   <div style={{ height: 60 }} className="flex items-center gap-6">
-                    <Users />
+                    <div className="hidden md:block">
+                      <Users />
+                    </div>
                     <div>
                       <div>{c.name}</div>
                       <div className={styles.corporateNumber}>
