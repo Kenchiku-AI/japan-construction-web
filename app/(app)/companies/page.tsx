@@ -44,35 +44,37 @@ const CompaniesPage = () => {
           iconOnlyMobile
         />
       </div>
-      <div className={cardClass}>
-        {companies?.length === 0 && (
-          <div className={styles.empty}>{t("empty_companies_description")}</div>
-        )}
-        {companies?.map((c, i) => (
-          <div key={c.id}>
-            {i > 0 && <Divider />}
-            <div
-              className="hover:opacity-50 cursor-pointer mx-4"
-              onClick={() => {
-                setShowLoader(true);
-                router.push(`/companies/${c.id}?name=${c.name}`);
-              }}
-            >
-              <div className="flex items-center justify-between">
-                <div style={{ height: 60 }} className="flex items-center gap-6">
-                  <Users />
-                  <div>
-                    <div>{c.name}</div>
-                    <div className={styles.corporateNumber}>
-                      {c.corporate_number}
+      {!!companies && (
+        <div className={cardClass}>
+          {companies.length === 0 && (
+            <div className={styles.empty}>{t("empty_companies_description")}</div>
+          )}
+          {companies.map((c, i) => (
+            <div key={c.id}>
+              {i > 0 && <Divider />}
+              <div
+                className="hover:opacity-50 cursor-pointer mx-4"
+                onClick={() => {
+                  setShowLoader(true);
+                  router.push(`/companies/${c.id}?name=${c.name}`);
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <div style={{ height: 60 }} className="flex items-center gap-6">
+                    <Users />
+                    <div>
+                      <div>{c.name}</div>
+                      <div className={styles.corporateNumber}>
+                        {c.corporate_number}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
       <CreateCompanyModal
         isOpen={showCreateCompany}
         onClose={() => {

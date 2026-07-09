@@ -48,7 +48,9 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({
             >
               <div className="flex items-center justify-between md:mx-3">
                 <div style={{ height: 60 }} className="flex items-center gap-3">
-                  <Hardhat />
+                  <div className="hidden md:block">
+                    <Hardhat />
+                  </div>
                   <div>{p.name}</div>
                 </div>
                 <StatusLabel project={p} />
