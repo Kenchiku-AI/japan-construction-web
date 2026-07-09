@@ -49,43 +49,45 @@ const BillingPlansPage = () => {
           iconOnlyMobile
         />
       </div>
-      <div className={cardClass}>
-        {billingPlans?.length === 0 && (
-          <div className={styles.empty}>{t("empty_billing_plans_description")}</div>
-        )}
-        {billingPlans?.map((b, i) => (
-          <div key={b.id}>
-            {i > 0 && <Divider />}
-            <div className="md:mx-3">
-              <div className="flex items-center justify-between">
-                <div
-                  style={{ height: 60, minWidth: 0 }}
-                  className="flex items-center gap-3"
-                >
-                  <div>
-                    <CreditCard color={fontColor1} strokeWidth={1} />
-                  </div>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ color: fontColor1 }}>{b.name}<span className="ml-2">{`(¥${b.amount_jpy}/${t("month")})`}</span></div>
-                    <div className={styles.subtitle}>{b.description}</div>
-                  </div>
-                </div>
-                <div className="flex gap-3 md:gap-5 items-center">
+      {!!billingPlans && (
+        <div className={cardClass}>
+          {billingPlans.length === 0 && (
+            <div className={styles.empty}>{t("empty_billing_plans_description")}</div>
+          )}
+          {billingPlans.map((b, i) => (
+            <div key={b.id}>
+              {i > 0 && <Divider />}
+              <div className="md:mx-3">
+                <div className="flex items-center justify-between">
                   <div
-                    className="cursor-pointer pb-1"
-                    onClick={() => setEditBillingPlan(b)}
+                    style={{ height: 60, minWidth: 0 }}
+                    className="flex items-center gap-3"
                   >
-                    <Edit />
+                    <div className="hidden md:block">
+                      <CreditCard color={fontColor1} strokeWidth={1} />
+                    </div>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ color: fontColor1 }}>{b.name}<span className="ml-2">{`(¥${b.amount_jpy}/${t("month")})`}</span></div>
+                      <div className={styles.subtitle}>{b.description}</div>
+                    </div>
                   </div>
-                  <div className="cursor-pointer" onClick={() => setDeleteBillingPlanId(b.id)}>
-                    <Trash />
+                  <div className="flex gap-3 md:gap-5 items-center">
+                    <div
+                      className="cursor-pointer pb-1"
+                      onClick={() => setEditBillingPlan(b)}
+                    >
+                      <Edit />
+                    </div>
+                    <div className="cursor-pointer" onClick={() => setDeleteBillingPlanId(b.id)}>
+                      <Trash />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
       <CreateBillingPlanModal
         isOpen={showCreateBillingPlan}
         onClose={() => {
