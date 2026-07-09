@@ -1,6 +1,6 @@
 import Divider from "@/app/ui/Divider";
 import Image from "next/image";
-import { bgColor2, bgColor5, fontColor1, fontColor2 } from "@/lib/constants";
+import { bgColor2, bgColor5, buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
 
 export default function LinePage() {
   return (
@@ -32,7 +32,7 @@ export default function LinePage() {
               href="https://account.line.biz/"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: fontColor1, textDecoration: "underline" }}
+              style={{ color: buttonColor, textDecoration: "underline" }}
             >
               LINE公式アカウント
             </a>
@@ -153,7 +153,7 @@ export default function LinePage() {
                 href="https://developers.line.biz/console/"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: fontColor1, textDecoration: "underline" }}
+                style={{ color: buttonColor, textDecoration: "underline" }}
               >
                 LINE Developersコンソール
               </a>
