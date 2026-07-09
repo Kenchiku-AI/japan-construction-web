@@ -157,24 +157,26 @@ export default function LandingPage() {
             <Link href="#pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金プラン</Link>
             <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ドキュメント</Link>
             <div className={styles.mobileMenuDivider} />
-            <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => setMenuOpen(false)}>ログイン</Link>
-            {invitationId && (
+            <div className="flex flex-col gap-2">
+              <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => setMenuOpen(false)}>ログイン</Link>
+              {invitationId && (
+                <div
+                  onClick={() => {
+                    resendInvitation(invitationId);
+                  }}
+                  className={`${styles.btn} ${styles.btnSecondary}`}
+                >
+                  メールを再送信する
+                </div>
+              )}
               <div
                 onClick={() => {
-                  resendInvitation(invitationId);
+                  setShowSignup(true);
                 }}
-                className={`${styles.btn} ${styles.btnSecondary}`}
+                className={`${styles.btn} ${styles.btnPrimary}`}
               >
-                メールを再送信する
+                無料で試してみる →
               </div>
-            )}
-            <div
-              onClick={() => {
-                setShowSignup(true);
-              }}
-              className={`${styles.btn} ${styles.btnPrimary}`}
-            >
-              無料で試してみる →
             </div>
           </div>
         )
