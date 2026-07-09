@@ -185,12 +185,7 @@ export default function LandingPage() {
 
         {/* Background photo — replace src with your actual construction site photo */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/hero-bg.png"
-          alt=""
-          aria-hidden="true"
-          className={styles.heroBg}
-        />
+        <Image src="/hero-bg.png" alt="" fill priority className={styles.heroBg} aria-hidden />
 
         {/* Overlay so text is readable over the photo */}
         <div className={styles.heroOverlay} aria-hidden="true" />
