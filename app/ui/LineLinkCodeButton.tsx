@@ -7,9 +7,10 @@ import { useTranslation } from "react-i18next";
 interface LineLinkCodeButtonProps {
   code: string;
   shorten?: boolean;
+  fontSize?: number;
 }
 
-const LineLinkCodeButton: FC<LineLinkCodeButtonProps> = ({ code, shorten }) => {
+const LineLinkCodeButton: FC<LineLinkCodeButtonProps> = ({ code, shorten, fontSize }) => {
   const [copied, setCopied] = useState(false);
   const { t } = useTranslation();
 
@@ -17,7 +18,7 @@ const LineLinkCodeButton: FC<LineLinkCodeButtonProps> = ({ code, shorten }) => {
     <>
       {copied ? (
         <div className="flex items-center" style={{ color: fontColor2, height: 40 }}>
-          <div className="flex flex-row gap-1">
+          <div className="flex flex-row gap-1 items-center">
             <Check color={fontColor2} />
             {t("copied")}
           </div>
@@ -41,6 +42,7 @@ const LineLinkCodeButton: FC<LineLinkCodeButtonProps> = ({ code, shorten }) => {
             }
           }}
           style={{ height: 40 }}
+          textStyle={{ fontSize }}
         />
       )}
     </>

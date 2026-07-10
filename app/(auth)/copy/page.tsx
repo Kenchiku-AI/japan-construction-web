@@ -5,6 +5,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import styles from "./page.module.css";
 import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
 import { redirect, useSearchParams } from "next/navigation";
+import { Button } from "@/app/ui/Button/Button";
 
 const CopyPage = () => {
   const { t } = useTranslation();
@@ -22,7 +23,19 @@ const CopyPage = () => {
           title={t("copy_code")}
           subtitle={t("copy_code_description")}
         />
-        <LineLinkCodeButton code={code} shorten />
+        <div className="mt-16 mb-18 flex justify-center">
+          <LineLinkCodeButton
+            code={code}
+            fontSize={30}
+            shorten
+          />
+        </div>
+        <Button
+          label={t("open_line")}
+          onClick={() => {
+            window.location.href = "line://";
+          }}
+        />
       </div>
     </div>
   );
