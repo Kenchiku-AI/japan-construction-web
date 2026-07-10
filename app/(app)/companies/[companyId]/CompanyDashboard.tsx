@@ -181,20 +181,22 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
                   </div>
                 </div>
-                <Divider />
-                <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
-                  {!company.line_channel_secret_last4 && (
-                    <Button
-                      variant="tertiary"
-                      label={t("connect_line")}
-                      iconLeft={() => <LineLogo color={buttonColor} />}
-                      onClick={() => {
-                        router.push("/line");
-                      }}
-                      style={{ height: 40 }}
-                    />
-                  )}
-                </div>
+                {!company.line_channel_secret_last4 && (
+                  <>
+                    <Divider />
+                    <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                      <Button
+                        variant="tertiary"
+                        label={t("connect_line")}
+                        iconLeft={() => <LineLogo color={buttonColor} />}
+                        onClick={() => {
+                          router.push("/line");
+                        }}
+                        style={{ height: 40 }}
+                      />
+                    </div>
+                  </>
+                )}
                 {/* <Divider style={{ background: fontColor2 }} /> */}
               </div>
             )}
