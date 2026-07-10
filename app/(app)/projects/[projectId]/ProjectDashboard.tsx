@@ -8,13 +8,13 @@ import { useApi } from "@/lib/api/ApiContext";
 import { CompanyGuest, UserRole, ActionItem } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Check, Close, Download, LineLogo, Plus } from "@/app/ui/Icons";
+import { Check, Close, DownChevron, Download, LineLogo, Plus, UpChevron } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
-import { cardClass, errorColor1, fontColor2, fontColor3 } from "@/lib/constants";
+import { cardClass, errorColor1, fontColor2, fontColor3, hideQRCodeKey } from "@/lib/constants";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
 import GuestsList from "./GuestsList";
@@ -57,7 +57,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [showQRCode, setShowQRCode] = useState(true);
+  const hideQRCodeDefault = sessionStorage.getItem(hideQRCodeKey);
+  const [hideQRCode, setHideQRCode] = useState(hideQRCodeDefault === "true");
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
@@ -154,7 +155,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   <LineLinkCodeButton code={project.line_link_code} />
                   <div className="hidden md:block">
                     <Divider />
-                    <div className={`collapse ${showQRCode ? 'collapse-open' : 'collapse-close'}`}>
+                    <div className={`collapse ${hideQRCode ? 'collapse-close' : 'collapse-open'}`}>
                       <div className="collapse-content p-0">
                         <div style={{ color: fontColor3 }}>
                           {t("scan_to_copy")}
@@ -171,10 +172,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     </div>
                     <Button
                       variant="tertiary"
-                      label={showQRCode ? t("hide_qr_code") : t("show_qr_code")}
+                      label={hideQRCode ? t("show_qr_code") : t("hide_qr_code")}
                       onClick={() => {
-                        setShowQRCode(!showQRCode);
+                        sessionStorage.setItem(hideQRCodeKey, String(!hideQRCode));
+                        setHideQRCode(!hideQRCode);
                       }}
+                      iconLeft={() => hideQRCode ? <DownChevron /> : <UpChevron />}
                     />
                   </div>
                 </>

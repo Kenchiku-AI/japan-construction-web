@@ -15,6 +15,7 @@ export const refreshTokenKey = "refreshToken";
 export const invitationTokenKey = "invitationToken";
 export const createCompanyInvitationIdKey = "createCompanyInvitationId";
 export const existingUserInvitationTokenKey = "existingUserInvitationToken";
+export const hideQRCodeKey = "hideQRCode";
 export const bgColor1 = "#FDFDFD";
 export const bgColor2 = "#F3F3F5";
 export const bgColor3 = "rgba(164, 169, 174, 0.05)";
