@@ -16,7 +16,7 @@ export default function CopyPageContent({
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen pb-12">
+    <div className="flex flex-col justify-center items-center h-screen pb-16">
       <div className={styles.content}>
         <Heading
           title={t("copy_code")}
