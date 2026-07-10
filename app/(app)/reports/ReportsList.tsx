@@ -4,7 +4,7 @@ import { Report, ReportStatus } from "@/types";
 import styles from "./page.module.css";
 import { Paper } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { cardClass, fontColor2 } from "@/lib/constants";
+import { fontColor2 } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 import { Button } from "@/app/ui/Button/Button";
 import { useDate } from "@/public/date/useDate";

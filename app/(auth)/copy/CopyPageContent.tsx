@@ -2,19 +2,18 @@
 
 import { useTranslation } from "react-i18next";
 import { Heading } from "@/app/ui/Heading/Heading";
-import styles from "./page.module.css";
-import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
-import { redirect, useSearchParams } from "next/navigation";
 import { Button } from "@/app/ui/Button/Button";
+import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
+import styles from "./page.module.css";
 
-const CopyPageContent = () => {
+interface CopyPageContentProps {
+  code: string;
+}
+
+export default function CopyPageContent({
+  code,
+}: CopyPageContentProps) {
   const { t } = useTranslation();
-  const searchParams = useSearchParams();
-  const code = searchParams.get("code");
-
-  if (!code) {
-    redirect("/");
-  }
 
   return (
     <div className="flex flex-col mt-20 sm:mt-0 sm:justify-center px-5 items-center h-screen">
@@ -39,6 +38,4 @@ const CopyPageContent = () => {
       </div>
     </div>
   );
-};
-
-export default CopyPageContent;
+}
