@@ -157,7 +157,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     <Divider />
                     <div className={`collapse ${hideQRCode ? 'collapse-close' : 'collapse-open'}`}>
                       <div className="collapse-content p-0">
-                        <div style={{ color: fontColor3 }}>
+                        <div style={{ color: fontColor3, textAlign: "center" }}>
                           {t("scan_to_copy")}
                         </div>
                         <div className="pt-6" style={{ height: "auto", margin: "0 auto", maxWidth: 180, width: "100%" }}>
