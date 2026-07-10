@@ -9,7 +9,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { useRouter } from "next/navigation";
 import Divider from "@/app/ui/Divider";
-import { cardClass, fontColor1, fontColor2 } from "@/lib/constants";
+import { cardClass, fontColor1 } from "@/lib/constants";
 import { Loader } from "@/app/ui/Loader";
 import { useBillingPlans } from "./useBillingPlans";
 import { BillingPlan } from "@/types/billingPlans";

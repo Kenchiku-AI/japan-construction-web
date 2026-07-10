@@ -1,12 +1,12 @@
 "use client";
 
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
 import { Company, ReportImageTag, UserRole } from "@/types";
-import { redirect, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
 import { Alert, CreditCard, CreditCardPlus, Edit, LineLogo, Plus } from "@/app/ui/Icons";
 import InviteUserModal from "./InviteUserModal";
@@ -26,9 +26,6 @@ import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
 import { buttonColor, cardClass, errorColor1, fontColor1, fontColor3 } from "@/lib/constants";
 import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
-import LineChannelSecretModal from "./LineChannelSecretModal";
-import LineWebhookButton from "./LineWebhookButton";
-import LineWebhookModal from "./LineWebhookModal";
 import { useBillingPlans } from "../../billing-plans/useBillingPlans";
 import Select from "@/app/ui/Select/Select";
 import { BillingPlan } from "@/types/billingPlans";
@@ -46,16 +43,15 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     getCompany,
     createProject,
     updateName,
-    updateLineChannelSecret,
     updateBillingPlan,
     templates,
     createTemplate,
     removeUser,
   } = useCompany(companyId);
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showCreateProject, setShowCreateProject] = useState(false);
-  const [showLineSecret, setShowLineSecret] = useState(false);
   const [loadingPaymentMethod, setLoadingPaymentMethod] = useState(false);
   const [paymentMethodClientSecret, setPaymentMethodClientSecret] =
     useState("");
@@ -64,7 +60,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     useState(false);
   const [editingTag, setEditingTag] = useState<ReportImageTag>();
   const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
-  const [showLineWebhook, setShowLineWebhook] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
@@ -188,34 +183,16 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                 </div>
                 <Divider />
                 <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
-                  {!company.line_channel_secret_last4 ? (
+                  {!company.line_channel_secret_last4 && (
                     <Button
                       variant="tertiary"
                       label={t("connect_line")}
                       iconLeft={() => <LineLogo color={buttonColor} />}
                       onClick={() => {
-                        setShowLineSecret(true);
+                        router.push("/line");
                       }}
                       style={{ height: 40 }}
                     />
-                  ) : (
-                    <>
-                      <div className="flex flex-row gap-2 items-center">
-                        <LineLogo color={fontColor1} />
-                        <div>
-                          {`${t("line_channel_secret")}: ••••${company.line_channel_secret_last4}`}
-                        </div>
-                        <Button
-                          variant="tertiary"
-                          iconLeft={() => <Edit />}
-                          onClick={() => {
-                            setShowLineSecret(true);
-                          }}
-                        />
-                      </div>
-                      <MobileDivider />
-                      <LineWebhookButton companyId={companyId} shorten />
-                    </>
                   )}
                 </div>
                 {/* <Divider style={{ background: fontColor2 }} /> */}
@@ -430,28 +407,6 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           setPaymentMethodClientSecret("");
           getCompany(companyId);
           refreshCurrentUser();
-        }}
-      />
-      <LineChannelSecretModal
-        isOpen={showLineSecret}
-        onClose={() => {
-          setShowLineSecret(false);
-        }}
-        onSubmit={async (secret) => {
-          const shouldShowWebhook = !company?.line_channel_secret_last4;
-
-          const success = await updateLineChannelSecret(secret);
-
-          if (success && shouldShowWebhook) {
-            setShowLineWebhook(true);
-          }
-        }}
-      />
-      <LineWebhookModal
-        companyId={companyId}
-        isOpen={showLineWebhook}
-        onClose={() => {
-          setShowLineWebhook(false);
         }}
       />
       {(showLoader || companyLoading) && <Loader />}
