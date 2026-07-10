@@ -15,7 +15,6 @@ import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
 import { cardClass, errorColor1, fontColor2, fontColor3 } from "@/lib/constants";
-import Select from "@/app/ui/Select/Select";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
 import GuestsList from "./GuestsList";
@@ -28,6 +27,7 @@ import ActionItemsList from "./ActionItemsList";
 import CreateActionItemModal from "./CreateActionItemModal";
 import EditActionItemModal from "./EditActionItemModal";
 import DeleteActionItemModal from "./DeleteActionItemModal";
+import QRCode from "react-qr-code";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -42,7 +42,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     project,
     updateProject,
     createReport,
-    statusOptions,
     projectGuests,
     nonProjectGuests,
     getCompanyGuests,
@@ -58,6 +57,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  const [showQRCode, setShowQRCode] = useState(true);
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
@@ -150,7 +150,34 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   <LineLinkCodeButton code={project.line_link_code} shorten />
                 </div>
               ) : (
-                <LineLinkCodeButton code={project.line_link_code} />
+                <>
+                  <LineLinkCodeButton code={project.line_link_code} />
+                  <div className="hidden md:block">
+                    <Divider />
+                    <div className={`collapse ${showQRCode ? 'collapse-open' : 'collapse-close'}`}>
+                      <div className="collapse-content p-0">
+                        <div style={{ color: fontColor3 }}>
+                          {t("scan_to_copy")}
+                        </div>
+                        <div className="pt-6" style={{ height: "auto", margin: "0 auto", maxWidth: 180, width: "100%" }}>
+                          <QRCode
+                            size={256}
+                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                            value={`${process.env.NEXT_PUBLIC_SITE_URL}copy?code=${project.line_link_code}`}
+                            viewBox={`0 0 256 256`}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <Button
+                      variant="tertiary"
+                      label={showQRCode ? t("hide_qr_code") : t("show_qr_code")}
+                      onClick={() => {
+                        setShowQRCode(!showQRCode);
+                      }}
+                    />
+                  </div>
+                </>
               )}
             </div>
             <Divider />

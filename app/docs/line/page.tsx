@@ -215,7 +215,7 @@ export default function LinePage() {
 
         <div className="space-y-4">
           <p>
-            LINEグループをKenchiku AIのプロジェクトと連携すると、そのグループが対象プロジェクトとして認識されます。
+            LINEグループをKenchiku AIのプロジェクトと連携すると、そのグループが対象プロジェクトと連携されます。
           </p>
 
           <ol className="list-decimal pl-6 space-y-3">
