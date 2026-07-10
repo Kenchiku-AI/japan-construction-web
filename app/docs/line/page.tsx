@@ -54,7 +54,7 @@ export default function LinePage() {
 
             <Image
               src="/line-docs-screenshot-1.png"
-              alt="Line Docsのスクリーンショット1"
+              alt="LINE設定画面のスクリーンショット"
               width={2592}
               height={1190}
               priority
@@ -63,11 +63,11 @@ export default function LinePage() {
             />
 
             <li>
-              Developerアカウントをまだ作成していない場合は、
+              LINE Developersアカウントをまだ作成していない場合は、
               <strong style={{ color: fontColor1 }}>名前</strong>
               と
               <strong style={{ color: fontColor1 }}>メールアドレス</strong>
-              を入力してDeveloperアカウントを作成します。すでに作成済みの場合は、この手順は表示されません。
+              を入力してLINE Developersアカウントを作成します。すでに作成済みの場合は、この手順は表示されません。
             </li>
 
             <li>
@@ -87,7 +87,7 @@ export default function LinePage() {
             </li>
 
             <li>
-              アカウント作成を完了すると、
+              Messaging APIチャネルの作成が完了すると、
               <strong style={{ color: fontColor1 }}>
                 Channel secret
               </strong>
@@ -96,7 +96,7 @@ export default function LinePage() {
 
             <Image
               src="/line-docs-screenshot-2.png"
-              alt="Line Docsのスクリーンショット2"
+              alt="LINE設定画面のスクリーンショット"
               width={2590}
               height={1514}
               priority
@@ -105,7 +105,7 @@ export default function LinePage() {
             />
 
             <li>
-              Kenchiku AIに管理者、または管理者権限を持つユーザーでログインし、
+              Kenchiku AIに管理者または管理者権限を持つユーザーでログインし、
               <strong style={{ color: fontColor1 }}>
                 「LINE連携」
               </strong>
@@ -149,85 +149,33 @@ export default function LinePage() {
             </li>
 
             <li>
-              <a
-                href="https://developers.line.biz/console/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: buttonColor, textDecoration: "underline" }}
-              >
-                LINE Developersコンソール
-              </a>
-              を開き、作成したプロバイダーをクリックします。
+              LINE Official Account Managerで
+              <strong style={{ color: fontColor1 }}>
+                「設定 → 応答設定」
+              </strong>
+              を開きます。
+              <strong style={{ color: fontColor1 }}>
+                「Webhook」
+              </strong>
+              の設定が
+              <strong style={{ color: fontColor1 }}>
+                有効
+              </strong>
+              になっていることを確認してください。
             </li>
 
             <Image
               src="/line-docs-screenshot-3.png"
-              alt="Line Docsのスクリーンショット3"
-              width={2630}
-              height={1332}
+              alt="LINE設定画面のスクリーンショット"
+              width={2562}
+              height={1388}
               priority
               className="my-10 border"
               style={{ borderColor: bgColor5 }}
             />
 
             <li>
-              <strong style={{ color: fontColor1 }}>
-                「チャネル設定」
-              </strong>
-              タブが選択されていることを確認し、Messaging APIチャネルをクリックします。
-            </li>
-
-            <Image
-              src="/line-docs-screenshot-4.png"
-              alt="Line Docsのスクリーンショット4"
-              width={2630}
-              height={1622}
-              priority
-              className="my-10 border"
-              style={{ borderColor: bgColor5 }}
-            />
-
-            <li>
-              <strong style={{ color: fontColor1 }}>
-                「Messaging API設定」
-              </strong>
-              タブを開き、
-              <strong style={{ color: fontColor1 }}>
-                Webhook
-              </strong>
-              の設定項目までスクロールします。
-              <strong style={{ color: fontColor1 }}>
-                「Webhookの利用」
-              </strong>
-              が有効になっていることを確認してください。
-            </li>
-
-            <p>
-              ※「Webhookの利用」が表示されない場合は、Webhook URLが入力されていることを確認し、保存してください。
-            </p>
-
-            <Image
-              src="/line-docs-screenshot-5.png"
-              alt="Line Docsのスクリーンショット5"
-              width={2630}
-              height={1480}
-              priority
-              className="my-10 border"
-              style={{ borderColor: bgColor5 }}
-            />
-
-            <Image
-              src="/line-docs-screenshot-6.png"
-              alt="Line Docsのスクリーンショット6"
-              width={2630}
-              height={1294}
-              priority
-              className="10 border"
-              style={{ borderColor: bgColor5 }}
-            />
-
-            <li>
-              最後にLINE Official Account Managerに戻り、
+              最後に、
               <strong style={{ color: fontColor1 }}>
                 「設定 → アカウント設定」
               </strong>
@@ -239,12 +187,12 @@ export default function LinePage() {
               <strong style={{ color: fontColor1 }}>
                 「グループ・複数人トークへの参加を許可する」
               </strong>
-              が選択されていることを確認します。
+              が有効になっていることを確認してください。
             </li>
 
             <Image
-              src="/line-docs-screenshot-7.png"
-              alt="Line Docsのスクリーンショット7"
+              src="/line-docs-screenshot-4.png"
+              alt="LINE設定画面のスクリーンショット"
               width={2560}
               height={1648}
               priority
