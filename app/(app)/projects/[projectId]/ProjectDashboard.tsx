@@ -14,7 +14,7 @@ import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
-import { cardClass, errorColor1, fontColor2, fontColor3, hideQRCodeKey } from "@/lib/constants";
+import { buttonColor, cardClass, errorColor1, fontColor2, fontColor3, hideQRCodeKey } from "@/lib/constants";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
 import GuestsList from "./GuestsList";
@@ -177,7 +177,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                         sessionStorage.setItem(hideQRCodeKey, String(!hideQRCode));
                         setHideQRCode(!hideQRCode);
                       }}
-                      iconLeft={() => hideQRCode ? <DownChevron /> : <UpChevron />}
+                      iconLeft={() => hideQRCode ? <DownChevron color={buttonColor} /> : <UpChevron color={buttonColor} />}
                     />
                   </div>
                 </>
