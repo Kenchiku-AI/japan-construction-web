@@ -45,14 +45,16 @@ const ReportTemplatesPage = () => {
           iconOnlyMobile
         />
       </div>
-      <div className={cardClass}>
-        <TagsList
-          tags={tags ?? []}
-          isEmpty={!loading && tags?.length === 0}
-          onEdit={(t) => setEditingTag(t)}
-          onDelete={(t) => setDeletingTag(t)}
-        />
-      </div>
+      {!!tags && (
+        <div className={cardClass}>
+          <TagsList
+            tags={tags}
+            isEmpty={!loading && tags.length === 0}
+            onEdit={(t) => setEditingTag(t)}
+            onDelete={(t) => setDeletingTag(t)}
+          />
+        </div>
+      )}
       <CreateTagModal
         isOpen={isCreateTagModalShown}
         onClose={() => {

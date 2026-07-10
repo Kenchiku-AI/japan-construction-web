@@ -57,7 +57,9 @@ const ReportTemplatesList: FC<ReportTemplatesListProps> = ({
             >
               <div className="flex items-center justify-between">
                 <div style={{ height: 60 }} className="flex items-center gap-3">
-                  <Papers size={30} />
+                  <div className="hidden md:block">
+                    <Papers size={30} />
+                  </div>
                   <div>{tp.name}</div>
                   {isAdmin && (
                     <>
