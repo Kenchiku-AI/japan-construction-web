@@ -38,7 +38,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({
       subtitle={t("create_project_description")}
     >
       <div className="my-8 flex flex-col gap-3">
-        <Input value={name} placeholder={t("name")} onChange={setName} />
+        <Input value={name} placeholder={t("project_name")} onChange={setName} />
         <TextArea
           value={description}
           placeholder={t("description")}
