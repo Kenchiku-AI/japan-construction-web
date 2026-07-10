@@ -29,7 +29,7 @@ export default function LinePage() {
           <p>
             まだLINE公式アカウントを作成していない場合は、
             <a
-              href="https://account.line.biz/"
+              href="https://help2.line.me/official_account_jp/web/pc?lang=ja&contentId=20013136"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: buttonColor, textDecoration: "underline" }}
