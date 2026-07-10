@@ -9,6 +9,7 @@ export const publicRoutes = [
   "/support",
   "/accept-invitation",
   "/docs",
+  "/copy",
 ];
 export const accessTokenKey = "accessToken";
 export const refreshTokenKey = "refreshToken";
