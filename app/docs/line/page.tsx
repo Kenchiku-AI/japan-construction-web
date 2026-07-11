@@ -1,6 +1,6 @@
 import Divider from "@/app/ui/Divider";
 import Image from "next/image";
-import { bgColor2, bgColor5, buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
+import { bgColor5, buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
 
 export default function LinePage() {
   return (
@@ -10,38 +10,67 @@ export default function LinePage() {
           LINE連携
         </div>
         <Divider style={{ background: fontColor2 }} />
-        <p>
-          Kenchiku AIはLINEと連携することで、現場からのメッセージを報告書に自動反映できます。LINEのダイレクトメッセージやグループチャットで送信したテキストがAIによって解析され、該当するフィールドに書き込まれます。
+        <p className="mt-4">
+          Kenchiku AIはLINEと連携することで、現場やお客様とのコミュニケーションをプロジェクトごとに管理できます。Kenchiku AIの各プロジェクトはLINEグループと1対1で連携し、AIがLINE上の会話を解析して、プロジェクトに関連するアクション項目を自動で作成します。
+        </p>
+
+        <p className="mt-4">
+          LINE連携の設定・利用に追加費用はかかりません。LINE公式アカウントをご利用であれば、LINE・Kenchiku AIのいずれからも追加料金なくLINE連携をご利用いただけます。
         </p>
       </div>
 
       <section>
         <div className="text-2xl" style={{ color: fontColor1 }}>
-          LINE公式アカウントの作成・連携設定
+          LINE公式アカウントの作成
+        </div>
+
+        <Divider style={{ background: fontColor2 }} />
+
+        <div className="space-y-4">
+          <p>
+            Kenchiku AIとLINEを連携するには、会社のLINE公式アカウントが必要です。
+          </p>
+
+          <p>
+            まだLINE公式アカウントを作成していない場合は、先に作成してください。作成方法については、
+            <a
+              href="https://help.line.me/official_account_jp/web/pc?lang=ja"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: buttonColor, textDecoration: "underline" }}
+            >
+              LINE公式サポート
+            </a>
+            をご参照ください。
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <div className="text-2xl" style={{ color: fontColor1 }}>
+          Kenchiku AIとの連携設定
         </div>
         <Divider style={{ background: fontColor2 }} />
 
         <div className="space-y-4">
           <p>
-            LINE連携を利用するには、LINE公式アカウントの設定とKenchiku AIとの連携設定が必要です。以下の手順に沿って設定してください。
-          </p>
-
-          <p>
-            まだLINE公式アカウントを作成していない場合は、
-            <a
-              href="https://help2.line.me/official_account_jp/web/pc?lang=ja&contentId=20013136"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: buttonColor, textDecoration: "underline" }}
-            >
-              LINE公式アカウント
-            </a>
-            から作成してください。
+            LINE公式アカウントを作成したら、以下の手順でKenchiku AIとの連携設定を行ってください。
           </p>
 
           <ol className="list-decimal pl-6 space-y-3">
             <li>
-              LINE Official Account Managerで
+              <a
+                href="https://account.line.biz/login"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: buttonColor, textDecoration: "underline" }}
+              >
+                LINE Official Account Manager
+              </a>
+              にログインします。
+            </li>
+
+            <li>
               <strong style={{ color: fontColor1 }}>
                 「設定 → Messaging API」
               </strong>
@@ -63,11 +92,11 @@ export default function LinePage() {
             />
 
             <li>
-              LINE Developersアカウントをまだ作成していない場合は、
+              LINE Developersへの登録がまだ完了していない場合は、
               <strong style={{ color: fontColor1 }}>名前</strong>
               と
               <strong style={{ color: fontColor1 }}>メールアドレス</strong>
-              を入力してLINE Developersアカウントを作成します。すでに作成済みの場合は、この手順は表示されません。
+              を入力して登録を行います。すでに登録済みの場合は、この画面は表示されません。
             </li>
 
             <li>
@@ -120,6 +149,16 @@ export default function LinePage() {
               をクリックします。
             </li>
 
+            <Image
+              src="/line-docs-screenshot-3.png"
+              alt="LINE設定画面のスクリーンショット"
+              width={2564}
+              height={968}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
+
             <li>
               引き続きKenchiku AIの
               <strong style={{ color: fontColor1 }}>
@@ -131,6 +170,16 @@ export default function LinePage() {
               </strong>
               ボタンをクリックしてWebhook URLをコピーします。
             </li>
+
+            <Image
+              src="/line-docs-screenshot-4.png"
+              alt="LINE設定画面のスクリーンショット"
+              width={2480}
+              height={956}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
 
             <li>
               LINE Official Account Managerに戻り、
@@ -147,6 +196,16 @@ export default function LinePage() {
               </strong>
               をクリックします。
             </li>
+
+            <Image
+              src="/line-docs-screenshot-5.png"
+              alt="LINE設定画面のスクリーンショット"
+              width={2568}
+              height={1512}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
 
             <li>
               LINE Official Account Managerで
@@ -165,7 +224,7 @@ export default function LinePage() {
             </li>
 
             <Image
-              src="/line-docs-screenshot-3.png"
+              src="/line-docs-screenshot-6.png"
               alt="LINE設定画面のスクリーンショット"
               width={2562}
               height={1388}
@@ -191,7 +250,7 @@ export default function LinePage() {
             </li>
 
             <Image
-              src="/line-docs-screenshot-4.png"
+              src="/line-docs-screenshot-7.png"
               alt="LINE設定画面のスクリーンショット"
               width={2560}
               height={1648}
