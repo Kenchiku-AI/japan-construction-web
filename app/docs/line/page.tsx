@@ -101,7 +101,7 @@ export default function LinePage() {
 
             <li>
               <strong style={{ color: fontColor1 }}>プロバイダーを作成</strong>
-              が表示された場合は、プロバイダー名を入力してプロバイダーを作成します。すでにプロバイダーがある場合は、そのまま次へ進んでください。
+              が表示された場合は、プロバイダー名を入力してプロバイダーを作成します。プロバイダー名には会社名を設定することをおすすめします（プロバイダー名は後から変更できません）。すでにプロバイダーがある場合は、そのまま次へ進んでください。
             </li>
 
             <li>
@@ -134,11 +134,11 @@ export default function LinePage() {
             />
 
             <li>
-              Kenchiku AIに管理者または管理者権限を持つユーザーでログインし、
+              Kenchiku AIに管理者または管理者権限を持つユーザーでログインし、サイドバーの
               <strong style={{ color: fontColor1 }}>
                 「LINE連携」
               </strong>
-              ページを開きます。
+              を開きます。
               <strong style={{ color: fontColor1 }}>
                 Channel secret
               </strong>
@@ -268,18 +268,30 @@ export default function LinePage() {
 
       <section>
         <div className="text-2xl" style={{ color: fontColor1 }}>
-          LINEグループとプロジェクトの連携
+          プロジェクトとLINEグループの連携
         </div>
         <Divider style={{ background: fontColor2 }} />
 
         <div className="space-y-4">
           <p>
-            LINEグループをKenchiku AIのプロジェクトと連携すると、そのグループが対象プロジェクトと連携されます。
+            現場ごとに使用しているLINEグループをKenchiku AIのプロジェクトと連携することで、AIがそのグループの会話を対象プロジェクトとして認識できるようになります。
           </p>
 
           <ol className="list-decimal pl-6 space-y-3">
             <li>
-              Kenchiku AIのプロジェクト画面を開きます。
+              Kenchiku AIのサイドバーから
+              <strong style={{ color: fontColor1 }}>
+                「プロジェクト」
+              </strong>
+              を開きます。
+            </li>
+
+            <li>
+              連携するプロジェクトを一覧から選択します。まだプロジェクトがない場合は、画面右上の
+              <strong style={{ color: fontColor1 }}>
+                「作成」
+              </strong>
+              ボタンをクリックして新しいプロジェクトを作成します。
             </li>
 
             <li>
@@ -288,8 +300,18 @@ export default function LinePage() {
               </strong>
               をクリックし、プロジェクト連携コード（例：
               <code style={{ color: fontColor1 }}>P-XXXXXX</code>
-              ）をコピーします。
+              ）をコピーします。パソコンからKenchiku AIをご利用の場合は、画面に表示されるQRコードをスマートフォンで読み取ることで、お使いの端末に連携コードをコピーすることもできます。
             </li>
+
+            <Image
+              src="/line-docs-screenshot-8.png"
+              alt="LINE設定画面のスクリーンショット"
+              width={2482}
+              height={1274}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
 
             <li>
               連携するLINEグループで、コピーしたコードをメッセージとして送信します。
