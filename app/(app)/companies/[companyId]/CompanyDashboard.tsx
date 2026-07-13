@@ -125,7 +125,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
             title={companyName}
             topLabel={t("company")}
             placeholder={t("company_name")}
-            isEditable={isAdminOrManager}
+            isEditable={isAdmin}
             onEdit={(n) => updateName(n)}
           />
         </>

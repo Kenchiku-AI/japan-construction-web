@@ -41,7 +41,7 @@ const Signup = () => {
         <div className="flex justify-center mt-14 sm:mt-0 mb-4">
           <Logo />
         </div>
-        <Heading title={t("welcome")} subtitle={t("以下の項目を入力して、ユーザーアカウントを作成してください。")} />
+        <Heading title={t("welcome")} subtitle={t("sign_up_description")} />
         <div className={styles.fields}>
           <Input
             placeholder={t("email")}
