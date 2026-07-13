@@ -11,7 +11,7 @@ import { Loader } from "../ui/Loader";
 import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
-import { createCompanyInvitationIdKey } from "@/lib/constants";
+import { androidUrl, createCompanyInvitationIdKey, iosUrl } from "@/lib/constants";
 
 const structuredDataApp = {
   "@context": "https://schema.org",
@@ -96,12 +96,12 @@ export default function LandingPage() {
         </Link>
 
         <div className={styles.navLinks}>
+          <Link href="#line" className={styles.navLink}>LINE連携</Link>
           <Link href="#features" className={styles.navLink}>機能</Link>
           <Link href="#how-it-works" className={styles.navLink}>ご利用の流れ</Link>
           <Link href="#apps" className={styles.navLink}>アプリ</Link>
-          <Link href="#line" className={styles.navLink}>LINE連携</Link>
           <Link href="#roles" className={styles.navLink}>利用対象</Link>
-          <Link href="#pricing" className={styles.navLink}>料金プラン</Link>
+          <Link href="#pricing" className={styles.navLink}>料金</Link>
           <Link href="/docs" className={styles.navLink}>ドキュメント</Link>
         </div>
 
@@ -149,12 +149,12 @@ export default function LandingPage() {
       {
         menuOpen && (
           <div className={styles.mobileMenu} role="dialog" aria-label="ナビゲーションメニュー">
+            <Link href="#line" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>LINE連携</Link>
             <Link href="#features" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>機能</Link>
             <Link href="#how-it-works" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ご利用の流れ</Link>
             <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>アプリ</Link>
-            <Link href="#line" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>LINE連携</Link>
             <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>利用対象</Link>
-            <Link href="#pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金プラン</Link>
+            <Link href="#pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金</Link>
             <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ドキュメント</Link>
             <div className={styles.mobileMenuDivider} />
             <div className="flex flex-col gap-2">
@@ -332,8 +332,53 @@ export default function LandingPage() {
 
       </header>
 
+      {/* ── LINE ── */}
+      <section id="line" className={styles.section}>
+        <div className={styles.sectionInner}>
+          <p className={styles.sectionEyebrow}>LINE連携</p>
+
+          <h2 className={styles.sectionTitle}>
+            LINEのやり取りを、
+            AIが仕事につなげる
+          </h2>
+
+          <p className={styles.sectionLead}>
+            建設会社では、現場担当者・協力会社・お客様との多くのやり取りがLINEで行われています。
+            Kenchiku AIは、その日々のコミュニケーションをAIが理解し、
+            書類作成やタスク管理などの業務をサポートします。
+          </p>
+
+          <div
+            className={styles.lineBanner}
+            role="region"
+            aria-label="LINE連携の説明"
+          >
+            <div className={styles.lineBannerIcon} aria-hidden="true">
+              <LineLogo color="white" size={40} />
+            </div>
+
+            <div className={styles.lineBannerBody}>
+              <h3>お客様とのLINEから、AIが次のアクションを整理</h3>
+
+              <p>
+                プロジェクトに紐付いたLINEグループや担当者とのテキストメッセージをAIが解析。
+                「追加で写真をお願いします」「金曜日までに確認してください」
+                「来週から工事を開始します」といったやり取りから、
+                対応が必要なアクションや重要な情報を整理し、
+                チーム全体で共有しやすい形にまとめます。
+              </p>
+
+              <p style={{ marginTop: 16 }}>
+                QRコードまたはリンクコードでLINEグループとプロジェクトを紐付けるだけで、
+                普段どおりLINEを使いながらAIによるサポートを受けられます。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Features ── */}
-      <section id="features" className={styles.section}>
+      <section id="features" className={`${styles.section} ${styles.sectionAlt}`}>
         <div className={styles.sectionInner}>
           <p className={styles.sectionEyebrow}>機能</p>
           <h2 className={styles.sectionTitle}>現場報告業務を、AIで圧倒的に効率化</h2>
@@ -342,6 +387,24 @@ export default function LandingPage() {
           </p>
           <div className={styles.featuresGrid}>
             {[
+              {
+                icon: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
+                title: "LINE連携",
+                desc: (
+                  <>
+                    普段どおりLINEを使うだけ。
+                    <div className="mt-3">
+                      AIが
+                    </div>
+                    <ul>
+                      <li>お客様とのやり取りを整理</li>
+                      <li>アクション項目を自動抽出</li>
+                      <li>業務をサポート</li>
+                    </ul>
+                    新しい使い方を覚える必要はありません。
+                  </>
+                )
+              },
               {
                 icon: <><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8" /></>,
                 // sub: "音声入力 / Voice Input",
@@ -365,24 +428,6 @@ export default function LandingPage() {
                     などを自動判別。
                   </>
                 ),
-              },
-              {
-                icon: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
-                // sub: "LINE連携 / LINE Integration",
-                title: "LINE連携",
-                desc: (
-                  <>
-                    LINEからそのまま報告。現場スタッフは新しいアプリを覚える必要なし。
-                    <div className="mt-3">
-                      LINEで
-                    </div>
-                    <ul>
-                      <li>写真送信</li>
-                      <li>音声送信</li>
-                    </ul>
-                    するだけでAIがレポート生成。
-                  </>
-                )
               },
               {
                 icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" /></>,
@@ -445,7 +490,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── How it works ── */}
-      <section id="how-it-works" className={`${styles.section} ${styles.sectionAlt}`}>
+      <section id="how-it-works" className={styles.section}>
         <div className={styles.sectionInner}>
           <p className={styles.sectionEyebrow}>ご利用の流れ</p>
           <h2 className={styles.sectionTitle}>たった5ステップで報告書を作成</h2>
@@ -473,7 +518,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Web + Mobile ── */}
-      <section id="apps" className={styles.section}>
+      <section id="apps" className={`${styles.section} ${styles.sectionAlt}`}>
         <div className={styles.sectionInner}>
           <p className={styles.sectionEyebrow}>アプリ</p>
           <h2 className={styles.sectionTitle}>オフィスでも現場でも使えるツール</h2>
@@ -525,29 +570,20 @@ export default function LandingPage() {
                   style={{ width: "100%", maxWidth: 200, height: "auto", borderRadius: 24, border: "1.5px solid var(--border-color)" }}
                 />
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── LINE ── */}
-      <section id="line" className={`${styles.section} ${styles.sectionAlt}`}>
-        <div className={styles.sectionInner}>
-          <p className={styles.sectionEyebrow}>LINE連携</p>
-          <h2 className={styles.sectionTitle}>使い慣れたLINEが、そのまま現場ツールに</h2>
-          {/* <p className={styles.sectionSub}>LINE Messaging API integration for field teams</p> */}
-          <p className={styles.sectionLead}>
-            現場担当者がわざわざアプリを覚え直す必要はありません。日常的に使っているLINEから報告書を作成できます。
-          </p>
-          <div className={styles.lineBanner} role="region" aria-label="LINE連携の説明">
-            <div className={styles.lineBannerIcon} aria-hidden="true">
-              <LineLogo color="white" size={40} />
-            </div>
-            <div className={styles.lineBannerBody}>
-              <h3>LINEのメッセージが、そのまま報告書の項目になる</h3>
-              <p>
-                LINEのダイレクトメッセージやグループチャットで送ったテキストを、AIがリアルタイムで解析。「天候：晴れ、作業員：12名、進捗：基礎工事完了」のような自然なメッセージが、自動的に報告書の各フィールドに入力されます。QRコードやリンクコードで現場グループとプロジェクトを紐付けるだけで、設定は完了です。
-              </p>
+              <div className="flex items-center justify-center pt-4 gap-4">
+                <div
+                  className="cursor-pointer"
+                  onClick={() => (window.location.href = iosUrl)}
+                >
+                  <Image src="/apple.svg" alt="apple" width={120} height={100} />
+                </div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => (window.location.href = androidUrl)}
+                >
+                  <Image src="/google.svg" alt="google" width={148} height={100} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -585,7 +621,6 @@ export default function LandingPage() {
         <div className={styles.sectionInner}>
           <p className={styles.sectionEyebrow}>料金</p>
           <h2 className={styles.sectionTitle}>シンプルな料金プラン</h2>
-          <p className={styles.sectionSub}>Simple, transparent pricing</p>
 
           <div className={styles.pricingWrap}>
 

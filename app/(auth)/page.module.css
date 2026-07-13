@@ -318,7 +318,7 @@
 	color: rgba(255, 255, 255, 0.75);
 	line-height: 1.85;
 	margin: 0;
-	padding-right: 48px;
+	padding-right: 50px;
 }
 
 .heroCta {
@@ -341,6 +341,10 @@
 @media (max-width: 1100px) {
 	.heroRight {
 		right: 50
+	}
+
+	.heroDescription {
+		padding-right: 0px;
 	}
 }
 
@@ -513,7 +517,6 @@
 .sectionLead {
 	font-size: 16px;
 	color: var(--text2);
-	max-width: 600px;
 	line-height: 1.85;
 	margin-bottom: 48px;
 }
@@ -853,7 +856,7 @@
 	border: 1.5px solid var(--border);
 	border-radius: 20px;
 	display: grid;
-	grid-template-columns: 300px auto 1fr;
+	grid-template-columns: fit-content(420px) auto minmax(0, 1fr);
 	overflow: hidden;
 	box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
 }
