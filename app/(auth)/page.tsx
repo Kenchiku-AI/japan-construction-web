@@ -200,10 +200,10 @@ export default function LandingPage() {
             </span>
 
             <h1 className={styles.heroHeadline}>
-              建設会社のバックオフィスを、
+              建設会社のバックオフィスを
               <br />
               <span className={styles.heroHeadlineAccent}>
-                AIでもっと効率的に。
+                AIでもっと効率的に
               </span>
             </h1>
 
