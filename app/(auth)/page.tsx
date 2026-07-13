@@ -11,7 +11,7 @@ import { Loader } from "../ui/Loader";
 import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
-import { androidUrl, createCompanyInvitationIdKey, iosUrl } from "@/lib/constants";
+import { androidUrl, buttonColor, createCompanyInvitationIdKey, iosUrl } from "@/lib/constants";
 
 const structuredDataApp = {
   "@context": "https://schema.org",
@@ -819,6 +819,22 @@ export default function LandingPage() {
             )}
           </div>
         </div>
+
+        <p
+          style={{
+            marginTop: 54,
+            textAlign: "center",
+            lineHeight: 1.8,
+          }}
+        >
+          ご質問やご意見・ご要望など、どんなことでもお気軽にご連絡ください。<br />
+          皆さまからのフィードバックをお待ちしております。<br />
+          <div style={{ marginTop: 16 }}>
+            <a href="mailto:support@kenchiku.ai" style={{ fontWeight: 600, color: buttonColor }}>
+              {" "}support@kenchiku.ai
+            </a>
+          </div>
+        </p>
       </section >
 
       {/* ── Footer ── */}
