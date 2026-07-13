@@ -682,7 +682,9 @@ export default function LandingPage() {
                 <div className={styles.pricingEarlyAdopter}>
                   <p className={styles.pricingEarlyAdopterTitle}>早期導入企業募集中</p>
                   <p className={styles.pricingEarlyAdopterDesc}>
-                    現在、初期導入企業様と一緒にサービスを改善しています。早期導入企業様は現在の料金で継続してご利用いただけます。
+                    現在、初期導入企業様と一緒にサービスを改善しています。
+                    スタータープランは小規模〜中規模の建設会社向けの特別価格です。
+                    早期導入企業様は現在の料金で継続してご利用いただけます。
                   </p>
                 </div>
               </div>
@@ -696,9 +698,10 @@ export default function LandingPage() {
                   <p className={styles.pricingRecommendTitle}>こんな会社におすすめです</p>
                   <ul className={styles.pricingList}>
                     {[
-                      "小規模〜中規模の建設会社",
+                      "小規模〜中規模の建設会社向け",
                       "電気・設備・空調・配管・リフォーム工事",
                       "現場の報告書作成を効率化したい会社",
+                      "まずは低コストでAI・LINE連携を導入したい会社",
                     ].map((item) => (
                       <li key={item} className={styles.pricingListItem}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={styles.pricingCheckAlt} aria-hidden="true">
@@ -736,12 +739,55 @@ export default function LandingPage() {
               </div>
 
             </div>
+
+            <div
+              style={{
+                textAlign: "center",
+                background: "#fdfdfd",
+                border: "1.5px solid #e4e6e8",
+                borderRadius: 20,
+                padding: 36,
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: 24,
+                  fontWeight: 700,
+                  marginBottom: 12,
+                }}
+              >
+                大規模導入をご検討ですか？
+              </h3>
+
+              <p
+                style={{
+                  maxWidth: 700,
+                  margin: "0 auto",
+                  lineHeight: 1.8,
+                  color: "#555",
+                }}
+              >
+                複数拠点・多数のプロジェクト・多くのユーザーでのご利用を予定されている企業様には、
+                導入規模に応じたエンタープライズプランをご用意しています。
+                ご利用規模や運用方法に合わせて最適なプランをご提案いたしますので、お気軽にお問い合わせください。
+              </p>
+
+              <div style={{ marginTop: 20 }}>
+                <a
+                  href="mailto:support@kenchiku.ai?subject=エンタープライズプランについて"
+                  className={`${styles.btn} ${styles.btnSecondary}`}
+                >
+                  エンタープライズプランについて問い合わせる
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* ── CTA band ── */}
-      <section id="signup" className={`${styles.section} ${styles.ctaBand}`}>
+      < section id="signup" className={`${styles.section} ${styles.ctaBand}`
+      }>
         <div className={styles.sectionInner}>
           <p className={`${styles.sectionEyebrow} ${styles.centered}`}>今すぐ始める</p>
           <h2 className={`${styles.sectionTitle} ${styles.centered}`}>現場の報告業務を、今日から変えよう</h2>
@@ -773,10 +819,10 @@ export default function LandingPage() {
             </Link>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* ── Footer ── */}
-      <footer className={styles.footer} role="contentinfo">
+      < footer className={styles.footer} role="contentinfo" >
         <div className={styles.footerInner}>
           <Link href="/" className={styles.footerBrand} aria-label="Kenchiku AI トップへ">
             <Logo size={22} />
@@ -790,7 +836,7 @@ export default function LandingPage() {
           </nav>
           <p className={styles.footerCopy}>© 2026 Kenchiku AI</p>
         </div>
-      </footer>
+      </footer >
 
       <SignupModal
         isOpen={showSignup}

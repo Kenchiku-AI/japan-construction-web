@@ -197,7 +197,6 @@
 	color: var(--text1);
 	border: 1.5px solid var(--border-color);
 	background: var(--bg);
-
 }
 
 .btnSecondary:hover {
@@ -855,16 +854,16 @@
 	padding: 8px 16px;
 	border-radius: 8px;
 	align-self: flex-start;
+	margin-top: 8px;
 }
 
 .pricingCard {
 	background: var(--bg);
-	border: 1.5px solid var(--border);
+	border: 1.5px solid var(--border-color);
 	border-radius: 20px;
 	display: grid;
 	grid-template-columns: fit-content(420px) auto minmax(0, 1fr);
 	overflow: hidden;
-	box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
 }
 
 .pricingLeft {
@@ -876,14 +875,14 @@
 
 .pricingBadge {
 	display: inline-block;
-	background: var(--green);
-	color: #fff;
+	background: rgba(111, 179, 122, 0.25);
+	color: var(--green);
 	font-size: 12px;
 	font-weight: 700;
 	letter-spacing: 0.04em;
-	padding: 4px 12px;
 	border-radius: 20px;
 	align-self: flex-start;
+	padding: 5px 14px;
 }
 
 .pricingName {
