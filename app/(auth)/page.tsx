@@ -574,18 +574,22 @@ export default function LandingPage() {
                 />
               </div>
               <div className="flex items-center justify-center pt-4 gap-4">
-                <div
+                <a
                   className="cursor-pointer"
-                  onClick={() => (window.location.href = iosUrl)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={iosUrl}
                 >
                   <Image src="/apple.svg" alt="apple" width={120} height={100} />
-                </div>
-                <div
+                </a>
+                <a
                   className="cursor-pointer"
-                  onClick={() => (window.location.href = androidUrl)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={androidUrl}
                 >
                   <Image src="/google.svg" alt="google" width={148} height={100} />
-                </div>
+                </a>
               </div>
             </div>
           </div>
