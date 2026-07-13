@@ -444,12 +444,20 @@ const PaymentLabel: FC<PaymentLabelProps> = ({ company, billingPlan }) => {
     );
   }
 
-  const daysLeft = company?.free_trial_days_left ?? 0;
+  const daysLeft = company?.free_trial_days_left;
 
-  if (daysLeft > 0) {
+  if ((daysLeft ?? 0) > 0) {
     return (
       <>
         {t("free_trial", { days: daysLeft })}
+      </>
+    )
+  }
+
+  if (daysLeft === 0) {
+    return (
+      <>
+        {t("free_trial_expires_today")}
       </>
     )
   }

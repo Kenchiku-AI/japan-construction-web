@@ -133,6 +133,7 @@
   "forgot_password_description": "ログインに使用しているメールアドレスを入力してください。パスワードをリセットするためのリンクをお送りします。",
   "forgot_password_error_description": "メールの送信中にエラーが発生しました。",
   "free_trial": "無料トライアル（残り{{days}}日）",
+  "free_trial_expires_today": "無料トライアル（本日終了）",
   "get_project_error_description": "プロジェクト名の取得中にエラーが発生しました。",
   "get_projects_error_description": "プロジェクト名の取得中にエラーが発生しました。",
   "get_report_error_description": "報告書の取得中にエラーが発生しました。",
