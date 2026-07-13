@@ -656,7 +656,11 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 32px;
-	align-items: start;
+	align-items: stretch;
+}
+
+.twoCol>.appCard {
+	height: 100%;
 }
 
 .appCard {
@@ -664,6 +668,9 @@
 	border: 1.5px solid var(--border-color);
 	border-radius: 16px;
 	padding: 32px;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 }
 
 .appCardTitle {
@@ -718,11 +725,13 @@
 }
 
 .appScreenshotWrap {
-	margin-top: 24px;
+	margin-top: auto;
+	padding-bottom: 12px;
 }
 
 .mobileScreenshotWrap {
-	margin-top: 24px;
+	padding-top: 36px;
+	margin-top: auto;
 	display: flex;
 	justify-content: center;
 }

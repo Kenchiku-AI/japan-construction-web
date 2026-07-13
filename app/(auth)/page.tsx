@@ -541,15 +541,13 @@ export default function LandingPage() {
               </ul>
               <div className={styles.appScreenshotWrap}>
                 {/* <ScreenshotPlaceholder aspectRatio="4/3" label="Webアプリのスクリーンショット" borderRadius={10} /> */}
-                <div style={{ marginTop: 60 }} className="mb-4">
-                  <Image
-                    src="/web-screenshot.png"
-                    alt="Kenchiku AIウェブアプリの管理画面"
-                    width={2560}
-                    height={1648}
-                    style={{ width: "100%", height: "auto", borderRadius: 10, border: "1.5px solid var(--border-color)" }}
-                  />
-                </div>
+                <Image
+                  src="/web-screenshot.png"
+                  alt="Kenchiku AIウェブアプリの管理画面"
+                  width={2560}
+                  height={1648}
+                  style={{ width: "100%", height: "auto", borderRadius: 10, border: "1.5px solid var(--border-color)" }}
+                />
               </div>
             </div>
             <div className={styles.appCard}>
@@ -820,9 +818,9 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <p
+        <div
           style={{
-            marginTop: 54,
+            marginTop: 60,
             textAlign: "center",
             lineHeight: 1.8,
           }}
@@ -834,7 +832,7 @@ export default function LandingPage() {
               {" "}support@kenchiku.ai
             </a>
           </div>
-        </p>
+        </div>
       </section >
 
       {/* ── Footer ── */}
