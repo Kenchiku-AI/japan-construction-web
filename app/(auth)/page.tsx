@@ -534,19 +534,32 @@ export default function LandingPage() {
               <h3 className={styles.appCardTitle}>Webアプリ</h3>
               <p className={styles.appCardIntro}>オフィス・事務所での管理業務に</p>
               <ul className={styles.appCardList}>
-                {["テンプレートの作成・管理", "プロジェクトとユーザーの管理", "提出済み報告書の閲覧", "PDF・Excelダウンロード", "ゲスト招待・権限管理", "LINE連携の設定"].map((item) => (
+                {[
+                  "テンプレートの作成・管理",
+                  "プロジェクト・ユーザーの管理",
+                  "提出済み報告書の閲覧・検索",
+                  "PDF・Excelでの出力",
+                  "ゲスト招待・権限管理",
+                  "LINEグループとの連携設定",
+                  "プロジェクトとLINEグループの紐付け",
+                  "アクション項目の作成・管理",
+                  "LINE連携の各種設定",
+                  "会社・プロジェクト情報の管理",
+                ].map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
               <div className={styles.appScreenshotWrap}>
                 {/* <ScreenshotPlaceholder aspectRatio="4/3" label="Webアプリのスクリーンショット" borderRadius={10} /> */}
-                <Image
-                  src="/web-screenshot.png"
-                  alt="Kenchiku AIウェブアプリの管理画面"
-                  width={2560}
-                  height={1648}
-                  style={{ width: "100%", height: "auto", borderRadius: 10, border: "1.5px solid var(--border-color)" }}
-                />
+                <div style={{ marginTop: 60 }} className="mb-4">
+                  <Image
+                    src="/web-screenshot.png"
+                    alt="Kenchiku AIウェブアプリの管理画面"
+                    width={2560}
+                    height={1648}
+                    style={{ width: "100%", height: "auto", borderRadius: 10, border: "1.5px solid var(--border-color)" }}
+                  />
+                </div>
               </div>
             </div>
             <div className={styles.appCard}>
