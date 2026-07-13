@@ -769,7 +769,7 @@ export default function LandingPage() {
               >
                 複数拠点・多数のプロジェクト・多くのユーザーでのご利用を予定されている企業様には、
                 導入規模に応じたエンタープライズプランをご用意しています。
-                ご利用規模や運用方法に合わせて最適なプランをご提案いたしますので、お気軽にお問い合わせください。
+                ご要望に合わせた最適なプランをご提案いたしますので、お気軽にお問い合わせください。
               </p>
 
               <div style={{ marginTop: 20 }}>
@@ -796,6 +796,17 @@ export default function LandingPage() {
             管理者が招待リンクを発行するだけで、チーム全員がすぐに使えます。
           </p>
           <div className={`${styles.btnGroup} ${styles.centered}`}>
+            <div
+              onClick={() => {
+                setShowSignup(true);
+              }}
+              className={`${styles.btn} ${styles.btnPrimary}`}
+            >
+              無料で試してみる →
+            </div>
+            <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`}>
+              既存アカウントでログイン
+            </Link>
             {invitationId && (
               <div
                 onClick={() => {
@@ -806,17 +817,6 @@ export default function LandingPage() {
                 メールを再送信する
               </div>
             )}
-            <div
-              onClick={() => {
-                setShowSignup(true);
-              }}
-              className={`${styles.btn} ${styles.btnPrimary}`}
-            >
-              無料で試してみる →
-            </div>
-            <Link href="/login" className={`${styles.btn} ${styles.btnSecondary} ${styles.btnLg}`}>
-              既存アカウントでログイン
-            </Link>
           </div>
         </div>
       </section >
