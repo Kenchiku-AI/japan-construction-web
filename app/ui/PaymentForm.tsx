@@ -22,8 +22,6 @@ const PaymentMethodForm: FC<PaymentMethodFormProps> = ({ onSuccess }) => {
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
 
-  console.log("STRIPE KEY", process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!stripe || !elements) return;
