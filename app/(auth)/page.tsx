@@ -196,24 +196,20 @@ export default function LandingPage() {
           {/* ── Left column: text ── */}
           <div className={styles.heroLeft}>
             <span className={styles.heroBadge}>
-              建設会社の既存業務をAIにつなぐ
+              書類作成に追われない建設会社へ
             </span>
 
             <h1 className={styles.heroHeadline}>
-              毎日のやり取りを、
+              建設会社のバックオフィスを、
               <br />
               <span className={styles.heroHeadlineAccent}>
-                AIの仕事へ。
+                AIでもっと効率的に。
               </span>
             </h1>
 
             <p className={styles.heroDescription}>
-              LINEでのクライアントとのやり取り、現場担当者や協力会社からの報告、
-              モバイルアプリで記録した音声や写真など、
-              普段の業務で生まれる情報をAIが整理。
-              <br />
-              日報・作業報告書・安全書類・タスク一覧の作成を自動化し、
-              書類作成や事務作業にかかる時間を大幅に削減します。
+              LINEでのやり取りや現場報告、写真・音声など、日々の情報をAIが整理。
+              日報・作業報告書・安全書類・タスク一覧を自動で作成し、書類作成にかかる時間を大幅に削減します。
             </p>
 
             <div className={styles.heroCta}>
@@ -338,14 +334,12 @@ export default function LandingPage() {
           <p className={styles.sectionEyebrow}>LINE連携</p>
 
           <h2 className={styles.sectionTitle}>
-            LINEのやり取りを、
-            AIが仕事につなげる
+            LINEのやり取りをAIで整理。
+            業務と締切を見える化。
           </h2>
 
           <p className={styles.sectionLead}>
-            建設会社では、現場担当者・協力会社・お客様との多くのやり取りがLINEで行われています。
-            Kenchiku AIは、その日々のコミュニケーションをAIが理解し、
-            書類作成やタスク管理などの業務をサポートします。
+            建設会社で日々行われる、お客様・現場担当者・協力会社とのLINEでのやり取りをAIが整理。タスクや締切を見える化するとともに、日報や作業報告書、安全書類などの作成を自動化し、業務の負担を大幅に軽減します。
           </p>
 
           <div
@@ -361,16 +355,12 @@ export default function LandingPage() {
               <h3>お客様とのLINEから、AIが次のアクションを整理</h3>
 
               <p>
-                プロジェクトに紐付いたLINEグループや担当者とのテキストメッセージをAIが解析。
-                「追加で写真をお願いします」「金曜日までに確認してください」
-                「来週から工事を開始します」といったやり取りから、
-                対応が必要なアクションや重要な情報を整理し、
-                チーム全体で共有しやすい形にまとめます。
+                プロジェクトに紐づいたLINEグループや担当者とのメッセージをAIが自動で整理。「○○様に見積書を送ってください」「材料は金曜日までに現場へ搬入してください」「設備業者さんと日程調整をお願いします」といった日々のやり取りから、タスクや締切、関係者を自動で抽出し、誰が・何を・いつまでに対応するのかを見える化します。
               </p>
 
               <p style={{ marginTop: 16 }}>
-                QRコードまたはリンクコードでLINEグループとプロジェクトを紐付けるだけで、
-                普段どおりLINEを使いながらAIによるサポートを受けられます。
+                LINEグループとプロジェクトをQRコードまたはリンクコードで紐づけるだけで、
+                普段どおりLINEを使いながら、AIによる業務サポートを受けられます。
               </p>
             </div>
           </div>
