@@ -195,18 +195,25 @@ export default function LandingPage() {
         <div className={styles.heroContent}>
           {/* ── Left column: text ── */}
           <div className={styles.heroLeft}>
-            <span className={styles.heroBadge}>建設現場の報告業務を、AIで自動化</span>
+            <span className={styles.heroBadge}>
+              建設会社の既存業務をAIにつなぐ
+            </span>
 
             <h1 className={styles.heroHeadline}>
-              音声と写真だけで<br />
-              現場レポートを<br />
-              <span className={styles.heroHeadlineAccent}>AIが自動生成。</span>
+              毎日のやり取りを、
+              <br />
+              <span className={styles.heroHeadlineAccent}>
+                AIの仕事へ。
+              </span>
             </h1>
 
             <p className={styles.heroDescription}>
-              現場での写真撮影や音声メモだけで、日報・作業報告書・<br />
-              安全管理記録などをAIが自動で作成。<br />
-              手間を削減し、ミスを防ぎ、もっと「建設」に集中できる時間へ。
+              LINEでのクライアントとのやり取り、現場担当者や協力会社からの報告、
+              モバイルアプリで記録した音声や写真など、
+              普段の業務で生まれる情報をAIが整理。
+              <br />
+              日報・作業報告書・安全書類・タスク一覧の作成を自動化し、
+              書類作成や事務作業にかかる時間を大幅に削減します。
             </p>
 
             <div className={styles.heroCta}>
@@ -220,20 +227,15 @@ export default function LandingPage() {
                   メールを再送信する
                 </div>
               )}
+
               <div
                 onClick={() => {
                   setShowSignup(true);
                 }}
                 className={`${styles.btn} ${styles.btnPrimary}`}
               >
-                無料で試してみる →
+                30日間無料で試す →
               </div>
-              {/* <Link href="/docs" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
-                </svg>
-                3分でわかる Kenchiku AI
-              </Link> */}
             </div>
           </div>
 
@@ -245,34 +247,50 @@ export default function LandingPage() {
               <div className={styles.calloutCard}>
                 <div className={styles.calloutIcon}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" />
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
                 </div>
                 <div>
-                  <p className={styles.calloutTitle}>写真を撮るだけ</p>
-                  <p className={styles.calloutDesc}>現場の写真を撮影するだけで<br />AIが内容を解析します</p>
+                  <p className={styles.calloutTitle}>LINEグループをAI解析</p>
+                  <p className={styles.calloutDesc}>
+                    メッセージを自動で整理
+                    <br />
+                    タスクや進捗を抽出
+                  </p>
                 </div>
               </div>
+
               <div className={styles.calloutCard}>
                 <div className={styles.calloutIcon}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8" />
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
                   </svg>
                 </div>
                 <div>
-                  <p className={styles.calloutTitle}>話すだけで記録</p>
-                  <p className={styles.calloutDesc}>音声で状況をメモすれば<br />文字起こし&amp;要約します</p>
+                  <p className={styles.calloutTitle}>写真をAIで解析</p>
+                  <p className={styles.calloutDesc}>
+                    説明文を自動生成
+                    <br />
+                    タグを自動で追加
+                  </p>
                 </div>
               </div>
+
               <div className={styles.calloutCard}>
                 <div className={styles.calloutIcon}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M16 13H8M16 17H8" />
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8" />
                   </svg>
                 </div>
                 <div>
-                  <p className={styles.calloutTitle}>AIがレポートを自動生成</p>
-                  <p className={styles.calloutDesc}>必要な項目を整理し<br />見やすいレポートを自動作成</p>
+                  <p className={styles.calloutTitle}>音声をAIで解析</p>
+                  <p className={styles.calloutDesc}>
+                    文字起こしを自動化
+                    <br />
+                    要約して書類へ反映
+                  </p>
                 </div>
               </div>
             </div>
