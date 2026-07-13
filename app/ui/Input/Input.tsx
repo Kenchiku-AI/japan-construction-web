@@ -92,8 +92,16 @@ export const Input: FC<InputProps> = ({
         defaultValue={defaultValue}
         onChange={(e) => {
           lastChangeWasUser.current = true;
-          onChange?.(e.target.value);
-          setIsEmpty(!e.target.value);
+
+          let value = e.target.value;
+
+          if (type === "password") {
+            // Keep only printable ASCII characters (! through ~)
+            value = value.replace(/[^\x21-\x7E]/g, "");
+          }
+
+          onChange?.(value);
+          setIsEmpty(!value);
         }}
         style={{
           backgroundColor: error ? errorColor2 : disabled ? bgColor3 : bgColor2,

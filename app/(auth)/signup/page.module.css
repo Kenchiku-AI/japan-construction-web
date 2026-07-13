@@ -13,7 +13,7 @@
 .fields {
   display: flex;
   flex-direction: column;
-  margin: 20px 0;
+  margin: 24px 0;
   gap: 10px;
 }
 

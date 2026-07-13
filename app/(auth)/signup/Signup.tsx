@@ -41,7 +41,7 @@ const Signup = () => {
         <div className="flex justify-center mt-14 sm:mt-0 mb-4">
           <Logo />
         </div>
-        <Heading title={t("welcome")} subtitle={t("sign_up_description")} />
+        <Heading title={t("welcome")} subtitle={t("以下の項目を入力して、ユーザーアカウントを作成してください。")} />
         <div className={styles.fields}>
           <Input
             placeholder={t("email")}
@@ -73,6 +73,12 @@ const Signup = () => {
             error={isPasswordInvalid}
             type="password"
           />
+          <ul className="list-disc pl-5 mx-4 my-1 space-y-1 text-sm">
+            <li>{t("password_requirement_1")}</li>
+            <li>{t("password_requirement_2")}</li>
+            <li>{t("password_requirement_3")}</li>
+            <li>{t("password_requirement_4")}</li>
+          </ul>
           <Input
             placeholder={t("confirm_password")}
             onChange={(t) => {
@@ -96,7 +102,7 @@ const Signup = () => {
               return;
             }
 
-            if (password.length < 8) {
+            if (password.length < 10 || password.length > 64) {
               setIsPasswordInvalid(true);
               return;
             }
