@@ -43,10 +43,10 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
           <div className="space-y-1">
             <SidebarItem name="クイックスタート" path="/docs/quick-start" />
             <SidebarItem name="LINE連携" path="/docs/line" />
+            <SidebarItem name="プロジェクト" path="/docs/projects" />
             <SidebarItem name="テンプレート" path="/docs/templates" />
             <SidebarItem name="報告書" path="/docs/reports" />
             <SidebarItem name="写真とタグ" path="/docs/photos-and-tags" />
-            <SidebarItem name="プロジェクト" path="/docs/projects" />
             <SidebarItem name="ダウンロード" path="/docs/exports" />
             <SidebarItem name="ゲスト" path="/docs/guests" />
             <SidebarItem name="管理者向け" path="/docs/admin" />
