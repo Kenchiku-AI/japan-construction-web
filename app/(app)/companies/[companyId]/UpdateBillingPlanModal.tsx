@@ -35,7 +35,7 @@ const UpdateBillingPlanModal: FC<UpdateBillingPlanModalProps> = ({
     >
       <div className="mt-8 grid lg:grid-col-2 gap-2">
         <Button
-          label={t(prefix)}
+          label={t(`${prefix}_billing_plan_button`)}
           onClick={onConfirm}
         />
         <Button
