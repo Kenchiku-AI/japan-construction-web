@@ -29,6 +29,7 @@ import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
 import { useBillingPlans } from "../../billing-plans/useBillingPlans";
 import Select from "@/app/ui/Select/Select";
 import { BillingPlan } from "@/types/billingPlans";
+import UpdateBillingPlanModal from "./UpdateBillingPlanModal";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -64,6 +65,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();
   const { billingPlans } = useBillingPlans();
+  const [billingPlanIdToUpdate, setBillingPlanIdToUpdate] = useState("");
   const {
     tags,
     updateTag,
@@ -141,8 +143,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                       options={billingPlanOptions}
                       placeholder={t("billing_plan")}
                       value={selectedBillingPlan?.id ?? "none"}
-                      onChange={(value) => {
-                        updateBillingPlan(value as string);
+                      onChange={(id) => {
+                        setBillingPlanIdToUpdate(id as string);
                       }}
                     />
                     <Divider />
@@ -409,6 +411,17 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           setPaymentMethodClientSecret("");
           getCompany(companyId);
           refreshCurrentUser();
+        }}
+      />
+      <UpdateBillingPlanModal
+        billingPlanId={billingPlanIdToUpdate}
+        isOpen={!!billingPlanIdToUpdate}
+        onClose={() => {
+          setBillingPlanIdToUpdate("");
+        }}
+        onConfirm={() => {
+          updateBillingPlan(billingPlanIdToUpdate);
+          setBillingPlanIdToUpdate("");
         }}
       />
       {(showLoader || companyLoading) && <Loader />}
