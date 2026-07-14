@@ -8,87 +8,174 @@ export default function QuickStartPage() {
         <div className="text-3xl" style={{ color: fontColor1 }}>
           クイックスタート
         </div>
+
         <Divider />
+
         <p className="mt-4">
-          Kenchiku AIの基本的な利用方法をご紹介します。初めて利用する方は、まずこのページをご確認ください。
+          Kenchiku AIへようこそ。このページでは、Kenchiku AIの基本的な使い方と、利用開始までの流れをご紹介します。
         </p>
       </div>
 
       <section>
-        <div className="text-2xl font-semibold" style={{ color: fontColor1 }}>
-          Kenchiku AIへようこそ
+        <div className="text-2xl" style={{ color: fontColor1 }}>
+          Kenchiku AIとは
         </div>
+
         <Divider style={{ background: fontColor2 }} />
+
         <div className="space-y-4">
           <p>
-            Kenchiku AIは、報告業務の管理を行うWebアプリケーションと、現場での情報収集を行うモバイルアプリケーションを組み合わせた建設業向け報告プラットフォームです。
+            Kenchiku AIは、建設業向けのAI業務支援プラットフォームです。お客様や協力会社とのLINEでのやり取り、現場での音声メモ、写真などの情報をAIが整理し、日々の業務を効率化します。
           </p>
+
           <p>
-            AIを活用することで、現場で収集した情報を効率的かつ統一された形式で報告書としてまとめることができます。
+            Webアプリでは、プロジェクトやテンプレート、ユーザーの管理、報告書の確認などを行えます。モバイルアプリでは、現場から音声入力や写真の撮影・アップロードを行い、その場で情報を記録できます。
           </p>
+
           <p>
-            現場監督、施工管理者、検査担当者、協力会社、発注者など、さまざまな立場の利用者が同じ情報を効率的に共有できるよう設計されています。
+            LINE連携を利用すると、プロジェクトごとにLINEグループを連携できます。AIがお客様や協力会社との会話を解析し、対応が必要な内容をアクション項目として自動で整理するため、対応漏れの防止や事務作業の効率化につながります。
           </p>
         </div>
       </section>
 
       <section>
-        <div className="text-2xl font-semibold" style={{ color: fontColor1 }}>
+        <div className="text-2xl" style={{ color: fontColor1 }}>
           利用を開始する前に
         </div>
+
         <Divider style={{ background: fontColor2 }} />
+
         <div className="space-y-4">
           <p>
-            Kenchiku AIを利用するには、管理者から招待を受ける必要があります。
+            Kenchiku AIを利用するには、管理者から招待を受ける必要があります。招待方法には、
+            <strong style={{ color: fontColor1 }}>会社ユーザー</strong>
+            と
+            <strong style={{ color: fontColor1 }}>ゲスト</strong>
+            の2種類があります。
           </p>
 
-          <div>
-            <h3 className="font-semibold" style={{ color: fontColor1 }}>
-              会社ユーザーとして招待される場合
-            </h3>
-            <p className="mt-1">
-              所属会社のKenchiku AI環境に招待されます。ログイン後は、担当するプロジェクトへアクセスできます。
-            </p>
-          </div>
+          <div
+            className="rounded-lg border p-6 space-y-4"
+            style={{ borderColor: fontColor2 }}
+          >
+            <div>
+              <div className="font-semibold" style={{ color: fontColor1 }}>
+                会社ユーザー
+              </div>
 
-          <div>
-            <h3 className="font-semibold" style={{ color: fontColor1 }}>
-              ゲストとして招待される場合
-            </h3>
-            <p className="mt-1">
-              他社が管理する特定のプロジェクトへ招待されます。ゲストは招待されたプロジェクトのみ利用できます。
-            </p>
+              <p className="mt-1">
+                自社のKenchiku AI環境へ招待されます。ログイン後は、権限に応じて担当するプロジェクトへアクセスできます。
+              </p>
+            </div>
+
+            <div>
+              <div className="font-semibold" style={{ color: fontColor1 }}>
+                ゲスト
+              </div>
+
+              <p className="mt-1">
+                他社が管理する特定のプロジェクトへ招待されます。アクセスできるのは、招待されたプロジェクトのみです。
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       <section>
-        <div className="text-2xl font-semibold" style={{ color: fontColor1 }}>
-          アカウントの有効化
+        <div className="text-2xl" style={{ color: fontColor1 }}>
+          LINE連携
         </div>
+
         <Divider style={{ background: fontColor2 }} />
-        <div className="space-y-4">
-          <p>招待メールを受信したら、以下の手順で利用を開始してください。</p>
 
-          <ol className="list-decimal pl-6 space-y-2">
-            <li>招待メールを開く</li>
-            <li>アクティベーションリンクをクリックする</li>
-            <li>パスワードを設定する</li>
-            <li>ログインする</li>
-          </ol>
-
-          <p>ログイン後、割り当てられたプロジェクトを確認できます。</p>
-        </div>
-      </section>
-
-      <section>
-        <div className="text-2xl font-semibold" style={{ color: fontColor1 }}>
-          Webアプリとモバイルアプリ
-        </div>
-        <Divider style={{ background: fontColor2 }} />
         <div className="space-y-4">
           <p>
-            Kenchiku AIはWebアプリとモバイルアプリの両方を提供しています。それぞれ利用する場面が異なります。
+            Kenchiku AIのおすすめ機能の一つが、LINEとの連携です。各プロジェクトをLINEグループと連携することで、お客様や協力会社との日々のやり取りをAIが解析し、対応が必要な内容を自動でアクション項目として整理します。
+          </p>
+
+          <p>
+            LINEを普段どおり利用するだけで、対応漏れの防止や事務作業の効率化につながります。現場担当者が新しいツールを覚える必要もありません。
+          </p>
+
+          <div
+            className="rounded-lg border p-6 space-y-4"
+            style={{ borderColor: fontColor2 }}
+          >
+            <div>
+              <div className="font-semibold" style={{ color: fontColor1 }}>
+                LINE連携でできること
+              </div>
+
+              <ul className="list-disc pl-6 mt-2 space-y-2">
+                <li>プロジェクトごとにLINEグループを連携</li>
+                <li>AIがお客様や協力会社との会話を自動で解析</li>
+                <li>対応が必要な内容をアクション項目として自動作成</li>
+                <li>対応漏れや確認漏れを防止</li>
+                <li>LINEをそのまま利用できるため、新しい運用は不要</li>
+              </ul>
+            </div>
+          </div>
+
+          <p>
+            LINE連携の設定方法については、
+            <strong style={{ color: fontColor1 }}>
+              「LINE連携」
+            </strong>
+            のページをご参照ください。
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <div className="text-2xl" style={{ color: fontColor1 }}>
+          アカウントの設定
+        </div>
+
+        <Divider style={{ background: fontColor2 }} />
+
+        <div className="space-y-4">
+          <p>
+            招待メールを受信したら、以下の手順でアカウントの設定を完了してください。
+          </p>
+
+          <ol className="list-decimal pl-6 space-y-3">
+            <li>
+              招待メールを開きます。
+            </li>
+
+            <li>
+              メール内の
+              <strong style={{ color: fontColor1 }}>
+                「アカウントを設定」
+              </strong>
+              ボタンをクリックします。
+            </li>
+
+            <li>
+              パスワードを設定します。
+            </li>
+
+            <li>
+              Kenchiku AIへログインします。
+            </li>
+          </ol>
+
+          <p>
+            ログインすると、招待されたプロジェクトや利用できる機能を確認できます。
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <div className="text-2xl" style={{ color: fontColor1 }}>
+          Webアプリとモバイルアプリ
+        </div>
+
+        <Divider style={{ background: fontColor2 }} />
+
+        <div className="space-y-4">
+          <p>
+            Kenchiku AIは、Webアプリとモバイルアプリの両方を提供しています。事務所ではWebアプリ、現場ではモバイルアプリを利用することで、場所を問わず効率的に業務を進められます。
           </p>
 
           <div
@@ -98,13 +185,18 @@ export default function QuickStartPage() {
             <h3 className="text-lg font-semibold" style={{ color: fontColor1 }}>
               Webアプリ
             </h3>
-            <p>主に事務所やオフィスで利用します。</p>
+
+            <p>
+              主に事務所やオフィスで利用します。
+            </p>
+
             <ul className="list-disc pl-6 space-y-1">
+              <li>プロジェクトの管理</li>
               <li>テンプレートの作成・管理</li>
-              <li>プロジェクト情報の管理</li>
+              <li>LINE連携の設定</li>
               <li>ユーザー・ゲストの管理</li>
-              <li>提出済み報告書の確認</li>
-              <li>PDFダウンロード・Excelダウンロード</li>
+              <li>報告書の確認・編集</li>
+              <li>PDF・Excelの出力</li>
               <li>タグの管理</li>
             </ul>
           </div>
@@ -116,65 +208,115 @@ export default function QuickStartPage() {
             <h3 className="text-lg font-semibold" style={{ color: fontColor1 }}>
               モバイルアプリ
             </h3>
-            <p>主に現場で利用します。</p>
+
+            <p>
+              主に現場で利用します。
+            </p>
+
             <ul className="list-disc pl-6 space-y-1">
-              <li>報告書の作成</li>
-              <li>音声入力による記録</li>
+              <li>報告書の作成・編集</li>
+              <li>音声入力</li>
               <li>写真の撮影・アップロード</li>
-              <li>AIによる内容整理</li>
-              <li>現場での情報更新</li>
+              <li>AIによる音声・写真の整理</li>
+              <li>現場からリアルタイムで情報を更新</li>
             </ul>
           </div>
         </div>
       </section>
 
       <section>
-        <div className="text-2xl font-semibold" style={{ color: fontColor1 }}>
+        <div className="text-2xl" style={{ color: fontColor1 }}>
           基本的な利用の流れ
         </div>
+
         <Divider style={{ background: fontColor2 }} />
+
         <div className="space-y-4">
-          <p>はじめて利用する場合、以下の流れで進めてください。</p>
+          <p>
+            Kenchiku AIを利用する際の一般的な流れは以下のとおりです。
+          </p>
 
           <div
             className="rounded-lg border p-6 text-center space-y-2"
             style={{ borderColor: fontColor2 }}
           >
-            <p style={{ color: fontColor1 }}>テンプレートを作成する</p>
+            <p style={{ color: fontColor1 }}>プロジェクトを作成する</p>
             <p>↓</p>
-            <p style={{ color: fontColor1 }}>プロジェクトを開く</p>
+
+            <p style={{ color: fontColor1 }}>LINEグループを連携する</p>
             <p>↓</p>
-            <p style={{ color: fontColor1 }}>報告書を作成する</p>
+
+            <p style={{ color: fontColor1 }}>現場で音声入力や写真を追加する</p>
             <p>↓</p>
-            <p style={{ color: fontColor1 }}>音声入力・写真を追加する</p>
+
+            <p style={{ color: fontColor1 }}>
+              AIがLINE・音声・写真の情報を整理する
+            </p>
             <p>↓</p>
-            <p style={{ color: fontColor1 }}>AI結果を確認する</p>
+
+            <p style={{ color: fontColor1 }}>
+              アクション項目や報告内容を確認する
+            </p>
             <p>↓</p>
-            <p style={{ color: fontColor1 }}>保存する</p>
-            <p>↓</p>
-            <p style={{ color: fontColor1 }}>PDF・Excelでダウンロードする</p>
+
+            <p style={{ color: fontColor1 }}>
+              必要に応じてPDF・Excelで出力する
+            </p>
           </div>
 
           <p>
-            テンプレートは管理者が事前に作成します。テンプレートが用意されていれば、現場担当者はすぐに報告書の作成を開始できます。
+            テンプレートは管理者が事前に作成します。テンプレートが用意されていれば、現場担当者はすぐにプロジェクトで作業を開始できます。
           </p>
         </div>
       </section>
 
       <section>
-        <div className="text-2xl font-semibold" style={{ color: fontColor1 }}>
+        <div className="text-2xl" style={{ color: fontColor1 }}>
           次のステップ
         </div>
+
         <Divider style={{ background: fontColor2 }} />
+
         <div className="space-y-4">
-          <p>各機能の詳細については、以下のページをご参照ください。</p>
+          <p>
+            各機能の詳しい使い方については、以下のページをご参照ください。
+          </p>
 
           <ul className="list-disc pl-6 space-y-2">
-            <li>テンプレートの設計方法 → テンプレート</li>
-            <li>報告書の作成・写真・エクスポート → 報告書</li>
-            <li>写真の整理・タグの活用 → 写真とタグ</li>
-            <li>ゲストの招待方法 → ゲスト</li>
-            <li>ユーザーと権限の管理 → 管理者向け</li>
+            <li>
+              LINEグループとの連携方法 →
+              <strong style={{ color: fontColor1 }}>LINE連携</strong>
+            </li>
+
+            <li>
+              プロジェクトの管理方法 →
+              <strong style={{ color: fontColor1 }}>プロジェクト</strong>
+            </li>
+
+            <li>
+              テンプレートの作成・管理 →
+              <strong style={{ color: fontColor1 }}>テンプレート</strong>
+            </li>
+
+            <li>
+              報告書の作成・編集・エクスポート →
+              <strong style={{ color: fontColor1 }}>報告書</strong>
+            </li>
+
+            <li>
+              写真の管理とタグの活用 →
+              <strong style={{ color: fontColor1 }}>写真とタグ</strong>
+            </li>
+
+            <li>
+              ゲストの招待・管理 →
+              <strong style={{ color: fontColor1 }}>ゲスト</strong>
+            </li>
+
+            <li>
+              ユーザーや権限の管理 →
+              <strong style={{ color: fontColor1 }}>管理者向け</strong>
+            </li>
           </ul>
         </div>
       </section>
