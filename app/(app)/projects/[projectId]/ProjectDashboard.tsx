@@ -8,25 +8,23 @@ import { useApi } from "@/lib/api/ApiContext";
 import { CompanyGuest, UserRole, ActionItem, Conversation } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Check, Close, DownChevron, Download, LineLogo, Plus, UpChevron } from "@/app/ui/Icons";
+import { Check, Close, DownChevron, Download, Edit, LineLogo, Plus, UpChevron } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
-import { buttonColor, cardClass, errorColor1, fontColor3, hideQRCodeKey } from "@/lib/constants";
+import { cardClass, errorColor1, fontColor1, fontColor2, fontColor3 } from "@/lib/constants";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
 import GuestsList from "./GuestsList";
 import AddGuestModal from "./AddGuestModal";
 import RemoveGuestModal from "./RemoveGuestModal";
 import { Loader } from "@/app/ui/Loader";
-import LineLinkCodeButton from "../../../ui/LineLinkCodeButton";
 import ActionItemsList from "./ActionItemsList";
 import CreateActionItemModal from "./CreateActionItemModal";
 import EditActionItemModal from "./EditActionItemModal";
 import DeleteActionItemModal from "./DeleteActionItemModal";
-import QRCode from "react-qr-code";
 import ConversationsList from "./ConversationsList";
 import ConversationModal from "./ConversationModal";
 import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
@@ -64,6 +62,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const searchParams = useSearchParams();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
+  const [showEditDescription, setShowEditDescription] = useState(false);
   const [status, setStatus] = useState("");
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
@@ -143,14 +142,74 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
       {project && (
         <>
           <div className={cardClass}>
-            <div className="flex flex-col">
-              <TextArea
-                value={description}
-                placeholder={t("description")}
-                onChange={setDescription}
-                disabled={!isEditable}
-              />
-              {/* {currentUser?.role === "admin" && (
+            {showEditDescription ? (
+              <div className="flex flex-col">
+                <TextArea
+                  value={description}
+                  placeholder={t("description")}
+                  onChange={setDescription}
+                  disabled={!isEditable}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    marginTop: 12,
+                    marginBottom: 6,
+                    gap: 24,
+                  }}
+                >
+                  <Button
+                    variant="tertiary"
+                    iconLeft={() => <Check />}
+                    style={{ height: "auto" }}
+                    label={t("update")}
+                    onClick={() => {
+                      updateProject({ description });
+                      setShowEditDescription(false);
+
+                      // if (currentUser?.role === "admin") {
+                      //   updateProject({ description, status });
+                      // } else {
+                      //   updateProject({ description });
+                      // }
+                    }}
+                  />
+                  <Button
+                    variant="tertiary"
+                    iconLeft={() => (
+                      <div style={{ marginRight: -3 }}>
+                        <Close color={errorColor1} />
+                      </div>
+                    )}
+                    style={{ height: "auto" }}
+                    label={t("cancel")}
+                    onClick={() => {
+                      setDescription(project.description);
+                      setShowEditDescription(false);
+                    }}
+                    textStyle={{ color: errorColor1 }}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="flex">
+                <div className="p-3 flex flex-1" style={{ color: !description ? fontColor2 : fontColor1 }}>
+                  {description || t("add_description")}
+                </div>
+                {isEditable && (
+                  <div
+                    className="cursor-pointer pt-3 pr-2"
+                    onClick={() => {
+                      setShowEditDescription(true);
+                    }}
+                  >
+                    <Edit />
+                  </div>
+                )}
+              </div>
+            )}
+            {/* {currentUser?.role === "admin" && (
                 <>
                   <Divider />
                   <Select
@@ -163,48 +222,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   />
                 </>
               )} */}
-            </div>
-
-            <div
-              style={{
-                height: isEdited ? 40 : 0,
-                opacity: isEdited ? 1 : 0,
-                overflow: "hidden",
-                transition:
-                  "height 0.075s ease-in-out, opacity 0.15s ease-in-out",
-                display: "flex",
-                alignItems: "flex-end",
-                gap: 24,
-              }}
-            >
-              <Button
-                variant="tertiary"
-                iconLeft={() => <Check />}
-                style={{ height: "auto" }}
-                label={t("update")}
-                onClick={() => {
-                  if (currentUser?.role === "admin") {
-                    updateProject({ description, status });
-                  } else {
-                    updateProject({ description });
-                  }
-                }}
-              />
-              <Button
-                variant="tertiary"
-                iconLeft={() => (
-                  <div style={{ marginRight: -3 }}>
-                    <Close color={errorColor1} />
-                  </div>
-                )}
-                style={{ height: "auto" }}
-                label={t("cancel")}
-                onClick={() => {
-                  setDescription(project.description);
-                }}
-                textStyle={{ color: errorColor1 }}
-              />
-            </div>
           </div>
 
           {/* Conversations */}
