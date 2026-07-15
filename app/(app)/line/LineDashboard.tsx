@@ -4,7 +4,7 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useCompany } from "../companies/[companyId]/useCompany";
 import { buttonColor, cardClass, fontColor3 } from "@/lib/constants";
-import { Edit, Hardhat, Info } from "@/app/ui/Icons";
+import { AnnotationCheck, Edit, Hardhat, Info, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { Button } from "@/app/ui/Button/Button";
 import LineChannelSecretModal from "../companies/[companyId]/LineChannelSecretModal";
@@ -15,6 +15,8 @@ import { Input } from "@/app/ui/Input/Input";
 import Link from "next/link";
 import { useProjects } from "../projects/useProjects";
 import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
+import CreateConversationItemTypeModal from "./CreateConversationItemTypeModal";
+import styles from "./page.module.css";
 
 interface LineDashboardProps {
   companyId: string;
@@ -22,12 +24,20 @@ interface LineDashboardProps {
 
 const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
   const { t } = useTranslation();
-  const { company, updateLineChannelSecret, loading } = useCompany(companyId);
+  const {
+    company,
+    updateLineChannelSecret,
+    createConversationItemType,
+    updateConversationItemType,
+    deleteConversationItemType,
+    loading
+  } = useCompany(companyId);
   const { projects } = useProjects();
   const [channelSecret, setChannelSecret] = useState("");
   const [showChannelSecret, setShowChannelSecret] = useState(false);
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [showWebhook, setShowWebhook] = useState(false);
+  const [showCreateConversationItemType, setShowCreateConversationItemType] = useState(false);
 
   useEffect(() => {
     if (!company) return;
@@ -99,6 +109,66 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
           <LineWebhookButton companyId={companyId} />
         </div>
       </div>
+      <div className="flex justify-between mt-12">
+        <div className="self-end">{t("conversation_item_types")}</div>
+        <Button
+          variant="tertiary"
+          label={t("create")}
+          iconLeft={() => <Plus />}
+          onClick={() => {
+            setShowCreateConversationItemType(true);
+          }}
+          style={{ height: "auto" }}
+          iconOnlyMobile
+        />
+      </div>
+      <div className={cardClass}>
+        {company.conversation_item_types.length === 0 && (
+          <div className={styles.empty}>
+            {t("empty_conversation_item_types_description")}
+          </div>
+        )}
+        {company.conversation_item_types.map((c, i) => (
+          <>
+            {i > 0 && <Divider />}
+            <div className="md:px-4 py-4 flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="hidden md:block">
+                  <AnnotationCheck />
+                </div>
+                <div>
+                  {c.name}
+                </div>
+              </div>
+            </div>
+          </>
+        ))}
+      </div>
+      {unlinkedProjects.length > 0 && (
+        <>
+          <div className="mt-12">
+            {t("unlinked_projects")}
+          </div>
+          <div className={cardClass}>
+            {unlinkedProjects.map((p, i) => (
+              <div key={p.id}>
+                {i > 0 && <Divider />}
+                <div className="md:px-4 py-2 flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <div className="hidden md:block">
+                      <Hardhat />
+                    </div>
+                    <div>
+                      {p.name}
+                    </div>
+                  </div>
+                  <LineLinkCodeButton shorten code={p.line_link_code} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
       <LineChannelSecretModal
         isOpen={showChannelSecret}
         onClose={() => {
@@ -114,34 +184,21 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
           }
         }}
       />
-      {unlinkedProjects.length > 0 && (
-        <>
-          <div className="mt-12">
-            {t("unlinked_projects")}
-          </div>
-          <div className={cardClass}>
-            {unlinkedProjects.map((p, i) => (
-              <>
-                {i > 0 && <Divider />}
-                <div className="md:px-4 py-2 flex justify-between items-center">
-                  <div className="flex items-center gap-3">
-                    <Hardhat />
-                    <div>
-                      {p.name}
-                    </div>
-                  </div>
-                  <LineLinkCodeButton shorten code={p.line_link_code} />
-                </div>
-              </>
-            ))}
-          </div>
-        </>
-      )}
       <LineWebhookModal
         companyId={companyId}
         isOpen={showWebhook}
         onClose={() => {
           setShowWebhook(false);
+        }}
+      />
+      <CreateConversationItemTypeModal
+        isOpen={showCreateConversationItemType}
+        onClose={() => {
+          setShowCreateConversationItemType(false);
+        }}
+        onCreate={(name, description) => {
+          setShowCreateConversationItemType(false);
+          createConversationItemType({ name, description });
         }}
       />
       {loading && <Loader />}

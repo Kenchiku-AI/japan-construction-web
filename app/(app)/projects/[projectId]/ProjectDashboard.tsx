@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { CompanyGuest, UserRole, ActionItem } from "@/types";
+import { CompanyGuest, UserRole, ActionItem, Conversation } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Check, Close, DownChevron, Download, LineLogo, Plus, UpChevron } from "@/app/ui/Icons";
@@ -21,7 +21,6 @@ import GuestsList from "./GuestsList";
 import AddGuestModal from "./AddGuestModal";
 import RemoveGuestModal from "./RemoveGuestModal";
 import { Loader } from "@/app/ui/Loader";
-import { useModal } from "@/lib/modal/ModalContext";
 import LineLinkCodeButton from "../../../ui/LineLinkCodeButton";
 import ActionItemsList from "./ActionItemsList";
 import CreateActionItemModal from "./CreateActionItemModal";
@@ -29,7 +28,8 @@ import EditActionItemModal from "./EditActionItemModal";
 import DeleteActionItemModal from "./DeleteActionItemModal";
 import QRCode from "react-qr-code";
 import ConversationsList from "./ConversationsList";
-import CreateConversationModal from "./CreateConversationModal";
+import ConversationModal from "./ConversationModal";
+import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -56,6 +56,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     updateConversation,
     deleteConversation
   } = useProject(projectId);
+  const { conversationItemTypes } = useConversationItemTypes(project?.company_id);
   const { downloadExcel } = useExport();
   const isLoaded = useRef(false);
   const searchParams = useSearchParams();
@@ -67,13 +68,13 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
-  const [showCreateConversation, setShowCreateConversation] = useState(false);
+  const [showConversationModal, setShowConversationModal] = useState(false);
+  const [editConversation, setEditConversation] = useState<Conversation>();
   const [showCreateActionItem, setShowCreateActionItem] = useState(false);
   const [editActionItem, setEditActionItem] = useState<ActionItem>();
   const [actionItemToDelete, setActionItemToDelete] = useState<ActionItem>();
   const [showLoader, setShowLoader] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
-  const { showModal } = useModal();
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -263,7 +264,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                 label={t("create_conversation")}
                 iconLeft={() => <Plus />}
                 onClick={() => {
-                  setShowCreateConversation(true);
+                  setShowConversationModal(true);
                 }}
                 style={{ height: "auto" }}
                 iconOnlyMobile
@@ -273,9 +274,10 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           <div className={cardClass}>
             <ConversationsList
               conversations={project.conversations}
-              isEmpty={(project.action_items ?? []).length === 0}
+              isEmpty={(project.conversations ?? []).length === 0}
               onClickConversation={(conversation) => {
                 setEditConversation(conversation);
+                setShowConversationModal(true);
               }}
             />
           </div>
@@ -459,18 +461,44 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           });
         }}
       />
-      <CreateConversationModal
-        isOpen={showCreateConversation}
+      <ConversationModal
+        conversation={editConversation}
+        conversationItemTypes={conversationItemTypes}
+        isOpen={showConversationModal}
         onClose={() => {
-          setShowCreateConversation(false);
-        }}
-        onCreate={(name) => {
-          setShowCreateConversation(false);
+          setShowConversationModal(false);
 
-          createConversation({
-            project_id: projectId,
-            name,
-          });
+          setTimeout(() => {
+            setEditConversation(undefined);
+          }, 500);
+        }}
+        onSubmit={(name, itemTypes) => {
+          setShowConversationModal(false);
+
+          if (!project) return;
+
+          const item_type_ids = itemTypes.map((i) => i.id);
+
+          if (editConversation) {
+            updateConversation(
+              editConversation.id,
+              {
+                name,
+                item_type_ids,
+              }
+            );
+
+            setTimeout(() => {
+              setEditConversation(undefined);
+            }, 500);
+          } else {
+            createConversation({
+              project_id: projectId,
+              company_id: project.company_id,
+              name,
+              item_type_ids,
+            });
+          }
         }}
       />
       <EditActionItemModal

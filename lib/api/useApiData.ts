@@ -38,6 +38,8 @@ import {
   Conversation,
   CreateConversationRequest,
   UpdateConversationRequest,
+  ConversationItemTypeRequest,
+  ConversationItemType,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -341,6 +343,22 @@ export const useApiData = () => {
     },
     async deleteConversation(conversationId: string) {
       const url = `/conversations/${conversationId}`;
+      return call(() => http.delete(url));
+    },
+    async getConversationItemTypes(companyId: string) {
+      const url = `/companies/${companyId}/conversation-item-types`;
+      return call(() => http.get<ConversationItemType[]>(url));
+    },
+    async createConversationItemType(companyId: string, request: ConversationItemTypeRequest) {
+      const url = `/companies/${companyId}/conversation-item-types`;
+      return call(() => http.post<ConversationItemType[]>(url, request));
+    },
+    async updateConversationItemType(companyId: string, itemTypeId: string, request: ConversationItemTypeRequest) {
+      const url = `/companies/${companyId}/conversation-item-types/${itemTypeId}`;
+      return call(() => http.patch<ConversationItemType[]>(url, request));
+    },
+    async deleteConversationItemType(companyId: string, itemTypeId: string) {
+      const url = `/companies/${companyId}/conversation-item-types/${itemTypeId}`;
       return call(() => http.delete(url));
     },
     async getReports(projectId?: string, query?: string) {

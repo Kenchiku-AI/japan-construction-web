@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Conversation } from "@/types";
 import styles from "./page.module.css";
-import { ClipboardCheck } from "@/app/ui/Icons";
+import { Chat, ClipboardCheck } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { fontColor1 } from "@/lib/constants";
 
@@ -20,7 +20,7 @@ const ConversationsList: FC<ConversationsListProps> = ({
   const { t } = useTranslation();
 
   if (isEmpty) {
-    return <div className={styles.empty}>{t("empty_action_items_description")}</div>;
+    return <div className={styles.empty}>{t("empty_conversations_description")}</div>;
   }
 
   const truncateText = (text: string, maxLength: number) => {
@@ -47,17 +47,21 @@ const ConversationsList: FC<ConversationsListProps> = ({
               }}
               className={"hover:opacity-50 cursor-pointer"}
             >
-              <div className="flex items-center justify-between gap-4">
+              <div className="md:mx-3 flex items-center justify-between gap-4">
                 <div
                   style={{ minHeight: 60, minWidth: 0 }}
                   className="flex flex-1 items-center gap-3 py-1"
                 >
                   <div className="hidden md:block">
-                    <ClipboardCheck />
+                    <Chat />
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ color: fontColor1 }}>{c.name}</div>
-                    <div className={styles.subtitle}>{truncateText(c.last_message_text, 100)}</div>
+                    {c.last_message_text && (
+                      <div className={styles.subtitle}>
+                        {truncateText(c.last_message_text, 100)}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
