@@ -35,6 +35,9 @@ import {
   CreateActionItemRequest,
   ActionItem,
   UpdateActionItemRequest,
+  Conversation,
+  CreateConversationRequest,
+  UpdateConversationRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -326,6 +329,18 @@ export const useApiData = () => {
     },
     async deleteActionItem(actionItemId: string) {
       const url = `/action-items/${actionItemId}`;
+      return call(() => http.delete(url));
+    },
+    async createConversation(request: CreateConversationRequest) {
+      const url = "/conversations";
+      return call(() => http.post<Conversation>(url, request));
+    },
+    async updateConversation(conversationId: string, request: UpdateConversationRequest) {
+      const url = `/conversations/${conversationId}`;
+      return call(() => http.patch<Conversation>(url, request));
+    },
+    async deleteConversation(conversationId: string) {
+      const url = `/conversations/${conversationId}`;
       return call(() => http.delete(url));
     },
     async getReports(projectId?: string, query?: string) {

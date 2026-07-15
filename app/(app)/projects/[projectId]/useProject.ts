@@ -7,9 +7,11 @@ import { useTranslation } from "react-i18next";
 import {
   CompanyGuest,
   CreateActionItemRequest,
+  CreateConversationRequest,
   CreateReportRequest,
   Project,
   UpdateActionItemRequest,
+  UpdateConversationRequest,
   UpdateProjectRequest,
   UserRole,
 } from "@/types";
@@ -179,6 +181,67 @@ export const useProject = (projectId: string) => {
     [api],
   );
 
+  const createConversation = useCallback(
+    async (request: CreateConversationRequest) => {
+      setLoading(true);
+
+      try {
+        await api.createConversation(request);
+        getProject(projectId);
+      } catch (err) {
+        setLoading(false);
+
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+    },
+    [api],
+  );
+
+  const updateConversation = useCallback(
+    async (conversationId: string, request: UpdateConversationRequest) => {
+      setLoading(true);
+
+      try {
+        await api.updateConversation(conversationId, request);
+        getProject(projectId);
+      } catch (err) {
+        setLoading(false);
+
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+    },
+    [api],
+  );
+
+  const deleteConversation = useCallback(
+    async (conversationId: string) => {
+      setLoading(true);
+
+      try {
+        await api.deleteConversation(conversationId);
+        getProject(projectId);
+      } catch (err) {
+        setLoading(false);
+
+        if (isBillingError(err)) {
+          return;
+        }
+
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+    },
+    [api],
+  );
+
   const createReport = useCallback(
     async (request: CreateReportRequest) => {
       setLoading(true);
@@ -284,6 +347,9 @@ export const useProject = (projectId: string) => {
     removeGuest,
     createActionItem,
     updateActionItem,
-    deleteActionItem
+    deleteActionItem,
+    createConversation,
+    updateConversation,
+    deleteConversation
   };
 };

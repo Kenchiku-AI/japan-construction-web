@@ -28,6 +28,8 @@ import CreateActionItemModal from "./CreateActionItemModal";
 import EditActionItemModal from "./EditActionItemModal";
 import DeleteActionItemModal from "./DeleteActionItemModal";
 import QRCode from "react-qr-code";
+import ConversationsList from "./ConversationsList";
+import CreateConversationModal from "./CreateConversationModal";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -49,7 +51,10 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     removeGuest,
     createActionItem,
     updateActionItem,
-    deleteActionItem
+    deleteActionItem,
+    createConversation,
+    updateConversation,
+    deleteConversation
   } = useProject(projectId);
   const { downloadExcel } = useExport();
   const isLoaded = useRef(false);
@@ -62,6 +67,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
+  const [showCreateConversation, setShowCreateConversation] = useState(false);
   const [showCreateActionItem, setShowCreateActionItem] = useState(false);
   const [editActionItem, setEditActionItem] = useState<ActionItem>();
   const [actionItemToDelete, setActionItemToDelete] = useState<ActionItem>();
@@ -247,6 +253,34 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               />
             </div>
           </div>
+
+          {/* Conversations */}
+          <div className="flex justify-between mt-12">
+            <div className="self-end">{t("conversations")}</div>
+            {isEditable && (
+              <Button
+                variant="tertiary"
+                label={t("create_conversation")}
+                iconLeft={() => <Plus />}
+                onClick={() => {
+                  setShowCreateConversation(true);
+                }}
+                style={{ height: "auto" }}
+                iconOnlyMobile
+              />
+            )}
+          </div>
+          <div className={cardClass}>
+            <ConversationsList
+              conversations={project.conversations}
+              isEmpty={(project.action_items ?? []).length === 0}
+              onClickConversation={(conversation) => {
+                setEditConversation(conversation);
+              }}
+            />
+          </div>
+
+          {/* Action Items */}
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("action_items")}</div>
             {isEditable && (
@@ -274,6 +308,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               } : undefined}
             />
           </div>
+
+          {/* Reports */}
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("reports")}</div>
             <div className="flex gap-6">
@@ -323,6 +359,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               }}
             />
           </div>
+
+          {/* Guests */}
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("guests")}</div>
             {isEditable && (
@@ -350,6 +388,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
         </>
       )}
+
       <CreateReportModal
         templates={reportTemplates ?? []}
         forceProjectId={projectId}
@@ -417,6 +456,20 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             project_id: projectId,
             name,
             description
+          });
+        }}
+      />
+      <CreateConversationModal
+        isOpen={showCreateConversation}
+        onClose={() => {
+          setShowCreateConversation(false);
+        }}
+        onCreate={(name) => {
+          setShowCreateConversation(false);
+
+          createConversation({
+            project_id: projectId,
+            name,
           });
         }}
       />

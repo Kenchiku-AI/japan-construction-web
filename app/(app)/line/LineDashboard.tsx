@@ -3,7 +3,7 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useCompany } from "../companies/[companyId]/useCompany";
-import { buttonColor, cardClass, fontColor2, fontColor3 } from "@/lib/constants";
+import { buttonColor, cardClass, fontColor3 } from "@/lib/constants";
 import { Edit, Hardhat, Info } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { Button } from "@/app/ui/Button/Button";
@@ -12,7 +12,6 @@ import { Loader } from "@/app/ui/Loader";
 import LineWebhookModal from "../companies/[companyId]/LineWebhookModal";
 import LineWebhookButton from "../companies/[companyId]/LineWebhookButton";
 import { Input } from "@/app/ui/Input/Input";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useProjects } from "../projects/useProjects";
 import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
@@ -29,7 +28,6 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
   const [showChannelSecret, setShowChannelSecret] = useState(false);
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [showWebhook, setShowWebhook] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     if (!company) return;
