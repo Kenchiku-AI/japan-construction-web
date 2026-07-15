@@ -169,14 +169,16 @@ const ConversationModal: FC<ConversationModalProps> = ({
           />
         </div>
       ) : (
-        <Button
-          disabled={!name}
-          label={t("create")}
-          onClick={() => {
-            onSubmit(name, selectedItemTypes);
-            reset();
-          }}
-        />
+        <div className={(conversationItemTypes?.length ?? 0) > 0 ? "" : "pt-6"}>
+          <Button
+            disabled={!name}
+            label={t("create")}
+            onClick={() => {
+              onSubmit(name, selectedItemTypes);
+              reset();
+            }}
+          />
+        </div>
       )}
     </Modal>
   );
