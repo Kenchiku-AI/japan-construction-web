@@ -30,6 +30,7 @@ import QRCode from "react-qr-code";
 import ConversationsList from "./ConversationsList";
 import ConversationModal from "./ConversationModal";
 import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
+import DeleteConversationModal from "./DeleteConversationModal";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -70,6 +71,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showAddGuest, setShowAddGuest] = useState(false);
   const [showConversationModal, setShowConversationModal] = useState(false);
   const [editConversation, setEditConversation] = useState<Conversation>();
+  const [conversationToDelete, setConversationToDelete] = useState<Conversation>();
   const [showCreateActionItem, setShowCreateActionItem] = useState(false);
   const [editActionItem, setEditActionItem] = useState<ActionItem>();
   const [actionItemToDelete, setActionItemToDelete] = useState<ActionItem>();
@@ -417,9 +419,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           if (!template) return;
 
           setIsExcelDownloading(true);
-
           downloadExcel(templateId, template.name, projectId, project?.name);
-
           setIsExcelDownloading(false);
         }}
       />
@@ -482,10 +482,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           if (editConversation) {
             updateConversation(
               editConversation.id,
-              {
-                name,
-                item_type_ids,
-              }
+              { name, item_type_ids }
             );
 
             setTimeout(() => {
@@ -499,6 +496,14 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               item_type_ids,
             });
           }
+        }}
+        onDelete={() => {
+          setShowConversationModal(false);
+
+          setTimeout(() => {
+            setConversationToDelete(editConversation);
+            setEditConversation(undefined);
+          }, 500);
         }}
       />
       <EditActionItemModal
@@ -534,6 +539,19 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           }
 
           setActionItemToDelete(undefined);
+        }}
+      />
+      <DeleteConversationModal
+        isOpen={!!conversationToDelete}
+        onClose={() => {
+          setConversationToDelete(undefined);
+        }}
+        onDelete={() => {
+          if (conversationToDelete) {
+            deleteConversation(conversationToDelete.id);
+          }
+
+          setConversationToDelete(undefined);
         }}
       />
       {showLoader && <Loader />}

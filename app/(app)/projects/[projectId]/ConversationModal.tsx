@@ -5,7 +5,8 @@ import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { Conversation, ConversationItemType } from "@/types";
 import Divider from "@/app/ui/Divider";
-import { fontColor1, fontColor3 } from "@/lib/constants";
+import { errorColor1, fontColor1, fontColor3 } from "@/lib/constants";
+import { Check, Trash } from "@/app/ui/Icons";
 
 interface ConversationModalProps {
   conversation?: Conversation;
@@ -13,6 +14,7 @@ interface ConversationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (name: string, itemTypes: ConversationItemType[]) => void;
+  onDelete: () => void;
 }
 
 const CreateActionItemModal: FC<ConversationModalProps> = ({
@@ -21,6 +23,7 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  onDelete
 }) => {
   const [name, setName] = useState("");
   const [selectedItemTypes, setSelectedItemTypes] = useState<ConversationItemType[]>([]);
@@ -94,14 +97,36 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
           </div>
         )}
       </div>
-      <Button
-        disabled={!name}
-        label={conversation ? t("update") : t("create")}
-        onClick={() => {
-          onSubmit(name, selectedItemTypes);
-          reset();
-        }}
-      />
+      {!!conversation ? (
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
+          <Button
+            disabled={!name}
+            iconLeft={() => <Check color="white" />}
+            label={t("update")}
+            onClick={() => {
+              onSubmit(name, selectedItemTypes);
+              reset();
+            }}
+          />
+          <Button
+            variant="secondary"
+            iconLeft={() => <Trash />}
+            style={{ borderColor: errorColor1, height: 60 }}
+            textStyle={{ color: errorColor1 }}
+            label={t("delete")}
+            onClick={onDelete}
+          />
+        </div>
+      ) : (
+        <Button
+          disabled={!name}
+          label={t("create")}
+          onClick={() => {
+            onSubmit(name, selectedItemTypes);
+            reset();
+          }}
+        />
+      )}
     </Modal>
   );
 };
