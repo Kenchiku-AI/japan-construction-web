@@ -18,7 +18,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 interface ConversationItemsProps {
   projectId: string;
-  itemTypeId: string;
 }
 
 const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
