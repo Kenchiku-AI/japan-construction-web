@@ -90,25 +90,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     getCompanyGuests(project.company_id);
   }, [project, currentUser]);
 
-  const isEdited = useMemo(() => {
-    if (!isLoaded.current) return false;
-
-    if (project?.description !== description) return true;
-
-    if (currentUser?.role === "admin") {
-      return project?.status !== status;
-    }
-
-    return false;
-  }, [
-    description,
-    status,
-    isLoaded.current,
-    project?.description,
-    project?.status,
-    currentUser?.role,
-  ]);
-
   const isEditable = useMemo(() => {
     if (currentUser?.role === UserRole.Admin) return true;
     if (project?.status !== "active") return false;
@@ -272,7 +253,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               </div>
               <div className={cardClass}>
                 <ConversationItemsList
-                  conversationItems={c.items}
+                  conversationItems={c.items.slice(0, 5)}
                   isEmpty={(c.items ?? []).length === 0}
                   onClickConversationItem={(ci) => {
                     setEditConversationItem({

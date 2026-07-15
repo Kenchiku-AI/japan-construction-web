@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { ConversationItem } from "@/types";
 import styles from "./page.module.css";
-import { ClipboardCheck, } from "@/app/ui/Icons";
+import { AnnotationCheck } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { bgColor5, fontColor1, } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
@@ -57,7 +57,7 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
                     className="flex flex-1 items-center gap-3 py-1"
                   >
                     <div className="hidden md:block">
-                      <ClipboardCheck />
+                      <AnnotationCheck />
                     </div>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ color: fontColor1 }}>{c.name}</div>

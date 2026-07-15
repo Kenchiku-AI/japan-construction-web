@@ -38,7 +38,7 @@ const ConversationCreatedModal: FC<ConversationCreatedModalProps> = ({
               viewBox={`0 0 256 256`}
             />
           </div>
-          <div className="px-12" style={{ color: fontColor3, textAlign: "center" }}>
+          <div style={{ color: fontColor3, textAlign: "center", fontSize: 14 }}>
             {t("scan_to_copy")}
           </div>
         </div>

@@ -129,7 +129,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
           </div>
         )}
         {company.conversation_item_types.map((c, i) => (
-          <>
+          <div key={c.id}>
             {i > 0 && <Divider />}
             <div className="md:px-4 py-4 flex justify-between items-center">
               <div className="flex items-center gap-3">
@@ -141,34 +141,9 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
                 </div>
               </div>
             </div>
-          </>
+          </div>
         ))}
       </div>
-      {unlinkedProjects.length > 0 && (
-        <>
-          <div className="mt-12">
-            {t("unlinked_projects")}
-          </div>
-          <div className={cardClass}>
-            {unlinkedProjects.map((p, i) => (
-              <div key={p.id}>
-                {i > 0 && <Divider />}
-                <div className="md:px-4 py-2 flex justify-between items-center">
-                  <div className="flex items-center gap-3">
-                    <div className="hidden md:block">
-                      <Hardhat />
-                    </div>
-                    <div>
-                      {p.name}
-                    </div>
-                  </div>
-                  <LineLinkCodeButton shorten code={p.line_link_code} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
       <LineChannelSecretModal
         isOpen={showChannelSecret}
         onClose={() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { ConversationItem, UserRole } from "@/types";
@@ -41,21 +41,23 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
   const [editConversationItem, setEditConversationItem] = useState<ConversationItem>();
   const [conversationItemToDelete, setConversationItemToDelete] = useState<ConversationItem>();
 
-  useEffect(() => {
+  const refresh = useCallback(async () => {
     if (!conversationItemTypeId) {
       router.replace(`/projects/${projectId}`);
       return;
     }
 
-    (async () => {
-      const response = await getConversationItems(conversationItemTypeId);
+    const response = await getConversationItems(conversationItemTypeId);
 
-      if (response) {
-        setTitle(response.conversation_item_type_name);
-        setConversationItems(response.items);
-      }
-    })();
-  }, [conversationItemTypeId, router]);
+    if (response) {
+      setTitle(response.conversation_item_type_name);
+      setConversationItems(response.items);
+    }
+  }, [conversationItemTypeId])
+
+  useEffect(() => {
+    refresh();
+  }, [conversationItemTypeId, router, refresh]);
 
   const topLabel = useMemo(() => {
     return project?.name ?? "";
@@ -102,14 +104,15 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
         onClose={() => {
           setShowCreateConversationItem(false);
         }}
-        onCreate={(name, description) => {
+        onCreate={async (name, description) => {
           if (conversationItemTypeId) {
-            createConversationItem({
+            await createConversationItem({
               project_id: projectId,
               conversation_item_type_id: conversationItemTypeId,
               name,
               description
             });
+            refresh();
           }
 
           setShowCreateConversationItem(false);
@@ -122,12 +125,13 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
         onClose={() => {
           setEditConversationItem(undefined);
         }}
-        onSubmit={(request) => {
+        onSubmit={async (request) => {
           if (editConversationItem) {
-            updateConversationItem(
+            await updateConversationItem(
               editConversationItem.id,
               request
             );
+            refresh();
           }
         }}
         onDelete={(conversationItem) => {
@@ -143,9 +147,10 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
         onClose={() => {
           setConversationItemToDelete(undefined);
         }}
-        onDelete={() => {
+        onDelete={async () => {
           if (conversationItemToDelete) {
-            deleteConversationItem(conversationItemToDelete.id);
+            await deleteConversationItem(conversationItemToDelete.id);
+            refresh();
           }
 
           setConversationItemToDelete(undefined);
