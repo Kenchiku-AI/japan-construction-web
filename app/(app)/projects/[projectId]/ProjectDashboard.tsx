@@ -71,7 +71,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [editConversation, setEditConversation] = useState<Conversation>();
   const [conversationToDelete, setConversationToDelete] = useState<Conversation>();
   const [showCreateConversationItem, setShowCreateConversationItem] = useState<{ id: string, name: string }>();
-  const [editConversationItem, setEditConversationItem] = useState<ConversationItem>();
+  const [editConversationItem, setEditConversationItem] = useState<{ item: ConversationItem, typeName: string }>();
   const [conversationItemToDelete, setConversationItemToDelete] = useState<ConversationItem>();
   const [showLoader, setShowLoader] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
@@ -275,7 +275,10 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   conversationItems={c.items}
                   isEmpty={(c.items ?? []).length === 0}
                   onClickConversationItem={(ci) => {
-                    setEditConversationItem(ci);
+                    setEditConversationItem({
+                      item: ci,
+                      typeName: c.conversation_item_type_name
+                    });
                   }}
                   onViewAll={(c.items.length ?? 0) > 5 ? () => {
                     router.push(`${projectId}/conversation-items/${c.conversation_item_type_id}`);
@@ -510,15 +513,15 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
       />
       <EditConversationItemModal
         isOpen={!!editConversationItem}
-        title={editConversationItem?.name ?? t('edit')}
-        conversationItem={editConversationItem}
+        title={editConversationItem?.typeName ?? t('edit')}
+        conversationItem={editConversationItem?.item}
         onClose={() => {
           setEditConversationItem(undefined);
         }}
         onSubmit={(request) => {
           if (editConversationItem) {
             updateConversationItem(
-              editConversationItem.id,
+              editConversationItem.item.id,
               request
             );
           }
