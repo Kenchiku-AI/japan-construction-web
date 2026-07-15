@@ -19,7 +19,7 @@ interface ConversationModalProps {
   onDelete: () => void;
 }
 
-const CreateActionItemModal: FC<ConversationModalProps> = ({
+const ConversationModal: FC<ConversationModalProps> = ({
   conversation,
   conversationItemTypes,
   isOpen,
@@ -29,8 +29,7 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
 }) => {
   const [name, setName] = useState("");
   const [selectedItemTypes, setSelectedItemTypes] = useState<ConversationItemType[]>([]);
-  const hideQRCodeDefault = sessionStorage.getItem(hideQRCodeKey);
-  const [hideQRCode, setHideQRCode] = useState(hideQRCodeDefault === "true");
+  const [hideQRCode, setHideQRCode] = useState(false);
   const { t } = useTranslation();
 
   const reset = () => {
@@ -46,7 +45,9 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
     if (conversation) {
       setName(conversation.name);
       setSelectedItemTypes(conversation.item_types);
+      setHideQRCode(!!conversation.line_group_id);
     } else {
+      setName("");
       setSelectedItemTypes(conversationItemTypes);
     }
   }, [isOpen, conversation]);
@@ -62,7 +63,7 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
     >
       <div>
         {!!conversation && (
-          <div className="pb-6">
+          <>
             <Divider />
             <div className="mx-3">
               <LineLinkCodeButton code={conversation.line_link_code} />
@@ -96,7 +97,6 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
                   variant="tertiary"
                   label={hideQRCode ? t("show_qr_code") : t("hide_qr_code")}
                   onClick={() => {
-                    sessionStorage.setItem(hideQRCodeKey, String(!hideQRCode));
                     setHideQRCode(!hideQRCode);
                   }}
                   iconLeft={() => hideQRCode ? <DownChevron color={buttonColor} /> : <UpChevron color={buttonColor} />}
@@ -104,15 +104,17 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
               </div>
               <Divider />
             </div>
-          </div>
+          </>
         )}
-        <Input
-          value={name}
-          placeholder={t("name")}
-          onChange={(n) => {
-            setName(n);
-          }}
-        />
+        <div className="pt-6">
+          <Input
+            value={name}
+            placeholder={t("name")}
+            onChange={(n) => {
+              setName(n);
+            }}
+          />
+        </div>
         {(conversationItemTypes?.length ?? 0) > 0 && (
           <div className="mt-8">
             <div style={{ color: fontColor3 }}>{t("conversation_item_types")}</div>
@@ -180,4 +182,4 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
   );
 };
 
-export default CreateActionItemModal;
+export default ConversationModal;

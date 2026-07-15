@@ -8,10 +8,12 @@ import {
   CompanyGuest,
   Conversation,
   CreateActionItemRequest,
+  CreateConversationItemRequest,
   CreateConversationRequest,
   CreateReportRequest,
   Project,
   UpdateActionItemRequest,
+  UpdateConversationItemRequest,
   UpdateConversationRequest,
   UpdateProjectRequest,
   UserRole,
@@ -113,12 +115,12 @@ export const useProject = (projectId: string) => {
     [project, api],
   );
 
-  const createActionItem = useCallback(
-    async (request: CreateActionItemRequest) => {
+  const createConversationItem = useCallback(
+    async (request: CreateConversationItemRequest) => {
       setLoading(true);
 
       try {
-        await api.createActionItem(request);
+        await api.createConversationItem(request);
         getProject(projectId);
       } catch (err) {
         setLoading(false);
@@ -129,19 +131,19 @@ export const useProject = (projectId: string) => {
 
         showModal({
           title: t("error"),
-          subtitle: t("create_action_item_error_description"),
+          subtitle: t("error_description"),
         });
       }
     },
     [api],
   );
 
-  const updateActionItem = useCallback(
-    async (actionItemId: string, request: UpdateActionItemRequest) => {
+  const updateConversationItem = useCallback(
+    async (conversationItemId: string, request: UpdateConversationItemRequest) => {
       setLoading(true);
 
       try {
-        await api.updateActionItem(actionItemId, request);
+        await api.updateConversationItem(conversationItemId, request);
         getProject(projectId);
       } catch (err) {
         setLoading(false);
@@ -152,19 +154,19 @@ export const useProject = (projectId: string) => {
 
         showModal({
           title: t("error"),
-          subtitle: t("update_action_item_error_description"),
+          subtitle: t("error_description"),
         });
       }
     },
     [api],
   );
 
-  const deleteActionItem = useCallback(
-    async (actionItemId: string) => {
+  const deleteConversationItem = useCallback(
+    async (conversationItemId: string) => {
       setLoading(true);
 
       try {
-        await api.deleteActionItem(actionItemId);
+        await api.deleteConversationItem(conversationItemId);
         getProject(projectId);
       } catch (err) {
         setLoading(false);
@@ -350,11 +352,11 @@ export const useProject = (projectId: string) => {
     getCompanyGuests,
     inviteGuest,
     removeGuest,
-    createActionItem,
-    updateActionItem,
-    deleteActionItem,
     createConversation,
     updateConversation,
-    deleteConversation
+    deleteConversation,
+    createConversationItem,
+    updateConversationItem,
+    deleteConversationItem,
   };
 };

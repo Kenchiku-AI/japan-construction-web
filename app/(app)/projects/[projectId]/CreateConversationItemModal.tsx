@@ -5,14 +5,16 @@ import { Input } from "@/app/ui/Input/Input";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Modal from "@/app/ui/Modal";
 
-interface CreateActionItemModalProps {
+interface CreateConversationItemModalProps {
   isOpen: boolean;
+  title: string;
   onClose: () => void;
   onCreate: (name: string, description: string) => void;
 }
 
-const CreateActionItemModal: FC<CreateActionItemModalProps> = ({
+const CreateActionItemModal: FC<CreateConversationItemModalProps> = ({
   isOpen,
+  title,
   onClose,
   onCreate,
 }) => {
@@ -34,7 +36,7 @@ const CreateActionItemModal: FC<CreateActionItemModalProps> = ({
         onClose();
         reset();
       }}
-      title={t("create_action_item")}
+      title={title}
     >
       <div className="flex flex-col gap-3 my-6">
         <Input

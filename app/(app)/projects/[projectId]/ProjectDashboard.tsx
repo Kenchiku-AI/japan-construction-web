@@ -5,11 +5,10 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { CompanyGuest, UserRole, ActionItem, Conversation } from "@/types";
+import { CompanyGuest, UserRole, Conversation, ConversationItem } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Check, Close, DownChevron, Download, Edit, LineLogo, Plus, UpChevron } from "@/app/ui/Icons";
-import Divider from "@/app/ui/Divider";
+import { Check, Close, Download, Edit, Plus } from "@/app/ui/Icons";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
@@ -21,15 +20,15 @@ import GuestsList from "./GuestsList";
 import AddGuestModal from "./AddGuestModal";
 import RemoveGuestModal from "./RemoveGuestModal";
 import { Loader } from "@/app/ui/Loader";
-import ActionItemsList from "./ActionItemsList";
-import CreateActionItemModal from "./CreateActionItemModal";
-import EditActionItemModal from "./EditActionItemModal";
-import DeleteActionItemModal from "./DeleteActionItemModal";
+import CreateConversationItemModal from "./CreateConversationItemModal";
+import EditConversationItemModal from "./EditConversationItemModal";
+import DeleteConversationItemModal from "./DeleteConversationItemModal";
 import ConversationsList from "./ConversationsList";
 import ConversationModal from "./ConversationModal";
 import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
 import DeleteConversationModal from "./DeleteConversationModal";
 import ConversationCreatedModal from "./ConversationCreatedModal";
+import ConversationItemsList from "./ConversationItemsList";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -49,12 +48,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     getCompanyGuests,
     inviteGuest,
     removeGuest,
-    createActionItem,
-    updateActionItem,
-    deleteActionItem,
     createConversation,
     updateConversation,
-    deleteConversation
+    deleteConversation,
+    createConversationItem,
+    updateConversationItem,
+    deleteConversationItem,
   } = useProject(projectId);
   const { conversationItemTypes } = useConversationItemTypes(project?.company_id);
   const { downloadExcel } = useExport();
@@ -71,9 +70,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [conversationCreatedCode, setConversationCreatedCode] = useState("");
   const [editConversation, setEditConversation] = useState<Conversation>();
   const [conversationToDelete, setConversationToDelete] = useState<Conversation>();
-  const [showCreateActionItem, setShowCreateActionItem] = useState(false);
-  const [editActionItem, setEditActionItem] = useState<ActionItem>();
-  const [actionItemToDelete, setActionItemToDelete] = useState<ActionItem>();
+  const [showCreateConversationItem, setShowCreateConversationItem] = useState<{ id: string, name: string }>();
+  const [editConversationItem, setEditConversationItem] = useState<ConversationItem>();
+  const [conversationItemToDelete, setConversationItemToDelete] = useState<ConversationItem>();
   const [showLoader, setShowLoader] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
 
@@ -194,12 +193,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               </div>
             ) : (
               <div className="flex">
-                <div className="p-3 flex flex-1" style={{ color: !description ? fontColor2 : fontColor1 }}>
+                <div className="p-4 flex flex-1" style={{ color: !description ? fontColor2 : fontColor1 }}>
                   {description || t("add_description")}
                 </div>
                 {isEditable && (
                   <div
-                    className="cursor-pointer pt-3 pr-2"
+                    className="cursor-pointer pt-4 pr-3"
                     onClick={() => {
                       setShowEditDescription(true);
                     }}
@@ -251,34 +250,40 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             />
           </div>
 
-          {/* Action Items */}
-          <div className="flex justify-between mt-12">
-            <div className="self-end">{t("action_items")}</div>
-            {isEditable && (
-              <Button
-                variant="tertiary"
-                label={t("create_action_item")}
-                iconLeft={() => <Plus />}
-                onClick={() => {
-                  setShowCreateActionItem(true);
-                }}
-                style={{ height: "auto" }}
-                iconOnlyMobile
-              />
-            )}
-          </div>
-          <div className={cardClass}>
-            <ActionItemsList
-              actionItems={project.action_items?.slice(0, 5) ?? []}
-              isEmpty={(project.action_items ?? []).length === 0}
-              onClickActionItem={(actionItem) => {
-                setEditActionItem(actionItem);
-              }}
-              onViewAll={(project.action_items?.length ?? 0) > 5 ? () => {
-                router.push(`${projectId}/action-items`);
-              } : undefined}
-            />
-          </div>
+          {project.conversation_items.map((c) => (
+            <div className="mt-12" key={c.conversation_item_type_id}>
+              <div className="flex justify-between">
+                <div className="self-end">{c.conversation_item_type_name}</div>
+                {isEditable && (
+                  <Button
+                    variant="tertiary"
+                    label={t("create")}
+                    iconLeft={() => <Plus />}
+                    onClick={() => {
+                      setShowCreateConversationItem({
+                        id: c.conversation_item_type_id,
+                        name: c.conversation_item_type_name
+                      });
+                    }}
+                    style={{ height: "auto" }}
+                    iconOnlyMobile
+                  />
+                )}
+              </div>
+              <div className={cardClass}>
+                <ConversationItemsList
+                  conversationItems={c.items}
+                  isEmpty={(c.items ?? []).length === 0}
+                  onClickConversationItem={(ci) => {
+                    setEditConversationItem(ci);
+                  }}
+                  onViewAll={(c.items.length ?? 0) > 5 ? () => {
+                    router.push(`${projectId}/conversation-items/${c.conversation_item_type_id}`);
+                  } : undefined}
+                />
+              </div>
+            </div>
+          ))}
 
           {/* Reports */}
           <div className="flex justify-between mt-12">
@@ -413,19 +418,23 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           setGuestToRemove(undefined);
         }}
       />
-      <CreateActionItemModal
-        isOpen={showCreateActionItem}
+      <CreateConversationItemModal
+        isOpen={!!showCreateConversationItem}
+        title={showCreateConversationItem?.name ?? t("create")}
         onClose={() => {
-          setShowCreateActionItem(false);
+          setShowCreateConversationItem(undefined);
         }}
         onCreate={(name, description) => {
-          setShowCreateActionItem(false);
+          if (showCreateConversationItem) {
+            createConversationItem({
+              project_id: projectId,
+              conversation_item_type_id: showCreateConversationItem.id,
+              name,
+              description
+            });
+          }
 
-          createActionItem({
-            project_id: projectId,
-            name,
-            description
-          });
+          setShowCreateConversationItem(undefined);
         }}
       />
       <ConversationModal
@@ -481,42 +490,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         code={conversationCreatedCode}
         isOpen={!!conversationCreatedCode}
         onClose={() => {
-          setConversationCreatedCode("");
-        }}
-      />
-      <EditActionItemModal
-        isOpen={!!editActionItem}
-        actionItem={editActionItem}
-        onClose={() => {
-          setEditActionItem(undefined);
-        }}
-        onSubmit={(request) => {
-          if (editActionItem) {
-            updateActionItem(
-              editActionItem.id,
-              request
-            );
-          }
-        }}
-        onDelete={(actionItem) => {
-          setEditActionItem(undefined);
-
           setTimeout(() => {
-            setActionItemToDelete(actionItem);
+            setConversationCreatedCode("");
           }, 500);
-        }}
-      />
-      <DeleteActionItemModal
-        isOpen={!!actionItemToDelete}
-        onClose={() => {
-          setActionItemToDelete(undefined);
-        }}
-        onDelete={() => {
-          if (actionItemToDelete) {
-            deleteActionItem(actionItemToDelete.id);
-          }
-
-          setActionItemToDelete(undefined);
         }}
       />
       <DeleteConversationModal
@@ -530,6 +506,42 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           }
 
           setConversationToDelete(undefined);
+        }}
+      />
+      <EditConversationItemModal
+        isOpen={!!editConversationItem}
+        title={editConversationItem?.name ?? t('edit')}
+        conversationItem={editConversationItem}
+        onClose={() => {
+          setEditConversationItem(undefined);
+        }}
+        onSubmit={(request) => {
+          if (editConversationItem) {
+            updateConversationItem(
+              editConversationItem.id,
+              request
+            );
+          }
+        }}
+        onDelete={(conversationItem) => {
+          setEditConversationItem(undefined);
+
+          setTimeout(() => {
+            setConversationItemToDelete(conversationItem);
+          }, 500);
+        }}
+      />
+      <DeleteConversationItemModal
+        isOpen={!!conversationItemToDelete}
+        onClose={() => {
+          setConversationItemToDelete(undefined);
+        }}
+        onDelete={() => {
+          if (conversationItemToDelete) {
+            deleteConversationItem(conversationItemToDelete.id);
+          }
+
+          setConversationItemToDelete(undefined);
         }}
       />
       {showLoader && <Loader />}

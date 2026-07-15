@@ -3,37 +3,39 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
-import { UpdateActionItemRequest, ActionItem, ActionItemStatus } from "@/types";
+import { ConversationItemStatus, ConversationItem, UpdateConversationItemRequest } from "@/types";
 import Select from "@/app/ui/Select/Select";
 import Divider from "@/app/ui/Divider";
 import { Check, Close, Edit, Trash } from "@/app/ui/Icons";
 import styles from "./page.module.css";
-import { errorColor1, fontColor2 } from "@/lib/constants";
+import { errorColor1 } from "@/lib/constants";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import { useDate } from "@/public/date/useDate";
 
-interface EditActionItemModalProps {
+interface EditConversationItemModalProps {
   isOpen: boolean;
-  actionItem?: ActionItem;
+  title: string;
+  conversationItem?: ConversationItem;
   onClose: () => void;
-  onSubmit: (request: UpdateActionItemRequest) => void;
-  onDelete: (actionItem: ActionItem) => void;
+  onSubmit: (request: UpdateConversationItemRequest) => void;
+  onDelete: (conversationItem: ConversationItem) => void;
 }
 
-const EditActionItemModal: FC<EditActionItemModalProps> = ({
+const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
   isOpen,
-  actionItem,
+  title,
+  conversationItem,
   onClose,
   onSubmit,
   onDelete,
 }) => {
-  const [name, setName] = useState(actionItem?.name ?? "");
+  const [name, setName] = useState(conversationItem?.name ?? "");
   const [showEditName, setShowEditName] = useState(false);
-  const [description, setDescription] = useState(actionItem?.description ?? "");
+  const [description, setDescription] = useState(conversationItem?.description ?? "");
   const [showEditDescription, setShowEditDescription] = useState(false);
-  const [lineMessage, setLineMessage] = useState(actionItem?.source_message_text ?? "");
-  const [lineMessageTimestamp, setLineMessageTimestamp] = useState(actionItem?.line_timestamp ?? "");
-  const [status, setStatus] = useState<ActionItemStatus>(actionItem?.status ?? ActionItemStatus.New);
+  const [lineMessage, setLineMessage] = useState(conversationItem?.source_message_text ?? "");
+  const [lineMessageTimestamp, setLineMessageTimestamp] = useState(conversationItem?.line_timestamp ?? "");
+  const [status, setStatus] = useState<ConversationItemStatus>(conversationItem?.status ?? ConversationItemStatus.New);
   const { t } = useTranslation();
   const { formatDateAndTime } = useDate();
 
@@ -43,24 +45,24 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
     setTimeout(() => {
       setName("");
       setDescription("");
-      setStatus(ActionItemStatus.New);
+      setStatus(ConversationItemStatus.New);
       setLineMessage("");
       setLineMessageTimestamp("");
     }, 500);
   };
 
   useEffect(() => {
-    if (isOpen && actionItem) {
-      setName(actionItem.name);
-      setDescription(actionItem.description);
-      setStatus(actionItem.status);
-      setLineMessage(actionItem.source_message_text ?? "");
-      setLineMessageTimestamp(actionItem.line_timestamp ?? "");
+    if (isOpen && conversationItem) {
+      setName(conversationItem.name);
+      setDescription(conversationItem.description);
+      setStatus(conversationItem.status);
+      setLineMessage(conversationItem.source_message_text ?? "");
+      setLineMessageTimestamp(conversationItem.line_timestamp ?? "");
     }
   }, [isOpen]);
 
   const statusOptions = useMemo(() => {
-    const values = Object.values(ActionItemStatus);
+    const values = Object.values(ConversationItemStatus);
 
     return values.map((v) => ({
       label: t(v),
@@ -69,23 +71,23 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
   }, [t]);
 
   const unchanged = useMemo(() => {
-    return name === actionItem?.name &&
-      description === actionItem?.description &&
-      status === actionItem?.status;
+    return name === conversationItem?.name &&
+      description === conversationItem?.description &&
+      status === conversationItem?.status;
   }, [
     name,
-    actionItem?.name,
+    conversationItem?.name,
     description,
-    actionItem?.description,
+    conversationItem?.description,
     status,
-    actionItem?.status
+    conversationItem?.status
   ]);
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={closeAndReset}
-      title={t("action_item")}
+      title={title}
       width={640}
     >
       <Divider />
@@ -96,7 +98,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
             className="hover:opacity-50 cursor-pointer"
             onClick={() => {
               setShowEditName(false);
-              setName(actionItem?.name ?? "");
+              setName(conversationItem?.name ?? "");
             }}>
             <Close color={errorColor1} size={32} />
           </div>
@@ -124,7 +126,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
             className="hover:opacity-50 cursor-pointer"
             onClick={() => {
               setShowEditDescription(false);
-              setDescription(actionItem?.description ?? "");
+              setDescription(conversationItem?.description ?? "");
             }}>
             <Close color={errorColor1} size={32} />
           </div>
@@ -172,7 +174,7 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
       />
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
         <Button
-          disabled={!actionItem || !name || !description || !status || unchanged}
+          disabled={!conversationItem || !name || !description || !status || unchanged}
           iconLeft={() => <Check color="white" />}
           label={t("update")}
           onClick={() => {
@@ -192,8 +194,8 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
           textStyle={{ color: errorColor1 }}
           label={t("delete")}
           onClick={() => {
-            if (actionItem) {
-              onDelete(actionItem);
+            if (conversationItem) {
+              onDelete(conversationItem);
             }
 
             closeAndReset();
@@ -204,4 +206,4 @@ const EditActionItemModal: FC<EditActionItemModalProps> = ({
   );
 };
 
-export default EditActionItemModal;
+export default EditConversationItemModal;

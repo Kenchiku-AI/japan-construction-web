@@ -40,6 +40,9 @@ import {
   UpdateConversationRequest,
   ConversationItemTypeRequest,
   ConversationItemType,
+  UpdateConversationItemRequest,
+  CreateConversationItemRequest,
+  ConversationItem,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -321,16 +324,16 @@ export const useApiData = () => {
       const url = "/projects";
       return call(() => http.post<Project>(url, request));
     },
-    async createActionItem(request: CreateActionItemRequest) {
-      const url = "/action-items";
-      return call(() => http.post<ActionItem>(url, request));
+    async createConversationItem(request: CreateConversationItemRequest) {
+      const url = "/conversation-items";
+      return call(() => http.post<ConversationItem>(url, request));
     },
-    async updateActionItem(actionItemId: string, request: UpdateActionItemRequest) {
-      const url = `/action-items/${actionItemId}`;
-      return call(() => http.patch<ActionItem>(url, request));
+    async updateConversationItem(conversationItemId: string, request: UpdateConversationItemRequest) {
+      const url = `/conversation-items/${conversationItemId}`;
+      return call(() => http.patch<ConversationItem>(url, request));
     },
-    async deleteActionItem(actionItemId: string) {
-      const url = `/action-items/${actionItemId}`;
+    async deleteConversationItem(actionItemId: string) {
+      const url = `/conversation-items/${actionItemId}`;
       return call(() => http.delete(url));
     },
     async createConversation(request: CreateConversationRequest) {

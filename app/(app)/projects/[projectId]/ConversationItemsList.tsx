@@ -1,29 +1,29 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { ActionItem } from "@/types";
+import { ConversationItem } from "@/types";
 import styles from "./page.module.css";
-import { ClipboardCheck, Edit, Tag, Trash } from "@/app/ui/Icons";
+import { ClipboardCheck, } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { bgColor5, fontColor1, fontColor2 } from "@/lib/constants";
+import { bgColor5, fontColor1, } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 
-interface ActionItemsListProps {
-  actionItems: ActionItem[];
+interface ConversationItemsListProps {
+  conversationItems: ConversationItem[];
   isEmpty: boolean;
-  onClickActionItem: (actionItem: ActionItem) => void;
+  onClickConversationItem: (conversationItem: ConversationItem) => void;
   onViewAll?: () => void;
 }
 
-const ActionItemsList: FC<ActionItemsListProps> = ({
-  actionItems,
+const ConversationItemsList: FC<ConversationItemsListProps> = ({
+  conversationItems,
   isEmpty,
-  onClickActionItem,
+  onClickConversationItem,
   onViewAll
 }) => {
   const { t } = useTranslation();
 
   if (isEmpty) {
-    return <div className={styles.empty}>{t("empty_action_items_description")}</div>;
+    return <div className={styles.empty}>{t("empty_conversation_items_description")}</div>;
   }
 
   const truncateText = (text: string, maxLength: number) => {
@@ -41,12 +41,12 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
           transition: "max-height 0.5s ease-in-out",
         }}
       >
-        {actionItems.map((a, i) => (
-          <div key={a.id}>
+        {conversationItems.map((c, i) => (
+          <div key={c.id}>
             {i > 0 && <Divider />}
             <div
               onClick={() => {
-                onClickActionItem(a);
+                onClickConversationItem(c);
               }}
               className={"hover:opacity-50 cursor-pointer"}
             >
@@ -60,8 +60,8 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
                       <ClipboardCheck />
                     </div>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ color: fontColor1 }}>{a.name}</div>
-                      <div className={styles.subtitle}>{truncateText(a.description, 100)}</div>
+                      <div style={{ color: fontColor1 }}>{c.name}</div>
+                      <div className={styles.subtitle}>{truncateText(c.description, 100)}</div>
                     </div>
                   </div>
                   <div
@@ -73,7 +73,7 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
                       background: bgColor5
                     }}
                   >
-                    {t(a.status)}
+                    {t(c.status)}
                   </div>
                 </div>
               </div>
@@ -96,4 +96,4 @@ const ActionItemsList: FC<ActionItemsListProps> = ({
   );
 };
 
-export default ActionItemsList;
+export default ConversationItemsList;

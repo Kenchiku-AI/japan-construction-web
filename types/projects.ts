@@ -12,7 +12,14 @@ export type Project = {
   company_id: string;
   company_name?: string;
   conversations: Conversation[];
+  conversation_items: ProjectConversationItems[];
 };
+
+export type ProjectConversationItems = {
+  conversation_item_type_id: string;
+  conversation_item_type_name: string;
+  items: ConversationItem[];
+}
 
 export enum ProjectStatus {
   Active = "active",
@@ -81,6 +88,36 @@ export type CreateConversationRequest = {
 export type UpdateConversationRequest = {
   name: string;
   item_type_ids: string[];
+}
+
+export type ConversationItem = {
+  id: string;
+  name: string;
+  description: string;
+  source_message_text?: string;
+  line_timestamp?: string;
+  status: ConversationItemStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export type CreateConversationItemRequest = {
+  project_id: string;
+  conversation_item_type_id: string;
+  name: string;
+  description: string;
+}
+
+export type UpdateConversationItemRequest = {
+  name: string;
+  description: string;
+  status: ConversationItemStatus;
+}
+
+export enum ConversationItemStatus {
+  New = "new",
+  InProgress = "in_progress",
+  Closed = "closed"
 }
 
 export type ConversationItemType = {
