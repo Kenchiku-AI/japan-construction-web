@@ -6,7 +6,7 @@ import { Company } from "@/types/companies";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { ReportTemplate, ReportTemplateRequest } from "@/types";
+import { ConversationItemTypeRequest, ReportTemplate, ReportTemplateRequest } from "@/types";
 
 export const useCompany = (companyId: string) => {
   const [loading, setLoading] = useState(false);
@@ -183,6 +183,66 @@ export const useCompany = (companyId: string) => {
     [currentUser],
   );
 
+  const createConversationItemType = useCallback(
+    async (request: ConversationItemTypeRequest) => {
+      setLoading(true);
+
+      try {
+        const response = await api.createConversationItemType(companyId, request);
+
+        if (company && response) {
+          setCompany({
+            ...company,
+            conversation_item_types: response,
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [company, companyId],
+  );
+
+  const updateConversationItemType = useCallback(
+    async (itemTypeId: string, request: ConversationItemTypeRequest) => {
+      setLoading(true);
+
+      try {
+        const response = await api.updateConversationItemType(companyId, itemTypeId, request);
+
+        if (company && response) {
+          setCompany({
+            ...company,
+            conversation_item_types: response,
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [company, companyId],
+  );
+
+  const deleteConversationItemType = useCallback(
+    async (itemTypeId: string) => {
+      setLoading(true);
+
+      try {
+        const response = await api.deleteConversationItemType(companyId, itemTypeId);
+
+        if (company && response) {
+          setCompany({
+            ...company,
+            conversation_item_types: response,
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [company, companyId],
+  );
+
   return {
     loading,
     company,
@@ -190,6 +250,9 @@ export const useCompany = (companyId: string) => {
     updateName,
     updateLineChannelSecret,
     updateBillingPlan,
+    createConversationItemType,
+    updateConversationItemType,
+    deleteConversationItemType,
     templates,
     createTemplate,
     removeUser,

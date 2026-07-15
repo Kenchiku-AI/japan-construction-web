@@ -11,6 +11,7 @@ export type Project = {
   status: ProjectStatus;
   company_id: string;
   company_name?: string;
+  conversations: Conversation[];
 };
 
 export enum ProjectStatus {
@@ -59,4 +60,36 @@ export enum ActionItemStatus {
   Scheduled = "scheduled",
   InProgress = "in_progress",
   Closed = "closed"
+}
+
+export type Conversation = {
+  id: string;
+  name: string;
+  line_group_id?: string;
+  line_link_code: string;
+  last_message_text: string;
+  item_types: ConversationItemType[];
+}
+
+export type CreateConversationRequest = {
+  project_id: string;
+  company_id: string; // must send company id in case admin creates conversation that's not tied to a project
+  name: string;
+  item_type_ids: string[];
+}
+
+export type UpdateConversationRequest = {
+  name: string;
+  item_type_ids: string[];
+}
+
+export type ConversationItemType = {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export type ConversationItemTypeRequest = {
+  name: string;
+  description: string;
 }

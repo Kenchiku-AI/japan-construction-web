@@ -5,29 +5,31 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { CompanyGuest, UserRole, ActionItem } from "@/types";
+import { CompanyGuest, UserRole, ActionItem, Conversation } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Check, Close, DownChevron, Download, LineLogo, Plus, UpChevron } from "@/app/ui/Icons";
+import { Check, Close, DownChevron, Download, Edit, LineLogo, Plus, UpChevron } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
-import { buttonColor, cardClass, errorColor1, fontColor2, fontColor3, hideQRCodeKey } from "@/lib/constants";
+import { cardClass, errorColor1, fontColor1, fontColor2, fontColor3 } from "@/lib/constants";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
 import GuestsList from "./GuestsList";
 import AddGuestModal from "./AddGuestModal";
 import RemoveGuestModal from "./RemoveGuestModal";
 import { Loader } from "@/app/ui/Loader";
-import { useModal } from "@/lib/modal/ModalContext";
-import LineLinkCodeButton from "../../../ui/LineLinkCodeButton";
 import ActionItemsList from "./ActionItemsList";
 import CreateActionItemModal from "./CreateActionItemModal";
 import EditActionItemModal from "./EditActionItemModal";
 import DeleteActionItemModal from "./DeleteActionItemModal";
-import QRCode from "react-qr-code";
+import ConversationsList from "./ConversationsList";
+import ConversationModal from "./ConversationModal";
+import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
+import DeleteConversationModal from "./DeleteConversationModal";
+import ConversationCreatedModal from "./ConversationCreatedModal";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -49,25 +51,31 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     removeGuest,
     createActionItem,
     updateActionItem,
-    deleteActionItem
+    deleteActionItem,
+    createConversation,
+    updateConversation,
+    deleteConversation
   } = useProject(projectId);
+  const { conversationItemTypes } = useConversationItemTypes(project?.company_id);
   const { downloadExcel } = useExport();
   const isLoaded = useRef(false);
   const searchParams = useSearchParams();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
+  const [showEditDescription, setShowEditDescription] = useState(false);
   const [status, setStatus] = useState("");
-  const hideQRCodeDefault = sessionStorage.getItem(hideQRCodeKey);
-  const [hideQRCode, setHideQRCode] = useState(hideQRCodeDefault === "true");
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
+  const [showConversationModal, setShowConversationModal] = useState(false);
+  const [conversationCreatedCode, setConversationCreatedCode] = useState("");
+  const [editConversation, setEditConversation] = useState<Conversation>();
+  const [conversationToDelete, setConversationToDelete] = useState<Conversation>();
   const [showCreateActionItem, setShowCreateActionItem] = useState(false);
   const [editActionItem, setEditActionItem] = useState<ActionItem>();
   const [actionItemToDelete, setActionItemToDelete] = useState<ActionItem>();
   const [showLoader, setShowLoader] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
-  const { showModal } = useModal();
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -134,64 +142,74 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
       {project && (
         <>
           <div className={cardClass}>
-            <div className="md:px-3">
-              {project.line_group_id ? (
-                <div className="flex flex-row justify-between">
-                  <div className="flex flex-row gap-1 items-center">
-                    <div className="flex flex-row" >
-                      <LineLogo color={fontColor3} />
-                      <div style={{ marginTop: -2, marginLeft: -2 }}>
-                        <Check color={fontColor3} size={14} />
+            {showEditDescription ? (
+              <div className="flex flex-col">
+                <TextArea
+                  value={description}
+                  placeholder={t("description")}
+                  onChange={setDescription}
+                  disabled={!isEditable}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    marginTop: 12,
+                    marginBottom: 6,
+                    gap: 24,
+                  }}
+                >
+                  <Button
+                    variant="tertiary"
+                    iconLeft={() => <Check />}
+                    style={{ height: "auto" }}
+                    label={t("update")}
+                    onClick={() => {
+                      updateProject({ description });
+                      setShowEditDescription(false);
+
+                      // if (currentUser?.role === "admin") {
+                      //   updateProject({ description, status });
+                      // } else {
+                      //   updateProject({ description });
+                      // }
+                    }}
+                  />
+                  <Button
+                    variant="tertiary"
+                    iconLeft={() => (
+                      <div style={{ marginRight: -3 }}>
+                        <Close color={errorColor1} />
                       </div>
-                    </div>
-                    <div style={{ color: fontColor3 }}>
-                      {t("line_connected")}
-                    </div>
-                  </div>
-                  <LineLinkCodeButton code={project.line_link_code} shorten />
+                    )}
+                    style={{ height: "auto" }}
+                    label={t("cancel")}
+                    onClick={() => {
+                      setDescription(project.description);
+                      setShowEditDescription(false);
+                    }}
+                    textStyle={{ color: errorColor1 }}
+                  />
                 </div>
-              ) : (
-                <>
-                  <LineLinkCodeButton code={project.line_link_code} />
-                  <div className="hidden md:block">
-                    <Divider />
-                    <div className={`collapse ${hideQRCode ? 'collapse-close' : 'collapse-open'}`}>
-                      <div className="collapse-content p-0">
-                        <div style={{ color: fontColor3, textAlign: "center" }}>
-                          {t("scan_to_copy")}
-                        </div>
-                        <div className="pt-6" style={{ height: "auto", margin: "0 auto", maxWidth: 180, width: "100%" }}>
-                          <QRCode
-                            size={256}
-                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                            value={`${process.env.NEXT_PUBLIC_SITE_URL}copy?code=${project.line_link_code}`}
-                            viewBox={`0 0 256 256`}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <Button
-                      variant="tertiary"
-                      label={hideQRCode ? t("show_qr_code") : t("hide_qr_code")}
-                      onClick={() => {
-                        sessionStorage.setItem(hideQRCodeKey, String(!hideQRCode));
-                        setHideQRCode(!hideQRCode);
-                      }}
-                      iconLeft={() => hideQRCode ? <DownChevron color={buttonColor} /> : <UpChevron color={buttonColor} />}
-                    />
+              </div>
+            ) : (
+              <div className="flex">
+                <div className="p-3 flex flex-1" style={{ color: !description ? fontColor2 : fontColor1 }}>
+                  {description || t("add_description")}
+                </div>
+                {isEditable && (
+                  <div
+                    className="cursor-pointer pt-3 pr-2"
+                    onClick={() => {
+                      setShowEditDescription(true);
+                    }}
+                  >
+                    <Edit />
                   </div>
-                </>
-              )}
-            </div>
-            <Divider />
-            <div className="flex flex-col">
-              <TextArea
-                value={description}
-                placeholder={t("description")}
-                onChange={setDescription}
-                disabled={!isEditable}
-              />
-              {/* {currentUser?.role === "admin" && (
+                )}
+              </div>
+            )}
+            {/* {currentUser?.role === "admin" && (
                 <>
                   <Divider />
                   <Select
@@ -204,49 +222,36 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   />
                 </>
               )} */}
-            </div>
-
-            <div
-              style={{
-                height: isEdited ? 40 : 0,
-                opacity: isEdited ? 1 : 0,
-                overflow: "hidden",
-                transition:
-                  "height 0.075s ease-in-out, opacity 0.15s ease-in-out",
-                display: "flex",
-                alignItems: "flex-end",
-                gap: 24,
-              }}
-            >
-              <Button
-                variant="tertiary"
-                iconLeft={() => <Check />}
-                style={{ height: "auto" }}
-                label={t("update")}
-                onClick={() => {
-                  if (currentUser?.role === "admin") {
-                    updateProject({ description, status });
-                  } else {
-                    updateProject({ description });
-                  }
-                }}
-              />
-              <Button
-                variant="tertiary"
-                iconLeft={() => (
-                  <div style={{ marginRight: -3 }}>
-                    <Close color={errorColor1} />
-                  </div>
-                )}
-                style={{ height: "auto" }}
-                label={t("cancel")}
-                onClick={() => {
-                  setDescription(project.description);
-                }}
-                textStyle={{ color: errorColor1 }}
-              />
-            </div>
           </div>
+
+          {/* Conversations */}
+          <div className="flex justify-between mt-12">
+            <div className="self-end">{t("conversations")}</div>
+            {isEditable && (
+              <Button
+                variant="tertiary"
+                label={t("create_conversation")}
+                iconLeft={() => <Plus />}
+                onClick={() => {
+                  setShowConversationModal(true);
+                }}
+                style={{ height: "auto" }}
+                iconOnlyMobile
+              />
+            )}
+          </div>
+          <div className={cardClass}>
+            <ConversationsList
+              conversations={project.conversations}
+              isEmpty={(project.conversations ?? []).length === 0}
+              onClickConversation={(conversation) => {
+                setEditConversation(conversation);
+                setShowConversationModal(true);
+              }}
+            />
+          </div>
+
+          {/* Action Items */}
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("action_items")}</div>
             {isEditable && (
@@ -274,6 +279,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               } : undefined}
             />
           </div>
+
+          {/* Reports */}
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("reports")}</div>
             <div className="flex gap-6">
@@ -323,6 +330,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               }}
             />
           </div>
+
+          {/* Guests */}
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("guests")}</div>
             {isEditable && (
@@ -350,6 +359,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
         </>
       )}
+
       <CreateReportModal
         templates={reportTemplates ?? []}
         forceProjectId={projectId}
@@ -376,9 +386,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           if (!template) return;
 
           setIsExcelDownloading(true);
-
           downloadExcel(templateId, template.name, projectId, project?.name);
-
           setIsExcelDownloading(false);
         }}
       />
@@ -420,6 +428,62 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           });
         }}
       />
+      <ConversationModal
+        conversation={editConversation}
+        conversationItemTypes={conversationItemTypes}
+        isOpen={showConversationModal}
+        onClose={() => {
+          setShowConversationModal(false);
+
+          setTimeout(() => {
+            setEditConversation(undefined);
+          }, 500);
+        }}
+        onSubmit={async (name, itemTypes) => {
+          setShowConversationModal(false);
+
+          if (!project) return;
+
+          const item_type_ids = itemTypes.map((i) => i.id);
+
+          if (editConversation) {
+            updateConversation(
+              editConversation.id,
+              { name, item_type_ids }
+            );
+
+            setTimeout(() => {
+              setEditConversation(undefined);
+            }, 500);
+          } else {
+            const conversation = await createConversation({
+              project_id: projectId,
+              company_id: project.company_id,
+              name,
+              item_type_ids,
+            });
+
+            if (conversation) {
+              setConversationCreatedCode(conversation.line_link_code);
+            }
+          }
+        }}
+        onDelete={() => {
+          setShowConversationModal(false);
+
+          setTimeout(() => {
+            setConversationToDelete(editConversation);
+            setEditConversation(undefined);
+          }, 500);
+        }}
+      />
+      <ConversationCreatedModal
+        code={conversationCreatedCode}
+        isOpen={!!conversationCreatedCode}
+        onClose={() => {
+          setConversationCreatedCode("");
+        }}
+      />
       <EditActionItemModal
         isOpen={!!editActionItem}
         actionItem={editActionItem}
@@ -453,6 +517,19 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           }
 
           setActionItemToDelete(undefined);
+        }}
+      />
+      <DeleteConversationModal
+        isOpen={!!conversationToDelete}
+        onClose={() => {
+          setConversationToDelete(undefined);
+        }}
+        onDelete={() => {
+          if (conversationToDelete) {
+            deleteConversation(conversationToDelete.id);
+          }
+
+          setConversationToDelete(undefined);
         }}
       />
       {showLoader && <Loader />}
