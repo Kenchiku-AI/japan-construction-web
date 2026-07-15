@@ -281,7 +281,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     });
                   }}
                   onViewAll={(c.items.length ?? 0) > 5 ? () => {
-                    router.push(`${projectId}/conversation-items/${c.conversation_item_type_id}`);
+                    router.push(`${projectId}/conversation-items?conversationItemTypeId=${c.conversation_item_type_id}`);
                   } : undefined}
                 />
               </div>

@@ -12,6 +12,7 @@ import {
   CreateConversationRequest,
   CreateReportRequest,
   Project,
+  ProjectConversationItems,
   UpdateActionItemRequest,
   UpdateConversationItemRequest,
   UpdateConversationRequest,
@@ -113,6 +114,32 @@ export const useProject = (projectId: string) => {
       setLoading(false);
     },
     [project, api],
+  );
+
+  const getConversationItems = useCallback(
+    async (itemTypeId: string) => {
+      setLoading(true);
+
+      let items: ProjectConversationItems | undefined;
+
+      try {
+        items = await api.getConversationItems(projectId, itemTypeId);
+      } catch (err) {
+        setLoading(false);
+
+        if (isBillingError(err)) {
+          return;
+        }
+
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+
+      return items;
+    },
+    [api],
   );
 
   const createConversationItem = useCallback(
@@ -355,6 +382,7 @@ export const useProject = (projectId: string) => {
     createConversation,
     updateConversation,
     deleteConversation,
+    getConversationItems,
     createConversationItem,
     updateConversationItem,
     deleteConversationItem,

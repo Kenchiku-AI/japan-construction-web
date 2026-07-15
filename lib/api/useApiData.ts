@@ -43,6 +43,7 @@ import {
   UpdateConversationItemRequest,
   CreateConversationItemRequest,
   ConversationItem,
+  ProjectConversationItems,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -323,6 +324,10 @@ export const useApiData = () => {
     async createProject(request: CreateProjectRequest) {
       const url = "/projects";
       return call(() => http.post<Project>(url, request));
+    },
+    async getConversationItems(projectId: string, itemTypeId: string) {
+      const url = `/conversation-items?project_id=${projectId}&conversation_item_type_id=${itemTypeId}`;
+      return call(() => http.get<ProjectConversationItems>(url));
     },
     async createConversationItem(request: CreateConversationItemRequest) {
       const url = "/conversation-items";
