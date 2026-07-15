@@ -5,8 +5,10 @@ import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { Conversation, ConversationItemType } from "@/types";
 import Divider from "@/app/ui/Divider";
-import { errorColor1, fontColor1, fontColor3 } from "@/lib/constants";
-import { Check, Trash } from "@/app/ui/Icons";
+import { buttonColor, errorColor1, fontColor1, fontColor3, hideQRCodeKey } from "@/lib/constants";
+import { Check, DownChevron, Trash, UpChevron } from "@/app/ui/Icons";
+import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
+import QRCode from "react-qr-code";
 
 interface ConversationModalProps {
   conversation?: Conversation;
@@ -27,6 +29,8 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
 }) => {
   const [name, setName] = useState("");
   const [selectedItemTypes, setSelectedItemTypes] = useState<ConversationItemType[]>([]);
+  const hideQRCodeDefault = sessionStorage.getItem(hideQRCodeKey);
+  const [hideQRCode, setHideQRCode] = useState(hideQRCodeDefault === "true");
   const { t } = useTranslation();
 
   const reset = () => {
@@ -56,7 +60,52 @@ const CreateActionItemModal: FC<ConversationModalProps> = ({
       }}
       title={conversation ? t("update_conversation") : t("create_conversation")}
     >
-      <div className="flex flex-col gap-3 my-6">
+      <div>
+        {!!conversation && (
+          <div className="pb-6">
+            <Divider />
+            <div className="mx-3">
+              <LineLinkCodeButton code={conversation.line_link_code} />
+            </div>
+            <Divider />
+            <div className="hidden md:block">
+              <div className={`collapse ${hideQRCode ? 'collapse-close' : 'collapse-open'}`}>
+                <div className="collapse-content p-0">
+                  <div
+                    style={{
+                      color: fontColor3,
+                      textAlign: "center",
+                      fontSize: 14,
+                      paddingTop: 8
+                    }}
+                  >
+                    {t("scan_to_copy")}
+                  </div>
+                  <div className="py-6" style={{ height: "auto", margin: "0 auto", maxWidth: 180, width: "100%" }}>
+                    <QRCode
+                      size={256}
+                      style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                      value={`${process.env.NEXT_PUBLIC_SITE_URL}copy?code=${conversation.line_link_code}`}
+                      viewBox={`0 0 256 256`}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="mx-3">
+                <Button
+                  variant="tertiary"
+                  label={hideQRCode ? t("show_qr_code") : t("hide_qr_code")}
+                  onClick={() => {
+                    sessionStorage.setItem(hideQRCodeKey, String(!hideQRCode));
+                    setHideQRCode(!hideQRCode);
+                  }}
+                  iconLeft={() => hideQRCode ? <DownChevron color={buttonColor} /> : <UpChevron color={buttonColor} />}
+                />
+              </div>
+              <Divider />
+            </div>
+          </div>
+        )}
         <Input
           value={name}
           placeholder={t("name")}

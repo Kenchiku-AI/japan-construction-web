@@ -2,9 +2,9 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Conversation } from "@/types";
 import styles from "./page.module.css";
-import { Chat, ClipboardCheck } from "@/app/ui/Icons";
+import { Chat } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { fontColor1 } from "@/lib/constants";
+import { errorColor1, errorColor2, fontColor1 } from "@/lib/constants";
 
 interface ConversationsListProps {
   conversations: Conversation[];
@@ -47,22 +47,38 @@ const ConversationsList: FC<ConversationsListProps> = ({
               }}
               className={"hover:opacity-50 cursor-pointer"}
             >
-              <div className="md:mx-3 flex items-center justify-between gap-4">
-                <div
-                  style={{ minHeight: 60, minWidth: 0 }}
-                  className="flex flex-1 items-center gap-3 py-1"
-                >
-                  <div className="hidden md:block">
-                    <Chat />
+              <div className="md:mx-3">
+                <div className="flex items-center justify-between gap-4">
+                  <div
+                    style={{ minHeight: 60, minWidth: 0 }}
+                    className="flex flex-1 items-center gap-3 py-1"
+                  >
+                    <div className="hidden md:block">
+                      <Chat />
+                    </div>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ color: fontColor1 }}>{c.name}</div>
+                      {c.last_message_text && (
+                        <div className={styles.subtitle}>
+                          {truncateText(c.last_message_text, 100)}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ color: fontColor1 }}>{c.name}</div>
-                    {c.last_message_text && (
-                      <div className={styles.subtitle}>
-                        {truncateText(c.last_message_text, 100)}
-                      </div>
-                    )}
-                  </div>
+                  {!c.line_group_id && (
+                    <div
+                      className="flex items-center px-2"
+                      style={{
+                        fontSize: 12,
+                        padding: "5px 10px",
+                        borderRadius: 18,
+                        color: errorColor1,
+                        background: errorColor2
+                      }}
+                    >
+                      {t("unlinked")}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

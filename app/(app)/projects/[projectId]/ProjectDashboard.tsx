@@ -14,7 +14,7 @@ import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
-import { buttonColor, cardClass, errorColor1, fontColor2, fontColor3, hideQRCodeKey } from "@/lib/constants";
+import { buttonColor, cardClass, errorColor1, fontColor3, hideQRCodeKey } from "@/lib/constants";
 import DownloadExcelModal from "../../reports/DownloadExcelModal";
 import { useExport } from "../../reports/useExport";
 import GuestsList from "./GuestsList";
@@ -31,6 +31,7 @@ import ConversationsList from "./ConversationsList";
 import ConversationModal from "./ConversationModal";
 import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
 import DeleteConversationModal from "./DeleteConversationModal";
+import ConversationCreatedModal from "./ConversationCreatedModal";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -64,12 +65,11 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const hideQRCodeDefault = sessionStorage.getItem(hideQRCodeKey);
-  const [hideQRCode, setHideQRCode] = useState(hideQRCodeDefault === "true");
   const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
   const [showConversationModal, setShowConversationModal] = useState(false);
+  const [conversationCreatedCode, setConversationCreatedCode] = useState("");
   const [editConversation, setEditConversation] = useState<Conversation>();
   const [conversationToDelete, setConversationToDelete] = useState<Conversation>();
   const [showCreateActionItem, setShowCreateActionItem] = useState(false);
@@ -143,56 +143,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
       {project && (
         <>
           <div className={cardClass}>
-            <div className="md:px-3">
-              {project.line_group_id ? (
-                <div className="flex flex-row justify-between">
-                  <div className="flex flex-row gap-1 items-center">
-                    <div className="flex flex-row" >
-                      <LineLogo color={fontColor3} />
-                      <div style={{ marginTop: -2, marginLeft: -2 }}>
-                        <Check color={fontColor3} size={14} />
-                      </div>
-                    </div>
-                    <div style={{ color: fontColor3 }}>
-                      {t("line_connected")}
-                    </div>
-                  </div>
-                  <LineLinkCodeButton code={project.line_link_code} shorten />
-                </div>
-              ) : (
-                <>
-                  <LineLinkCodeButton code={project.line_link_code} />
-                  <div className="hidden md:block">
-                    <Divider />
-                    <div className={`collapse ${hideQRCode ? 'collapse-close' : 'collapse-open'}`}>
-                      <div className="collapse-content p-0">
-                        <div style={{ color: fontColor3, textAlign: "center" }}>
-                          {t("scan_to_copy")}
-                        </div>
-                        <div className="pt-6" style={{ height: "auto", margin: "0 auto", maxWidth: 180, width: "100%" }}>
-                          <QRCode
-                            size={256}
-                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                            value={`${process.env.NEXT_PUBLIC_SITE_URL}copy?code=${project.line_link_code}`}
-                            viewBox={`0 0 256 256`}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <Button
-                      variant="tertiary"
-                      label={hideQRCode ? t("show_qr_code") : t("hide_qr_code")}
-                      onClick={() => {
-                        sessionStorage.setItem(hideQRCodeKey, String(!hideQRCode));
-                        setHideQRCode(!hideQRCode);
-                      }}
-                      iconLeft={() => hideQRCode ? <DownChevron color={buttonColor} /> : <UpChevron color={buttonColor} />}
-                    />
-                  </div>
-                </>
-              )}
-            </div>
-            <Divider />
             <div className="flex flex-col">
               <TextArea
                 value={description}
@@ -472,7 +422,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             setEditConversation(undefined);
           }, 500);
         }}
-        onSubmit={(name, itemTypes) => {
+        onSubmit={async (name, itemTypes) => {
           setShowConversationModal(false);
 
           if (!project) return;
@@ -489,12 +439,16 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               setEditConversation(undefined);
             }, 500);
           } else {
-            createConversation({
+            const conversation = await createConversation({
               project_id: projectId,
               company_id: project.company_id,
               name,
               item_type_ids,
             });
+
+            if (conversation) {
+              setConversationCreatedCode(conversation.line_link_code);
+            }
           }
         }}
         onDelete={() => {
@@ -504,6 +458,13 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             setConversationToDelete(editConversation);
             setEditConversation(undefined);
           }, 500);
+        }}
+      />
+      <ConversationCreatedModal
+        code={conversationCreatedCode}
+        isOpen={!!conversationCreatedCode}
+        onClose={() => {
+          setConversationCreatedCode("");
         }}
       />
       <EditActionItemModal

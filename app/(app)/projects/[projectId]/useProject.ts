@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
   CompanyGuest,
+  Conversation,
   CreateActionItemRequest,
   CreateConversationRequest,
   CreateReportRequest,
@@ -185,8 +186,10 @@ export const useProject = (projectId: string) => {
     async (request: CreateConversationRequest) => {
       setLoading(true);
 
+      let conversation: Conversation | undefined;
+
       try {
-        await api.createConversation(request);
+        conversation = await api.createConversation(request);
         getProject(projectId);
       } catch (err) {
         setLoading(false);
@@ -196,6 +199,8 @@ export const useProject = (projectId: string) => {
           subtitle: t("error_description"),
         });
       }
+
+      return conversation;
     },
     [api],
   );
