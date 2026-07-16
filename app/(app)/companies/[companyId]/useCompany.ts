@@ -183,83 +183,7 @@ export const useCompany = (companyId: string) => {
     [currentUser],
   );
 
-  const createConversationItemType = useCallback(
-    async (request: ConversationItemTypeRequest) => {
-      setLoading(true);
 
-      try {
-        const response = await api.createConversationItemType(companyId, request);
-
-        if (company && response) {
-          setCompany({
-            ...company,
-            conversation_item_types: response,
-          });
-        }
-      } catch (e) {
-        showModal({
-          title: t("error"),
-          subtitle: t("error_description"),
-        });
-      } finally {
-        setLoading(false);
-      }
-    },
-    [company, companyId],
-  );
-
-  const updateConversationItemType = useCallback(
-    async (itemTypeId: string, request: ConversationItemTypeRequest) => {
-      setLoading(true);
-
-      try {
-        const response = await api.updateConversationItemType(companyId, itemTypeId, request);
-
-        if (company && response) {
-          setCompany({
-            ...company,
-            conversation_item_types: response,
-          });
-        }
-      } catch (e) {
-        showModal({
-          title: t("error"),
-          subtitle: t("error_description"),
-        });
-      } finally {
-        setLoading(false);
-      }
-    },
-    [company, companyId],
-  );
-
-  const deleteConversationItemType = useCallback(
-    async (itemTypeId: string) => {
-      setLoading(true);
-
-      try {
-        await api.deleteConversationItemType(companyId, itemTypeId);
-
-        if (company) {
-          const itemTypes = company.conversation_item_types;
-          const newItemTypes = itemTypes.filter((c) => c.id !== itemTypeId);
-
-          setCompany({
-            ...company,
-            conversation_item_types: newItemTypes ?? [],
-          });
-        }
-      } catch (e) {
-        showModal({
-          title: t("error"),
-          subtitle: t("error_description"),
-        });
-      } finally {
-        setLoading(false);
-      }
-    },
-    [company, companyId],
-  );
 
   return {
     loading,
@@ -268,9 +192,6 @@ export const useCompany = (companyId: string) => {
     updateName,
     updateLineChannelSecret,
     updateBillingPlan,
-    createConversationItemType,
-    updateConversationItemType,
-    deleteConversationItemType,
     templates,
     createTemplate,
     removeUser,

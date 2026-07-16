@@ -18,6 +18,7 @@ import styles from "./page.module.css";
 import EditConversationItemTypeModal from "./EditConversationItemTypeModal";
 import ConfirmDeleteModal from "../projects/[projectId]/ConfirmDeleteModal";
 import { ConversationItemType } from "@/types";
+import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
 
 interface LineDashboardProps {
   companyId: string;
@@ -28,10 +29,13 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
   const {
     company,
     updateLineChannelSecret,
+  } = useCompany(companyId);
+  const {
+    conversationItemTypes,
     createConversationItemType,
     updateConversationItemType,
     deleteConversationItemType,
-  } = useCompany(companyId);
+  } = useConversationItemTypes(companyId);
   const [channelSecret, setChannelSecret] = useState("");
   const [showChannelSecret, setShowChannelSecret] = useState(false);
   const [showSaveButton, setShowSaveButton] = useState(false);
@@ -127,12 +131,12 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
         />
       </div>
       <div className={cardClass}>
-        {company.conversation_item_types.length === 0 && (
+        {conversationItemTypes.length === 0 && (
           <div className={styles.empty}>
             {t("empty_conversation_item_types_description")}
           </div>
         )}
-        {company.conversation_item_types.map((c, i) => (
+        {conversationItemTypes.map((c, i) => (
           <div key={c.id}>
             {i > 0 && <Divider />}
             <div

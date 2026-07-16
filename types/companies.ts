@@ -11,7 +11,6 @@ export type Company = {
   billing_plan_id?: string;
   users: CompanyUser[];
   projects: Project[];
-  conversation_item_types: ConversationItemType[];
 };
 
 export type CreateCompanyRequest = {
