@@ -13,9 +13,11 @@ import LineWebhookModal from "../companies/[companyId]/LineWebhookModal";
 import LineWebhookButton from "../companies/[companyId]/LineWebhookButton";
 import { Input } from "@/app/ui/Input/Input";
 import Link from "next/link";
-import { useProjects } from "../projects/useProjects";
 import CreateConversationItemTypeModal from "./CreateConversationItemTypeModal";
 import styles from "./page.module.css";
+import EditConversationItemTypeModal from "./EditConversationItemTypeModal";
+import ConfirmDeleteModal from "../projects/[projectId]/ConfirmDeleteModal";
+import { ConversationItemType } from "@/types";
 
 interface LineDashboardProps {
   companyId: string;
@@ -31,12 +33,13 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
     deleteConversationItemType,
     loading
   } = useCompany(companyId);
-  const { projects } = useProjects();
   const [channelSecret, setChannelSecret] = useState("");
   const [showChannelSecret, setShowChannelSecret] = useState(false);
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [showWebhook, setShowWebhook] = useState(false);
   const [showCreateConversationItemType, setShowCreateConversationItemType] = useState(false);
+  const [editConversationItemType, setEditConversationItemType] = useState<ConversationItemType>();
+  const [conversationItemTypeToDelete, setConversationItemTypeToDelete] = useState<ConversationItemType>();
 
   useEffect(() => {
     if (!company) return;
@@ -169,6 +172,41 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
         onCreate={(name, description) => {
           setShowCreateConversationItemType(false);
           createConversationItemType({ name, description });
+        }}
+      />
+      <EditConversationItemTypeModal
+        conversationItemType={editConversationItemType}
+        isOpen={!!editConversationItemType}
+        onClose={() => {
+          setEditConversationItemType(undefined);
+        }}
+        onSubmit={(name, description) => {
+          if (editConversationItemType) {
+            updateConversationItemType(
+              editConversationItemType.id,
+              { name, description }
+            );
+          }
+        }}
+        onDelete={(conversationItemType) => {
+          setEditConversationItemType(undefined);
+
+          setTimeout(() => {
+            setConversationItemTypeToDelete(conversationItemType);
+          }, 500);
+        }}
+      />
+      <ConfirmDeleteModal
+        isOpen={!!conversationItemTypeToDelete}
+        onClose={() => {
+          setConversationItemTypeToDelete(undefined);
+        }}
+        onDelete={() => {
+          if (conversationItemToDelete) {
+            deleteConversationItem(conversationItemToDelete.id);
+          }
+
+          setConversationItemToDelete(undefined);
         }}
       />
       {loading && <Loader />}

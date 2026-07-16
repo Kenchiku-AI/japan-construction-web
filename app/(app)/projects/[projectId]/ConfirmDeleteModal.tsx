@@ -3,13 +3,13 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 
-interface DeleteConversationItemModalProps {
+interface ConfirmDeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
   onDelete: () => void;
 }
 
-const DeleteConversationItemModal: FC<DeleteConversationItemModalProps> = ({
+const ConfirmDeleteModal: FC<ConfirmDeleteModalProps> = ({
   isOpen,
   onClose,
   onDelete,
@@ -36,4 +36,4 @@ const DeleteConversationItemModal: FC<DeleteConversationItemModalProps> = ({
   );
 };
 
-export default DeleteConversationItemModal;
+export default ConfirmDeleteModal;

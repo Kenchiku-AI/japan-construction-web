@@ -35,6 +35,7 @@ const CreateConversationItemTypeModal: FC<CreateConversationItemTypeModalProps> 
         reset();
       }}
       title={t("create_conversation_item_type")}
+      subtitle={t("conversation_item_type_description")}
     >
       <div className="flex flex-col gap-3 my-6">
         <Input

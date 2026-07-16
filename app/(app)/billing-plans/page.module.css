@@ -11,6 +11,7 @@
 }
 
 .empty {
+  font-size: 14px;
   color: var(--text-color-2);
   display: flex;
   justify-content: center;

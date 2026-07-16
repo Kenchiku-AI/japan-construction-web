@@ -22,7 +22,7 @@ import RemoveGuestModal from "./RemoveGuestModal";
 import { Loader } from "@/app/ui/Loader";
 import CreateConversationItemModal from "./CreateConversationItemModal";
 import EditConversationItemModal from "./EditConversationItemModal";
-import DeleteConversationItemModal from "./DeleteConversationItemModal";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import ConversationsList from "./ConversationsList";
 import ConversationModal from "./ConversationModal";
 import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
@@ -515,7 +515,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           }, 500);
         }}
       />
-      <DeleteConversationItemModal
+      <ConfirmDeleteModal
         isOpen={!!conversationItemToDelete}
         onClose={() => {
           setConversationItemToDelete(undefined);

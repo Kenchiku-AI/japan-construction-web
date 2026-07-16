@@ -2,9 +2,9 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Conversation } from "@/types";
 import styles from "./page.module.css";
-import { Chat } from "@/app/ui/Icons";
+import { Chat, Check } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { errorColor1, errorColor2, fontColor1 } from "@/lib/constants";
+import { bgColor2, bgColor3, bgColor5, errorColor1, errorColor2, fontColor1 } from "@/lib/constants";
 
 interface ConversationsListProps {
   conversations: Conversation[];
@@ -65,7 +65,7 @@ const ConversationsList: FC<ConversationsListProps> = ({
                       )}
                     </div>
                   </div>
-                  {!c.line_group_id && (
+                  {!c.line_group_id ? (
                     <div
                       className="flex items-center px-2"
                       style={{
@@ -77,6 +77,19 @@ const ConversationsList: FC<ConversationsListProps> = ({
                       }}
                     >
                       {t("unlinked")}
+                    </div>
+                  ) : (
+                    <div
+                      className="flex items-center px-2 gap-1"
+                      style={{
+                        fontSize: 12,
+                        padding: "5px 10px",
+                        borderRadius: 18,
+                        background: bgColor5
+                      }}
+                    >
+                      <Check size={18} color={fontColor1} />
+                      {t("linked")}
                     </div>
                   )}
                 </div>

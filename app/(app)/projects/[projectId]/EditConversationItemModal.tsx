@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { ConversationItemStatus, ConversationItem, UpdateConversationItemRequest } from "@/types";
-import Select from "@/app/ui/Select/Select";
 import Divider from "@/app/ui/Divider";
 import { Check, Close, Edit, Trash } from "@/app/ui/Icons";
 import styles from "./page.module.css";
@@ -166,12 +165,12 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
       )
       }
       <Divider />
-      <Select
+      {/* <Select
         options={statusOptions}
         value={status}
         placeholder={t("status")}
         onChange={(s) => setStatus(s as any)}
-      />
+      /> */}
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
         <Button
           disabled={!conversationItem || !name || !description || !status || unchanged}

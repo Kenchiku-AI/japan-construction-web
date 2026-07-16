@@ -8,7 +8,7 @@ import { Loader } from "@/app/ui/Loader";
 import ConversationItemsList from "../ConversationItemsList";
 import CreateConversationItemModal from "../CreateConversationItemModal";
 import EditConversationItemModal from "../EditConversationItemModal";
-import DeleteConversationItemModal from "../DeleteConversationItemModal";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
 import { useProject } from "../useProject";
 import { cardClass } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
@@ -141,7 +141,7 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
           }, 500);
         }}
       />
-      <DeleteConversationItemModal
+      <ConfirmDeleteModal
         isOpen={!!conversationItemToDelete}
         onClose={() => {
           setConversationItemToDelete(undefined);

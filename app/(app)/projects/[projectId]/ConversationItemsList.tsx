@@ -64,7 +64,7 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
                       <div className={styles.subtitle}>{truncateText(c.description, 100)}</div>
                     </div>
                   </div>
-                  <div
+                  {/* <div
                     className="flex items-center px-2 hidden md:block"
                     style={{
                       fontSize: 12,
@@ -74,7 +74,7 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
                     }}
                   >
                     {t(c.status)}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
