@@ -69,7 +69,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
             <Info color={fontColor3} />
           </div>
           <div>
-            LINE連携の設定方法については、<Link href="/docs/line" target="_blank" rel="noopener noreferrer" style={{ color: buttonColor }}>セットアップガイド</Link>をご覧ください。
+            LINE連携の設定方法については、<Link href="/docs/line-setup" target="_blank" rel="noopener noreferrer" style={{ color: buttonColor }}>セットアップガイド</Link>をご覧ください。
           </div>
         </div>
         <Divider />

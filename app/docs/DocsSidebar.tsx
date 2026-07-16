@@ -42,7 +42,8 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
           <Divider />
           <div className="space-y-1">
             <SidebarItem name="クイックスタート" path="/docs/quick-start" />
-            <SidebarItem name="LINE連携" path="/docs/line" />
+            <SidebarItem name="LINE連携" path="/docs/line-setup" />
+            <SidebarItem name="LINEトーク" path="/docs/line-conversations" />
             <SidebarItem name="プロジェクト" path="/docs/projects" />
             <SidebarItem name="テンプレート" path="/docs/templates" />
             <SidebarItem name="報告書" path="/docs/reports" />

@@ -60,7 +60,7 @@ const ConversationsList: FC<ConversationsListProps> = ({
                       <div style={{ color: fontColor1 }}>{c.name}</div>
                       {c.last_message_text && (
                         <div className={styles.subtitle}>
-                          {truncateText(c.last_message_text, 100)}
+                          {`${t("last_message")}: 「${truncateText(c.last_message_text, 100)}」`}
                         </div>
                       )}
                     </div>

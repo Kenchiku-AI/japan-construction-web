@@ -150,7 +150,7 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
           <Divider />
           <div className="flex flex-row justify-between">
             <div className={styles.subtitle}>
-              {`${t("line_message")}`}
+              {`${t("original_line_message")}`}
             </div>
             {lineMessageTimestamp && (
               <div className={styles.subtitle}>
