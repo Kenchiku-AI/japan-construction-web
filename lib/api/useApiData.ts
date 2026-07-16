@@ -32,9 +32,6 @@ import {
   UserRole,
   SetupIntentResponse,
   CreateCompanyResponse,
-  CreateActionItemRequest,
-  ActionItem,
-  UpdateActionItemRequest,
   Conversation,
   CreateConversationRequest,
   UpdateConversationRequest,
@@ -337,8 +334,8 @@ export const useApiData = () => {
       const url = `/conversation-items/${conversationItemId}`;
       return call(() => http.patch<ConversationItem>(url, request));
     },
-    async deleteConversationItem(actionItemId: string) {
-      const url = `/conversation-items/${actionItemId}`;
+    async deleteConversationItem(conversationItemId: string) {
+      const url = `/conversation-items/${conversationItemId}`;
       return call(() => http.delete(url));
     },
     async createConversation(request: CreateConversationRequest) {

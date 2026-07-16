@@ -7,7 +7,6 @@ export type Project = {
   line_link_code: string;
   line_group_id?: string;
   reports?: Report[];
-  action_items?: ActionItem[];
   status: ProjectStatus;
   company_id: string;
   company_name?: string;
@@ -38,36 +37,6 @@ export type UpdateProjectRequest = {
   description?: string;
   status?: string;
 };
-
-export type ActionItem = {
-  id: string;
-  name: string;
-  description: string;
-  source_message_text?: string;
-  line_timestamp?: string;
-  status: ActionItemStatus;
-  created_at: string;
-  updated_at: string;
-}
-
-export type CreateActionItemRequest = {
-  project_id: string;
-  name: string;
-  description: string;
-}
-
-export type UpdateActionItemRequest = {
-  name: string;
-  description: string;
-  status: ActionItemStatus;
-}
-
-export enum ActionItemStatus {
-  New = "new",
-  Scheduled = "scheduled",
-  InProgress = "in_progress",
-  Closed = "closed"
-}
 
 export type Conversation = {
   id: string;

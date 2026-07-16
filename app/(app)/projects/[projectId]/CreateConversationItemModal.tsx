@@ -12,7 +12,7 @@ interface CreateConversationItemModalProps {
   onCreate: (name: string, description: string) => void;
 }
 
-const CreateActionItemModal: FC<CreateConversationItemModalProps> = ({
+const CreateConversationItemModal: FC<CreateConversationItemModalProps> = ({
   isOpen,
   title,
   onClose,
@@ -66,4 +66,4 @@ const CreateActionItemModal: FC<CreateConversationItemModalProps> = ({
   );
 };
 
-export default CreateActionItemModal;
+export default CreateConversationItemModal;

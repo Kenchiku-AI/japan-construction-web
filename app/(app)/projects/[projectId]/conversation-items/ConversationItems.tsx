@@ -91,7 +91,7 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
       <div className={cardClass}>
         <ConversationItemsList
           conversationItems={conversationItems}
-          isEmpty={(project?.action_items ?? []).length === 0}
+          isEmpty={conversationItems.length === 0}
           onClickConversationItem={(conversationItem) => {
             setEditConversationItem(conversationItem);
           }}

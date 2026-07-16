@@ -3,13 +3,13 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 
-interface DeleteActionItemModalProps {
+interface DeleteConversationItemModalProps {
   isOpen: boolean;
   onClose: () => void;
   onDelete: () => void;
 }
 
-const DeleteActionItemModal: FC<DeleteActionItemModalProps> = ({
+const DeleteConversationItemModal: FC<DeleteConversationItemModalProps> = ({
   isOpen,
   onClose,
   onDelete,
@@ -20,8 +20,8 @@ const DeleteActionItemModal: FC<DeleteActionItemModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={t("delete_action_item")}
-      subtitle={t("delete_action_item_description")}
+      title={t("confirm_delete")}
+      subtitle={t("confirm_delete_description")}
     >
       <div className="mt-8 flex flex-col gap-3">
         <Button label={t("delete")} onClick={onDelete} />
@@ -36,4 +36,4 @@ const DeleteActionItemModal: FC<DeleteActionItemModalProps> = ({
   );
 };
 
-export default DeleteActionItemModal;
+export default DeleteConversationItemModal;

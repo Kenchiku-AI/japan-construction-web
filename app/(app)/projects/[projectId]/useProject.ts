@@ -7,13 +7,11 @@ import { useTranslation } from "react-i18next";
 import {
   CompanyGuest,
   Conversation,
-  CreateActionItemRequest,
   CreateConversationItemRequest,
   CreateConversationRequest,
   CreateReportRequest,
   Project,
   ProjectConversationItems,
-  UpdateActionItemRequest,
   UpdateConversationItemRequest,
   UpdateConversationRequest,
   UpdateProjectRequest,
