@@ -1,6 +1,7 @@
 import Divider from "@/app/ui/Divider";
 import Link from "next/link";
-import { buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
+import Image from "next/image";
+import { bgColor5, buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
 
 export default function LineConversationPage() {
   return (
@@ -55,6 +56,16 @@ export default function LineConversationPage() {
               セクションで、
               <strong style={{ color: fontColor1 }}>「作成」</strong>
               をクリックします。
+
+              <Image
+                src="/line-docs-screenshot-9.png"
+                alt="LINE設定画面のスクリーンショット"
+                width={2356}
+                height={1326}
+                priority
+                className="my-10 border"
+                style={{ borderColor: bgColor5 }}
+              />
             </li>
 
             <li>
@@ -62,6 +73,16 @@ export default function LineConversationPage() {
               と
               <strong style={{ color: fontColor1 }}>「詳細」</strong>
               を入力します。
+
+              <Image
+                src="/line-docs-screenshot-10.png"
+                alt="LINE設定画面のスクリーンショット"
+                width={2354}
+                height={1786}
+                priority
+                className="my-10 border"
+                style={{ borderColor: bgColor5 }}
+              />
             </li>
           </ol>
 
@@ -160,12 +181,32 @@ export default function LineConversationPage() {
                 「トークを作成」
               </strong>
               をクリックします。
+
+              <Image
+                src="/line-docs-screenshot-11.png"
+                alt="LINE設定画面のスクリーンショット"
+                width={2356}
+                height={1670}
+                priority
+                className="my-10 border"
+                style={{ borderColor: bgColor5 }}
+              />
             </li>
 
             <li>
               <strong style={{ color: fontColor1 }}>「名称」</strong>
               に、このトークに対応するLINEグループが分かる名前を入力します。
               例えば、「お客様」「空調業者」「電気工事」などがおすすめです。
+
+              <Image
+                src="/line-docs-screenshot-12.png"
+                alt="LINE設定画面のスクリーンショット"
+                width={2356}
+                height={1768}
+                priority
+                className="my-10 border"
+                style={{ borderColor: bgColor5 }}
+              />
             </li>
 
             <li>
@@ -201,6 +242,16 @@ export default function LineConversationPage() {
                 「LINE連携コードをコピー」
               </strong>
               をクリックしてコードをコピーします。
+
+              <Image
+                src="/line-docs-screenshot-13.png"
+                alt="LINE設定画面のスクリーンショット"
+                width={2356}
+                height={1788}
+                priority
+                className="my-10 border"
+                style={{ borderColor: bgColor5 }}
+              />
             </li>
 
             <li>
@@ -252,6 +303,16 @@ export default function LineConversationPage() {
             </strong>
             ごとに、それぞれ別々の一覧として表示されます。
           </p>
+
+          <Image
+            src="/line-docs-screenshot-14.png"
+            alt="LINE設定画面のスクリーンショット"
+            width={2406}
+            height={1696}
+            priority
+            className="my-10 border"
+            style={{ borderColor: bgColor5 }}
+          />
 
           <p>
             新しいメッセージが送信されるたびに、一覧に表示されている情報が更新されたり、新しい項目が追加されたりすることがあります。
