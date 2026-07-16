@@ -192,7 +192,7 @@ export default function LineConversationPage() {
 
         <div className="space-y-4">
           <p>
-            トークを作成すると、LINEグループと連携するためのコードが表示されます。
+            トークを作成すると、LINEグループと連携するためのLINE連携コード（例：K-XXXXXX）が表示されます。
           </p>
 
           <ol className="list-decimal pl-6 space-y-3">

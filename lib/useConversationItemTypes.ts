@@ -5,6 +5,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { ConversationItemType, ConversationItemTypeRequest } from "@/types";
 import { useModal } from "./modal/ModalContext";
 import { useTranslation } from "react-i18next";
+import { AxiosError } from "axios";
 
 export const useConversationItemTypes = (companyId?: string) => {
   const [conversationItemTypes, setConversationItemTypes] = useState<ConversationItemType[]>([]);
@@ -41,9 +42,11 @@ export const useConversationItemTypes = (companyId?: string) => {
           setConversationItemTypes(response);
         }
       } catch (e) {
+        const status = (e as AxiosError).status;
+
         showModal({
           title: t("error"),
-          subtitle: t("error_description"),
+          subtitle: t(status === 409 ? "duplicate_name_description" : "error_description"),
         });
       }
     },

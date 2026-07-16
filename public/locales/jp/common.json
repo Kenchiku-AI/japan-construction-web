@@ -104,6 +104,7 @@
   "download_tag": "「{{tag}}」の写真をダウンロード",
   "downloading": "ダウンロード中...",
   "drag_to_reorder": "ドラッグして並び替え",
+  "duplicate_name_description": "その名称はすでに使用されています。別の名称を入力してください。",
   "edit": "編集",
   "edit_billing_plan": "料金プランを編集",
   "edit_conversation_item_type": "トークから抽出する情報を編集",
