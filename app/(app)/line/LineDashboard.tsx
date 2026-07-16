@@ -14,7 +14,6 @@ import LineWebhookButton from "../companies/[companyId]/LineWebhookButton";
 import { Input } from "@/app/ui/Input/Input";
 import Link from "next/link";
 import { useProjects } from "../projects/useProjects";
-import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
 import CreateConversationItemTypeModal from "./CreateConversationItemTypeModal";
 import styles from "./page.module.css";
 
@@ -46,10 +45,6 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
       setShowSaveButton(true);
     }, 5);
   }, [company]);
-
-  const unlinkedProjects = useMemo(() => {
-    return projects.filter((p) => !p.line_group_id);
-  }, [projects]);
 
   if (!company) {
     return (
