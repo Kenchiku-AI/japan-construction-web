@@ -116,6 +116,7 @@
   "empty_conversations_description": "まだトークはありません。",
   "empty_conversation_items_description": "まだありません。",
   "empty_conversation_item_types_description": "トークから抽出する情報はまだありません。",
+  "empty_conversation_item_types_description_extended": "から設定してください。",
   "empty_guests_description": "ゲストがまだいません。",
   "empty_photos_description": "写真がまだありません。",
   "empty_projects_description": "まだプロジェクトはありません。",

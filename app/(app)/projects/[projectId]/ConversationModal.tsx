@@ -5,10 +5,11 @@ import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { Conversation, ConversationItemType } from "@/types";
 import Divider from "@/app/ui/Divider";
-import { buttonColor, errorColor1, fontColor1, fontColor3, hideQRCodeKey } from "@/lib/constants";
-import { Check, DownChevron, Trash, UpChevron } from "@/app/ui/Icons";
+import { bgColor3, bgColor4, bgColor5, buttonColor, errorColor1, errorColor2, fontColor1, fontColor2, fontColor3, hideQRCodeKey } from "@/lib/constants";
+import { Check, DownChevron, Info, Trash, UpChevron } from "@/app/ui/Icons";
 import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
 import QRCode from "react-qr-code";
+import Link from "next/link";
 
 interface ConversationModalProps {
   conversation?: Conversation;
@@ -115,8 +116,8 @@ const ConversationModal: FC<ConversationModalProps> = ({
             }}
           />
         </div>
-        {(conversationItemTypes?.length ?? 0) > 0 && (
-          <div className="mt-8">
+        {(conversationItemTypes?.length ?? 0) > 0 ? (
+          <div className="my-8">
             <div style={{ color: fontColor3 }}>{t("conversation_item_types")}</div>
             <Divider />
             {conversationItemTypes.map((c) => {
@@ -146,6 +147,19 @@ const ConversationModal: FC<ConversationModalProps> = ({
               )
             })}
           </div>
+        ) : (
+          <div className="p-6 mt-6 rounded-lg flex gap-4 items-center" style={{ background: errorColor2 }} >
+            <div>
+              <Info color={errorColor1} />
+            </div>
+            <div style={{ color: errorColor1 }}>
+              {t("empty_conversation_item_types_description")}
+              <Link href="/line" style={{ color: buttonColor, fontWeight: "bold" }}>
+                {t("line_integration")}
+              </Link>
+              {t("empty_conversation_item_types_description_extended")}
+            </div>
+          </div>
         )}
       </div>
       {!!conversation ? (
@@ -169,16 +183,14 @@ const ConversationModal: FC<ConversationModalProps> = ({
           />
         </div>
       ) : (
-        <div className={(conversationItemTypes?.length ?? 0) > 0 ? "" : "pt-6"}>
-          <Button
-            disabled={!name}
-            label={t("create")}
-            onClick={() => {
-              onSubmit(name, selectedItemTypes);
-              reset();
-            }}
-          />
-        </div>
+        <Button
+          disabled={!name}
+          label={t("create")}
+          onClick={() => {
+            onSubmit(name, selectedItemTypes);
+            reset();
+          }}
+        />
       )}
     </Modal>
   );
