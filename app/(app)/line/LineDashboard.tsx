@@ -31,7 +31,6 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
     createConversationItemType,
     updateConversationItemType,
     deleteConversationItemType,
-    loading
   } = useCompany(companyId);
   const [channelSecret, setChannelSecret] = useState("");
   const [showChannelSecret, setShowChannelSecret] = useState(false);
@@ -53,6 +52,13 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
     return (
       <Loader />
     );
+  }
+
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
   }
 
   return (
@@ -129,13 +135,28 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
         {company.conversation_item_types.map((c, i) => (
           <div key={c.id}>
             {i > 0 && <Divider />}
-            <div className="md:px-4 py-4 flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <div className="hidden md:block">
-                  <AnnotationCheck />
-                </div>
-                <div>
-                  {c.name}
+            <div
+              onClick={() => {
+                setEditConversationItemType(c);
+              }}
+              className="hover:opacity-50 cursor-pointer"
+            >
+              <div className="md:mx-3">
+                <div className="flex items-center justify-between gap-4">
+                  <div
+                    style={{ minHeight: 60, minWidth: 0 }}
+                    className="flex flex-1 items-center gap-4 py-1"
+                  >
+                    <div className="hidden md:block">
+                      <AnnotationCheck />
+                    </div>
+                    <div style={{ minWidth: 0 }}>
+                      <div>{c.name}</div>
+                      <div className={styles.subtitle}>
+                        {truncateText(c.description, 100)}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -202,14 +223,13 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
           setConversationItemTypeToDelete(undefined);
         }}
         onDelete={() => {
-          if (conversationItemToDelete) {
-            deleteConversationItem(conversationItemToDelete.id);
+          if (conversationItemTypeToDelete) {
+            deleteConversationItemType(conversationItemTypeToDelete.id);
           }
 
-          setConversationItemToDelete(undefined);
+          setConversationItemTypeToDelete(undefined);
         }}
       />
-      {loading && <Loader />}
     </>
   );
 }

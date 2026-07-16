@@ -48,13 +48,13 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
               onClick={() => {
                 onClickConversationItem(c);
               }}
-              className={"hover:opacity-50 cursor-pointer"}
+              className="hover:opacity-50 cursor-pointer"
             >
               <div className="md:mx-3">
                 <div className="flex items-center justify-between gap-4">
                   <div
                     style={{ minHeight: 60, minWidth: 0 }}
-                    className="flex flex-1 items-center gap-3 py-1"
+                    className="flex flex-1 items-center gap-4 py-1"
                   >
                     <div className="hidden md:block">
                       <AnnotationCheck />
