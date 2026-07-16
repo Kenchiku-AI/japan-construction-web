@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import { Plus, Trash } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { cardClass, fontColor2 } from "@/lib/constants";
+import { bgColor1, bgColor2, bgColor3, bgColor5, cardClass, fontColor2 } from "@/lib/constants";
 import styles from "./page.module.css";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import { ReportTemplateFieldInfo } from "@/types";
@@ -58,7 +58,7 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
         )}
       </div>
       <div className={cardClass}>
-        <div className={"flex flex-col"}>
+        <div className={"flex flex-col gap-4 p-3"}>
           <DndContext
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
@@ -101,7 +101,7 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
               }}
               label={t("add_field")}
               iconLeft={() => <Plus />}
-              style={{ height: 60, justifyContent: "center" }}
+              style={{ justifyContent: "center" }}
             />
           )}
         </div>
@@ -133,16 +133,17 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
     });
 
   return (
-    <>
+    <div>
       <div
         ref={disabled ? null : setNodeRef}
         style={{
           position: "relative",
           transform: DndCSS.Transform.toString(transform),
           background: "white",
-          padding: "0 16px"
+          padding: "0 16px",
+          borderColor: bgColor5
         }}
-        className={isDragging ? "shadow z-500" : ""}
+        className={`border rounded-xl ${isDragging ? "shadow z-500" : ""}`}
       >
         <div>
           <div
@@ -195,8 +196,7 @@ const ReportTemplateFieldCell: FC<ReportTemplateFieldCellProps> = ({
           </div>
         </div>
       </div>
-      <Divider />
-    </>
+    </div>
   );
 };
 

@@ -124,7 +124,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
       {!!reportTemplate && (
         <>
           <div className={cardClass}>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 p-3">
               <TextArea
                 placeholder={t("description")}
                 value={
