@@ -9,7 +9,7 @@ export default function QuickStartPage() {
           クイックスタート
         </div>
 
-        <Divider />
+        <Divider style={{ background: fontColor2 }} />
 
         <p className="mt-4">
           Kenchiku AIへようこそ。このページでは、Kenchiku AIの基本的な使い方と、利用開始までの流れをご紹介します。
