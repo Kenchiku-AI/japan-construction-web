@@ -2,7 +2,7 @@ export const authRoutes = [
   "/login",
   "/signup",
   "/forgot-password",
-  "/reset-password",
+  "/new-password",
 ];
 export const publicRoutes = [
   "/privacy-policy",

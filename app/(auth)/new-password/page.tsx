@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import ResetPassword from "./ResetPassword";
+import NewPassword from "./NewPassword";
 
 export default function Page() {
   return (
     <Suspense>
-      <ResetPassword />
+      <NewPassword />
     </Suspense>
   );
 }

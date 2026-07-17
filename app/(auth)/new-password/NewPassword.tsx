@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useResetPassword } from "./useResetPassword";
+import { useNewPassword } from "./useNewPassword";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { Input } from "@/app/ui/Input/Input";
 import styles from "./page.module.css";
@@ -11,10 +11,10 @@ import { Button } from "@/app/ui/Button/Button";
 import { Loader } from "@/app/ui/Loader";
 import { useModal } from "@/lib/modal/ModalContext";
 
-const ResetPassword = () => {
+const NewPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { loading, resetPassword } = useResetPassword();
+  const { loading, createPassword } = useNewPassword();
   const { t } = useTranslation();
   const router = useRouter();
   const { showModal } = useModal();
@@ -32,9 +32,14 @@ const ResetPassword = () => {
     <div className="flex flex-col pt-20 sm:mt-0 sm:justify-center items-center h-screen">
       <div className={styles.content}>
         <Heading
-          title={t("reset_password")}
-          subtitle={t("reset_password_description")}
+          title={t("new_password")}
         />
+        <ul className="list-disc pl-5 mx-4 my-1 space-y-1 text-sm">
+          <li>{t("password_requirement_1")}</li>
+          <li>{t("password_requirement_2")}</li>
+          <li>{t("password_requirement_3")}</li>
+          <li>{t("password_requirement_4")}</li>
+        </ul>
         <div className={styles.fields}>
           <Input
             placeholder={t("new_password")}
@@ -54,7 +59,7 @@ const ResetPassword = () => {
           />
         </div>
         <Button
-          label={t("reset_password")}
+          label={t("set_password")}
           onClick={async () => {
             if (password !== confirmPassword) {
               showModal({
@@ -64,7 +69,15 @@ const ResetPassword = () => {
               return;
             }
 
-            resetPassword(password, token, !!newUser);
+            if (password.length < 10 || password.length > 64) {
+              showModal({
+                title: t("error"),
+                subtitle: t("invalid_password_error_description"),
+              });
+              return;
+            }
+
+            createPassword(password, token, !!newUser);
           }}
           disabled={!password || !confirmPassword || loading}
         />
@@ -83,4 +96,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default NewPassword;

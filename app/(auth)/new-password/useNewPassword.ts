@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export const useResetPassword = () => {
+export const useNewPassword = () => {
   const [loading, setLoading] = useState(false);
   const api = useApi();
   const { t } = useTranslation();
@@ -14,7 +14,7 @@ export const useResetPassword = () => {
   const router = useRouter();
   const { showMobileAppModal } = useMobileAppModal();
 
-  const resetPassword = useCallback(
+  const createPassword = useCallback(
     async (new_password: string, token: string, newUser: boolean) => {
       setLoading(true);
 
@@ -44,7 +44,7 @@ export const useResetPassword = () => {
         } else {
           showModal({
             title: t("error"),
-            subtitle: t("reset_password_error_description"),
+            subtitle: t("error_description"),
           });
         }
       }
@@ -56,6 +56,6 @@ export const useResetPassword = () => {
 
   return {
     loading,
-    resetPassword,
+    createPassword,
   };
 };
