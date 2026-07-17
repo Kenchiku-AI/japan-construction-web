@@ -1,6 +1,6 @@
 import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
-import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
+// import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -12,7 +12,7 @@ export const useNewPassword = () => {
   const { t } = useTranslation();
   const { showModal } = useModal();
   const router = useRouter();
-  const { showMobileAppModal } = useMobileAppModal();
+  // const { showMobileAppModal } = useMobileAppModal();
 
   const createPassword = useCallback(
     async (new_password: string, token: string, newUser: boolean) => {
@@ -28,7 +28,7 @@ export const useNewPassword = () => {
 
         if (newUser) {
           // new user will always be guest
-          showMobileAppModal();
+          // showMobileAppModal();
         } else {
           showModal({
             title: t("password_reset"),

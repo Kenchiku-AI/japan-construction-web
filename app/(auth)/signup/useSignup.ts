@@ -1,8 +1,8 @@
 import { useApi } from "@/lib/api/ApiContext";
 import { createCompanyInvitationIdKey, invitationTokenKey } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
-import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
-import { UserRole } from "@/types";
+// import { useMobileAppModal } from "@/lib/modal/useMobileAppModal";
+// import { UserRole } from "@/types";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -14,7 +14,7 @@ export const useSignup = () => {
   const api = useApi();
   const { t } = useTranslation();
   const { showModal } = useModal();
-  const { showMobileAppModal } = useMobileAppModal();
+  // const { showMobileAppModal } = useMobileAppModal();
 
   const signup = useCallback(
     async (
@@ -42,11 +42,11 @@ export const useSignup = () => {
         api.setCurrentUser(user);
         sessionStorage.removeItem(invitationTokenKey);
         sessionStorage.removeItem(createCompanyInvitationIdKey);
-        router.push("/");
+        router.push("/home");
 
-        if (user.role === UserRole.User) {
-          showMobileAppModal();
-        }
+        // if (user.role === UserRole.User) {
+        //   showMobileAppModal();
+        // }
       } catch (err) {
         setLoading(false);
 
