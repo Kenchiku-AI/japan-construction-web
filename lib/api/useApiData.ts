@@ -95,9 +95,9 @@ export const useApiData = () => {
     try {
       const response = await api.getCurrentUser();
 
-      if (validateCurrentUser(response)) {
-        setCurrentUser(response);
-      }
+      // if (!validateCurrentUser(response)) return;
+
+      setCurrentUser(response);
     } catch { }
   };
 
