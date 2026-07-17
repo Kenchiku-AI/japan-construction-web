@@ -33,8 +33,9 @@ const NewPassword = () => {
       <div className={styles.content}>
         <Heading
           title={t("set_password")}
+          subtitle={t("new_password_description")}
         />
-        <ul className="list-disc pl-5 mx-4 my-1 space-y-1 text-sm">
+        <ul className="list-disc pl-5 mx-4 my-4 space-y-1 text-sm">
           <li>{t("password_requirement_1")}</li>
           <li>{t("password_requirement_2")}</li>
           <li>{t("password_requirement_3")}</li>
