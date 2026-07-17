@@ -75,6 +75,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [conversationItemToDelete, setConversationItemToDelete] = useState<ConversationItem>();
   const [showLoader, setShowLoader] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
+  const isAdmin = currentUser?.role === UserRole.Admin;
+  const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -313,7 +315,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     );
                   }
               }
-              needsTemplates={reportTemplates?.length === 0}
+              needsTemplates={reportTemplates?.length === 0 && isAdminOrManager}
               onClickReport={() => {
                 setShowLoader(true);
               }}

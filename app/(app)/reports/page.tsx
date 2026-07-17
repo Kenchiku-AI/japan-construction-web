@@ -40,6 +40,7 @@ const ReportsPage = () => {
   const { showModal } = useModal();
   const hasSearchPadding = isMobile && !projectName;
   const isAdmin = currentUser?.role === UserRole.Admin;
+  const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
 
   const isCreateEnabled = useMemo(() => {
     if (isAdmin) return false;
@@ -142,7 +143,7 @@ const ReportsPage = () => {
         <ReportsList
           reports={reports ?? []}
           isEmpty={!loading && reports?.length === 0 && !showSearch}
-          needsTemplates={reportTemplates?.length === 0}
+          needsTemplates={reportTemplates?.length === 0 && isAdminOrManager}
           onClickReport={() => {
             setShowLoader(true);
           }}
