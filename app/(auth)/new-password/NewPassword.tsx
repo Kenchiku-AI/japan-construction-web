@@ -32,7 +32,7 @@ const NewPassword = () => {
     <div className="flex flex-col pt-20 sm:mt-0 sm:justify-center items-center h-screen">
       <div className={styles.content}>
         <Heading
-          title={t("new_password")}
+          title={t("set_password")}
         />
         <ul className="list-disc pl-5 mx-4 my-1 space-y-1 text-sm">
           <li>{t("password_requirement_1")}</li>
