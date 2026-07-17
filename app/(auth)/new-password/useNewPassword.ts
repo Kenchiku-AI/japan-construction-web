@@ -15,7 +15,7 @@ export const useNewPassword = () => {
   // const { showMobileAppModal } = useMobileAppModal();
 
   const createPassword = useCallback(
-    async (new_password: string, token: string, newUser: boolean) => {
+    async (new_password: string, token: string) => {
       setLoading(true);
 
       try {
@@ -26,15 +26,10 @@ export const useNewPassword = () => {
 
         router.replace("/login");
 
-        if (newUser) {
-          // new user will always be guest
-          // showMobileAppModal();
-        } else {
-          showModal({
-            title: t("password_reset"),
-            subtitle: t("password_reset_description"),
-          });
-        }
+        showModal({
+          title: t("new_password_created"),
+          subtitle: t("new_password_created_description"),
+        });
       } catch (err) {
         if ((err as AxiosError).status === 400) {
           showModal({

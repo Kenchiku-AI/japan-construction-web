@@ -20,7 +20,7 @@ const NewPassword = () => {
   const { showModal } = useModal();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  const newUser = searchParams.get("newUser");
+  // const newUser = searchParams.get("newUser");
 
   useEffect(() => {
     if (!token) {
@@ -78,7 +78,7 @@ const NewPassword = () => {
               return;
             }
 
-            createPassword(password, token, !!newUser);
+            createPassword(password, token);
           }}
           disabled={!password || !confirmPassword || loading}
         />
