@@ -333,7 +333,7 @@ export const useProject = (projectId: string) => {
       setLoading(true);
 
       try {
-        const guestProject = guest.projects.find((p) => projectId);
+        const guestProject = guest.projects.find((p) => p.project_id === projectId);
         if (!guestProject) return;
 
         await api.removeGuest(projectId, guestProject.guest_link_id);
