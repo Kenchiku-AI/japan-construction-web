@@ -97,7 +97,10 @@ dialog {
 
 .react-datepicker__time-list-item {
   width: calc(100% - 1px);
-  padding-top: 7px;
+}
+
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item {
+  padding: 7px 10px;
 }
 
 h2.react-datepicker__current-month {
