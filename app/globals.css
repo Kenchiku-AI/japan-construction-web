@@ -97,6 +97,19 @@ dialog {
 
 .react-datepicker__time-list-item {
   width: calc(100% - 1px);
+  font-family: 'Noto Sans JP';
+}
+
+.react-datepicker__day-name {
+  font-family: 'Noto Sans JP';
+}
+
+.react-datepicker__day {
+  font-family: 'Noto Sans JP';
+}
+
+.react-datepicker__day--selected {
+  background: var(--button-color);
 }
 
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item {
