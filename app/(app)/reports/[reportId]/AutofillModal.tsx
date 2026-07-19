@@ -30,9 +30,43 @@ const AutofillModal: FC<AutofillModalProps> = ({
       title={t("autofill_from_chat")}
       subtitle={t("autofill_from_chat_description")}
     >
-      {conversations.map((c) => (
+      {conversations.map((c) => {
+        const selectedConversation = selectedConversations.find((sc) => sc.conversation_id === c.id);
 
-      ))}
+        return (
+          <ConversationRow
+            conversation={c}
+            isSelected={!!selectedConversation}
+            startTime={selectedConversation?.start_time}
+            endTime={selectedConversation?.end_time}
+            onSelect={(s) => {
+              if (!!selectedConversation) {
+                setSelectedConversations((prev) => (
+                  prev.filter((sc) => sc.conversation_id !== c.id)
+                ));
+              } else {
+                setSelectedConversations((prev) => (
+                  [
+                    ...prev,
+                    {
+                      conversation_id: c.id,
+                      start_time: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+                      end_time: new Date().toISOString()
+                    }
+                  ]
+                ));
+              }
+            }}
+            onUpdateStartTime={() => {
+
+            }}
+            onUpdateEndTime={() => {
+
+            }}
+          />
+        );
+      }
+      )}
       <div className="mt-8 grid lg:grid-col-2 gap-2">
         <Button label={t("delete_report")} onClick={onSubmit} />
         <Button
@@ -49,8 +83,8 @@ const AutofillModal: FC<AutofillModalProps> = ({
 interface ConversationRowProps {
   conversation: Conversation;
   isSelected: boolean;
-  startTime: string;
-  endTime: string;
+  startTime?: string;
+  endTime?: string;
   onSelect: (isSelected: boolean) => void;
   onUpdateStartTime: (start_time: string) => void;
   onUpdateEndTime: (end_time: string) => void;
@@ -78,13 +112,15 @@ const ConversationRow: FC<ConversationRowProps> = ({
         />
         {conversation.name}
       </label>
-      <div
-        style={{
-          transition: "height 0.5s ease-in-out",
-          height: isSelected ? 60 : 0
-        }}
-      >
-      </div>
+      {isSelected && (
+        <div
+          style={{
+            transition: "height 0.5s ease-in-out",
+            height: isSelected ? 60 : 0
+          }}
+        >
+        </div>
+      )}
       <Divider />
     </div>
   )
