@@ -89,3 +89,23 @@ dialog {
 .react-day-picker .rdp-selected>button {
   background: black !important;
 }
+
+.react-datepicker__header--time {
+  height: 40px;
+}
+
+.react-datepicker__header--time::after {
+  visibility: visible;
+  content: "時刻";
+  position: absolute;
+  left: 0;
+}
+
+.react-datepicker-time__header {
+  display: none;
+}
+
+.react-datepicker__day--selected {
+  background-color: var(--button-color);
+  color: white;
+}
