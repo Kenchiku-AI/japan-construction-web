@@ -91,7 +91,7 @@ dialog {
 }
 
 .react-datepicker__header--time {
-  height: 40px;
+  height: 39px;
   padding-top: 10px;
 }
 
@@ -112,7 +112,7 @@ h2.react-datepicker__current-month {
 }
 
 .react-datepicker-ignore-onclickoutside {
-  background: "#F3F3F5";
+  background: #F3F3F5;
 }
 
 .react-datepicker__navigation--previous {
