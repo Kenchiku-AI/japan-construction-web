@@ -6,7 +6,7 @@ import { Conversation, ConversationRange } from "@/types";
 import Divider from "@/app/ui/Divider";
 import { fontColor1 } from "@/lib/constants";
 import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
+import "react-datepicker/dist/react-datepicker.css";
 import { ja } from "date-fns/locale";
 
 interface AutofillModalProps {
