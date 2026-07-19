@@ -106,22 +106,10 @@ const ConversationRow: FC<ConversationRowProps> = ({
   onUpdateEndTime
 }) => {
   const { t } = useTranslation();
-  const [date, setDate] = useState<Date | null>(new Date());
-  //   const [startTimeValue, setStartTimeValue] = useState("")
-  //   const getISOstring = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const localValue = e.target.value;
-
-  //   setValue(localValue);
-
-  //   const iso = new Date(localValue).toISOString();
-
-  //   console.log(localValue); // "2026-07-19T21:30"
-  //   console.log(iso);        // "2026-07-19T12:30:00.000Z" (example)
-  // };
 
   return (
-    <div className="py-5">
-      <label className="label flex gap-4 mx-3" style={{ color: fontColor1 }}>
+    <div>
+      <label className="label flex gap-4 mx-3 py-2" style={{ color: fontColor1 }}>
         <input
           type="checkbox"
           className="checkbox checkbox-neutral"
@@ -133,7 +121,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
         {conversation.name}
       </label>
       <div
-        className="mx-3"
+        className="px-3"
         style={{
           transition: "height 0.1s ease-in-out",
           height: isSelected ? 60 : 0,
@@ -141,7 +129,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
         }}
       >
         <Divider />
-        <div className="flex items-center gap-6">
+        <div className="flex items-center px-3 gap-6">
           <div>
             {t("start_time")}
           </div>
@@ -156,7 +144,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
           />
         </div>
         <Divider />
-        <div className="flex items-center gap-6">
+        <div className="flex items-center px-3 gap-6">
           <div>
             {t("end_time")}
           </div>
