@@ -100,10 +100,15 @@ dialog {
   padding: 7px 10px;
 }
 
+h2.react-datepicker__current-month {
+  font-family: 'Noto Sans JP';
+}
+
 .react-datepicker__header--time::after {
   content: "時刻";
   text-align: center;
   font-weight: bold;
+  font-family: 'Noto Sans JP';
 }
 
 .react-datepicker__navigation--previous {
