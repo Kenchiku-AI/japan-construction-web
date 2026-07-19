@@ -105,6 +105,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
   onUpdateStartTime,
   onUpdateEndTime
 }) => {
+  const { t } = useTranslation();
   const [date, setDate] = useState<Date | null>(new Date());
   //   const [startTimeValue, setStartTimeValue] = useState("")
   //   const getISOstring = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,15 +149,20 @@ const ConversationRow: FC<ConversationRowProps> = ({
           className="input input-bordered w-full"
         // value={endTime}
         /> */}
-        <DatePicker
-          selected={date}
-          onChange={(d: any) => setDate(d)}
-          locale={ja}
-          timeFormat="HH:mm"
-          dateFormat="yyyy/MM/dd HH:mm"
-          timeIntervals={15}
-          showTimeSelect
-        />
+        <div className="flex gap-4">
+          <div>
+            {t("start_time")}
+          </div>
+          <DatePicker
+            selected={date}
+            onChange={(d: any) => setDate(d)}
+            locale={ja}
+            timeFormat="HH:mm"
+            dateFormat="yyyy/MM/dd HH:mm"
+            timeIntervals={15}
+            showTimeSelect
+          />
+        </div>
       </div>
       <Divider />
     </div>
