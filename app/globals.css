@@ -176,6 +176,10 @@ h2.react-datepicker__current-month {
   background: var(--button-color) !important;
 }
 
+.react-datepicker__time-list-item react-datepicker__time-list-item--selected {
+  background-color: var(--button-color) !important;
+}
+
 .react-datepicker__day--keyboard-selected:not([aria-disabled=true]):hover,
 .react-datepicker__month-text--keyboard-selected:not([aria-disabled=true]):hover,
 .react-datepicker__quarter-text--keyboard-selected:not([aria-disabled=true]):hover,
