@@ -187,3 +187,7 @@ h2.react-datepicker__current-month {
   background-color: #f0f0f0 !important;
   color: black !important;
 }
+
+.react-datepicker {
+  border-color: black !important;
+}
