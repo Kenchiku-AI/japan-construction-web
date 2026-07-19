@@ -65,7 +65,7 @@ const ConversationsList: FC<ConversationsListProps> = ({
                       )}
                     </div>
                   </div>
-                  {!c.line_group_id ? (
+                  {!c.line_chat_id ? (
                     <div
                       className="flex items-center px-2"
                       style={{

@@ -46,7 +46,7 @@ const ConversationModal: FC<ConversationModalProps> = ({
     if (conversation) {
       setName(conversation.name);
       setSelectedItemTypes(conversation.item_types);
-      setHideQRCode(!!conversation.line_group_id);
+      setHideQRCode(!!conversation.line_chat_id);
     } else {
       setName("");
       setSelectedItemTypes(conversationItemTypes);

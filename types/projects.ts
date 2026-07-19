@@ -39,7 +39,7 @@ export type UpdateProjectRequest = {
 export type Conversation = {
   id: string;
   name: string;
-  line_group_id?: string;
+  line_chat_id?: string;
   line_link_code: string;
   last_message_text: string;
   item_types: ConversationItemType[];
