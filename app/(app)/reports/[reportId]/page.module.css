@@ -10,3 +10,12 @@
   align-items: center;
   height: 60px;
 }
+
+.react-datepicker-time__caption {
+  display: none;
+}
+
+.react-datepicker__day--selected {
+  background-color: var(--button-color);
+  color: white;
+}

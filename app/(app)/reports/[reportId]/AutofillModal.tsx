@@ -155,7 +155,6 @@ const ConversationRow: FC<ConversationRowProps> = ({
           timeFormat="HH:mm"
           dateFormat="yyyy/MM/dd HH:mm"
           timeIntervals={15}
-          className="input input-bordered w-full"
           showTimeSelect
         />
       </div>
