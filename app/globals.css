@@ -108,6 +108,10 @@ dialog {
   font-family: 'Noto Sans JP';
 }
 
+.react-datepicker__navigation {
+  top: 6px;
+}
+
 .react-datepicker__day--selected {
   background: var(--button-color);
 }
@@ -139,19 +143,22 @@ h2.react-datepicker__current-month {
   isolation: isolate;
 }
 
-.react-datepicker__navigation--previous {
-  top: 6px;
-}
-
-.react-datepicker__navigation--next {
-  top: 6px;
-}
-
 .react-datepicker-time__header {
   display: none;
 }
 
-.react-datepicker__day--selected {
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range,
+.react-datepicker__month-text--selected,
+.react-datepicker__month-text--in-selecting-range,
+.react-datepicker__month-text--in-range,
+.react-datepicker__quarter-text--selected,
+.react-datepicker__quarter-text--in-selecting-range,
+.react-datepicker__quarter-text--in-range,
+.react-datepicker__year-text--selected,
+.react-datepicker__year-text--in-selecting-range,
+.react-datepicker__year-text--in-range {
   background-color: var(--button-color);
   color: white;
 }
