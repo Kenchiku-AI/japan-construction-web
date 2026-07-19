@@ -102,6 +102,18 @@ const ConversationRow: FC<ConversationRowProps> = ({
   onUpdateStartTime,
   onUpdateEndTime
 }) => {
+  //   const [startTimeValue, setStartTimeValue] = useState("")
+  //   const getISOstring = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const localValue = e.target.value;
+
+  //   setValue(localValue);
+
+  //   const iso = new Date(localValue).toISOString();
+
+  //   console.log(localValue); // "2026-07-19T21:30"
+  //   console.log(iso);        // "2026-07-19T12:30:00.000Z" (example)
+  // };
+
   return (
     <div>
       <label className="label flex gap-4 mx-3 my-5" style={{ color: fontColor1 }}>
@@ -117,10 +129,20 @@ const ConversationRow: FC<ConversationRowProps> = ({
       </label>
       <div
         style={{
-          transition: "height 0.5s ease-in-out",
+          transition: "height 0.1s ease-in-out",
           height: isSelected ? 60 : 0
         }}
       >
+        <input
+          type="datetime-local"
+          className="input input-bordered w-full"
+        // value={startTime}
+        />
+        <input
+          type="datetime-local"
+          className="input input-bordered w-full"
+        // value={endTime}
+        />
       </div>
       <Divider />
     </div>
