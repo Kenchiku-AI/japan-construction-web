@@ -5,6 +5,9 @@ import { Button } from "@/app/ui/Button/Button";
 import { Conversation, ConversationRange } from "@/types";
 import Divider from "@/app/ui/Divider";
 import { fontColor1 } from "@/lib/constants";
+import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
+import { ja } from "date-fns/locale";
 
 interface AutofillModalProps {
   conversations: Conversation[];
@@ -102,6 +105,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
   onUpdateStartTime,
   onUpdateEndTime
 }) => {
+  const [date, setDate] = useState<Date | null>(new Date());
   //   const [startTimeValue, setStartTimeValue] = useState("")
   //   const getISOstring = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const localValue = e.target.value;
@@ -130,10 +134,11 @@ const ConversationRow: FC<ConversationRowProps> = ({
       <div
         style={{
           transition: "height 0.1s ease-in-out",
-          height: isSelected ? 60 : 0
+          height: isSelected ? 60 : 0,
+          overflow: "hidden"
         }}
       >
-        <input
+        {/* <input
           type="datetime-local"
           className="input input-bordered w-full"
         // value={startTime}
@@ -142,6 +147,16 @@ const ConversationRow: FC<ConversationRowProps> = ({
           type="datetime-local"
           className="input input-bordered w-full"
         // value={endTime}
+        /> */}
+        <DatePicker
+          selected={date}
+          onChange={(d: any) => setDate(d)}
+          locale={ja}
+          timeFormat="HH:mm"
+          dateFormat="yyyy/MM/dd HH:mm"
+          timeIntervals={15}
+          className="input input-bordered w-full"
+          showTimeSelect
         />
       </div>
       <Divider />
