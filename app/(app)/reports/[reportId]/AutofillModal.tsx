@@ -4,6 +4,7 @@ import Modal from "@/app/ui/Modal";
 import { Button } from "@/app/ui/Button/Button";
 import { Conversation, ConversationRange } from "@/types";
 import Divider from "@/app/ui/Divider";
+import { fontColor1 } from "@/lib/constants";
 
 interface AutofillModalProps {
   conversations: Conversation[];
@@ -30,44 +31,46 @@ const AutofillModal: FC<AutofillModalProps> = ({
       title={t("autofill_from_chat")}
       subtitle={t("autofill_from_chat_description")}
     >
-      {conversations.map((c) => {
-        const selectedConversation = selectedConversations.find((sc) => sc.conversation_id === c.id);
+      <div className="my-8">
+        <Divider />
+        {conversations.map((c) => {
+          const selectedConversation = selectedConversations.find((sc) => sc.conversation_id === c.id);
 
-        return (
-          <ConversationRow
-            conversation={c}
-            isSelected={!!selectedConversation}
-            startTime={selectedConversation?.start_time}
-            endTime={selectedConversation?.end_time}
-            onSelect={(s) => {
-              if (!!selectedConversation) {
-                setSelectedConversations((prev) => (
-                  prev.filter((sc) => sc.conversation_id !== c.id)
-                ));
-              } else {
-                setSelectedConversations((prev) => (
-                  [
-                    ...prev,
-                    {
-                      conversation_id: c.id,
-                      start_time: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-                      end_time: new Date().toISOString()
-                    }
-                  ]
-                ));
-              }
-            }}
-            onUpdateStartTime={() => {
+          return (
+            <ConversationRow
+              conversation={c}
+              isSelected={!!selectedConversation}
+              startTime={selectedConversation?.start_time}
+              endTime={selectedConversation?.end_time}
+              onSelect={(s) => {
+                if (!!selectedConversation) {
+                  setSelectedConversations((prev) => (
+                    prev.filter((sc) => sc.conversation_id !== c.id)
+                  ));
+                } else {
+                  setSelectedConversations((prev) => (
+                    [
+                      ...prev,
+                      {
+                        conversation_id: c.id,
+                        start_time: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+                        end_time: new Date().toISOString()
+                      }
+                    ]
+                  ));
+                }
+              }}
+              onUpdateStartTime={() => {
 
-            }}
-            onUpdateEndTime={() => {
+              }}
+              onUpdateEndTime={() => {
 
-            }}
-          />
-        );
-      }
-      )}
-      <div className="mt-8 grid lg:grid-col-2 gap-2">
+              }}
+            />
+          );
+        })}
+      </div>
+      <div className="grid lg:grid-col-2 gap-2">
         <Button label={t("delete_report")} onClick={onSubmit} />
         <Button
           variant="secondary"
@@ -101,7 +104,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
 }) => {
   return (
     <div>
-      <label className="label flex gap-4 mx-3 my-5">
+      <label className="label flex gap-4 mx-3 my-5" style={{ color: fontColor1 }}>
         <input
           type="checkbox"
           className="checkbox checkbox-neutral"
@@ -112,15 +115,13 @@ const ConversationRow: FC<ConversationRowProps> = ({
         />
         {conversation.name}
       </label>
-      {isSelected && (
-        <div
-          style={{
-            transition: "height 0.5s ease-in-out",
-            height: isSelected ? 60 : 0
-          }}
-        >
-        </div>
-      )}
+      <div
+        style={{
+          transition: "height 0.5s ease-in-out",
+          height: isSelected ? 60 : 0
+        }}
+      >
+      </div>
       <Divider />
     </div>
   )
