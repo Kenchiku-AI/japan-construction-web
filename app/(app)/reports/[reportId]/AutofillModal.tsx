@@ -149,7 +149,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
           className="input input-bordered w-full"
         // value={endTime}
         /> */}
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
           <div>
             {t("start_time")}
           </div>
