@@ -106,6 +106,8 @@ const ConversationRow: FC<ConversationRowProps> = ({
   onUpdateEndTime
 }) => {
   const { t } = useTranslation();
+  const [startTimeLocal, setStartTimeLocal] = useState<Date | null>(new Date());
+  const [endTimeLocal, setEndTimeLocal] = useState<Date | null>(new Date());
 
   return (
     <div>
@@ -134,8 +136,8 @@ const ConversationRow: FC<ConversationRowProps> = ({
             {t("start_time")}
           </div>
           <DatePicker
-            selected={date}
-            onChange={(d: any) => setDate(d)}
+            selected={startTimeLocal}
+            onChange={(d: any) => setStartTimeLocal(d)}
             locale={ja}
             timeFormat="HH:mm"
             dateFormat="yyyy/MM/dd HH:mm"
@@ -149,8 +151,8 @@ const ConversationRow: FC<ConversationRowProps> = ({
             {t("end_time")}
           </div>
           <DatePicker
-            selected={date}
-            onChange={(d: any) => setDate(d)}
+            selected={endTimeLocal}
+            onChange={(d: any) => setEndTimeLocal(d)}
             locale={ja}
             timeFormat="HH:mm"
             dateFormat="yyyy/MM/dd HH:mm"
