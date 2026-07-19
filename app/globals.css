@@ -92,13 +92,26 @@ dialog {
 
 .react-datepicker__header--time {
   height: 40px;
+  padding-top: 10px;
+}
+
+.react-datepicker__time-list-item {
+  width: calc(100% - 1px);
+  padding: 7px 10px;
 }
 
 .react-datepicker__header--time::after {
-  visibility: visible;
   content: "時刻";
-  position: absolute;
-  left: 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+.react-datepicker__navigation--previous {
+  top: 6px;
+}
+
+.react-datepicker__navigation--next {
+  top: 6px;
 }
 
 .react-datepicker-time__header {
