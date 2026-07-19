@@ -45,6 +45,12 @@ export type Conversation = {
   item_types: ConversationItemType[];
 }
 
+export type ConversationRange = {
+  conversation_id: string;
+  start_time: string;
+  end_time: string;
+}
+
 export type CreateConversationRequest = {
   project_id: string;
   company_id: string; // must send company id in case admin creates conversation that's not tied to a project

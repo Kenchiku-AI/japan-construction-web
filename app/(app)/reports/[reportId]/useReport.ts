@@ -8,12 +8,14 @@ import { useTranslation } from "react-i18next";
 import imageCompression from "browser-image-compression";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useBilling } from "@/lib/useBilling";
+import { Conversation } from "@/types";
 
 export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(true);
   const [imagesLoading, setImagesLoading] = useState(false);
   const [report, setReport] = useState<Report>();
   const [images, setImages] = useState<ReportImage[]>();
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const imagesRef = useRef<ReportImage[] | undefined>(undefined);
   const [selectedPhoto, setSelectedPhoto] = useState<ReportImage>();
   const { t } = useTranslation();
@@ -22,6 +24,7 @@ export const useReport = (reportId: string) => {
   const { showModal } = useModal();
   const pollingRef = useRef<Record<string, NodeJS.Timeout>>({});
   const selectedPhotoRef = useRef<ReportImage | undefined>(undefined);
+  const conversationsFetchedRef = useRef(false);
   const { isBillingError } = useBilling();
 
   useEffect(() => {
@@ -101,6 +104,11 @@ export const useReport = (reportId: string) => {
       try {
         const response = await api.getReport(reportId);
         setReport(response);
+
+        if (response?.parent_type === "project" && !conversationsFetchedRef.current) {
+          const project = await api.getProject(response.parent_id);
+          setConversations(project?.conversations ?? []);
+        }
       } catch (err) {
         showModal({
           title: t("error"),
@@ -375,5 +383,6 @@ export const useReport = (reportId: string) => {
     uploadImage,
     selectedPhoto,
     setSelectedPhoto,
+    conversations
   };
 };

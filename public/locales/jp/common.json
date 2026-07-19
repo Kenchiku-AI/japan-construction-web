@@ -12,6 +12,7 @@
   "add_tag": "タグを追加",
   "amount_yen": "月額（円）",
   "all_projects": "すべてのプロジェクト",
+  "autofill_from_chat": "トークから自動入力",
   "billing_enabled": "月額請求有効",
   "billing_exempt": "月額請求停止中",
   "billing_plan": "料金プラン",

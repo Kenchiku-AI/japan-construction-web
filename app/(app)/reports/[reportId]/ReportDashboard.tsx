@@ -18,7 +18,7 @@ import {
 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
-import { Plus, Download, Tag, Close, Check, Menu, Dots } from "@/app/ui/Icons";
+import { Plus, Download, Tag, Close, Check, Menu, Dots, Stars } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
@@ -33,6 +33,8 @@ import { useExportExcel } from "./useExportExcel";
 import { useIsMobile } from "@/lib/useIsMobile";
 import ConfirmStatusModal from "./ConfirmStatusModal";
 import ActionsModal from "./ActionsModal";
+import AutofillModal from "./AutofillModal";
+import { useProject } from "../../projects/[projectId]/useProject";
 
 interface ReportDashboardProps {
   reportId: string;
@@ -55,6 +57,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     uploadImage,
     selectedPhoto,
     setSelectedPhoto,
+    conversations
   } = useReport(reportId);
   const { downloadExcel } = useExportExcel();
   const { formatDate } = useDate();
@@ -67,6 +70,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
   const [isPhotoModalShown, setIsPhotoModalShown] = useState(false);
   const [isStatusModalShown, setIsStatusModalShown] = useState(false);
+  const [isAutofillModalShown, setIsAutofillModalShown] = useState(false);
   const [isFilterByTagModalShown, setIsFilterByTagModalShown] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const fileInputRef = useRef<any>(null);
@@ -302,6 +306,17 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             <Divider />
           </>
         )}
+        <div className="flex w-full justify-between py-1 md:px-3">
+          <Button
+            variant="tertiary"
+            label={t("autofill_from_chat")}
+            iconLeft={() => <Stars />}
+            onClick={() => {
+              setIsAutofillModalShown(true);
+            }}
+          />
+        </div>
+        <Divider />
         {!!sortedFields && (
           <>
             <div className="flex flex-col w-full gap-2 p-3">
@@ -532,6 +547,16 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         }}
         onDelete={() => {
           setIsDeleteModalShown(true);
+        }}
+      />
+      <AutofillModal
+        conversations={conversations}
+        isOpen={isAutofillModalShown}
+        onClose={() => {
+          setIsAutofillModalShown(false);
+        }}
+        onSubmit={() => {
+          setIsAutofillModalShown(false);
         }}
       />
       {loading && <Loader />}
