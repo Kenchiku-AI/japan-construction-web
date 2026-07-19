@@ -120,8 +120,8 @@ const ConversationRow: FC<ConversationRowProps> = ({
   // };
 
   return (
-    <div>
-      <label className="label flex gap-4 mx-3 my-5" style={{ color: fontColor1 }}>
+    <div className="py-5">
+      <label className="label flex gap-4 mx-3" style={{ color: fontColor1 }}>
         <input
           type="checkbox"
           className="checkbox checkbox-neutral"
@@ -133,25 +133,32 @@ const ConversationRow: FC<ConversationRowProps> = ({
         {conversation.name}
       </label>
       <div
+        className="mx-3"
         style={{
           transition: "height 0.1s ease-in-out",
           height: isSelected ? 60 : 0,
           overflow: "hidden"
         }}
       >
-        {/* <input
-          type="datetime-local"
-          className="input input-bordered w-full"
-        // value={startTime}
-        />
-        <input
-          type="datetime-local"
-          className="input input-bordered w-full"
-        // value={endTime}
-        /> */}
-        <div className="flex items-center gap-4">
+        <Divider />
+        <div className="flex items-center gap-6">
           <div>
             {t("start_time")}
+          </div>
+          <DatePicker
+            selected={date}
+            onChange={(d: any) => setDate(d)}
+            locale={ja}
+            timeFormat="HH:mm"
+            dateFormat="yyyy/MM/dd HH:mm"
+            timeIntervals={15}
+            showTimeSelect
+          />
+        </div>
+        <Divider />
+        <div className="flex items-center gap-6">
+          <div>
+            {t("end_time")}
           </div>
           <DatePicker
             selected={date}
