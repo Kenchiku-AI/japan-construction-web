@@ -115,6 +115,13 @@ h2.react-datepicker__current-month {
   background: #F3F3F5;
 }
 
+.react-datepicker-ignore-onclickoutside:focus,
+.react-datepicker-ignore-onclickoutside:focus-within {
+  outline: 2px solid var(--input-color);
+  outline-offset: 2px;
+  isolation: isolate;
+}
+
 .react-datepicker__navigation--previous {
   top: 6px;
 }
