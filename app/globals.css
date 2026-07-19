@@ -109,7 +109,7 @@ dialog {
 }
 
 .react-datepicker__navigation {
-  top: 6px;
+  top: 6px !important;
 }
 
 .react-datepicker__day--selected {
@@ -159,6 +159,6 @@ h2.react-datepicker__current-month {
 .react-datepicker__year-text--selected,
 .react-datepicker__year-text--in-selecting-range,
 .react-datepicker__year-text--in-range {
-  background-color: var(--button-color);
+  background-color: var(--button-color) !important;
   color: white;
 }
