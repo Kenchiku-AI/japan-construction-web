@@ -111,12 +111,13 @@ h2.react-datepicker__current-month {
   font-family: 'Noto Sans JP';
 }
 
-.react-datepicker-ignore-onclickoutside {
+.react-datepicker__input-container>input {
   background: #F3F3F5;
+  box-shadow: 0 1px color-mix(in oklab, var(--input-color) calc(var(--depth) * 10%), #0000) inset, 0 -1px oklch(100% 0 0 / calc(var(--depth) * .1)) inset;
 }
 
-.react-datepicker-ignore-onclickoutside:focus,
-.react-datepicker-ignore-onclickoutside:focus-within {
+.react-datepicker-ignore-onclickoutside {
+  background: #F3F3F5;
   outline: 2px solid var(--input-color);
   outline-offset: 2px;
   isolation: isolate;
