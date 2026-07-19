@@ -111,6 +111,10 @@ h2.react-datepicker__current-month {
   font-family: 'Noto Sans JP';
 }
 
+.react-datepicker-ignore-onclickoutside {
+  background: "#F3F3F5";
+}
+
 .react-datepicker__navigation--previous {
   top: 6px;
 }
