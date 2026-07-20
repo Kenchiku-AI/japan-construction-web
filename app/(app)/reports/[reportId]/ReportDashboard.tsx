@@ -558,6 +558,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         onSubmit={async (request) => {
           setIsAutofillModalShown(false);
 
+          console.log("hellow?");
+
           const response = await autofillReport(request);
 
           if (response) {
