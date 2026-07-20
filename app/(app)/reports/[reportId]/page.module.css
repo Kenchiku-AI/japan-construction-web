@@ -16,4 +16,5 @@
   color: var(--text-color-2);
   margin-bottom: -12px;
   padding-left: 16px;
+  z-index: 100;
 }
