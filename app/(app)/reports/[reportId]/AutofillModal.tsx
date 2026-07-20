@@ -100,7 +100,10 @@ const AutofillModal: FC<AutofillModalProps> = ({
             };
 
             onSubmit(request);
-            setSelectedConversations([]);
+
+            setTimeout(() => {
+              setSelectedConversations([]);
+            }, 500);
           }}
         />
         <Button
