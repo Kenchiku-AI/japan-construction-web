@@ -139,7 +139,10 @@ const ConversationRow: FC<ConversationRowProps> = ({
             {t("range")}
           </div>
           <div className="flex gap-3 flex-col md:flex-row md:items-center">
-            <div className={styles.startTime}>
+            <div>
+              <div className={styles.inputLabel}>
+                {t("start_time")}
+              </div>
               <DatePicker
                 selected={startTimeLocal}
                 onChange={(d: any) => setStartTimeLocal(d)}
@@ -153,7 +156,10 @@ const ConversationRow: FC<ConversationRowProps> = ({
             <div className="hidden md:block" style={{ color: fontColor3 }}>
               {t("to")}
             </div>
-            <div className={styles.startTime}>
+            <div>
+              <div className={styles.inputLabel}>
+                {t("end_time")}
+              </div>
               <DatePicker
                 selected={endTimeLocal}
                 onChange={(d: any) => setEndTimeLocal(d)}
