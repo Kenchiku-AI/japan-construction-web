@@ -141,6 +141,10 @@ h2.react-datepicker__current-month {
   .react-datepicker__input-container>input {
     width: 100% !important;
   }
+
+  .react-datepicker-wrapper {
+    width: 100% !important;
+  }
 }
 
 .react-datepicker__input-container>input:focus-visible {
