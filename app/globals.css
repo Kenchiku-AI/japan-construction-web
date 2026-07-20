@@ -212,9 +212,9 @@ h2.react-datepicker__current-month {
 }
 
 .datePickerLeft .react-datepicker-popper {
-  left: 36 !important;
+  left: 40px !important;
 }
 
 .datePickerRight .react-datepicker-popper {
-  right: 36 !important;
+  right: 130px !important;
 }
