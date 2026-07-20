@@ -34,7 +34,6 @@ import { useIsMobile } from "@/lib/useIsMobile";
 import ConfirmStatusModal from "./ConfirmStatusModal";
 import ActionsModal from "./ActionsModal";
 import AutofillModal from "./AutofillModal";
-import { useProject } from "../../projects/[projectId]/useProject";
 
 interface ReportDashboardProps {
   reportId: string;
