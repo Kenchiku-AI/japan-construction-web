@@ -41,7 +41,6 @@ import {
   CreateConversationItemRequest,
   ConversationItem,
   ProjectConversationItems,
-  ReportLineConversationRequest,
   AutofillRequest,
   AutofillResponse,
 } from "../../types";
