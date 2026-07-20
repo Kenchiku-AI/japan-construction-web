@@ -56,7 +56,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     uploadImage,
     selectedPhoto,
     setSelectedPhoto,
-    conversations
+    conversations,
+    autofillReport,
   } = useReport(reportId);
   const { downloadExcel } = useExportExcel();
   const { formatDate } = useDate();
@@ -554,8 +555,24 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         onClose={() => {
           setIsAutofillModalShown(false);
         }}
-        onSubmit={() => {
+        onSubmit={async (request) => {
           setIsAutofillModalShown(false);
+
+          const response = await autofillReport(request);
+
+          if (response) {
+            setFieldValues(prev => {
+              const newValues = { ...prev };
+
+              Object.entries(response.field_values).forEach(([key, value]) => {
+                if (report?.fields?.some(f => f.id === key)) {
+                  newValues[key] = value;
+                }
+              });
+
+              return newValues;
+            });
+          }
         }}
       />
       {loading && <Loader />}

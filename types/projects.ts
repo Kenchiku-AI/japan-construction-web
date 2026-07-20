@@ -47,8 +47,8 @@ export type Conversation = {
 
 export type ConversationRange = {
   conversation_id: string;
-  start_time: string;
-  end_time: string;
+  start_time: Date;
+  end_time: Date;
 }
 
 export type CreateConversationRequest = {

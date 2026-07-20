@@ -41,6 +41,9 @@ import {
   CreateConversationItemRequest,
   ConversationItem,
   ProjectConversationItems,
+  ReportLineConversationRequest,
+  AutofillRequest,
+  AutofillResponse,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -376,6 +379,10 @@ export const useApiData = () => {
     async updateReport(reportId: string, request: ReportRequest) {
       const url = `/reports/${reportId}`;
       return call(() => http.patch<Report>(url, request));
+    },
+    async autofillReport(reportId: string, request: AutofillRequest) {
+      const url = `/reports/${reportId}/line-conversations`;
+      return call(() => http.post<AutofillResponse>(url, request));
     },
     async createImage(reportId: string, request: ReportImageCreateRequest) {
       const url = `/reports/${reportId}/images`;

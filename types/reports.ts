@@ -155,3 +155,17 @@ export type ReportImageTagRequest = {
   name?: string;
   description?: string;
 };
+
+export type ConversationRangeRequest = {
+  conversation_id: string;
+  start_time: string;
+  end_time: string;
+}
+
+export type AutofillRequest = {
+  conversations: ConversationRangeRequest[];
+}
+
+export type AutofillResponse = {
+  field_values: ReportFieldValues;
+};

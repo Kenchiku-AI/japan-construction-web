@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import { Button } from "@/app/ui/Button/Button";
-import { Conversation, ConversationRange } from "@/types";
+import { AutofillRequest, Conversation, ConversationRange } from "@/types";
 import Divider from "@/app/ui/Divider";
 import { fontColor1, fontColor2, fontColor3 } from "@/lib/constants";
 import DatePicker from "react-datepicker";
@@ -15,7 +15,7 @@ interface AutofillModalProps {
   conversations: Conversation[];
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (request: AutofillRequest) => void;
 }
 
 const AutofillModal: FC<AutofillModalProps> = ({
@@ -58,25 +58,50 @@ const AutofillModal: FC<AutofillModalProps> = ({
                       ...prev,
                       {
                         conversation_id: c.id,
-                        start_time: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-                        end_time: new Date().toISOString()
+                        start_time: new Date(Date.now() - 24 * 60 * 60 * 1000),
+                        end_time: new Date(),
                       }
                     ]
                   ));
                 }
               }}
-              onUpdateStartTime={() => {
-
+              onUpdateStartTime={(startTime) => {
+                setSelectedConversations(prev =>
+                  prev.map(sc =>
+                    sc.conversation_id === c.id
+                      ? { ...sc, start_time: startTime }
+                      : sc
+                  )
+                );
               }}
-              onUpdateEndTime={() => {
-
+              onUpdateEndTime={(endTime) => {
+                setSelectedConversations(prev =>
+                  prev.map(sc =>
+                    sc.conversation_id === c.id
+                      ? { ...sc, end_time: endTime }
+                      : sc
+                  )
+                );
               }}
             />
           );
         })}
       </div>
       <div className="grid lg:grid-col-2 gap-2">
-        <Button label={t("delete_report")} onClick={onSubmit} />
+        <Button
+          label={t("submit")}
+          onClick={() => {
+            const request = {
+              conversations: selectedConversations.map(c => ({
+                conversation_id: c.conversation_id,
+                start_time: c.start_time.toISOString(),
+                end_time: c.end_time.toISOString(),
+              })),
+            };
+
+            onSubmit(request);
+          }}
+        />
         <Button
           variant="secondary"
           style={{ height: 60, width: "100%" }}
@@ -91,11 +116,11 @@ const AutofillModal: FC<AutofillModalProps> = ({
 interface ConversationRowProps {
   conversation: Conversation;
   isSelected: boolean;
-  startTime?: string;
-  endTime?: string;
+  startTime?: Date;
+  endTime?: Date;
   onSelect: (isSelected: boolean) => void;
-  onUpdateStartTime: (start_time: string) => void;
-  onUpdateEndTime: (end_time: string) => void;
+  onUpdateStartTime: (start_time: Date) => void;
+  onUpdateEndTime: (end_time: Date) => void;
 }
 
 const ConversationRow: FC<ConversationRowProps> = ({
@@ -108,8 +133,6 @@ const ConversationRow: FC<ConversationRowProps> = ({
   onUpdateEndTime
 }) => {
   const { t } = useTranslation();
-  const [startTimeLocal, setStartTimeLocal] = useState<Date | null>(new Date());
-  const [endTimeLocal, setEndTimeLocal] = useState<Date | null>(new Date());
   const { isMobile } = useIsMobile();
 
   return (
@@ -140,8 +163,12 @@ const ConversationRow: FC<ConversationRowProps> = ({
               {t("start_time")}
             </div>
             <DatePicker
-              selected={startTimeLocal}
-              onChange={(d: any) => setStartTimeLocal(d)}
+              selected={startTime}
+              onChange={(d: any) => {
+                if (d) {
+                  onUpdateStartTime(d);
+                }
+              }}
               locale={ja}
               timeFormat="HH:mm"
               dateFormat="yyyy/MM/dd HH:mm"
@@ -157,8 +184,12 @@ const ConversationRow: FC<ConversationRowProps> = ({
               {t("end_time")}
             </div>
             <DatePicker
-              selected={endTimeLocal}
-              onChange={(d: any) => setEndTimeLocal(d)}
+              selected={endTime}
+              onChange={(d: any) => {
+                if (d) {
+                  onUpdateEndTime(d);
+                }
+              }}
               locale={ja}
               timeFormat="HH:mm"
               dateFormat="yyyy/MM/dd HH:mm"

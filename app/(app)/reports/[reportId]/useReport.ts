@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
-import { Report, ReportImage, ReportRequest } from "@/types/reports";
+import { AutofillRequest, AutofillResponse, Report, ReportImage, ReportRequest } from "@/types/reports";
 import { useTranslation } from "react-i18next";
 import imageCompression from "browser-image-compression";
 import { useModal } from "@/lib/modal/ModalContext";
@@ -164,6 +164,26 @@ export const useReport = (reportId: string) => {
           });
         }
       }
+    },
+    [setReport, report, reportId],
+  );
+
+  const autofillReport = useCallback(
+    async (request: AutofillRequest) => {
+      setLoading(true);
+      let response: AutofillResponse | undefined;
+
+      try {
+        response = await api.autofillReport(reportId, request);
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+
+      setLoading(false);
+      return response;
     },
     [setReport, report, reportId],
   );
@@ -383,6 +403,7 @@ export const useReport = (reportId: string) => {
     uploadImage,
     selectedPhoto,
     setSelectedPhoto,
-    conversations
+    conversations,
+    autofillReport
   };
 };
