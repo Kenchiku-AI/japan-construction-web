@@ -100,6 +100,7 @@ const AutofillModal: FC<AutofillModalProps> = ({
             };
 
             onSubmit(request);
+            setSelectedConversations([]);
           }}
         />
         <Button
