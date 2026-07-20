@@ -275,7 +275,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           <div className="flex justify-between mt-12">
             <div className="self-end">{t("reports")}</div>
             <div className="flex gap-6">
-              {(project.reports?.length ?? 0) > 0 && (
+              {/* {(project.reports?.length ?? 0) > 0 && (
                 <Button
                   variant="tertiary"
                   style={{ height: "auto" }}
@@ -287,7 +287,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   disabled={isExcelDownloading}
                   iconOnlyMobile
                 />
-              )}
+              )} */}
               {(isEditable && reportTemplates?.length !== 0) && (
                 <Button
                   variant="tertiary"
