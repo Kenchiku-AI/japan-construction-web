@@ -306,7 +306,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             <Divider />
           </>
         )}
-        <div className="flex w-full justify-between py-1 md:px-3">
+        <div className="flex w-full justify-between py-1 px-3">
           <Button
             variant="tertiary"
             label={t("autofill_from_chat")}
@@ -342,7 +342,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
             </div>
             <div
               style={{
-                height: isDisabled ? 0 : isMobile ? 132 : 80,
+                height: isDisabled ? 0 : isMobile ? 150 : 80,
                 opacity: isDisabled ? 0 : 1,
                 overflow: "hidden",
                 transition: "height 0.2s ease-in-out, opacity 0.2s ease-in-out, padding 0.2s ease-in-out",
@@ -350,7 +350,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
 
             >
               <Divider />
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-3 px-2">
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 px-2">
                 <Button
                   label={t("update_report")}
                   onClick={() => {
