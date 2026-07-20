@@ -135,7 +135,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
           <div>
             {t("range")}
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-col md:flex-row">
             <DatePicker
               selected={startTimeLocal}
               onChange={(d: any) => setStartTimeLocal(d)}
