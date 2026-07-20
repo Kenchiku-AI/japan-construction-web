@@ -153,7 +153,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
           <div className="hidden md:block" style={{ color: fontColor3 }}>
             {t("to")}
           </div>
-          <div>
+          <div className={isMobile ? "datePickerLeft" : "datePickerRight"}>
             <div className={styles.inputLabel}>
               {t("end_time")}
             </div>

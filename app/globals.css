@@ -207,3 +207,8 @@ h2.react-datepicker__current-month {
   left: 36 !important;
   z-index: 200;
 }
+
+.datePickerLeft .react-datepicker-popper {
+  right: 36 !important;
+  z-index: 200;
+}
