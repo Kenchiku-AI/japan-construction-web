@@ -8,6 +8,7 @@ import { fontColor1, fontColor2 } from "@/lib/constants";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ja } from "date-fns/locale";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 interface AutofillModalProps {
   conversations: Conversation[];
@@ -108,6 +109,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
   const { t } = useTranslation();
   const [startTimeLocal, setStartTimeLocal] = useState<Date | null>(new Date());
   const [endTimeLocal, setEndTimeLocal] = useState<Date | null>(new Date());
+  const { isMobile } = useIsMobile();
 
   return (
     <div>
@@ -126,7 +128,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
         className="px-3"
         style={{
           transition: "height 0.1s ease-in-out",
-          height: isSelected ? 90 : 0,
+          height: isSelected ? (isMobile ? 160 : 90) : 0,
           overflow: "hidden"
         }}
       >
