@@ -18,7 +18,7 @@ import {
 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
-import { Plus, Download, Tag, Close, Check, Menu, Dots, Stars } from "@/app/ui/Icons";
+import { Plus, Download, Tag, Close, Check, Menu, Dots, Stars, Chat } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
@@ -292,7 +292,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           />
         )}
       </div>
-      <div className={cardClass}>
+      <div className={`${cardClass} pb-5`}>
         {report?.status === ReportStatus.Closed && (
           <>
             <div className="flex w-full justify-between py-1 md:px-3">
@@ -310,60 +310,66 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           <Button
             variant="tertiary"
             label={t("autofill_from_chat")}
-            iconLeft={() => <Stars />}
+            iconLeft={() => <Chat color={buttonColor} />}
             onClick={() => {
               setIsAutofillModalShown(true);
             }}
           />
         </div>
-        <Divider />
         {!!sortedFields && (
           <>
-            <div className="flex flex-col w-full gap-2 p-3">
+            <div className="flex flex-col w-full">
               {sortedFields?.map((field) => (
-                <Input
-                  key={field.id}
-                  placeholder={field.name}
-                  value={fieldValues?.[field.id] ?? ""}
-                  onChange={(value) => {
-                    setFieldValues((prev) => {
-                      const newValues = { ...prev };
-                      newValues[field.id] = value;
-                      return newValues;
-                    });
-                  }}
-                  disabled={!isReportEditable}
-                  loading={fieldValues?.[field.id] === undefined}
-                />
+                <div key={field.id}>
+                  <Divider />
+                  <div className="px-2">
+                    <Input
+                      placeholder={field.name}
+                      value={fieldValues?.[field.id] ?? ""}
+                      onChange={(value) => {
+                        setFieldValues((prev) => {
+                          const newValues = { ...prev };
+                          newValues[field.id] = value;
+                          return newValues;
+                        });
+                      }}
+                      disabled={!isReportEditable}
+                      loading={fieldValues?.[field.id] === undefined}
+                    />
+                  </div>
+                </div>
               ))}
             </div>
             <div
               style={{
-                height: isDisabled ? 0 : isMobile ? 132 : 68,
+                height: isDisabled ? 0 : isMobile ? 132 : 80,
                 opacity: isDisabled ? 0 : 1,
                 overflow: "hidden",
                 transition: "height 0.2s ease-in-out, opacity 0.2s ease-in-out, padding 0.2s ease-in-out",
               }}
-              className={`${isDisabled ? "" : "pt-4"} w-full grid grid-cols-1 md:grid-cols-2 md:gap-3`}
+
             >
-              <Button
-                label={t("update_report")}
-                onClick={() => {
-                  updateReport({ field_values: fieldValues });
-                }}
-                iconLeft={() => <Check color="white" />}
-                style={{ height: 50 }}
-              />
-              <Button
-                variant="secondary"
-                label={t("discard_changes")}
-                onClick={() => {
-                  resetFieldValues();
-                }}
-                iconLeft={() => <Close color={errorColor1} />}
-                style={{ borderColor: errorColor1 }}
-                textStyle={{ color: errorColor1 }}
-              />
+              <Divider />
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-3 px-2">
+                <Button
+                  label={t("update_report")}
+                  onClick={() => {
+                    updateReport({ field_values: fieldValues });
+                  }}
+                  iconLeft={() => <Check color="white" />}
+                  style={{ height: 60 }}
+                />
+                <Button
+                  variant="secondary"
+                  label={t("discard_changes")}
+                  onClick={() => {
+                    resetFieldValues();
+                  }}
+                  iconLeft={() => <Close color={errorColor1} />}
+                  style={{ borderColor: errorColor1, height: 59 }}
+                  textStyle={{ color: errorColor1 }}
+                />
+              </div>
             </div>
           </>
         )}

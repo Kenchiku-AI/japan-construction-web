@@ -44,6 +44,7 @@ const AutofillModal: FC<AutofillModalProps> = ({
           return (
             <ConversationRow
               conversation={c}
+              key={c.id}
               isSelected={!!selectedConversation}
               startTime={selectedConversation?.start_time}
               endTime={selectedConversation?.end_time}
