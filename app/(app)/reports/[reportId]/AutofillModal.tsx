@@ -129,7 +129,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
         className="px-3"
         style={{
           transition: "height 0.1s ease-in-out",
-          height: isSelected ? (isMobile ? 160 : 100) : 0,
+          height: isSelected ? (isMobile ? 160 : 120) : 0,
           overflow: "hidden"
         }}
       >
@@ -138,8 +138,8 @@ const ConversationRow: FC<ConversationRowProps> = ({
           <div className="mb-2" style={{ color: fontColor3 }}>
             {t("range")}
           </div>
-          <div className="flex gap-3 flex-col md:flex-row">
-            <div className="startTime">
+          <div className="flex gap-3 flex-col md:flex-row md:items-center">
+            <div className={styles.startTime}>
               <DatePicker
                 selected={startTimeLocal}
                 onChange={(d: any) => setStartTimeLocal(d)}
@@ -150,10 +150,10 @@ const ConversationRow: FC<ConversationRowProps> = ({
                 showTimeSelect
               />
             </div>
-            <div className="hidden md:block">
+            <div className="hidden md:block" style={{ color: fontColor3 }}>
               {t("to")}
             </div>
-            <div className="endTime">
+            <div className={styles.startTime}>
               <DatePicker
                 selected={endTimeLocal}
                 onChange={(d: any) => setEndTimeLocal(d)}
