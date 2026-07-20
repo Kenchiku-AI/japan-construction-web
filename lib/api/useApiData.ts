@@ -158,7 +158,11 @@ export const useApiData = () => {
   };
 
   const refresh = async <T>(callback: () => Promise<AxiosResponse<T>>) => {
+    console.log("IS REFRESHING?", isRefreshing);
+
     if (isRefreshing) {
+      console.log("pushing new promise...");
+
       return new Promise<T>((resolve, reject) => {
         requestQueue.push({
           resolve: async () => {
@@ -184,15 +188,20 @@ export const useApiData = () => {
 
       return await handleResponse(callback);
     } catch (err) {
+      console.log("refresh failed...", err);
+
       const queue = [...requestQueue];
       requestQueue = [];
 
       queue.forEach((item) => item.reject(err));
 
+      console.log("is refreshing?", isRefreshing);
+
       if (!isRefreshing) {
         await logout();
       }
     } finally {
+      console.log("is refreshing set to false");
       isRefreshing = false;
     }
   };
