@@ -66,14 +66,7 @@ export const http = axios.create({
   },
 });
 
-let isRefreshing = false;
-
-type QueueItem = {
-  resolve: () => void;
-  reject: (err: any) => void;
-};
-
-let requestQueue: QueueItem[] = [];
+let refreshPromise: Promise<void> | null = null;
 
 export const useApiData = () => {
   const router = useRouter();
@@ -136,18 +129,42 @@ export const useApiData = () => {
     }
   }, [pathname]);
 
-  const call = async <T>(callback: () => Promise<AxiosResponse<T>>) => {
+  const call = async <T>(
+    callback: () => Promise<AxiosResponse<T>>,
+    hasRetried = false,
+  ) => {
     try {
       return await handleResponse(callback);
     } catch (err) {
       const axiosErr = err as AxiosError;
 
-      if (axiosErr.status === 401 || axiosErr.response?.status === 401) {
-        return await refresh(callback);
+      if (
+        !hasRetried &&
+        (axiosErr.status === 401 || axiosErr.response?.status === 401)
+      ) {
+        await refreshPromiseIfNeeded();
+        return call(callback, true);
       }
 
       throw err;
     }
+  };
+
+  const refreshPromiseIfNeeded = async () => {
+    if (!refreshPromise) {
+      refreshPromise = http
+        .post("/auth/refresh")
+        .then(() => { })
+        .catch(async (err) => {
+          await logout();
+          throw err;
+        })
+        .finally(() => {
+          refreshPromise = null;
+        });
+    }
+
+    await refreshPromise;
   };
 
   const handleResponse = async <T>(
@@ -155,55 +172,6 @@ export const useApiData = () => {
   ): Promise<T> => {
     const { data } = await query();
     return data;
-  };
-
-  const refresh = async <T>(callback: () => Promise<AxiosResponse<T>>) => {
-    console.log("IS REFRESHING?", isRefreshing);
-
-    if (isRefreshing) {
-      console.log("pushing new promise...");
-
-      return new Promise<T>((resolve, reject) => {
-        requestQueue.push({
-          resolve: async () => {
-            try {
-              const res = await handleResponse(callback);
-              resolve(res);
-            } catch (err) {
-              reject(err);
-            }
-          },
-          reject,
-        });
-      });
-    }
-
-    try {
-      isRefreshing = true;
-      await http.post("/auth/refresh");
-
-      const queue = [...requestQueue];
-      requestQueue = [];
-      queue.forEach((item) => item.resolve());
-
-      return await handleResponse(callback);
-    } catch (err) {
-      console.log("refresh failed...", err);
-
-      const queue = [...requestQueue];
-      requestQueue = [];
-
-      queue.forEach((item) => item.reject(err));
-
-      console.log("is refreshing?", isRefreshing);
-
-      if (!isRefreshing) {
-        await logout();
-      }
-    } finally {
-      console.log("is refreshing set to false");
-      isRefreshing = false;
-    }
   };
 
   const api = {
