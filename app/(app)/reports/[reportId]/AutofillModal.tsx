@@ -129,14 +129,14 @@ const ConversationRow: FC<ConversationRowProps> = ({
         className="px-3"
         style={{
           transition: "height 0.1s ease-in-out",
-          height: isSelected ? (isMobile ? 160 : 80) : 0,
+          height: isSelected ? (isMobile ? 156 : 90) : 0,
           overflow: "hidden"
         }}
       >
         <Divider />
 
         <div className="px-3 py-2 flex gap-4 flex-col md:flex-row md:items-center">
-          <div className="datePickerLeft">
+          <div className={`datePicker ${isMobile ? "" : "datePickerLeft"}`}>
             <div className={styles.inputLabel}>
               {t("start_time")}
             </div>
@@ -153,7 +153,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
           <div className="hidden md:block" style={{ color: fontColor3 }}>
             {t("to")}
           </div>
-          <div className={isMobile ? "datePickerLeft" : "datePickerRight"}>
+          <div className={`datePicker ${isMobile ? "" : "datePickerRight"}`}>
             <div className={styles.inputLabel}>
               {t("end_time")}
             </div>
