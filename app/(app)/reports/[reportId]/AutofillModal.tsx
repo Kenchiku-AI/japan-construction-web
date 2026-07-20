@@ -136,7 +136,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
         <Divider />
 
         <div className="px-3 flex gap-3 flex-col md:flex-row md:items-center">
-          <div className={isMobile ? "" : "startTime"}>
+          <div className="datePickerLeft">
             <div className={styles.inputLabel}>
               {t("start_time")}
             </div>
