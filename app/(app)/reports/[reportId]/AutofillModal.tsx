@@ -134,7 +134,6 @@ const ConversationRow: FC<ConversationRowProps> = ({
         }}
       >
         <Divider />
-
         <div className="px-3 py-2 flex gap-4 flex-col md:flex-row md:items-center">
           <div className={`datePicker ${isMobile ? "" : "datePickerLeft"}`}>
             <div className={styles.inputLabel}>
@@ -151,7 +150,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
             />
           </div>
           <div className="hidden md:block" style={{ color: fontColor3 }}>
-            {t("to")}
+            〜
           </div>
           <div className={`datePicker ${isMobile ? "" : "datePickerRight"}`}>
             <div className={styles.inputLabel}>
