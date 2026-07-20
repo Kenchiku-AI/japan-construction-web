@@ -102,7 +102,7 @@ const ReportsPage = () => {
         <div className="flex gap-5 md:gap-8">
           {!!reports?.length && (
             <>
-              <Button
+              {/* <Button
                 variant="tertiary"
                 style={{ height: "auto" }}
                 label={t(isExcelDownloading ? "downloading" : "export")}
@@ -112,7 +112,7 @@ const ReportsPage = () => {
                 }}
                 disabled={isExcelDownloading}
                 iconOnlyMobile
-              />
+              /> */}
               <Button
                 variant="tertiary"
                 style={{ height: "auto" }}
