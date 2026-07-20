@@ -4,11 +4,12 @@ import Modal from "@/app/ui/Modal";
 import { Button } from "@/app/ui/Button/Button";
 import { Conversation, ConversationRange } from "@/types";
 import Divider from "@/app/ui/Divider";
-import { fontColor1, fontColor2 } from "@/lib/constants";
+import { fontColor1, fontColor2, fontColor3 } from "@/lib/constants";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ja } from "date-fns/locale";
 import { useIsMobile } from "@/lib/useIsMobile";
+import styles from "./page.module.css";
 
 interface AutofillModalProps {
   conversations: Conversation[];
@@ -134,12 +135,12 @@ const ConversationRow: FC<ConversationRowProps> = ({
       >
         <Divider />
         <div className="px-3">
-          <div className="mb-2" style={{ color: fontColor2 }}>
+          <div className="mb-2" style={{ color: fontColor3 }}>
             {t("range")}
           </div>
           <div className="flex gap-3 flex-col md:flex-row">
             <div>
-              <div style={{ color: fontColor2 }}>
+              <div className={styles.inputLabel}>
                 {t("start_time")}
               </div>
               <DatePicker
@@ -152,11 +153,11 @@ const ConversationRow: FC<ConversationRowProps> = ({
                 showTimeSelect
               />
             </div>
-            <div className="hidden md: block">
+            <div className="hidden md:block">
               {t("to")}
             </div>
             <div>
-              <div style={{ color: fontColor2 }}>
+              <div className={styles.inputLabel}>
                 {t("end_time")}
               </div>
               <DatePicker
