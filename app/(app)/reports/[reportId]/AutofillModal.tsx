@@ -129,7 +129,7 @@ const ConversationRow: FC<ConversationRowProps> = ({
         className="px-3"
         style={{
           transition: "height 0.1s ease-in-out",
-          height: isSelected ? (isMobile ? 160 : 90) : 0,
+          height: isSelected ? (isMobile ? 160 : 100) : 0,
           overflow: "hidden"
         }}
       >
