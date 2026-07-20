@@ -4,7 +4,7 @@ import Modal from "@/app/ui/Modal";
 import { Button } from "@/app/ui/Button/Button";
 import { Conversation, ConversationRange } from "@/types";
 import Divider from "@/app/ui/Divider";
-import { fontColor1 } from "@/lib/constants";
+import { fontColor1, fontColor2 } from "@/lib/constants";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ja } from "date-fns/locale";
@@ -132,31 +132,41 @@ const ConversationRow: FC<ConversationRowProps> = ({
       >
         <Divider />
         <div className="px-3">
-          <div>
+          <div className="mb-2" style={{ color: fontColor2 }}>
             {t("range")}
           </div>
           <div className="flex gap-3 flex-col md:flex-row">
-            <DatePicker
-              selected={startTimeLocal}
-              onChange={(d: any) => setStartTimeLocal(d)}
-              locale={ja}
-              timeFormat="HH:mm"
-              dateFormat="yyyy/MM/dd HH:mm"
-              timeIntervals={15}
-              showTimeSelect
-            />
             <div>
+              <div style={{ color: fontColor2 }}>
+                {t("start_time")}
+              </div>
+              <DatePicker
+                selected={startTimeLocal}
+                onChange={(d: any) => setStartTimeLocal(d)}
+                locale={ja}
+                timeFormat="HH:mm"
+                dateFormat="yyyy/MM/dd HH:mm"
+                timeIntervals={15}
+                showTimeSelect
+              />
+            </div>
+            <div className="hidden md: block">
               {t("to")}
             </div>
-            <DatePicker
-              selected={endTimeLocal}
-              onChange={(d: any) => setEndTimeLocal(d)}
-              locale={ja}
-              timeFormat="HH:mm"
-              dateFormat="yyyy/MM/dd HH:mm"
-              timeIntervals={15}
-              showTimeSelect
-            />
+            <div>
+              <div style={{ color: fontColor2 }}>
+                {t("end_time")}
+              </div>
+              <DatePicker
+                selected={endTimeLocal}
+                onChange={(d: any) => setEndTimeLocal(d)}
+                locale={ja}
+                timeFormat="HH:mm"
+                dateFormat="yyyy/MM/dd HH:mm"
+                timeIntervals={15}
+                showTimeSelect
+              />
+            </div>
           </div>
         </div>
       </div>
