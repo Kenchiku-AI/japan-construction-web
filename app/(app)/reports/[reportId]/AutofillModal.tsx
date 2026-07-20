@@ -134,42 +134,38 @@ const ConversationRow: FC<ConversationRowProps> = ({
         }}
       >
         <Divider />
-        <div className="px-3">
-          <div className="mb-2" style={{ color: fontColor3 }}>
-            {t("range")}
+
+        <div className="px-3 flex gap-3 flex-col md:flex-row md:items-center">
+          <div className={isMobile ? "" : "startTime"}>
+            <div className={styles.inputLabel}>
+              {t("start_time")}
+            </div>
+            <DatePicker
+              selected={startTimeLocal}
+              onChange={(d: any) => setStartTimeLocal(d)}
+              locale={ja}
+              timeFormat="HH:mm"
+              dateFormat="yyyy/MM/dd HH:mm"
+              timeIntervals={15}
+              showTimeSelect
+            />
           </div>
-          <div className="flex gap-3 flex-col md:flex-row md:items-center">
-            <div>
-              <div className={styles.inputLabel}>
-                {t("start_time")}
-              </div>
-              <DatePicker
-                selected={startTimeLocal}
-                onChange={(d: any) => setStartTimeLocal(d)}
-                locale={ja}
-                timeFormat="HH:mm"
-                dateFormat="yyyy/MM/dd HH:mm"
-                timeIntervals={15}
-                showTimeSelect
-              />
+          <div className="hidden md:block" style={{ color: fontColor3 }}>
+            {t("to")}
+          </div>
+          <div>
+            <div className={styles.inputLabel}>
+              {t("end_time")}
             </div>
-            <div className="hidden md:block" style={{ color: fontColor3 }}>
-              {t("to")}
-            </div>
-            <div>
-              <div className={styles.inputLabel}>
-                {t("end_time")}
-              </div>
-              <DatePicker
-                selected={endTimeLocal}
-                onChange={(d: any) => setEndTimeLocal(d)}
-                locale={ja}
-                timeFormat="HH:mm"
-                dateFormat="yyyy/MM/dd HH:mm"
-                timeIntervals={15}
-                showTimeSelect
-              />
-            </div>
+            <DatePicker
+              selected={endTimeLocal}
+              onChange={(d: any) => setEndTimeLocal(d)}
+              locale={ja}
+              timeFormat="HH:mm"
+              dateFormat="yyyy/MM/dd HH:mm"
+              timeIntervals={15}
+              showTimeSelect
+            />
           </div>
         </div>
       </div>

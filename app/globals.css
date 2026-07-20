@@ -134,7 +134,7 @@ h2.react-datepicker__current-month {
 .react-datepicker__input-container>input {
   background: #F3F3F5;
   width: 176px !important;
-  padding-top: 12px;
+  padding-top: 12px !important;
   box-shadow: 0 1px color-mix(in oklab, var(--input-color) calc(var(--depth) * 10%), #0000) inset, 0 -1px oklch(100% 0 0 / calc(var(--depth) * .1)) inset !important;
 }
 
@@ -196,4 +196,8 @@ h2.react-datepicker__current-month {
 
 .react-datepicker-popper .react-datepicker__triangle {
   stroke: black !important;
+}
+
+.startTime .react-datepicker-popper {
+  left: 36 !important;
 }
