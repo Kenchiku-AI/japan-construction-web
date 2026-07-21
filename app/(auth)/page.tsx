@@ -885,12 +885,9 @@ export default function LandingPage() {
                 </>
               ) : (
                 <>
-                  <Image
-                    src="https://qr-official.line.me/gs/M_634wpnjq_BW.png?oat_content=qr"
-                    alt="Kenchiku AI LINE QRコード"
-                    width={180}
-                    height={180}
-                  />
+                  <div className={styles.qrPlaceholder}>
+                    <img src="https://qr-official.line.me/gs/M_634wpnjq_BW.png?oat_content=qr" />
+                  </div>
 
                   <p className={styles.contactSmall}>
                     スマートフォンでQRコードを読み取り、
