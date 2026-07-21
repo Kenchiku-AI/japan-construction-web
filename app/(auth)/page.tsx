@@ -835,22 +835,118 @@ export default function LandingPage() {
         </div>
       </section >
 
-      {/* ── Footer ── */}
-      < footer className={styles.footer} role="contentinfo" >
-        <div className={styles.footerInner}>
-          <Link href="/" className={styles.footerBrand} aria-label="Kenchiku AI トップへ">
-            <Logo size={22} />
-            Kenchiku AI
-          </Link>
-          <nav className={styles.footerLinks} aria-label="フッターナビゲーション">
-            <Link href="/docs">ご利用ガイド</Link>
-            <Link href="/docs/quick-start">クイックスタート</Link>
-            <Link href="/login">ログイン</Link>
-            <Link href="/signup">新規登録</Link>
-          </nav>
-          <p className={styles.footerCopy}>© 2026 Kenchiku AI</p>
+      {/* ── Contact / Footer ── */}
+      <footer className={styles.footer} role="contentinfo">
+        <div className={styles.footerContact}>
+
+          <div className={styles.footerHeader}>
+            <p className={styles.footerEyebrow}>
+              ご相談・お問い合わせ
+            </p>
+
+            <h2 className={styles.footerTitle}>
+              導入のご相談・ご質問はお気軽にお問い合わせください
+            </h2>
+
+            <p className={styles.footerLead}>
+              デモのご依頼、料金のご相談、導入に関するご質問など、
+              建設会社様の状況に合わせてご案内いたします。
+            </p>
+          </div>
+
+          <div className={styles.contactGrid}>
+
+            {/* Phone */}
+            <div className={styles.contactCard}>
+              <div className={styles.contactIcon}>📞</div>
+
+              <h3>お電話でのお問い合わせ</h3>
+
+              <p className={styles.contactSmall}>
+                平日 9:00〜18:00
+              </p>
+
+              <a
+                href="tel:0000000000"
+                className={styles.contactPhone}
+              >
+                0000-000-000
+              </a>
+
+              <p className={styles.contactNote}>
+                ※ プレースホルダー
+              </p>
+            </div>
+
+            {/* LINE */}
+            <div className={styles.contactCard}>
+              <div className={styles.contactIcon}>
+                <LineLogo color="#06C755" size={32} />
+              </div>
+
+              <h3>LINEでお問い合わせ</h3>
+
+              <div className={styles.qrPlaceholder}>
+                QR CODE
+              </div>
+
+              <p className={styles.contactSmall}>
+                QRコードを読み取って友だち追加
+              </p>
+            </div>
+
+            {/* Email */}
+            <div className={styles.contactCard}>
+              <div className={styles.contactIcon}>✉️</div>
+
+              <h3>メールでのお問い合わせ</h3>
+
+              <a
+                href="mailto:your@email.com"
+                className={styles.contactEmail}
+              >
+                your@email.com
+              </a>
+
+              <p className={styles.contactSmall}>
+                1営業日以内にご返信いたします
+              </p>
+
+              <a
+                href="/contact"
+                className={`${styles.btn} ${styles.btnPrimary}`}
+              >
+                お問い合わせフォーム
+              </a>
+            </div>
+
+          </div>
         </div>
-      </footer >
+
+        <div className={styles.footerBottom}>
+          <div className={styles.footerInner}>
+            <Link
+              href="/"
+              className={styles.footerBrand}
+            >
+              <Logo size={22} />
+              Kenchiku AI
+            </Link>
+
+            <nav className={styles.footerLinks}>
+              <Link href="/docs">ご利用ガイド</Link>
+              <Link href="/docs/quick-start">クイックスタート</Link>
+              <Link href="/privacy">プライバシーポリシー</Link>
+              <Link href="/terms">利用規約</Link>
+              <Link href="/login">ログイン</Link>
+            </nav>
+
+            <p className={styles.footerCopy}>
+              © 2026 Kenchiku AI
+            </p>
+          </div>
+        </div>
+      </footer>
 
       <SignupModal
         isOpen={showSignup}

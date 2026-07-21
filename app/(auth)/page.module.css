@@ -1210,3 +1210,158 @@
 		border-right: none;
 	}
 }
+
+
+
+.footer {
+	background: #f7f9fb;
+	border-top: 1px solid var(--border-color);
+	padding: 0;
+}
+
+.footerContact {
+	max-width: 1150px;
+	margin: auto;
+	padding: 80px 24px;
+}
+
+.footerHeader {
+	text-align: center;
+	margin-bottom: 56px;
+}
+
+.footerEyebrow {
+	color: var(--green);
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: .15em;
+	text-transform: uppercase;
+	margin-bottom: 12px;
+}
+
+.footerTitle {
+	font-size: 36px;
+	font-weight: 700;
+	color: var(--text1);
+	margin-bottom: 18px;
+}
+
+.footerLead {
+	max-width: 720px;
+	margin: auto;
+	color: var(--text2);
+	line-height: 1.8;
+}
+
+.contactGrid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 28px;
+}
+
+.contactCard {
+	background: white;
+	border: 1px solid var(--border-color);
+	border-radius: 18px;
+	padding: 34px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 18px;
+}
+
+.contactCard:hover {
+	box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+}
+
+.contactIcon {
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	background: #edf7ef;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 28px;
+}
+
+.contactCard h3 {
+	font-size: 20px;
+	color: var(--text1);
+	font-weight: 700;
+}
+
+.contactPhone {
+	font-size: 34px;
+	color: var(--green);
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.contactEmail {
+	font-size: 22px;
+	font-weight: 600;
+	text-decoration: none;
+	color: var(--green);
+	word-break: break-word;
+}
+
+.contactSmall {
+	color: var(--text2);
+	line-height: 1.6;
+}
+
+.contactNote {
+	font-size: 13px;
+	color: #999;
+}
+
+.qrPlaceholder {
+	width: 180px;
+	height: 180px;
+	border: 2px dashed #c9c9c9;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	color: #aaa;
+	border-radius: 12px;
+}
+
+.footerBottom {
+	border-top: 1px solid var(--border-color);
+	background: white;
+	margin-top: 70px;
+}
+
+.footerInner {
+	max-width: 1150px;
+	margin: auto;
+	padding: 32px 24px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+}
+
+@media (max-width:900px) {
+
+	.contactGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.footerTitle {
+		font-size: 28px;
+	}
+
+	.contactPhone {
+		font-size: 28px;
+	}
+
+	.qrPlaceholder {
+		width: 150px;
+		height: 150px;
+	}
+}
