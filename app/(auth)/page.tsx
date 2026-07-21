@@ -12,6 +12,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
 import { androidUrl, buttonColor, createCompanyInvitationIdKey, iosUrl } from "@/lib/constants";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 const structuredDataApp = {
   "@context": "https://schema.org",
@@ -51,6 +52,7 @@ export default function LandingPage() {
   const [invitationId, setInvitationId] = useState("");
   const { signupCompany, resendInvite } = useApi();
   const { showModal } = useModal();
+  const { isMobile } = useIsMobile();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -854,8 +856,7 @@ export default function LandingPage() {
                 </a>
               </div>
               <p className={styles.contactSmall}>
-                年中無休<br />
-                お気軽にお電話ください
+                いつでもお気軽にお電話ください
               </p>
             </div>
 
@@ -867,13 +868,36 @@ export default function LandingPage() {
 
               <h3>LINEでお問い合わせ</h3>
 
-              <div className={styles.qrPlaceholder}>
-                <img src="https://qr-official.line.me/gs/M_634wpnjq_BW.png?oat_content=qr" />
-              </div>
+              {isMobile ? (
+                <>
+                  <p className={styles.contactSmall}>
+                    LINEからお気軽にお問い合わせください
+                  </p>
 
-              <p className={styles.contactSmall}>
-                QRコードを読み取って友だち追加
-              </p>
+                  <a
+                    href="https://line.me/R/ti/p/%40634wpnjq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${styles.btn} ${styles.btnPrimary}`}
+                  >
+                    LINEで友だち追加
+                  </a>
+                </>
+              ) : (
+                <>
+                  <Image
+                    src="https://qr-official.line.me/gs/M_634wpnjq_BW.png?oat_content=qr"
+                    alt="Kenchiku AI LINE QRコード"
+                    width={180}
+                    height={180}
+                  />
+
+                  <p className={styles.contactSmall}>
+                    スマートフォンでQRコードを読み取り、
+                    友だち追加してください
+                  </p>
+                </>
+              )}
             </div>
 
             {/* Email */}
