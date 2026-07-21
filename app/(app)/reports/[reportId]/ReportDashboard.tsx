@@ -18,7 +18,7 @@ import {
 } from "@/lib/constants";
 import DeleteReportModal from "./DeleteReportModal";
 import { Loader } from "@/app/ui/Loader";
-import { Plus, Download, Tag, Close, Check, Menu, Dots, Stars, Chat } from "@/app/ui/Icons";
+import { Plus, Download, Tag, Close, Check, Menu, Chat } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import styles from "./page.module.css";
 import { ReportPDF } from "./ReportPDF";
@@ -293,28 +293,24 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         )}
       </div>
       <div className={`${cardClass} pb-5`}>
-        {report?.status === ReportStatus.Closed && (
-          <>
-            <div className="flex w-full justify-between py-1 md:px-3">
-              <div className="flex items-center gap-1">
-                <Close color={fontColor2} />
-                <div style={{ color: fontColor2 }}>
-                  {t("report_closed")}
-                </div>
+        <div className="flex w-full justify-between py-1 px-3">
+          {report?.status === ReportStatus.Closed ? (
+            <div className="flex items-center gap-1">
+              <Close color={fontColor2} />
+              <div style={{ color: fontColor2 }}>
+                {t("report_closed")}
               </div>
             </div>
-            <Divider />
-          </>
-        )}
-        <div className="flex w-full justify-between py-1 px-3">
-          <Button
-            variant="tertiary"
-            label={t("autofill_from_chat")}
-            iconLeft={() => <Chat color={buttonColor} />}
-            onClick={() => {
-              setIsAutofillModalShown(true);
-            }}
-          />
+          ) : (
+            <Button
+              variant="tertiary"
+              label={t("autofill_from_chat")}
+              iconLeft={() => <Chat color={buttonColor} />}
+              onClick={() => {
+                setIsAutofillModalShown(true);
+              }}
+            />
+          )}
         </div>
         {!!sortedFields && (
           <>
