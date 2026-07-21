@@ -854,7 +854,7 @@ export default function LandingPage() {
                 </a>
               </div>
               <p className={styles.contactSmall}>
-                年中無休
+                年中無休<br />
                 お気軽にお電話ください
               </p>
             </div>
