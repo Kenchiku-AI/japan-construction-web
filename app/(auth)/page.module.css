@@ -247,8 +247,8 @@
 
 @media (max-width: 900px) {
 	.heroBg {
-		filter: blur(10px);
-		transform: scale(1.05);
+		/* filter: blur(10px);
+		transform: scale(1.05); */
 		/* prevents blur from showing white edges */
 	}
 }
