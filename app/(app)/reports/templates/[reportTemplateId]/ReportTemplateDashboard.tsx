@@ -43,8 +43,7 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
   const isLoaded = useRef(false);
   const canShare =
     reportTemplate?.is_global && currentUser?.role === UserRole.Admin;
-  const canEdit = true;
-  // currentUser?.role === UserRole.Admin || !reportTemplate?.is_global;
+  const canEdit = currentUser?.role === UserRole.Admin || !reportTemplate?.is_global;
 
   useEffect(() => {
     if (isLoaded.current || !reportTemplate) return;
