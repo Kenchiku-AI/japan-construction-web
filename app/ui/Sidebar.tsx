@@ -6,8 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard, LineLogo } from "./Icons";
-import { bgColor4, bgColor5, buttonColor, fontColor2 } from "@/lib/constants";
+import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard, LineLogo, Info } from "./Icons";
+import { bgColor4, bgColor5, buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
 import Divider from "./Divider";
 import Link from "next/link";
 
@@ -69,6 +69,13 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                     path={"/home"}
                   />
                 )}
+                {currentUser.role === "manager" && (
+                  <SidebarItem
+                    name={t("line_integration")}
+                    icon={() => <LineLogo size={18} strokeWidth={1.5} />}
+                    path={"/line"}
+                  />
+                )}
                 <SidebarItem
                   name={t("projects")}
                   icon={() => <Hardhat size={24} />}
@@ -92,9 +99,9 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                       path={"/tags"}
                     />
                     <SidebarItem
-                      name={t("line_integration")}
-                      icon={() => <LineLogo size={18} strokeWidth={1.5} />}
-                      path={"/line"}
+                      name={t("user_guide")}
+                      icon={() => <Info color="black" size={18} strokeWidth={1.5} />}
+                      path="/docs"
                     />
                   </>
                 )}

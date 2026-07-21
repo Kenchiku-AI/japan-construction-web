@@ -102,7 +102,7 @@ export default function LandingPage() {
           <Link href="#apps" className={styles.navLink}>アプリ</Link>
           <Link href="#roles" className={styles.navLink}>利用対象</Link>
           <Link href="#pricing" className={styles.navLink}>料金</Link>
-          <Link href="/docs" className={styles.navLink}>ドキュメント</Link>
+          <Link href="/docs" className={styles.navLink}>ご利用ガイド</Link>
         </div>
 
         <div className={styles.navActions}>
@@ -155,7 +155,7 @@ export default function LandingPage() {
             <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>アプリ</Link>
             <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>利用対象</Link>
             <Link href="#pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金</Link>
-            <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ドキュメント</Link>
+            <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ご利用ガイド</Link>
             <div className={styles.mobileMenuDivider} />
             <div className="flex flex-col gap-2">
               <Link href="/login" className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => setMenuOpen(false)}>ログイン</Link>
@@ -843,7 +843,7 @@ export default function LandingPage() {
             Kenchiku AI
           </Link>
           <nav className={styles.footerLinks} aria-label="フッターナビゲーション">
-            <Link href="/docs">ドキュメント</Link>
+            <Link href="/docs">ご利用ガイド</Link>
             <Link href="/docs/quick-start">クイックスタート</Link>
             <Link href="/login">ログイン</Link>
             <Link href="/signup">新規登録</Link>
