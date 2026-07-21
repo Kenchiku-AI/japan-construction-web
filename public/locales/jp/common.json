@@ -13,7 +13,7 @@
   "amount_yen": "月額（円）",
   "all_projects": "すべてのプロジェクト",
   "autofill_from_chat": "トークから自動入力",
-  "autofill_from_chat_description": "報告書に自動入力する情報の元となるトークを以下から選択してください。あわせて、使用するメッセージの日時範囲を指定してください。各トークにつき、使用されるメッセージは最大50件までです。",
+  "autofill_from_chat_description": "報告書に自動入力する情報の元となるトークを以下から選択してください。あわせて、使用するメッセージの日時範囲を指定してください。",
   "billing_enabled": "月額請求有効",
   "billing_exempt": "月額請求停止中",
   "billing_plan": "料金プラン",
