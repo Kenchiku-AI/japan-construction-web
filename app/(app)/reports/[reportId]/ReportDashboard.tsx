@@ -354,7 +354,14 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                 <Button
                   label={t("update_report")}
                   onClick={() => {
-                    updateReport({ field_values: fieldValues });
+                    const field_values = Object.fromEntries(
+                      Object.entries(fieldValues ?? {}).map(([key, value]) => [
+                        key,
+                        String(value ?? ""),
+                      ])
+                    );
+
+                    updateReport({ field_values });
                   }}
                   iconLeft={() => <Check color="white" />}
                   style={{ height: 60 }}
