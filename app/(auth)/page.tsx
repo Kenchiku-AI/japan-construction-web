@@ -921,23 +921,6 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* ── Footer ── */}
-      < footer className={styles.footer} role="contentinfo" >
-        <div className={styles.footerInner}>
-          <Link href="/" className={styles.footerBrand} aria-label="Kenchiku AI トップへ">
-            <Logo size={22} />
-            Kenchiku AI
-          </Link>
-          <nav className={styles.footerLinks} aria-label="フッターナビゲーション">
-            <Link href="/docs">ご利用ガイド</Link>
-            <Link href="/docs/quick-start">クイックスタート</Link>
-            <Link href="/login">ログイン</Link>
-            <Link href="/signup">新規登録</Link>
-          </nav>
-          <p className={styles.footerCopy}>© 2026 Kenchiku AI</p>
-        </div>
-      </footer >
-
       <SignupModal
         isOpen={showSignup}
         onClose={() => {
