@@ -1,5 +1,5 @@
 import Divider from "@/app/ui/Divider";
-import { fontColor1, fontColor2 } from "@/lib/constants";
+import { buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
 
 export default function ReportsPage() {
   return (
@@ -12,7 +12,7 @@ export default function ReportsPage() {
         <Divider />
 
         <p className="mt-4">
-          報告書は、Kenchiku AIで現場の情報を記録・共有するための基本機能です。音声入力や写真、AIによる情報整理を活用することで、現場で収集した情報を効率よく記録できます。報告書はWebアプリとモバイルアプリのどちらからでも作成・編集でき、プロジェクト全体でリアルタイムに共有されます。
+          報告書は、Kenchiku AIで現場の情報を記録・共有するための基本機能です。音声入力や写真、トークの内容、AIによる情報整理を活用することで、現場で収集した情報を効率よく記録できます。報告書はWebアプリとモバイルアプリのどちらからでも作成・編集でき、プロジェクト全体でリアルタイムに共有されます。
         </p>
       </div>
 
@@ -67,7 +67,7 @@ export default function ReportsPage() {
           <ul className="list-disc pl-6 space-y-2">
             <li>報告書に表示される項目</li>
             <li>入力する情報の種類</li>
-            <li>AIが音声入力を各項目へ振り分ける方法</li>
+            <li>AIが入力された情報を各項目へ振り分ける方法</li>
             <li>報告書全体の構成</li>
           </ul>
 
@@ -80,6 +80,51 @@ export default function ReportsPage() {
             <strong style={{ color: fontColor1 }}>
               「テンプレート」
             </strong>
+            のページをご参照ください。
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <div className="text-2xl" style={{ color: fontColor1 }}>
+          トークから自動入力
+        </div>
+
+        <Divider style={{ background: fontColor2 }} />
+
+        <div className="space-y-4">
+          <p>
+            プロジェクトに紐付く報告書では、関連するトークの内容を利用して報告書の項目を自動入力できます。
+          </p>
+
+          <p>
+            対象のプロジェクトに1つ以上のLINEトークが連携されている場合、
+            <strong style={{ color: fontColor1 }}>
+              「トークから自動入力」
+            </strong>
+            ボタンを利用できます。
+          </p>
+
+          <p>
+            自動入力を行う場合は、
+            <strong style={{ color: fontColor1 }}>
+              「トークから自動入力」
+            </strong>
+            をクリックし、情報抽出に利用するトークと対象となるメッセージの日時範囲を選択してください。
+          </p>
+
+          <p>
+            選択したトーク内のメッセージをAIが確認し、報告書の各項目に関連する情報を抽出します。処理が完了すると、抽出された情報が報告書の項目へ自動的に入力されます。
+          </p>
+
+          <p>
+            LINEトークの作成方法や、トークから抽出する情報の設定方法について詳しくは、
+            <a
+              href="/docs/line-conversations"
+              style={{ color: buttonColor, textDecoration: "underline" }}
+            >
+              LINEトーク
+            </a>
             のページをご参照ください。
           </p>
         </div>
