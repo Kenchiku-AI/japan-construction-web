@@ -817,22 +817,6 @@ export default function LandingPage() {
             )}
           </div>
         </div>
-
-        <div
-          style={{
-            marginTop: 60,
-            textAlign: "center",
-            lineHeight: 1.8,
-          }}
-        >
-          ご質問やご意見・ご要望など、どんなことでもお気軽にご連絡ください。<br />
-          皆さまからのフィードバックをお待ちしております。<br />
-          <div style={{ marginTop: 16 }}>
-            <a href="mailto:support@kenchiku.ai" style={{ fontWeight: 600, color: buttonColor }}>
-              {" "}support@kenchiku.ai
-            </a>
-          </div>
-        </div>
       </section >
 
       {/* ── Contact / Footer ── */}
@@ -861,20 +845,17 @@ export default function LandingPage() {
               <div className={styles.contactIcon}>📞</div>
 
               <h3>お電話でのお問い合わせ</h3>
-
+              <div>
+                <a
+                  href="tel:+8170856886588"
+                  className={styles.contactPhone}
+                >
+                  070-8568-6588
+                </a>
+              </div>
               <p className={styles.contactSmall}>
-                平日 9:00〜18:00
-              </p>
-
-              <a
-                href="tel:0000000000"
-                className={styles.contactPhone}
-              >
-                0000-000-000
-              </a>
-
-              <p className={styles.contactNote}>
-                ※ プレースホルダー
+                年中無休
+                お気軽にお電話ください
               </p>
             </div>
 
@@ -887,7 +868,7 @@ export default function LandingPage() {
               <h3>LINEでお問い合わせ</h3>
 
               <div className={styles.qrPlaceholder}>
-                QR CODE
+                <img src="https://qr-official.line.me/gs/M_634wpnjq_BW.png?oat_content=qr" />
               </div>
 
               <p className={styles.contactSmall}>
@@ -900,26 +881,18 @@ export default function LandingPage() {
               <div className={styles.contactIcon}>✉️</div>
 
               <h3>メールでのお問い合わせ</h3>
-
-              <a
-                href="mailto:your@email.com"
-                className={styles.contactEmail}
-              >
-                your@email.com
-              </a>
-
+              <div>
+                <a
+                  href="mailto:support@kenchiku.ai"
+                  className={styles.contactEmail}
+                >
+                  support@kenchiku.ai
+                </a>
+              </div>
               <p className={styles.contactSmall}>
                 1営業日以内にご返信いたします
               </p>
-
-              <a
-                href="/contact"
-                className={`${styles.btn} ${styles.btnPrimary}`}
-              >
-                お問い合わせフォーム
-              </a>
             </div>
-
           </div>
         </div>
 
@@ -947,6 +920,23 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* ── Footer ── */}
+      < footer className={styles.footer} role="contentinfo" >
+        <div className={styles.footerInner}>
+          <Link href="/" className={styles.footerBrand} aria-label="Kenchiku AI トップへ">
+            <Logo size={22} />
+            Kenchiku AI
+          </Link>
+          <nav className={styles.footerLinks} aria-label="フッターナビゲーション">
+            <Link href="/docs">ご利用ガイド</Link>
+            <Link href="/docs/quick-start">クイックスタート</Link>
+            <Link href="/login">ログイン</Link>
+            <Link href="/signup">新規登録</Link>
+          </nav>
+          <p className={styles.footerCopy}>© 2026 Kenchiku AI</p>
+        </div>
+      </footer >
 
       <SignupModal
         isOpen={showSignup}
