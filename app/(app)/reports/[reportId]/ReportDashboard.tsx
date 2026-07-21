@@ -295,7 +295,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       <div className={`${cardClass} pb-5`}>
         <div className="flex w-full justify-between py-1 px-3">
           {report?.status === ReportStatus.Closed ? (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center py-2 gap-1">
               <Close color={fontColor2} />
               <div style={{ color: fontColor2 }}>
                 {t("report_closed")}
