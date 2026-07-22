@@ -3,7 +3,7 @@
 import React, { FC, ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Divider from "../ui/Divider";
-import { fontColor2 } from "@/lib/constants";
+import { fontColor2, fontColor3 } from "@/lib/constants";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   return (
@@ -38,8 +38,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
               ✕
             </label>
           </div>
-          <div style={{ color: fontColor2 }}>{"ご利用ガイド"}</div>
-          <Divider />
+          <div style={{ color: fontColor3 }}>{"ご利用ガイド"}</div>
           <div className="space-y-1">
             <SidebarItem name="クイックスタート" path="/docs/quick-start" />
             <SidebarItem name="LINE連携" path="/docs/line-setup" />
@@ -70,24 +69,27 @@ const SidebarItem = ({ name, path }: SidebarItemProps) => {
   const active = currentPath === path || currentPath.startsWith(`${path}/`);
 
   return (
-    <li className={`mb-1 ${active ? "bg-base-300 rounded-md" : ""}`}>
-      <a
-        onClick={() => {
-          const drawer = document.getElementById(
-            "docs-sidebar",
-          ) as HTMLInputElement | null;
+    <>
+      <Divider />
+      <li className={`mb-1 ${active ? "bg-base-300 rounded-md" : ""}`}>
+        <a
+          onClick={() => {
+            const drawer = document.getElementById(
+              "docs-sidebar",
+            ) as HTMLInputElement | null;
 
-          if (drawer) {
-            drawer.checked = false;
-          }
+            if (drawer) {
+              drawer.checked = false;
+            }
 
-          router.push(path);
-        }}
-        className="active:bg-base-300 active:opacity-40 active:text-black gap-3"
-      >
-        <span className="max-md:text-sm">{name}</span>
-      </a>
-    </li>
+            router.push(path);
+          }}
+          className="active:bg-base-300 active:opacity-40 active:text-black gap-3"
+        >
+          <span className="max-md:text-sm">{name}</span>
+        </a>
+      </li>
+    </>
   );
 };
 
