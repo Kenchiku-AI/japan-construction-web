@@ -48,7 +48,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
             <SidebarItem name="テンプレート" path="/docs/templates" />
             <SidebarItem name="報告書" path="/docs/reports" />
             <SidebarItem name="写真とタグ" path="/docs/photos-and-tags" />
-            <SidebarItem name="ダウンロード" path="/docs/exports" />
+            {/* <SidebarItem name="ダウンロード" path="/docs/exports" /> */}
             <SidebarItem name="ゲスト" path="/docs/guests" />
             <SidebarItem name="管理者向け" path="/docs/admin" />
           </div>
