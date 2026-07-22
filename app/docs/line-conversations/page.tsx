@@ -14,8 +14,8 @@ export default function LineConversationPage() {
         <Divider style={{ background: fontColor2 }} />
 
         <p className="mt-4">
-          LINE連携の設定が完了すると、LINEグループごとに必要な情報を自動で整理・管理できるようになります。
-          このページでは、抽出する情報の設定方法と、LINEグループをKenchiku AIへ連携する方法をご紹介します。
+          LINE連携の設定が完了すると、LINEトークの内容をもとに必要な情報を自動で整理・管理できるようになります。
+          通常はLINE公式アカウントを含むLINEグループとの連携をおすすめしていますが、LINE公式アカウントとの1対1のトーク（ダイレクトメッセージ）も同じ方法で連携できます。このページでは、抽出する情報の設定方法と、LINEトークをKenchiku AIへ連携する方法をご紹介します。
         </p>
 
         <p className="mt-4">
@@ -39,7 +39,7 @@ export default function LineConversationPage() {
 
         <div className="space-y-4">
           <p>
-            LINE連携が完了したら、まずLINEの会話からどのような情報を抽出するかを設定します。
+            LINE連携が完了したら、まずLINEトークからどのような情報を抽出するかを設定します。
           </p>
 
           <ol className="list-decimal pl-6 space-y-3">
@@ -88,7 +88,7 @@ export default function LineConversationPage() {
 
           <p>
             <strong style={{ color: fontColor1 }}>「詳細」</strong>
-            には、LINEメッセージからどのような情報を抽出したいかを、できるだけ具体的に記載することをおすすめします。
+            には、LINEトークからどのような情報を抽出したいかを、できるだけ具体的に記載することをおすすめします。
             AIはこの内容をもとに情報を整理するため、詳しく記載するほど目的に合った結果になりやすくなります。
           </p>
 
@@ -156,8 +156,7 @@ export default function LineConversationPage() {
 
         <div className="space-y-4">
           <p>
-            抽出する情報を作成したら、次はLINEグループと対応するトークを作成します。
-            Kenchiku AIのトークは、LINEグループと1対1で対応します。
+            抽出する情報を作成したら、次はLINEトークに対応するKenchiku AIのトークを作成します。両者は常に1対1で対応します。
           </p>
 
           <p>
@@ -195,8 +194,7 @@ export default function LineConversationPage() {
 
             <li>
               <strong style={{ color: fontColor1 }}>「名称」</strong>
-              に、このトークに対応するLINEグループが分かる名前を入力します。
-              例えば、「お客様」「空調業者」「電気工事」などがおすすめです。
+              に、対応するLINEトークが分かりやすい名前を入力します。例えば、「お客様」「空調業者」「電気工事」などがおすすめです。
 
               <Image
                 src="/line-docs-screenshot-12.png"
@@ -214,26 +212,26 @@ export default function LineConversationPage() {
               <strong style={{ color: fontColor1 }}>
                 「トークから抽出する情報」
               </strong>
-              の一覧から、このLINEグループで抽出したい情報を選択します。
+              の一覧から、このLINEトークで抽出したい情報を選択します。
             </li>
           </ol>
 
           <p>
-            LINEグループによって必要な情報は異なります。例えば、お客様とのグループではスケジュールや図面変更を中心に抽出し、協力会社とのグループでは現場作業や資材・設備に関する情報を抽出する、といった使い分けができます。
+            LINEトークごとに抽出したい情報は異なります。例えば、お客様とのトークではスケジュールや図面変更を中心に抽出し、協力会社とのトークでは現場作業や資材・設備に関する情報を抽出する、といった使い分けができます。
           </p>
         </div>
       </section>
 
       <section>
         <div className="text-2xl" style={{ color: fontColor1 }}>
-          LINEグループと連携する
+          LINEトークと連携する
         </div>
 
         <Divider style={{ background: fontColor2 }} />
 
         <div className="space-y-4">
           <p>
-            トークを作成すると、LINEグループと連携するためのLINE連携コード（例：K-XXXXXX）が表示されます。
+            トークを作成すると、LINEトークと連携するためのLINE連携コード（例：K-XXXXXX）が表示されます。
           </p>
 
           <ol className="list-decimal pl-6 space-y-3">
@@ -259,19 +257,16 @@ export default function LineConversationPage() {
             </li>
 
             <li>
-              コピーしたコードを、連携したいLINEグループへメッセージとして送信してください。
+              コピーしたコードを、連携したいLINEトークへメッセージとして送信してください。
             </li>
           </ol>
 
           <p>
-            LINE連携を行うには、
-            <Link
-              href="/docs/line-setup"
-              style={{ color: buttonColor, textDecoration: "underline" }}
-            >
-              LINE連携ガイド
-            </Link>
-            で設定したLINE公式アカウントが、そのLINEグループに参加している必要があります。
+            通常は、LINE公式アカウントが参加しているLINEグループをKenchiku AIと連携して利用することをおすすめしています。ただし、LINE公式アカウントとの1対1のトーク（ダイレクトメッセージ）も同じ手順で連携できます。
+          </p>
+
+          <p>
+            LINE連携コードは、連携したいLINEトークへ送信してください。LINE公式アカウントが参加しているLINEグループ、またはLINE公式アカウントとの1対1のトークで利用できます。コードはLINEトーク内の誰が送信しても問題ありません。LINE公式アカウント自身が送信する必要はなく、参加者のどなたが送信しても連携できます。
           </p>
 
           <p>
@@ -279,7 +274,7 @@ export default function LineConversationPage() {
           </p>
 
           <p>
-            誤ったLINEグループへ連携してしまった場合でも問題ありません。同じ連携コードを正しいLINEグループへ再度送信するだけで、新しいグループへ切り替わります。
+            別のLINEトークへ切り替えたい場合は、新しいLINEトークへ同じLINE連携コードを送信してください。また、別のKenchiku AIのトークへ同じLINEトークを連携したい場合は、新しいKenchiku AIのトークのLINE連携コードをそのLINEトークへ送信してください。LINEトークとKenchiku AIのトークは常に1対1で対応するため、再連携を行うと既存の連携は自動的に解除され、新しい組み合わせへ切り替わります。
           </p>
         </div>
       </section>
@@ -293,7 +288,7 @@ export default function LineConversationPage() {
 
         <div className="space-y-4">
           <p>
-            連携済みのLINEグループでメッセージが送信されると、設定した種類ごとに情報が自動で抽出され、プロジェクトページへ表示されます。抽出された情報は、
+            連携済みのLINEトークでメッセージが送信されると、設定した種類ごとに情報が自動で抽出され、プロジェクトページへ表示されます。抽出された情報は、
             <strong style={{ color: fontColor1 }}>
               「LINE連携」
             </strong>
