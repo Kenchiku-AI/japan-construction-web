@@ -221,40 +221,6 @@ export default function ProjectsPage() {
 
       <section>
         <div className="text-2xl" style={{ color: fontColor1 }}>
-          Excelエクスポート
-        </div>
-
-        <Divider style={{ background: fontColor2 }} />
-
-        <div className="space-y-4">
-          <p>
-            プロジェクト画面から、そのプロジェクトに登録されている報告書をまとめてExcel形式でエクスポートできます。日々の記録を一覧で確認したり、社内での集計や共有に活用できます。
-          </p>
-
-          <p>
-            エクスポートする際は、対象となる
-            <strong style={{ color: fontColor1 }}>
-              テンプレート
-            </strong>
-            を選択します。選択したテンプレートを使用して作成された報告書が、1つのExcelファイルにまとめて出力されます。
-          </p>
-
-          <p>
-            Excelには、報告書名や作成日時、作成者、写真枚数に加え、テンプレートの各項目が列として出力されるため、フィルターや並べ替え、集計なども簡単に行えます。
-          </p>
-
-          <p>
-            Excelエクスポートの詳しい使い方については、
-            <strong style={{ color: fontColor1 }}>
-              「エクスポート」
-            </strong>
-            のセクションをご参照ください。
-          </p>
-        </div>
-      </section>
-
-      <section>
-        <div className="text-2xl" style={{ color: fontColor1 }}>
           まとめ
         </div>
 
