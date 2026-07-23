@@ -940,14 +940,7 @@ export default function LandingPage() {
               <div className={styles.companyRow}>
                 <div className={styles.companyLabel}>代表者</div>
                 <div className={styles.companyValue}>
-                  コスタンティーニ　留梨な
-                </div>
-              </div>
-
-              <div className={styles.companyRow}>
-                <div className={styles.companyLabel}>所在地</div>
-                <div className={styles.companyValue}>
-                  東京都　杉並区　和田3-57-3
+                  コスタンティーニ　留梨奈
                 </div>
               </div>
 
