@@ -725,8 +725,8 @@
 }
 
 .appScreenshotWrap {
+	margin: auto;
 	padding-top: 36px;
-	margin-top: auto;
 	padding-bottom: 12px;
 }
 
