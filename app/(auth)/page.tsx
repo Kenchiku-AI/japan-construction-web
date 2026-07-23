@@ -915,6 +915,84 @@ export default function LandingPage() {
           </div>
         </div>
 
+        <section className={styles.companySection}>
+          <div className={styles.sectionInner}>
+            <h2 className={styles.sectionTitle}>
+              会社概要
+            </h2>
+
+            <div className={styles.companyTable}>
+
+              <div className={styles.companyRow}>
+                <div className={styles.companyLabel}>会社名</div>
+                <div className={styles.companyValue}>
+                  Okapi合同会社
+                </div>
+              </div>
+
+              <div className={styles.companyRow}>
+                <div className={styles.companyLabel}>サービス名</div>
+                <div className={styles.companyValue}>
+                  Kenchiku AI
+                </div>
+              </div>
+
+              <div className={styles.companyRow}>
+                <div className={styles.companyLabel}>代表者</div>
+                <div className={styles.companyValue}>
+                  コスタンティーニ　留梨な
+                </div>
+              </div>
+
+              <div className={styles.companyRow}>
+                <div className={styles.companyLabel}>所在地</div>
+                <div className={styles.companyValue}>
+                  東京都〇〇区〇〇〇〇
+                </div>
+              </div>
+
+              <div className={styles.companyRow}>
+                <div className={styles.companyLabel}>電話番号</div>
+                <div className={styles.companyValue}>
+                  <a href="tel:+8170856886588">
+                    070-8568-6588
+                  </a>
+                </div>
+              </div>
+
+              <div className={styles.companyRow}>
+                <div className={styles.companyLabel}>メール</div>
+                <div className={styles.companyValue}>
+                  <a href="mailto:support@kenchiku.ai">
+                    support@kenchiku.ai
+                  </a>
+                </div>
+              </div>
+
+              <div className={styles.companyRow}>
+                <div className={styles.companyLabel}>事業内容</div>
+                <div className={styles.companyValue}>
+                  建設業向けAI業務支援システムの開発・提供
+                </div>
+              </div>
+
+              <div className={styles.companyRow}>
+                <div className={styles.companyLabel}>Webサイト</div>
+                <div className={styles.companyValue}>
+                  <a
+                    href="https://kenchiku.ai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    https://kenchiku.ai
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         <div className={styles.footerBottom}>
           <div className={styles.footerInner}>
             <Link
