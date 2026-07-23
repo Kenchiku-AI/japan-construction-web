@@ -947,7 +947,7 @@ export default function LandingPage() {
               <div className={styles.companyRow}>
                 <div className={styles.companyLabel}>所在地</div>
                 <div className={styles.companyValue}>
-                  東京都〇〇区〇〇〇〇
+                  東京都　杉並区　和田3-57-3
                 </div>
               </div>
 
