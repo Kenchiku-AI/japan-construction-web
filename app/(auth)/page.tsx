@@ -102,7 +102,7 @@ export default function LandingPage() {
           <Link href="#features" className={styles.navLink}>機能</Link>
           <Link href="#how-it-works" className={styles.navLink}>ご利用の流れ</Link>
           <Link href="#apps" className={styles.navLink}>アプリ</Link>
-          <Link href="#roles" className={styles.navLink}>利用対象</Link>
+          <Link href="#roles" className={styles.navLink}>こんな方におすすめ</Link>
           <Link href="#pricing" className={styles.navLink}>料金</Link>
           <Link href="/docs" className={styles.navLink}>ご利用ガイド</Link>
         </div>
@@ -155,7 +155,7 @@ export default function LandingPage() {
             <Link href="#features" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>機能</Link>
             <Link href="#how-it-works" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ご利用の流れ</Link>
             <Link href="#apps" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>アプリ</Link>
-            <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>利用対象</Link>
+            <Link href="#roles" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>こんな方におすすめ</Link>
             <Link href="#pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>料金</Link>
             <Link href="/docs" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>ご利用ガイド</Link>
             <div className={styles.mobileMenuDivider} />
@@ -527,16 +527,14 @@ export default function LandingPage() {
               <p className={styles.appCardIntro}>オフィス・事務所での管理業務に</p>
               <ul className={styles.appCardList}>
                 {[
+                  "LINE連携の各種設定",
+                  "会社・プロジェクト情報の管理",
                   "テンプレートの作成・管理",
-                  "プロジェクト・ユーザーの管理",
                   "提出済み報告書の閲覧・検索",
                   "PDF・Excelでの出力",
                   "ゲスト招待・権限管理",
-                  "LINEグループとの連携設定",
                   "プロジェクトとLINEグループの紐付け",
                   "アクション項目の作成・管理",
-                  "LINE連携の各種設定",
-                  "会社・プロジェクト情報の管理",
                 ].map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -599,15 +597,15 @@ export default function LandingPage() {
       {/* ── Roles ── */}
       <section id="roles" className={styles.section}>
         <div className={styles.sectionInner}>
-          <p className={styles.sectionEyebrow}>利用対象</p>
+          <p className={styles.sectionEyebrow}>こんな方におすすめ</p>
           <h2 className={styles.sectionTitle}>建設現場のすべての関係者へ</h2>
           <p className={styles.sectionLead}>
             Kenchiku AIは、施工管理者から協力会社まで、プロジェクトに関わるすべての立場の方が使えるよう設計されています。
           </p>
           <div className={styles.rolesGrid}>
             {[
-              { title: "施工管理者・現場監督", sub: "Field Supervisors", items: ["音声・写真でその場で記録", "LINEからの簡単入力", "リアルタイムで提出"] },
-              { title: "管理者・PM", sub: "Project Managers", items: ["テンプレート設計・管理", "全報告書の一元管理", "ユーザー・権限の管理"] },
+              { title: "施工管理者・現場監督", sub: "Field Supervisors", items: ["音声・写真でその場で記録", "LINEからの簡単入力", "報告書をリアルタイムで更新"] },
+              { title: "現場監督", sub: "Project Managers", items: ["テンプレート設計・管理", "全報告書の一元管理", "ユーザー・権限の管理"] },
               { title: "協力会社", sub: "Subcontractors", items: ["ゲストとして招待を受ける", "担当プロジェクトへアクセス", "進捗・状況をリアルタイム共有"] },
               { title: "発注者・検査担当者", sub: "Clients & Inspectors", items: ["報告書の閲覧・確認", "写真・記録へのアクセス", "PDFでの公式書類受領"] },
             ].map((r) => (
@@ -698,10 +696,10 @@ export default function LandingPage() {
                   <p className={styles.pricingRecommendTitle}>こんな会社におすすめです</p>
                   <ul className={styles.pricingList}>
                     {[
+                      "まずは低コストでAI・LINE連携を導入したい会社",
+                      "現場の報告書作成を効率化したい会社",
                       "小規模〜中規模の建設会社向け",
                       "電気・設備・空調・配管・リフォーム工事",
-                      "現場の報告書作成を効率化したい会社",
-                      "まずは低コストでAI・LINE連携を導入したい会社",
                     ].map((item) => (
                       <li key={item} className={styles.pricingListItem}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={styles.pricingCheckAlt} aria-hidden="true">
@@ -775,9 +773,9 @@ export default function LandingPage() {
               <div style={{ marginTop: 20 }}>
                 <a
                   href="mailto:support@kenchiku.ai?subject=エンタープライズプランについて"
-                  className={`${styles.btn} ${styles.btnSecondary}`}
+                  className={`${styles.btn} ${styles.btnPrimary}`}
                 >
-                  エンタープライズプランについて問い合わせる
+                  エンタープライズプラン<br />について問い合わせる
                 </a>
               </div>
             </div>
