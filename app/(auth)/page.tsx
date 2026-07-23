@@ -854,7 +854,7 @@ export default function LandingPage() {
                 </a>
               </div>
               <p className={styles.contactSmall}>
-                いつでもお気軽にお電話ください
+                お気軽にお問い合わせください。
               </p>
             </div>
 
@@ -909,7 +909,7 @@ export default function LandingPage() {
                 </a>
               </div>
               <p className={styles.contactSmall}>
-                1営業日以内にご返信いたします
+                1営業日以内にご返信いたします。
               </p>
             </div>
           </div>
