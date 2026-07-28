@@ -6,9 +6,9 @@ import {
   Text,
   StyleSheet,
   Font,
-  Image,
+  Image as PDFImage,
 } from "@react-pdf/renderer";
-import { Report, ReportImage } from "@/types";
+import { Report, Image } from "@/types";
 import { fontColor1, fontColor2 } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
 import { useDate } from "@/public/date/useDate";
@@ -16,7 +16,7 @@ import { useDate } from "@/public/date/useDate";
 interface ReportPDFProps {
   report: Report;
   topLabel: string;
-  images: ReportImage[];
+  images: Image[];
   labelWidth: number;
 }
 
@@ -65,7 +65,7 @@ export const ReportPDF: FC<ReportPDFProps> = ({
 
         return (
           <Page size="A4" key={image.id} style={styles.page}>
-            <Image
+            <PDFImage
               src={image.download_url}
               style={{ width: dims.width, height: dims.height }}
             />

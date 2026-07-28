@@ -4,12 +4,12 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
-import { ReportImageTag } from "@/types";
+import { ImageTag } from "@/types";
 
 interface UpdateTagModalProps {
   isOpen: boolean;
   onClose: () => void;
-  tag?: ReportImageTag;
+  tag?: ImageTag;
   onSubmit: (name?: string, description?: string) => void;
 }
 

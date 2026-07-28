@@ -5,7 +5,7 @@ import { redirect, useSearchParams } from "next/navigation";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReport } from "./useReport";
-import { ReportFieldValues, ReportImageTag, ReportStatus, UserRole } from "@/types";
+import { ReportFieldValues, ImageTag, ReportStatus, UserRole } from "@/types";
 import { Input } from "@/app/ui/Input/Input";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
@@ -64,7 +64,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
   const { isMobile } = useIsMobile();
   const searchParams = useSearchParams();
   const [fieldValues, setFieldValues] = useState<ReportFieldValues>();
-  const [selectedTag, setSelectedTag] = useState<ReportImageTag>();
+  const [selectedTag, setSelectedTag] = useState<ImageTag>();
   const [isActionsShown, setIsActionsShown] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
@@ -467,7 +467,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         tags={tags ?? []}
         isOpen={isFilterByTagModalShown}
         onClose={() => setIsFilterByTagModalShown(false)}
-        onSelectTag={(tag?: ReportImageTag) => {
+        onSelectTag={(tag?: ImageTag) => {
           setSelectedTag(tag);
         }}
       />

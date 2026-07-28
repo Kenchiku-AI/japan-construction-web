@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { Company, ReportImageTag, UserRole } from "@/types";
+import { Company, ImageTag, UserRole } from "@/types";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
 import { Alert, CreditCard, CreditCardPlus, Edit, LineLogo, Plus } from "@/app/ui/Icons";
@@ -59,8 +59,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
   const [isCreateTemplateModalShown, setIsCreateTemplateModalShown] =
     useState(false);
-  const [editingTag, setEditingTag] = useState<ReportImageTag>();
-  const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
+  const [editingTag, setEditingTag] = useState<ImageTag>();
+  const [deletingTag, setDeletingTag] = useState<ImageTag>();
   const [showLoader, setShowLoader] = useState(false);
   const [userIdToRemove, setUserIdToRemove] = useState("");
   const { showModal } = useModal();

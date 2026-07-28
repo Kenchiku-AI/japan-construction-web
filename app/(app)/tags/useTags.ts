@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
-import { ReportImageTag, ReportImageTagRequest } from "@/types/reports";
+import { ImageTag, ImageTagRequest } from "@/types/reports";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
 
 export const useTags = (companyId?: string) => {
   const [loading, setLoading] = useState(false);
-  const [tags, setTags] = useState<ReportImageTag[]>();
+  const [tags, setTags] = useState<ImageTag[]>();
   const { currentUser, ...api } = useApi();
   const { showModal } = useModal();
   const { t } = useTranslation();
@@ -31,7 +31,7 @@ export const useTags = (companyId?: string) => {
   }, [companyId]);
 
   const createTag = useCallback(
-    async (request: ReportImageTagRequest) => {
+    async (request: ImageTagRequest) => {
       if (!companyId) return;
 
       setLoading(true);
@@ -52,7 +52,7 @@ export const useTags = (companyId?: string) => {
   );
 
   const updateTag = useCallback(
-    async (tagId: string, request: ReportImageTagRequest) => {
+    async (tagId: string, request: ImageTagRequest) => {
       if (!companyId) return;
 
       setLoading(true);

@@ -8,15 +8,15 @@ import {
   Project,
   ShareReportTemplateRequest,
   ReportRequest,
-  ReportImageTag,
-  ReportImageTagRequest,
+  ImageTag,
+  ImageTagRequest,
   UpdateProjectRequest,
-  ReportImage,
-  ReportImageUpdateRequest,
+  Image,
+  ImageUpdateRequest,
   AddTagRequest,
-  ReportImageTagLink,
+  ImageTagLink,
   CreateImageResponse,
-  ReportImageCreateRequest,
+  ImageCreateRequest,
   ForgotPasswordRequest,
   ResetPasswordRequest,
   CreateAdminRequest,
@@ -24,7 +24,7 @@ import {
   UpdateUserRequest,
   UpdateCompanyRequest,
   UpdateCompanyResponse,
-  ReportImagePollResponse,
+  ImagePollResponse,
   CompanyGuest,
   InviteGuestRequest,
   AcceptInvitationRequest,
@@ -267,19 +267,19 @@ export const useApiData = () => {
     },
     async getTags(companyId: string) {
       const url = `/companies/${companyId}/tags`;
-      return call(() => http.get<ReportImageTag[]>(url));
+      return call(() => http.get<ImageTag[]>(url));
     },
-    async createTag(companyId: string, request: ReportImageTagRequest) {
+    async createTag(companyId: string, request: ImageTagRequest) {
       const url = `/companies/${companyId}/tags`;
-      return call(() => http.post<ReportImageTag>(url, request));
+      return call(() => http.post<ImageTag>(url, request));
     },
     async updateTag(
       companyId: string,
       tagId: string,
-      request: ReportImageTagRequest,
+      request: ImageTagRequest,
     ) {
       const url = `/companies/${companyId}/tags/${tagId}`;
-      return call(() => http.patch<ReportImageTag>(url, request));
+      return call(() => http.patch<ImageTag>(url, request));
     },
     async deleteTag(companyId: string, tagId: string) {
       const url = `/companies/${companyId}/tags/${tagId}`;
@@ -365,11 +365,11 @@ export const useApiData = () => {
     },
     async getReportImages(reportId: string) {
       const url = `/reports/${reportId}/images`;
-      return call(() => http.get<ReportImage[]>(url));
+      return call(() => http.get<Image[]>(url));
     },
     async getImageStatus(reportId: string, imageId: string) {
       const url = `/reports/${reportId}/images/${imageId}/status`;
-      return call(() => http.get<ReportImagePollResponse>(url));
+      return call(() => http.get<ImagePollResponse>(url));
     },
     async createReport(request: CreateReportRequest) {
       const url = "/reports";
@@ -383,17 +383,17 @@ export const useApiData = () => {
       const url = `/reports/${reportId}/line-conversations`;
       return call(() => http.post<AutofillResponse>(url, request));
     },
-    async createImage(reportId: string, request: ReportImageCreateRequest) {
+    async createImage(reportId: string, request: ImageCreateRequest) {
       const url = `/reports/${reportId}/images`;
       return call(() => http.post<CreateImageResponse>(url, request));
     },
     async updateImage(
       reportId: string,
       imageId: string,
-      request: ReportImageUpdateRequest,
+      request: ImageUpdateRequest,
     ) {
       const url = `/reports/${reportId}/images/${imageId}`;
-      return call(() => http.patch<ReportImage>(url, request));
+      return call(() => http.patch<Image>(url, request));
     },
     async deleteImage(reportId: string, imageId: string) {
       const url = `/reports/${reportId}/images/${imageId}`;
@@ -401,7 +401,7 @@ export const useApiData = () => {
     },
     async addTag(reportId: string, imageId: string, request: AddTagRequest) {
       const url = `/reports/${reportId}/images/${imageId}/tags`;
-      return call(() => http.post<ReportImageTagLink>(url, request));
+      return call(() => http.post<ImageTagLink>(url, request));
     },
     async removeTag(reportId: string, imageId: string, linkId: string) {
       const url = `/reports/${reportId}/images/${imageId}/tags/${linkId}`;

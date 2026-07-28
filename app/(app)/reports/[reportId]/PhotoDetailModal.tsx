@@ -1,8 +1,8 @@
 import { CSSProperties, FC, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Image from "next/image";
+import NextImage from "next/image";
 import Modal from "@/app/ui/Modal";
-import { ReportImage, ReportImageTag, ReportImageTagLink } from "@/types";
+import { Image, ImageTag, ImageTagLink } from "@/types";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Divider from "@/app/ui/Divider";
 import { useDate } from "@/public/date/useDate";
@@ -12,9 +12,9 @@ import { Check, Close, Download, Plus, Tag, Trash } from "@/app/ui/Icons";
 import styles from "./page.module.css";
 
 interface PhotoDetailModalProps {
-  image?: ReportImage;
+  image?: Image;
   index?: number;
-  tags: ReportImageTag[];
+  tags: ImageTag[];
   reportName: string;
   onDeletePhoto: () => void;
   onUpdateDescription: (description: string) => void;
@@ -212,7 +212,7 @@ const PhotoDetailModal: FC<PhotoDetailModalProps> = ({
 };
 
 interface PhotoProps {
-  image: ReportImage;
+  image: Image;
 }
 
 const Photo: FC<PhotoProps> = ({ image }) => {
@@ -223,7 +223,7 @@ const Photo: FC<PhotoProps> = ({ image }) => {
   }, [image?.download_url]);
 
   return (
-    <Image
+    <NextImage
       alt={image.id}
       src={image.download_url}
       fill
@@ -241,8 +241,8 @@ const Photo: FC<PhotoProps> = ({ image }) => {
 };
 
 interface TagsProps {
-  imageTags?: ReportImageTagLink[];
-  allTags: ReportImageTag[];
+  imageTags?: ImageTagLink[];
+  allTags: ImageTag[];
   onAdd: (tagId: string) => void;
   onDelete: (linkId: string) => void;
   isMobile: boolean;
