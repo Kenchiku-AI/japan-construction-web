@@ -22,6 +22,8 @@
   "cancel_billing_plan": "料金プランを解約",
   "cancel_billing_plan_button": "解約する",
   "cancel_billing_plan_description": "この料金プランを解約してもよろしいですか？この会社のユーザーは、現在の請求期間が終了するまで、引き続きすべての有料機能を利用できます。",
+  "channel_access_token": "チャネルアクセストークン",
+  "channel_access_token_description": "LINE Developersコンソールで発行したチャネルアクセストークンを入力してください。チャネルアクセストークンの取得方法については、ご利用ガイドをご確認ください。",
   "channel_secret": "Channel secret",
   "close": "完了",
   "close_report": "完了にする",

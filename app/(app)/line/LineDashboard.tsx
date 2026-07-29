@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useCompany } from "../companies/[companyId]/useCompany";
 import { buttonColor, cardClass, fontColor3 } from "@/lib/constants";
@@ -8,6 +8,7 @@ import { AnnotationCheck, Edit, Hardhat, Info, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { Button } from "@/app/ui/Button/Button";
 import LineChannelSecretModal from "../companies/[companyId]/LineChannelSecretModal";
+import LineChannelAccessTokenModal from "../companies/[companyId]/LineChannelAccessTokenModal";
 import { Loader } from "@/app/ui/Loader";
 import LineWebhookModal from "../companies/[companyId]/LineWebhookModal";
 import LineWebhookButton from "../companies/[companyId]/LineWebhookButton";
@@ -29,6 +30,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
   const {
     company,
     updateLineChannelSecret,
+    updateLineChannelAccessToken,
   } = useCompany(companyId);
   const {
     conversationItemTypes,
@@ -38,7 +40,9 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
   } = useConversationItemTypes(companyId);
   const [channelSecret, setChannelSecret] = useState("");
   const [showChannelSecret, setShowChannelSecret] = useState(false);
-  const [showSaveButton, setShowSaveButton] = useState(false);
+  const [channelAccessToken, setChannelAccessToken] = useState("");
+  const [showChannelAccessToken, setShowChannelAccessToken] = useState(false);
+  const [showSaveButtons, setShowSaveButtons] = useState(false);
   const [showWebhook, setShowWebhook] = useState(false);
   const [showCreateConversationItemType, setShowCreateConversationItemType] = useState(false);
   const [editConversationItemType, setEditConversationItemType] = useState<ConversationItemType>();
@@ -48,7 +52,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
     if (!company) return;
 
     setTimeout(() => {
-      setShowSaveButton(true);
+      setShowSaveButtons(true);
     }, 5);
   }, [company]);
 
@@ -86,7 +90,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
                 onChange={(t) => setChannelSecret(t)}
                 style={{ height: 50, paddingRight: 110 }}
               />
-              {showSaveButton && (
+              {showSaveButtons && (
                 <Button
                   label={t("save")}
                   disabled={!channelSecret}
@@ -107,6 +111,42 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
                 iconLeft={() => <Edit />}
                 onClick={() => {
                   setShowChannelSecret(true);
+                }}
+              />
+            </div>
+          )}
+        </div>
+        <Divider />
+        <div className="flex items-center justify-between gap-3 py-1">
+          {!company?.line_channel_access_token_last5 ? (
+            <div className="flex flex-1 md:px-2">
+              <Input
+                placeholder={t("channel_access_token")}
+                value={channelSecret}
+                onChange={(t) => setChannelAccessToken(t)}
+                style={{ height: 50, paddingRight: 110 }}
+              />
+              {showSaveButtons && (
+                <Button
+                  label={t("save")}
+                  disabled={!channelAccessToken}
+                  style={{ height: 50, width: 100, marginLeft: -100, borderTopLeftRadius: 0, borderBottomLeftRadius: 0, zIndex: 100 }}
+                  onClick={() => {
+                    updateLineChannelAccessToken(channelAccessToken);
+                  }}
+                />
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 md:px-4">
+              <div>
+                {`${t("channel_access_token")}: ••••${company.line_channel_access_token_last5}`}
+              </div>
+              <Button
+                variant="tertiary"
+                iconLeft={() => <Edit />}
+                onClick={() => {
+                  setShowChannelAccessToken(true);
                 }}
               />
             </div>
@@ -180,6 +220,15 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
           if (success && shouldShowWebhook) {
             setShowWebhook(true);
           }
+        }}
+      />
+      <LineChannelAccessTokenModal
+        isOpen={showChannelAccessToken}
+        onClose={() => {
+          setShowChannelAccessToken(false);
+        }}
+        onSubmit={async (token) => {
+          await updateLineChannelAccessToken(token);
         }}
       />
       <LineWebhookModal
