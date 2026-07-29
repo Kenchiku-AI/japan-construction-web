@@ -1,16 +1,16 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
-import { ReportImageTag } from "@/types";
+import { ImageTag } from "@/types";
 import Divider from "@/app/ui/Divider";
 import { Close, Tag } from "@/app/ui/Icons";
 import { fontColor2 } from "@/lib/constants";
 
 interface FilterByTagModalProps {
-  tags: ReportImageTag[];
+  tags: ImageTag[];
   isOpen: boolean;
   onClose: () => void;
-  onSelectTag: (tag?: ReportImageTag) => void;
+  onSelectTag: (tag?: ImageTag) => void;
 }
 
 const FilterByTagModal: FC<FilterByTagModalProps> = ({

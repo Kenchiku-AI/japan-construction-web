@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
-import { AutofillRequest, AutofillResponse, Report, ReportImage, ReportRequest } from "@/types/reports";
+import { AutofillRequest, AutofillResponse, Report, Image, ReportRequest } from "@/types/reports";
 import { useTranslation } from "react-i18next";
 import imageCompression from "browser-image-compression";
 import { useModal } from "@/lib/modal/ModalContext";
@@ -14,16 +14,16 @@ export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(true);
   const [imagesLoading, setImagesLoading] = useState(false);
   const [report, setReport] = useState<Report>();
-  const [images, setImages] = useState<ReportImage[]>();
+  const [images, setImages] = useState<Image[]>();
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const imagesRef = useRef<ReportImage[] | undefined>(undefined);
-  const [selectedPhoto, setSelectedPhoto] = useState<ReportImage>();
+  const imagesRef = useRef<Image[] | undefined>(undefined);
+  const [selectedPhoto, setSelectedPhoto] = useState<Image>();
   const { t } = useTranslation();
   const router = useRouter();
   const api = useApi();
   const { showModal } = useModal();
   const pollingRef = useRef<Record<string, NodeJS.Timeout>>({});
-  const selectedPhotoRef = useRef<ReportImage | undefined>(undefined);
+  const selectedPhotoRef = useRef<Image | undefined>(undefined);
   const conversationsFetchedRef = useRef(false);
   const { isBillingError } = useBilling();
 
@@ -131,7 +131,7 @@ export const useReport = (reportId: string) => {
         const response = await api.getReportImages(reportId);
         setImages(response ?? []);
 
-        (response ?? []).forEach((img: ReportImage) => {
+        (response ?? []).forEach((img: Image) => {
           if (img.status === "pending" || img.status === "processing") {
             pollImageStatus(img.id);
           }

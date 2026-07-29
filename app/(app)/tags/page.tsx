@@ -6,7 +6,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { Plus } from "@/app/ui/Icons";
 import { useApi } from "@/lib/api/ApiContext";
-import { ReportImageTag, UserRole } from "@/types";
+import { ImageTag, UserRole } from "@/types";
 import TagsList from "./TagsList";
 import { redirect } from "next/navigation";
 import { useTags } from "./useTags";
@@ -23,8 +23,8 @@ const ReportTemplatesPage = () => {
     currentUser?.company?.id,
   );
   const [isCreateTagModalShown, setIsCreateTagModalShown] = useState(false);
-  const [editingTag, setEditingTag] = useState<ReportImageTag>();
-  const [deletingTag, setDeletingTag] = useState<ReportImageTag>();
+  const [editingTag, setEditingTag] = useState<ImageTag>();
+  const [deletingTag, setDeletingTag] = useState<ImageTag>();
 
   if (currentUser?.role === UserRole.User) {
     redirect("/");

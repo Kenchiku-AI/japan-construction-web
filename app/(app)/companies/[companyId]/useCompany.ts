@@ -97,6 +97,34 @@ export const useCompany = (companyId: string) => {
     [company, companyId],
   );
 
+  const updateLineChannelAccessToken = useCallback(
+    async (line_channel_access_token: string) => {
+      let success = true;
+      setLoading(true);
+
+      try {
+        const response = await api.updateCompany(companyId, { line_channel_access_token });
+
+        if (company && response) {
+          setCompany({
+            ...company,
+            line_channel_access_token_last5: response.line_channel_access_token_last5,
+          });
+        }
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description")
+        });
+        success = false;
+      }
+
+      setLoading(false);
+      return success;
+    },
+    [company, companyId],
+  );
+
   const updateBillingPlan = useCallback(
     async (billingPlanId: string) => {
       setLoading(true);
@@ -191,6 +219,7 @@ export const useCompany = (companyId: string) => {
     createProject,
     updateName,
     updateLineChannelSecret,
+    updateLineChannelAccessToken,
     updateBillingPlan,
     templates,
     createTemplate,

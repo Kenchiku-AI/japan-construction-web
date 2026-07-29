@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { saveAs } from "file-saver";
-import { Report, ReportImage } from "@/types";
+import { Report, Image } from "@/types";
 
 // ─── colour palette (neutral greys matching app theme) ────────────────────────
 const C = {
@@ -61,7 +61,7 @@ async function fetchImageAsBase64(
 async function buildReportWorkbook(
   ExcelJS: typeof import("exceljs"),
   report: Report,
-  images: ReportImage[],
+  images: Image[],
   topLabel: string,
 ) {
   const wb = new ExcelJS.Workbook();
@@ -455,7 +455,7 @@ export const useExportExcel = () => {
   const [isExcelDownloading, setIsExcelDownloading] = useState(false);
 
   const downloadExcel = useCallback(
-    async (report: Report, images: ReportImage[], topLabel: string) => {
+    async (report: Report, images: Image[], topLabel: string) => {
       setIsExcelDownloading(true);
       try {
         const ExcelJS = (await import("exceljs")) as typeof import("exceljs");

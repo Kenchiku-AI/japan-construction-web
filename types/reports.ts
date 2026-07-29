@@ -22,43 +22,41 @@ export type ReportField = {
   order: number;
 };
 
-export type ReportImage = {
+export type Image = {
   id: string;
-  report_id: string;
   status: string;
   download_url: string;
   created_at: string;
   width: number;
   height: number;
   description?: string;
-  tags: ReportImageTagLink[];
+  tags: ImageTagLink[];
 };
 
-export type ReportImagePollResponse = {
+export type ImagePollResponse = {
   id: string;
   status: string;
   description?: string;
-  tags: ReportImageTagLink[];
+  tags: ImageTagLink[];
 };
 
 export type CreateImageResponse = {
   id: string;
-  report_id: string;
   status: string;
   upload_url: string;
   download_url: string;
   created_at: string;
   width: number;
   height: number;
-  tags: ReportImageTagLink[];
+  tags: ImageTagLink[];
 };
 
-export type ReportImageCreateRequest = {
+export type ImageCreateRequest = {
   width: number;
   height: number;
 };
 
-export type ReportImageTagLink = {
+export type ImageTagLink = {
   tag_id: string;
   link_id: string;
   name: string;
@@ -70,7 +68,7 @@ export type CreateReportRequest = {
   name: string;
 };
 
-export type ReportImageUpdateRequest = {
+export type ImageUpdateRequest = {
   description: string;
 };
 
@@ -145,13 +143,13 @@ export enum ReportStatus {
   Closed = "closed",
 }
 
-export type ReportImageTag = {
+export type ImageTag = {
   id: string;
   name: string;
   description: string;
 };
 
-export type ReportImageTagRequest = {
+export type ImageTagRequest = {
   name?: string;
   description?: string;
 };
