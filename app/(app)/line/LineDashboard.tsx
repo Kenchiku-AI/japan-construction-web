@@ -122,7 +122,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
             <div className="flex flex-1 md:px-2">
               <Input
                 placeholder={t("channel_access_token")}
-                value={channelSecret}
+                value={channelAccessToken}
                 onChange={(t) => setChannelAccessToken(t)}
                 style={{ height: 50, paddingRight: 110 }}
               />
