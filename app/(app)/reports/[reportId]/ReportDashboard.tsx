@@ -209,6 +209,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     currentUser.role !== UserRole.Admin &&
     currentUser.company.id !== report.company_id;
 
+  const hasTopRow = report?.status === ReportStatus.Closed || !!conversations?.length;
+
   const ImageList = useMemo(
     () => (
       <Masonry
@@ -292,8 +294,8 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
           />
         )}
       </div>
-      <div className={`${cardClass} pb-5`}>
-        {(report?.status === ReportStatus.Closed || !!conversations?.length) && (
+      <div className={`${cardClass} pb-4 ${hasTopRow ? 'pt-4' : ''}`}>
+        {hasTopRow && (
           <>
             <div className="flex w-full justify-between py-1 px-3">
               {report?.status === ReportStatus.Closed ? (
