@@ -175,6 +175,7 @@ export const useReport = (reportId: string) => {
 
       try {
         response = await api.autofillReport(reportId, request);
+        getImages(reportId);
       } catch (err) {
         showModal({
           title: t("error"),
@@ -185,7 +186,7 @@ export const useReport = (reportId: string) => {
       setLoading(false);
       return response;
     },
-    [setReport, report, reportId],
+    [setReport, report, reportId, getImages],
   );
 
   const deleteReport = useCallback(async () => {

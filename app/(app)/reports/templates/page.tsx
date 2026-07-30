@@ -47,15 +47,17 @@ const ReportTemplatesPage = () => {
           iconOnlyMobile
         />
       </div>
-      <div className={cardClass}>
-        <ReportTemplatesList
-          templates={reportTemplates ?? []}
-          isEmpty={!loading && reportTemplates?.length === 0}
-          onClickTemplate={() => {
-            setShowLoader(true);
-          }}
-        />
-      </div>
+      {(!loading || !!reportTemplates?.length) && (
+        <div className={cardClass}>
+          <ReportTemplatesList
+            templates={reportTemplates ?? []}
+            isEmpty={!loading && reportTemplates?.length === 0}
+            onClickTemplate={() => {
+              setShowLoader(true);
+            }}
+          />
+        </div>
+      )}
       <CreateReportTemplateModal
         isOpen={showCreateReportTemplate}
         onClose={() => {
