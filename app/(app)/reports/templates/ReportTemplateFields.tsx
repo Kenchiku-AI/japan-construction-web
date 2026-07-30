@@ -11,8 +11,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import { Plus, Trash } from "@/app/ui/Icons";
-import Divider from "@/app/ui/Divider";
-import { bgColor1, bgColor2, bgColor3, bgColor5, cardClass, fontColor2 } from "@/lib/constants";
+import { bgColor5, cardClass, fontColor2 } from "@/lib/constants";
 import styles from "./page.module.css";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import { ReportTemplateFieldInfo } from "@/types";
@@ -58,7 +57,7 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
         )}
       </div>
       <div className={cardClass}>
-        <div className={"flex flex-col gap-4 p-3"}>
+        <div className={"flex flex-col gap-3"}>
           <DndContext
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}

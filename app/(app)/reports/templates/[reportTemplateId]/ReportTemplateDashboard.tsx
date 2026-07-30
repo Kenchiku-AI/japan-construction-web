@@ -123,23 +123,22 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
       {!!reportTemplate && (
         <>
           <div className={cardClass}>
-            <div className="flex flex-col gap-2 p-3">
-              <TextArea
-                placeholder={t("description")}
-                value={
-                  !isLoaded.current ? reportTemplate.description : description
-                }
-                onChange={setDescription}
-                disabled={!canEdit}
-              />
-              <Select
-                placeholder={t("type")}
-                options={parentTypeOptions}
-                value={parentType}
-                onChange={(pt) => setParentType(pt as ReportParentType)}
-                disabled={!canEdit}
-              />
-            </div>
+            <TextArea
+              placeholder={t("description")}
+              value={
+                !isLoaded.current ? reportTemplate.description : description
+              }
+              onChange={setDescription}
+              disabled={!canEdit}
+            />
+            <Divider />
+            <Select
+              placeholder={t("type")}
+              options={parentTypeOptions}
+              value={parentType}
+              onChange={(pt) => setParentType(pt as ReportParentType)}
+              disabled={!canEdit}
+            />
           </div>
           <div className="mt-12">
             <ReportTemplateFields
