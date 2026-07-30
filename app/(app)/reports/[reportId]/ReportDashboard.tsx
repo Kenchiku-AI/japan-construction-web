@@ -294,32 +294,35 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
       </div>
       <div className={`${cardClass} pb-5`}>
         {(report?.status === ReportStatus.Closed || !!conversations?.length) && (
-          <div className="flex w-full justify-between py-1 px-3">
-            {report?.status === ReportStatus.Closed ? (
-              <div className="flex items-center py-2 gap-1">
-                <Close color={fontColor2} />
-                <div style={{ color: fontColor2 }}>
-                  {t("report_closed")}
+          <>
+            <div className="flex w-full justify-between py-1 px-3">
+              {report?.status === ReportStatus.Closed ? (
+                <div className="flex items-center py-2 gap-1">
+                  <Close color={fontColor2} />
+                  <div style={{ color: fontColor2 }}>
+                    {t("report_closed")}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <Button
-                variant="tertiary"
-                label={t("autofill_from_chat")}
-                iconLeft={() => <Chat color={buttonColor} />}
-                onClick={() => {
-                  setIsAutofillModalShown(true);
-                }}
-              />
-            )}
-          </div>
+              ) : (
+                <Button
+                  variant="tertiary"
+                  label={t("autofill_from_chat")}
+                  iconLeft={() => <Chat color={buttonColor} />}
+                  onClick={() => {
+                    setIsAutofillModalShown(true);
+                  }}
+                />
+              )}
+            </div>
+            <Divider />
+          </>
         )}
         {!!sortedFields && (
           <>
             <div className="flex flex-col w-full">
-              {sortedFields?.map((field) => (
+              {sortedFields?.map((field, i) => (
                 <div key={field.id}>
-                  <Divider />
+                  {i > 0 && <Divider />}
                   <div className="px-2">
                     <Input
                       placeholder={field.name}
