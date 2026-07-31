@@ -10,6 +10,7 @@ import styles from "./page.module.css";
 import { errorColor1 } from "@/lib/constants";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import { useDate } from "@/public/date/useDate";
+import Select from "@/app/ui/Select/Select";
 
 interface EditConversationItemModalProps {
   isOpen: boolean;
@@ -165,12 +166,12 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
       )
       }
       <Divider />
-      {/* <Select
+      <Select
         options={statusOptions}
         value={status}
         placeholder={t("status")}
         onChange={(s) => setStatus(s as any)}
-      /> */}
+      />
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
         <Button
           disabled={!conversationItem || !name || !description || !status || unchanged}
