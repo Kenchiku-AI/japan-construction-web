@@ -73,9 +73,9 @@ const ConversationModal: FC<ConversationModalProps> = ({
             setName(n);
           }}
         />
-        <Divider />
         {!!conversation && (
           <>
+            <Divider />
             <div className="mx-3">
               <LineLinkCodeButton
                 code={conversation.line_link_code}
@@ -152,7 +152,7 @@ const ConversationModal: FC<ConversationModalProps> = ({
             })}
           </div>
         ) : (
-          <div className="p-6 mt-6 rounded-lg flex gap-4 items-center" style={{ background: errorColor2 }} >
+          <div className="p-6 my-6 rounded-lg flex gap-4 items-center" style={{ background: errorColor2 }} >
             <div>
               <Info color={errorColor1} />
             </div>
