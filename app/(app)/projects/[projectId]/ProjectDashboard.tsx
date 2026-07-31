@@ -176,12 +176,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
               </div>
             ) : (
               <div className="flex">
-                <div className="p-4 flex flex-1" style={{ color: !description ? fontColor2 : fontColor1 }}>
+                <div className="p-1 md:p-3 flex flex-1" style={{ color: !description ? fontColor2 : fontColor1 }}>
                   {description || t("add_description")}
                 </div>
                 {isEditable && (
                   <div
-                    className="cursor-pointer pt-4 pr-3"
+                    className="cursor-pointer pt-1 md:pt-3 md:pr-3"
                     onClick={() => {
                       setShowEditDescription(true);
                     }}
