@@ -58,10 +58,10 @@ export default function LineConversationPage() {
               をクリックします。
 
               <Image
-                src="/line-docs-screenshot-9.png"
+                src="/line-docs-screenshot-8.png"
                 alt="LINE設定画面のスクリーンショット"
-                width={2356}
-                height={1326}
+                width={2476}
+                height={1304}
                 priority
                 className="my-10 border"
                 style={{ borderColor: bgColor5 }}
@@ -75,10 +75,10 @@ export default function LineConversationPage() {
               を入力します。
 
               <Image
-                src="/line-docs-screenshot-10.png"
+                src="/line-docs-screenshot-9.png"
                 alt="LINE設定画面のスクリーンショット"
-                width={2354}
-                height={1786}
+                width={2474}
+                height={1784}
                 priority
                 className="my-10 border"
                 style={{ borderColor: bgColor5 }}
@@ -182,10 +182,10 @@ export default function LineConversationPage() {
               をクリックします。
 
               <Image
-                src="/line-docs-screenshot-11.png"
+                src="/line-docs-screenshot-10.png"
                 alt="LINE設定画面のスクリーンショット"
-                width={2356}
-                height={1670}
+                width={2476}
+                height={1694}
                 priority
                 className="my-10 border"
                 style={{ borderColor: bgColor5 }}
@@ -197,10 +197,10 @@ export default function LineConversationPage() {
               に、対応するLINEトークが分かりやすい名前を入力します。例えば、「お客様」「空調業者」「電気工事」などがおすすめです。
 
               <Image
-                src="/line-docs-screenshot-12.png"
+                src="/line-docs-screenshot-11.png"
                 alt="LINE設定画面のスクリーンショット"
-                width={2356}
-                height={1768}
+                width={2474}
+                height={1782}
                 priority
                 className="my-10 border"
                 style={{ borderColor: bgColor5 }}
@@ -242,10 +242,10 @@ export default function LineConversationPage() {
               をクリックしてコードをコピーします。
 
               <Image
-                src="/line-docs-screenshot-13.png"
+                src="/line-docs-screenshot-12.png"
                 alt="LINE設定画面のスクリーンショット"
-                width={2356}
-                height={1788}
+                width={2474}
+                height={1776}
                 priority
                 className="my-10 border"
                 style={{ borderColor: bgColor5 }}
@@ -300,7 +300,7 @@ export default function LineConversationPage() {
           </p>
 
           <Image
-            src="/line-docs-screenshot-14.png"
+            src="/line-docs-screenshot-13.png"
             alt="LINE設定画面のスクリーンショット"
             width={2406}
             height={1696}

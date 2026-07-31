@@ -152,8 +152,8 @@ export default function LinePage() {
             <Image
               src="/line-docs-screenshot-3.png"
               alt="LINE設定画面のスクリーンショット"
-              width={2564}
-              height={968}
+              width={2478}
+              height={1388}
               priority
               className="my-10 border"
               style={{ borderColor: bgColor5 }}
@@ -174,8 +174,8 @@ export default function LinePage() {
             <Image
               src="/line-docs-screenshot-4.png"
               alt="LINE設定画面のスクリーンショット"
-              width={2480}
-              height={956}
+              width={2476}
+              height={1304}
               priority
               className="my-10 border"
               style={{ borderColor: bgColor5 }}
@@ -304,7 +304,7 @@ export default function LinePage() {
             </li>
 
             <Image
-              src="/line-docs-screenshot-15.png"
+              src="/line-docs-screenshot-14.png"
               alt="LINE Developersコンソールへのリンク"
               width={2568}
               height={1512}
@@ -322,7 +322,7 @@ export default function LinePage() {
             </li>
 
             <Image
-              src="/line-docs-screenshot-16.png"
+              src="/line-docs-screenshot-15.png"
               alt="LINE Developersコンソールのプロバイダー一覧"
               width={2566}
               height={1082}
@@ -340,7 +340,7 @@ export default function LinePage() {
             </li>
 
             <Image
-              src="/line-docs-screenshot-17.png"
+              src="/line-docs-screenshot-16.png"
               alt="Messaging APIチャネルの選択"
               width={2564}
               height={1626}
@@ -358,7 +358,7 @@ export default function LinePage() {
             </li>
 
             <Image
-              src="/line-docs-screenshot-18.png"
+              src="/line-docs-screenshot-17.png"
               alt="Messaging API設定タブ"
               width={2562}
               height={1756}
@@ -380,7 +380,7 @@ export default function LinePage() {
             </li>
 
             <Image
-              src="/line-docs-screenshot-19.png"
+              src="/line-docs-screenshot-18.png"
               alt="チャネルアクセストークンの発行"
               width={2562}
               height={1668}
@@ -398,7 +398,7 @@ export default function LinePage() {
             </li>
 
             <Image
-              src="/line-docs-screenshot-20.png"
+              src="/line-docs-screenshot-19.png"
               alt="チャネルアクセストークンのコピー"
               width={2562}
               height={1668}
@@ -424,10 +424,10 @@ export default function LinePage() {
             </li>
 
             <Image
-              src="/line-docs-screenshot-21.png"
+              src="/line-docs-screenshot-20.png"
               alt="Kenchiku AIでチャネルアクセストークンを設定"
               width={2566}
-              height={1356}
+              height={1278}
               priority
               className="my-10 border"
               style={{ borderColor: bgColor5 }}
