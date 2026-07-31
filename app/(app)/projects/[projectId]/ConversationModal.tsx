@@ -68,6 +68,14 @@ const ConversationModal: FC<ConversationModalProps> = ({
         {!!conversation && (
           <>
             <Divider />
+            <Input
+              value={name}
+              placeholder={t("name")}
+              onChange={(n) => {
+                setName(n);
+              }}
+            />
+            <Divider />
             <div className="mx-3">
               <LineLinkCodeButton
                 code={conversation.line_link_code}
@@ -112,18 +120,9 @@ const ConversationModal: FC<ConversationModalProps> = ({
             </div>
           </>
         )}
-        <div className="pt-6">
-          <Input
-            value={name}
-            placeholder={t("name")}
-            onChange={(n) => {
-              setName(n);
-            }}
-          />
-        </div>
         {(conversationItemTypes?.length ?? 0) > 0 ? (
-          <div className="my-8">
-            <div style={{ color: fontColor3 }}>{t("conversation_item_types")}</div>
+          <div className="my-10">
+            <div style={{ color: fontColor2, fontSize: 16 }}>{t("conversation_item_types")}</div>
             <Divider />
             {conversationItemTypes.map((c) => {
               const isChecked = selectedItemTypes.some((it) => it.id === c.id);
