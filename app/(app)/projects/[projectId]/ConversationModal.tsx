@@ -10,6 +10,7 @@ import { Check, DownChevron, Info, Trash, UpChevron } from "@/app/ui/Icons";
 import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
 import QRCode from "react-qr-code";
 import Link from "next/link";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 interface ConversationModalProps {
   conversation?: Conversation;
@@ -31,6 +32,7 @@ const ConversationModal: FC<ConversationModalProps> = ({
   const [name, setName] = useState("");
   const [selectedItemTypes, setSelectedItemTypes] = useState<ConversationItemType[]>([]);
   const [hideQRCode, setHideQRCode] = useState(false);
+  const { isMobile } = useIsMobile();
   const { t } = useTranslation();
 
   const reset = () => {
@@ -67,7 +69,10 @@ const ConversationModal: FC<ConversationModalProps> = ({
           <>
             <Divider />
             <div className="mx-3">
-              <LineLinkCodeButton code={conversation.line_link_code} />
+              <LineLinkCodeButton
+                code={conversation.line_link_code}
+                shorten={isMobile}
+              />
             </div>
             <Divider />
             <div className="hidden md:block">

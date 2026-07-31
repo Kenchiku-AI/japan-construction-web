@@ -325,7 +325,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
               {sortedFields?.map((field, i) => (
                 <div key={field.id}>
                   {i > 0 && <Divider />}
-                  <div className="px-2">
+                  <div className="md:px-2">
                     <Input
                       placeholder={field.name}
                       value={fieldValues?.[field.id] ?? ""}

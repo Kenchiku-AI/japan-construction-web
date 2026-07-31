@@ -265,6 +265,184 @@ export default function LinePage() {
           </p>
         </div>
       </section>
+
+      <section>
+        <div className="text-2xl" style={{ color: fontColor1 }}>
+          （任意）チャネルアクセストークン設定
+        </div>
+
+        <Divider style={{ background: fontColor2 }} />
+
+        <div className="space-y-4">
+          <p>
+            この設定は任意ですが、
+            <strong style={{ color: fontColor1 }}>
+              LINEトーク内の画像をKenchiku AIで利用する場合は必須
+            </strong>
+            です。
+          </p>
+
+          <p>
+            チャネルアクセストークンを設定すると、LINEのすべてのトークに投稿された画像をKenchiku AIが取得し、AIが画像の説明文と関連タグを自動で生成します。また、
+            <strong style={{ color: fontColor1 }}>
+              「トークから自動入力」
+            </strong>
+            を実行した際には、会話中の画像もあわせてレポートへ自動的に追加されます。
+          </p>
+
+          <ol className="list-decimal pl-6 space-y-3">
+            <li>
+              LINE Official Account Managerで
+              <strong style={{ color: fontColor1 }}>
+                「設定 → Messaging API」
+              </strong>
+              を開きます。画面下部にある
+              <strong style={{ color: fontColor1 }}>
+                「LINE Developersコンソール」
+              </strong>
+              のリンクをクリックします。
+            </li>
+
+            <Image
+              src="/line-docs-screenshot-15.png"
+              alt="LINE Developersコンソールへのリンク"
+              width={2568}
+              height={1512}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
+
+            <li>
+              LINE Developersコンソールが開いたら、先ほど作成した
+              <strong style={{ color: fontColor1 }}>
+                プロバイダー
+              </strong>
+              をクリックします。
+            </li>
+
+            <Image
+              src="/line-docs-screenshot-16.png"
+              alt="LINE Developersコンソールのプロバイダー一覧"
+              width={2566}
+              height={1082}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
+
+            <li>
+              次に、作成した
+              <strong style={{ color: fontColor1 }}>
+                Messaging APIチャネル
+              </strong>
+              をクリックします。
+            </li>
+
+            <Image
+              src="/line-docs-screenshot-17.png"
+              alt="Messaging APIチャネルの選択"
+              width={2564}
+              height={1626}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
+
+            <li>
+              画面上部の
+              <strong style={{ color: fontColor1 }}>
+                「Messaging API設定」
+              </strong>
+              タブを選択します。
+            </li>
+
+            <Image
+              src="/line-docs-screenshot-18.png"
+              alt="Messaging API設定タブ"
+              width={2562}
+              height={1756}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
+
+            <li>
+              下へスクロールして
+              <strong style={{ color: fontColor1 }}>
+                「チャネルアクセストークン」
+              </strong>
+              の項目を表示し、
+              <strong style={{ color: fontColor1 }}>
+                「発行」
+              </strong>
+              ボタンをクリックします。
+            </li>
+
+            <Image
+              src="/line-docs-screenshot-19.png"
+              alt="チャネルアクセストークンの発行"
+              width={2562}
+              height={1668}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
+
+            <li>
+              発行された
+              <strong style={{ color: fontColor1 }}>
+                チャネルアクセストークン
+              </strong>
+              の横にあるコピーアイコンをクリックしてコピーします。
+            </li>
+
+            <Image
+              src="/line-docs-screenshot-20.png"
+              alt="チャネルアクセストークンのコピー"
+              width={2562}
+              height={1668}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
+
+            <li>
+              Kenchiku AIに戻り、
+              <strong style={{ color: fontColor1 }}>
+                「LINE連携」
+              </strong>
+              ページを開きます。
+              <strong style={{ color: fontColor1 }}>
+                「チャネルアクセストークン」
+              </strong>
+              欄にコピーした値を貼り付け、
+              <strong style={{ color: fontColor1 }}>
+                「保存」
+              </strong>
+              をクリックします。
+            </li>
+
+            <Image
+              src="/line-docs-screenshot-21.png"
+              alt="Kenchiku AIでチャネルアクセストークンを設定"
+              width={2566}
+              height={1356}
+              priority
+              className="my-10 border"
+              style={{ borderColor: bgColor5 }}
+            />
+          </ol>
+
+          <p>
+            以上でチャネルアクセストークンの設定は完了です。以降はLINEトーク内の画像も自動的に取得・解析され、
+            <strong style={{ color: fontColor1 }}>
+              「トークから自動入力」
+            </strong>
+            を実行した際に、会話中の画像がレポートへ自動的に追加されます。
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
