@@ -65,17 +65,17 @@ const ConversationModal: FC<ConversationModalProps> = ({
       title={conversation ? t("update_conversation") : t("create_conversation")}
     >
       <div>
+        <Divider />
+        <Input
+          value={name}
+          placeholder={t("name")}
+          onChange={(n) => {
+            setName(n);
+          }}
+        />
+        <Divider />
         {!!conversation && (
           <>
-            <Divider />
-            <Input
-              value={name}
-              placeholder={t("name")}
-              onChange={(n) => {
-                setName(n);
-              }}
-            />
-            <Divider />
             <div className="mx-3">
               <LineLinkCodeButton
                 code={conversation.line_link_code}
@@ -166,37 +166,39 @@ const ConversationModal: FC<ConversationModalProps> = ({
           </div>
         )}
       </div>
-      {!!conversation ? (
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
+      {
+        !!conversation ? (
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Button
+              disabled={!name}
+              iconLeft={() => <Check color="white" />}
+              label={t("update")}
+              onClick={() => {
+                onSubmit(name, selectedItemTypes);
+                reset();
+              }}
+            />
+            <Button
+              variant="secondary"
+              iconLeft={() => <Trash />}
+              style={{ borderColor: errorColor1, height: 60 }}
+              textStyle={{ color: errorColor1 }}
+              label={t("delete")}
+              onClick={onDelete}
+            />
+          </div>
+        ) : (
           <Button
             disabled={!name}
-            iconLeft={() => <Check color="white" />}
-            label={t("update")}
+            label={t("create")}
             onClick={() => {
               onSubmit(name, selectedItemTypes);
               reset();
             }}
           />
-          <Button
-            variant="secondary"
-            iconLeft={() => <Trash />}
-            style={{ borderColor: errorColor1, height: 60 }}
-            textStyle={{ color: errorColor1 }}
-            label={t("delete")}
-            onClick={onDelete}
-          />
-        </div>
-      ) : (
-        <Button
-          disabled={!name}
-          label={t("create")}
-          onClick={() => {
-            onSubmit(name, selectedItemTypes);
-            reset();
-          }}
-        />
-      )}
-    </Modal>
+        )
+      }
+    </Modal >
   );
 };
 
