@@ -64,7 +64,8 @@ export type ImageTagLink = {
 
 export type CreateReportRequest = {
   template_id: string;
-  parent_id: string;
+  company_id: string;
+  project_id?: string;
   name: string;
 };
 

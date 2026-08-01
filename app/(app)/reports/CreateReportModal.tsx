@@ -30,11 +30,9 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
   const { currentUser } = useApi();
   const [templateId, setTemplateId] = useState("");
   const [projectId, setProjectId] = useState("");
-  const [requireProjectId, setRequireProjectId] = useState(false);
   const [name, setName] = useState("");
   const hasEditedName = useRef(false);
   const { t } = useTranslation();
-  const showProjectSelect = requireProjectId && !forceProjectId;
 
   useEffect(() => {
     const template = templates.find((t) => t.id === templateId);
@@ -44,13 +42,6 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
       setName(template.name);
       hasEditedName.current = false;
     }
-
-    const isProjectType = template.parent_type === ReportParentType.Project;
-    setRequireProjectId(isProjectType);
-
-    if (!isProjectType) {
-      setProjectId("");
-    }
   }, [templateId, templates]);
 
   const reset = () => {
@@ -58,7 +49,6 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
       setName("");
       setTemplateId("");
       setProjectId("");
-      setRequireProjectId(false);
       hasEditedName.current = false;
     }, 500);
   };
@@ -76,22 +66,19 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
     [templates],
   );
 
-  const projectOptions = useMemo(
-    () =>
-      currentUser?.projects
-        .filter((p) => p.status === ProjectStatus.Active)
-        .map((p) => ({
-          label: p.name,
-          value: p.id,
-        })) ?? [],
-    [currentUser?.projects],
-  );
+  const projectOptions = useMemo(() => {
+    const projects = currentUser?.projects
+      .filter((p) => p.status === ProjectStatus.Active)
+      .map((p) => ({
+        label: p.name,
+        value: p.id,
+      })) ?? [];
 
-  const parentId = useMemo(() => {
-    if (forceProjectId) return forceProjectId;
-    if (requireProjectId) return projectId;
-    return currentUser?.company?.id;
-  }, [forceProjectId, requireProjectId, projectId, currentUser?.company]);
+    return [
+      { label: t("none"), value: "none" },
+      ...projects
+    ]
+  }, [currentUser?.projects]);
 
   return (
     <Modal
@@ -110,14 +97,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
           placeholder={t("type")}
           onChange={(id) => setTemplateId(id as string)}
         />
-        <div
-          style={{
-            height: showProjectSelect ? 72 : 0,
-            opacity: showProjectSelect ? 1 : 0,
-            pointerEvents: showProjectSelect ? undefined : "none",
-            transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
-          }}
-        >
+        {!forceProjectId && (
           <Select
             options={projectOptions}
             value={projectId}
@@ -125,7 +105,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
             onChange={(id) => setProjectId(id as string)}
             style={{ paddingRight: 40 }}
           />
-        </div>
+        )}
       </div>
       <div className="mb-6">
         <Input
@@ -138,14 +118,24 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
         />
       </div>
       <Button
-        disabled={!templateId || !parentId || !name}
+        disabled={!templateId || !name}
         label={t("create")}
         onClick={() => {
-          onSubmit({
-            template_id: templateId,
-            parent_id: parentId!,
-            name,
-          });
+          if (currentUser?.company?.id) {
+            const request: CreateReportRequest = {
+              template_id: templateId,
+              company_id: currentUser.company.id,
+              name,
+            };
+
+            if (forceProjectId) {
+              request.project_id = forceProjectId;
+            } else if (!!projectId && projectId !== "none") {
+              request.project_id = projectId;
+            }
+
+            onSubmit(request);
+          }
 
           reset();
         }}
