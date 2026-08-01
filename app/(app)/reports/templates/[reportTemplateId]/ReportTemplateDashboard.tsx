@@ -5,12 +5,11 @@ import { redirect, useSearchParams } from "next/navigation";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useReportTemplate } from "./useReportTemplate";
-import { ReportParentType, ReportTemplateFieldInfo, UserRole } from "@/types";
+import { ReportTemplateFieldInfo, UserRole } from "@/types";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import ReportTemplateFields from "../ReportTemplateFields";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
-import Select from "@/app/ui/Select/Select";
 import { useReportTemplates } from "../useReportTemplates";
 import { AddUser } from "@/app/ui/Icons";
 import ShareReportTemplateModal from "./ShareReportTemplateModal";
@@ -33,11 +32,9 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
     shareReportTemplate,
     loading,
   } = useReportTemplate(reportTemplateId);
-  const { parentTypeOptions } = useReportTemplates();
   const [fields, setFields] = useState<ReportTemplateFieldInfo[]>([]);
   const fieldsRef = useRef<ReportTemplateFieldInfo[]>([]);
   const [description, setDescription] = useState("");
-  const [parentType, setParentType] = useState<ReportParentType>();
   const [showShare, setShowShare] = useState(false);
   const searchParams = useSearchParams();
   const isLoaded = useRef(false);
@@ -50,7 +47,6 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
 
     isLoaded.current = true;
     setDescription(reportTemplate.description);
-    setParentType(reportTemplate.parent_type);
 
     const initialFields = reportTemplate.fields.map((f, i) => ({
       id: f.id,
@@ -83,11 +79,10 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
 
     const isUnchanged =
       reportTemplate?.description === description &&
-      reportTemplate?.parent_type === parentType &&
       fieldsUnchanged;
 
     return isUnchanged;
-  }, [isLoaded.current, reportTemplate, description, parentType, fields]);
+  }, [isLoaded.current, reportTemplate, description, fields]);
 
   if (currentUser?.role == UserRole.User) {
     redirect("/");
@@ -131,14 +126,6 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
               onChange={setDescription}
               disabled={!canEdit}
             />
-            <Divider />
-            <Select
-              placeholder={t("type")}
-              options={parentTypeOptions}
-              value={parentType}
-              onChange={(pt) => setParentType(pt as ReportParentType)}
-              disabled={!canEdit}
-            />
           </div>
           <div className="mt-12">
             <ReportTemplateFields
@@ -156,7 +143,6 @@ const ReportTemplateDashboard: FC<ReportTemplateDashboardProps> = ({
                 onClick={async () => {
                   const request = {
                     description,
-                    parent_type: parentType,
                     fields,
                   };
 

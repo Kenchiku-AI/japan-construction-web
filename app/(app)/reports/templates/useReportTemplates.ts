@@ -5,7 +5,6 @@ import { useApi } from "@/lib/api/ApiContext";
 import {
   ReportTemplateRequest,
   ReportTemplate,
-  ReportParentType,
 } from "@/types/reports";
 import { useTranslation } from "react-i18next";
 
@@ -43,19 +42,10 @@ export const useReportTemplates = () => {
     [getReportTemplates],
   );
 
-  const parentTypeOptions = useMemo(
-    () => [
-      { label: t("project"), value: ReportParentType.Project },
-      { label: t("company"), value: ReportParentType.Company },
-    ],
-    [t],
-  );
-
   return {
     loading,
     reportTemplates,
     getReportTemplates,
     createReportTemplate,
-    parentTypeOptions,
   };
 };

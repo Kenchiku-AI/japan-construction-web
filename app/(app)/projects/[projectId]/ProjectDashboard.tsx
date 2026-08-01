@@ -8,14 +8,12 @@ import { useApi } from "@/lib/api/ApiContext";
 import { CompanyGuest, UserRole, Conversation, ConversationItem } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Check, Close, Download, Edit, Plus } from "@/app/ui/Icons";
+import { Check, Close, Edit, Plus } from "@/app/ui/Icons";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import ReportsList from "../../reports/ReportsList";
-import { cardClass, errorColor1, fontColor1, fontColor2, fontColor3 } from "@/lib/constants";
-import DownloadExcelModal from "../../reports/DownloadExcelModal";
-import { useExport } from "../../reports/useExport";
+import { cardClass, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import GuestsList from "./GuestsList";
 import AddGuestModal from "./AddGuestModal";
 import RemoveGuestModal from "./RemoveGuestModal";
@@ -29,6 +27,8 @@ import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
 import DeleteConversationModal from "./DeleteConversationModal";
 import ConversationCreatedModal from "./ConversationCreatedModal";
 import ConversationItemsList from "./ConversationItemsList";
+// import DownloadExcelModal from "../../reports/DownloadExcelModal";
+// import { useExport } from "../../reports/useExport";
 
 interface ProjectDashboardProps {
   projectId: string;
@@ -56,15 +56,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     deleteConversationItem,
   } = useProject(projectId);
   const { conversationItemTypes } = useConversationItemTypes(project?.company_id);
-  const { downloadExcel } = useExport();
   const isLoaded = useRef(false);
   const searchParams = useSearchParams();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
   const [showEditDescription, setShowEditDescription] = useState(false);
   const [status, setStatus] = useState("");
-  const [showDownloadExcel, setShowDownloadExcel] = useState(false);
-  const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
   const [showConversationModal, setShowConversationModal] = useState(false);
   const [conversationCreatedCode, setConversationCreatedCode] = useState("");
@@ -77,6 +74,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
   const isAdmin = currentUser?.role === UserRole.Admin;
   const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
+  // const { downloadExcel } = useExport();
+  // const [showDownloadExcel, setShowDownloadExcel] = useState(false);
+  // const [isExcelDownloading, setIsExcelDownloading] = useState(false);
 
   useEffect(() => {
     if (isLoaded.current || !project) return;
@@ -350,7 +350,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
         </>
       )}
-
       <CreateReportModal
         templates={reportTemplates ?? []}
         forceProjectId={projectId}
@@ -363,7 +362,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           createReport(request);
         }}
       />
-      <DownloadExcelModal
+      {/* <DownloadExcelModal
         templates={reportTemplates ?? []}
         disableProject
         isOpen={showDownloadExcel}
@@ -380,7 +379,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           downloadExcel(templateId, template.name, projectId, project?.name);
           setIsExcelDownloading(false);
         }}
-      />
+      /> */}
       <AddGuestModal
         knownGuests={nonProjectGuests}
         isOpen={showAddGuest}

@@ -6,7 +6,6 @@ import Modal from "@/app/ui/Modal";
 import {
   CreateReportRequest,
   ProjectStatus,
-  ReportParentType,
   ReportTemplate,
 } from "@/types";
 import Select from "@/app/ui/Select/Select";
@@ -56,9 +55,6 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
   const templateOptions = useMemo(
     () =>
       templates
-        .filter((t) =>
-          !forceProjectId ? true : t.parent_type === ReportParentType.Project,
-        )
         .map((t) => ({
           label: t.name,
           value: t.id,

@@ -7,18 +7,17 @@ import { useTranslation } from "react-i18next";
 import CreateReportModal from "./CreateReportModal";
 import { useReports } from "./useReports";
 import { useReportTemplates } from "./templates/useReportTemplates";
-import { Close, Download, Plus, Search } from "@/app/ui/Icons";
+import { Close, Plus, Search } from "@/app/ui/Icons";
 import ReportsList from "./ReportsList";
 import { useApi } from "@/lib/api/ApiContext";
 import { ProjectStatus, UserRole } from "@/types";
 import { Loader } from "@/app/ui/Loader";
 import { Input } from "@/app/ui/Input/Input";
-import DownloadExcelModal from "./DownloadExcelModal";
-import { useExport } from "./useExport";
 import { useSearchParams } from "next/navigation";
 import { useIsMobile } from "@/lib/useIsMobile";
-import { useModal } from "@/lib/modal/ModalContext";
 import { cardClass } from "@/lib/constants";
+// import { useExport } from "./useExport";
+// import DownloadExcelModal from "./DownloadExcelModal";
 
 const ReportsPage = () => {
   const { t } = useTranslation();
@@ -28,19 +27,18 @@ const ReportsPage = () => {
   const projectName = searchParams.get("projectName") || undefined;
   const { reports, setReports, getReports, createReport, search, loading } =
     useReports();
-  const { downloadExcel } = useExport();
   const { reportTemplates, getReportTemplates } = useReportTemplates();
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [showDownloadExcel, setShowDownloadExcel] = useState(false);
-  const [isExcelDownloading, setIsExcelDownloading] = useState(false);
   const searchRef = useRef<any>(null);
   const { isMobile } = useIsMobile();
-  const { showModal } = useModal();
   const hasSearchPadding = isMobile && !projectName;
   const isAdmin = currentUser?.role === UserRole.Admin;
   const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
+  // const { downloadExcel } = useExport();
+  // const [showDownloadExcel, setShowDownloadExcel] = useState(false);
+  // const [isExcelDownloading, setIsExcelDownloading] = useState(false);
 
   const isCreateEnabled = useMemo(() => {
     if (isAdmin) return false;
@@ -161,7 +159,7 @@ const ReportsPage = () => {
           createReport(request);
         }}
       />
-      <DownloadExcelModal
+      {/* <DownloadExcelModal
         templates={reportTemplates ?? []}
         isOpen={showDownloadExcel}
         onClose={() => {
@@ -186,7 +184,7 @@ const ReportsPage = () => {
 
           setIsExcelDownloading(false);
         }}
-      />
+      /> */}
       {(loading || showLoader) && <Loader />}
     </>
   );
