@@ -105,8 +105,10 @@ export const useReport = (reportId: string) => {
         const response = await api.getReport(reportId);
         setReport(response);
 
-        if (response?.parent_type === "project" && !conversationsFetchedRef.current) {
-          const project = await api.getProject(response.parent_id);
+        const projectId = report?.project_ids?.[0];
+
+        if (!!projectId && !conversationsFetchedRef.current) {
+          const project = await api.getProject(projectId);
           setConversations(project?.conversations ?? []);
         }
       } catch (err) {

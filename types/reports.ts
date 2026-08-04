@@ -3,6 +3,7 @@ export type Report = {
   name: string;
   template_id: string;
   status: ReportStatus;
+  project_ids: string[];
   project_name?: string;
   company_id?: string;
   company_name?: string;
