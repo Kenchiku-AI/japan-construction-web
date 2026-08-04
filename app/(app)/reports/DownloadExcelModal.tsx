@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
-import { ProjectStatus, ReportParentType, ReportTemplate } from "@/types";
+import { ProjectStatus, ReportTemplate } from "@/types";
 import Select from "@/app/ui/Select/Select";
 import { useApi } from "@/lib/api/ApiContext";
 
@@ -35,12 +35,12 @@ const DownloadExcelModal: FC<DownloadExcelModalProps> = ({
     const template = templates.find((t) => t.id === templateId);
     if (!template) return;
 
-    const isProjectType = template.parent_type === ReportParentType.Project;
-    setShowProject(isProjectType);
+    // const isProjectType = template.parent_type === ReportParentType.Project;
+    // setShowProject(isProjectType);
 
-    if (!isProjectType) {
-      setProjectId("");
-    }
+    // if (!isProjectType) {
+    //   setProjectId("");
+    // }
   }, [templateId, templates, disableProject]);
 
   const reset = () => {
