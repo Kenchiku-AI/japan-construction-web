@@ -93,6 +93,14 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
           placeholder={t("type")}
           onChange={(id) => setTemplateId(id as string)}
         />
+        <Input
+          value={name}
+          placeholder={t("name")}
+          onChange={(n) => {
+            setName(n);
+            hasEditedName.current = true;
+          }}
+        />
         {!forceProjectId && (
           <Select
             options={projectOptions}
@@ -102,14 +110,6 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
             style={{ paddingRight: 40 }}
           />
         )}
-        <Input
-          value={name}
-          placeholder={t("name")}
-          onChange={(n) => {
-            setName(n);
-            hasEditedName.current = true;
-          }}
-        />
       </div>
       <Button
         disabled={!templateId || !name}
