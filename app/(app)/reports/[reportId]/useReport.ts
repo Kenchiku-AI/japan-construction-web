@@ -107,6 +107,12 @@ export const useReport = (reportId: string) => {
 
         const projectId = report?.project_ids?.[0];
 
+        console.log("REPORT", report);
+
+        console.log("project ids", report?.project_ids);
+
+        console.log("PROJECT ID", report?.project_ids?.[0]);
+
         if (!!projectId && !conversationsFetchedRef.current) {
           const project = await api.getProject(projectId);
           setConversations(project?.conversations ?? []);
