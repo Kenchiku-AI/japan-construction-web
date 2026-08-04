@@ -86,7 +86,7 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
       title={t("create_report")}
       subtitle={t("create_report_description")}
     >
-      <div className="mt-8 flex flex-col gap-3">
+      <div className="my-6 flex flex-col gap-3">
         <Select
           options={templateOptions}
           value={templateId}
@@ -102,8 +102,6 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
             style={{ paddingRight: 40 }}
           />
         )}
-      </div>
-      <div className="mb-6">
         <Input
           value={name}
           placeholder={t("name")}
