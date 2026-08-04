@@ -321,7 +321,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
         )}
         {!!sortedFields && (
           <>
-            <div className="flex flex-col w-full">
+            <div className="py-1 flex flex-col w-full">
               {sortedFields?.map((field, i) => (
                 <div key={field.id}>
                   {i > 0 && <Divider />}
