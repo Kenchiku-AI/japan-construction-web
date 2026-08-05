@@ -20,12 +20,14 @@ interface ReportTemplateFieldsProps {
   fields: ReportTemplateFieldInfo[];
   onChange: (fields: ReportTemplateFieldInfo[]) => void;
   disabled?: boolean;
+  hideCard?: boolean;
 }
 
 const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
   fields,
   onChange,
   disabled,
+  hideCard,
 }) => {
   const { t } = useTranslation();
 
@@ -56,7 +58,7 @@ const ReportTemplateFields: FC<ReportTemplateFieldsProps> = ({
           <div style={{ color: fontColor2 }}>{t("drag_to_reorder")}</div>
         )}
       </div>
-      <div className={cardClass}>
+      <div className={hideCard ? "mt-3" : cardClass}>
         <div className={"flex flex-col gap-3"}>
           <DndContext
             collisionDetection={closestCenter}

@@ -59,7 +59,11 @@ const CreateReportTemplateModal: FC<CreateReportTemplateModalProps> = ({
           onChange={setDescription}
         />
       </div>
-      <ReportTemplateFields fields={fields} onChange={(f) => setFields(f)} />
+      <ReportTemplateFields
+        fields={fields}
+        onChange={(f) => setFields(f)}
+        hideCard
+      />
       <Button
         disabled={isSubmitDisabled}
         label={t("create")}
