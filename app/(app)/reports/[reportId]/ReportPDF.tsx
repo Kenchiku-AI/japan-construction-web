@@ -21,8 +21,8 @@ interface ReportPDFProps {
 }
 
 Font.register({
-  family: "KosugiMaru",
-  src: "/fonts/KosugiMaru-Regular.ttf",
+  family: "NotoSansJP",
+  src: "/fonts/NotoSansJP-Regular.ttf",
 });
 
 const PAGE_CONTENT_WIDTH = 499;
@@ -128,7 +128,7 @@ const getImageDimensions = (width: number, height: number) => {
 const styles = StyleSheet.create({
   page: {
     padding: 48,
-    fontFamily: "KosugiMaru",
+    fontFamily: "NotoSansJP",
   },
   topLabel: {
     fontSize: 12,
