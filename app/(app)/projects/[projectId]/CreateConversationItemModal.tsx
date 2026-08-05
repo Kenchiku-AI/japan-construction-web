@@ -37,6 +37,7 @@ const CreateConversationItemModal: FC<CreateConversationItemModalProps> = ({
         reset();
       }}
       title={title}
+      width={640}
     >
       <div className="flex flex-col gap-3 my-6">
         <Input
