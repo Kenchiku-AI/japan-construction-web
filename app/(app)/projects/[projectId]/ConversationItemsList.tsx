@@ -4,7 +4,7 @@ import { ConversationItem } from "@/types";
 import styles from "./page.module.css";
 import { AnnotationCheck } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { bgColor5, fontColor1, } from "@/lib/constants";
+import { bgColor5, doneColor1, doneColor2, errorColor1, errorColor2, fontColor1, inProgressColor1, inProgressColor2, } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 
 interface ConversationItemsListProps {
@@ -31,6 +31,27 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
       return text.slice(0, maxLength) + '...';
     }
     return text;
+  }
+
+  const getStatusColors = (status: string) => {
+    if (status === "new") {
+      return {
+        color: errorColor1,
+        background: errorColor2
+      }
+    }
+
+    if (status === "in_progress") {
+      return {
+        color: inProgressColor1,
+        background: inProgressColor2
+      }
+    }
+
+    return {
+      color: doneColor1,
+      background: doneColor2
+    }
   }
 
   return (
@@ -70,7 +91,7 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
                       fontSize: 12,
                       padding: "5px 10px",
                       borderRadius: 18,
-                      background: bgColor5
+                      ...getStatusColors(c.status)
                     }}
                   >
                     {t(c.status)}
