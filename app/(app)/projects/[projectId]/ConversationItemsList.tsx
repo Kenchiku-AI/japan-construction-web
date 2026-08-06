@@ -85,7 +85,17 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
                       <div className={styles.subtitle}>{truncateText(c.description, 100)}</div>
                     </div>
                   </div>
-                  <div className="hidden md:flex flex-col items-end gap-3">
+                  <div className="hidden md:flex flex-col items-end gap-1">
+                    {c.assignee && (
+                      <div
+                        className={styles.subtitle}
+                        style={{
+                          fontSize: 12
+                        }}
+                      >
+                        {`${t("assignee")}: ${c.assignee.last_name} ${c.assignee.first_name}`}
+                      </div>
+                    )}
                     <div
                       className="flex items-center px-2"
                       style={{
@@ -97,11 +107,6 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
                     >
                       {t(c.status)}
                     </div>
-                    {c.assignee && (
-                      <div className={styles.subtitle}>
-                        {`${t("assignee")}: ${c.assignee.last_name} ${c.assignee.first_name}`}
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
