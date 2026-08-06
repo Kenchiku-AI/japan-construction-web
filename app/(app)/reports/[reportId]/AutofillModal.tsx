@@ -90,7 +90,7 @@ const AutofillModal: FC<AutofillModalProps> = ({
       </div>
       <div className="grid lg:grid-col-2 gap-2">
         <Button
-          label={t("submit")}
+          label={t("autofill")}
           onClick={() => {
             const request = {
               conversations: selectedConversations.map(c => ({
