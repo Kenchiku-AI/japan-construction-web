@@ -88,14 +88,16 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
   const unchanged = useMemo(() => {
     return name === conversationItem?.name &&
       description === conversationItem?.description &&
-      status === conversationItem?.status;
+      status === conversationItem?.status &&
+      assigneeId == conversationItem?.assignee?.id
   }, [
     name,
     conversationItem?.name,
     description,
     conversationItem?.description,
     status,
-    conversationItem?.status
+    conversationItem?.status,
+    assigneeId
   ]);
 
   return (
@@ -181,7 +183,7 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
       )
       }
       <Divider />
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-3">
         <Select
           options={statusOptions}
           value={status}
