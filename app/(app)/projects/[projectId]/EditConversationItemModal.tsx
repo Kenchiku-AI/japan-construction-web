@@ -3,7 +3,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
-import { ConversationItemStatus, ConversationItem, UpdateConversationItemRequest } from "@/types";
+import { ConversationItemStatus, ConversationItem, UpdateConversationItemRequest, User, Assignee } from "@/types";
 import Divider from "@/app/ui/Divider";
 import { Check, Close, Edit, Trash } from "@/app/ui/Icons";
 import styles from "./page.module.css";
@@ -16,6 +16,7 @@ interface EditConversationItemModalProps {
   isOpen: boolean;
   title: string;
   conversationItem?: ConversationItem;
+  assignees: Assignee[];
   onClose: () => void;
   onSubmit: (request: UpdateConversationItemRequest) => void;
   onDelete: (conversationItem: ConversationItem) => void;
@@ -25,6 +26,7 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
   isOpen,
   title,
   conversationItem,
+  assignees,
   onClose,
   onSubmit,
   onDelete,
@@ -36,6 +38,7 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
   const [lineMessage, setLineMessage] = useState(conversationItem?.source_message_text ?? "");
   const [lineMessageTimestamp, setLineMessageTimestamp] = useState(conversationItem?.line_timestamp ?? "");
   const [status, setStatus] = useState<ConversationItemStatus>(conversationItem?.status ?? ConversationItemStatus.New);
+  const [assigneeId, setAssigneeId] = useState(conversationItem?.assignee?.id ?? "");
   const { t } = useTranslation();
   const { formatDateAndTime } = useDate();
 
@@ -48,6 +51,7 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
       setStatus(ConversationItemStatus.New);
       setLineMessage("");
       setLineMessageTimestamp("");
+      setAssigneeId("");
     }, 500);
   };
 
@@ -58,6 +62,7 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
       setStatus(conversationItem.status);
       setLineMessage(conversationItem.source_message_text ?? "");
       setLineMessageTimestamp(conversationItem.line_timestamp ?? "");
+      setAssigneeId(conversationItem.assignee?.id ?? "");
     }
   }, [isOpen]);
 
@@ -69,6 +74,13 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
       value: v
     }));
   }, [t]);
+
+  const assigneeOptions = useMemo(() => {
+    return (assignees ?? []).map((a) => ({
+      label: `${a.last_name} {a.first_name}`,
+      value: a.id
+    }));
+  }, [assignees]);
 
   const unchanged = useMemo(() => {
     return name === conversationItem?.name &&
@@ -170,6 +182,12 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
         options={statusOptions}
         value={status}
         placeholder={t("status")}
+        onChange={(s) => setStatus(s as any)}
+      />
+      <Select
+        options={assigneeOptions}
+        value={assigneeId}
+        placeholder={t("assignee")}
         onChange={(s) => setStatus(s as any)}
       />
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">

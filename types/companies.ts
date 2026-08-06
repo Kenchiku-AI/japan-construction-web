@@ -84,6 +84,12 @@ export type CompanyGuestProject = {
   guest_link_id: string;
 };
 
+export type Assignee = {
+  id: string;
+  first_name: string;
+  last_name: string;
+}
+
 export type InviteProjectGuestRequest = {
   project_id: string;
   email: string;

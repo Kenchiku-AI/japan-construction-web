@@ -43,6 +43,7 @@ import {
   ProjectConversationItems,
   AutofillRequest,
   AutofillResponse,
+  CompanyUser,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -456,6 +457,10 @@ export const useApiData = () => {
     async getGuests(companyId: string) {
       const url = `/companies/${companyId}/guests`;
       return call(() => http.get<CompanyGuest[]>(url));
+    },
+    async getUsers(companyId: string) {
+      const url = `/companies/${companyId}/users`;
+      return call(() => http.get<CompanyUser[]>(url));
     },
     async acceptInvitation(request: AcceptInvitationRequest) {
       const url = "/invitations/accept";

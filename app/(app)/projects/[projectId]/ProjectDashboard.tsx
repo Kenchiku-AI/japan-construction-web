@@ -46,6 +46,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     projectGuests,
     nonProjectGuests,
     getCompanyGuests,
+    companyUsers,
+    getCompanyUsers,
     inviteGuest,
     removeGuest,
     createConversation,
@@ -90,6 +92,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     getReportTemplates(companyId);
 
     getCompanyGuests(project.company_id);
+    getCompanyUsers(project.company_id);
   }, [project, currentUser]);
 
   const isEditable = useMemo(() => {
@@ -405,6 +408,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
       />
       <CreateConversationItemModal
         isOpen={!!showCreateConversationItem}
+        assignees={[...companyUsers, ...projectGuests]}
         title={showCreateConversationItem?.name ?? t("create")}
         onClose={() => {
           setShowCreateConversationItem(undefined);

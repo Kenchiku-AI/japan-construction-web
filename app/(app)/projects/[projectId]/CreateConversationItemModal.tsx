@@ -4,10 +4,12 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Modal from "@/app/ui/Modal";
+import { Assignee } from "@/types";
 
 interface CreateConversationItemModalProps {
   isOpen: boolean;
   title: string;
+  assignees: Assignee[];
   onClose: () => void;
   onCreate: (name: string, description: string) => void;
 }
@@ -15,6 +17,7 @@ interface CreateConversationItemModalProps {
 const CreateConversationItemModal: FC<CreateConversationItemModalProps> = ({
   isOpen,
   title,
+  assignees,
   onClose,
   onCreate,
 }) => {

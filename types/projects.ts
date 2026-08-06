@@ -63,6 +63,12 @@ export type UpdateConversationRequest = {
   item_type_ids: string[];
 }
 
+export type ConversationItemAssignee = {
+  id: string;
+  first_name: string;
+  last_name: string;
+}
+
 export type ConversationItem = {
   id: string;
   name: string;
@@ -70,6 +76,7 @@ export type ConversationItem = {
   source_message_text?: string;
   line_timestamp?: string;
   status: ConversationItemStatus;
+  assignee?: ConversationItemAssignee;
   created_at: string;
   updated_at: string;
 }

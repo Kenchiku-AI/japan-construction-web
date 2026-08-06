@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
   CompanyGuest,
+  CompanyUser,
   Conversation,
   CreateConversationItemRequest,
   CreateConversationRequest,
@@ -25,6 +26,7 @@ export const useProject = (projectId: string) => {
   const [project, setProject] = useState<Project>();
   const [projectGuests, setProjectGuests] = useState<CompanyGuest[]>([]);
   const [nonProjectGuests, setNonProjectGuests] = useState<CompanyGuest[]>([]);
+  const [companyUsers, setCompanyUsers] = useState<CompanyUser[]>([]);
   const router = useRouter();
   const { t } = useTranslation();
   const { showModal } = useModal();
@@ -83,6 +85,19 @@ export const useProject = (projectId: string) => {
 
         setProjectGuests(newProjectGuests);
         setNonProjectGuests(newNonProjectGuests);
+      } catch (err) { }
+    },
+    [projectId],
+  );
+
+  const getCompanyUsers = useCallback(
+    async (companyId: string) => {
+      try {
+        const response = await api.getUsers(companyId);
+
+        if (response) {
+          setCompanyUsers(response);
+        }
       } catch (err) { }
     },
     [projectId],
@@ -377,6 +392,8 @@ export const useProject = (projectId: string) => {
     getCompanyGuests,
     inviteGuest,
     removeGuest,
+    companyUsers,
+    getCompanyUsers,
     createConversation,
     updateConversation,
     deleteConversation,
