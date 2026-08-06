@@ -85,9 +85,9 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
                       <div className={styles.subtitle}>{truncateText(c.description, 100)}</div>
                     </div>
                   </div>
-                  <div>
+                  <div className="hidden md:block flex flex-col gap-3">
                     <div
-                      className="flex items-center px-2 hidden md:block"
+                      className="flex items-center px-2"
                       style={{
                         fontSize: 12,
                         padding: "5px 10px",
