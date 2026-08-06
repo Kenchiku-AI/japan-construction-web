@@ -86,12 +86,14 @@ export type CreateConversationItemRequest = {
   conversation_item_type_id: string;
   name: string;
   description: string;
+  assignee_id?: string | null;
 }
 
 export type UpdateConversationItemRequest = {
   name: string;
   description: string;
   status: ConversationItemStatus;
+  assignee_id?: string | null;
 }
 
 export enum ConversationItemStatus {

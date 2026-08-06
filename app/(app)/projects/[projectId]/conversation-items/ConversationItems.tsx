@@ -3,7 +3,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
-import { ConversationItem, UserRole } from "@/types";
+import { ConversationItem, CreateConversationItemRequest, UserRole } from "@/types";
 import { Loader } from "@/app/ui/Loader";
 import ConversationItemsList from "../ConversationItemsList";
 import CreateConversationItemModal from "../CreateConversationItemModal";
@@ -32,7 +32,11 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
     getConversationItems,
     createConversationItem,
     updateConversationItem,
-    deleteConversationItem
+    deleteConversationItem,
+    companyUsers,
+    getCompanyUsers,
+    projectGuests,
+    getCompanyGuests
   } = useProject(projectId);
   const [title, setTitle] = useState("");
   const [conversationItems, setConversationItems] = useState<ConversationItem[]>([]);
@@ -57,6 +61,13 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
   useEffect(() => {
     refresh();
   }, [conversationItemTypeId, router, refresh]);
+
+  useEffect(() => {
+    if (project?.company_id) {
+      getCompanyUsers(project.company_id);
+      getCompanyGuests(project.company_id);
+    }
+  }, [project?.company_id]);
 
   const topLabel = useMemo(() => {
     return project?.name ?? "";
@@ -100,17 +111,24 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
       <CreateConversationItemModal
         isOpen={!!showCreateConversationItem}
         title={t("create")}
+        assignees={[...companyUsers, ...projectGuests]}
         onClose={() => {
           setShowCreateConversationItem(false);
         }}
-        onCreate={async (name, description) => {
+        onCreate={async (name, description, assigneeId) => {
           if (conversationItemTypeId) {
-            await createConversationItem({
+            const request: CreateConversationItemRequest = {
               project_id: projectId,
               conversation_item_type_id: conversationItemTypeId,
               name,
               description
-            });
+            };
+
+            if (assigneeId) {
+              request.assignee_id = assigneeId;
+            }
+
+            await createConversationItem(request);
             refresh();
           }
 
@@ -120,6 +138,7 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
       <EditConversationItemModal
         isOpen={!!editConversationItem}
         title={t('edit')}
+        assignees={[...companyUsers, ...projectGuests]}
         conversationItem={editConversationItem}
         onClose={() => {
           setEditConversationItem(undefined);

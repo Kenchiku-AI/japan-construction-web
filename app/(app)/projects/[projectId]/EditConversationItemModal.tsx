@@ -76,10 +76,13 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
   }, [t]);
 
   const assigneeOptions = useMemo(() => {
-    return (assignees ?? []).map((a) => ({
-      label: `${a.last_name} {a.first_name}`,
-      value: a.id
-    }));
+    return [
+      { label: t("none"), value: "none" },
+      ...(assignees ?? []).map((a) => ({
+        label: `${a.last_name} ${a.first_name}`,
+        value: a.id
+      }))
+    ];
   }, [assignees]);
 
   const unchanged = useMemo(() => {
@@ -188,7 +191,7 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
         options={assigneeOptions}
         value={assigneeId}
         placeholder={t("assignee")}
-        onChange={(s) => setStatus(s as any)}
+        onChange={(s) => setAssigneeId(s as any)}
       />
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
         <Button
@@ -196,11 +199,17 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
           iconLeft={() => <Check color="white" />}
           label={t("update")}
           onClick={() => {
-            onSubmit({
+            const request: UpdateConversationItemRequest = {
               name,
               description,
               status
-            });
+            };
+
+            if (assigneeId === "none") {
+              request.assignee_id = null;
+            }
+
+            onSubmit(request);
 
             closeAndReset();
           }}

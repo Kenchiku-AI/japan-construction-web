@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { CompanyGuest, UserRole, Conversation, ConversationItem } from "@/types";
+import { CompanyGuest, UserRole, Conversation, ConversationItem, CreateConversationItemRequest } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Check, Close, Edit, Plus } from "@/app/ui/Icons";
@@ -413,14 +413,20 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         onClose={() => {
           setShowCreateConversationItem(undefined);
         }}
-        onCreate={(name, description) => {
+        onCreate={(name, description, assigneeId) => {
           if (showCreateConversationItem) {
-            createConversationItem({
+            const request: CreateConversationItemRequest = {
               project_id: projectId,
               conversation_item_type_id: showCreateConversationItem.id,
               name,
-              description
-            });
+              description,
+            };
+
+            if (assigneeId) {
+              request.assignee_id = assigneeId;
+            }
+
+            createConversationItem(request);
           }
 
           setShowCreateConversationItem(undefined);
@@ -501,6 +507,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         isOpen={!!editConversationItem}
         title={editConversationItem?.typeName ?? t('edit')}
         conversationItem={editConversationItem?.item}
+        assignees={[...companyUsers, ...projectGuests]}
         onClose={() => {
           setEditConversationItem(undefined);
         }}
