@@ -82,24 +82,26 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
                     </div>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ color: fontColor1 }}>{c.name}</div>
-                      {c.assignee && (
-                        <div style={{ color: fontColor3 }}>
-                          {`${t("assignee")}: ${c.assignee.last_name} ${c.assignee.first_name}`}
-                        </div>
-                      )}
                       <div className={styles.subtitle}>{truncateText(c.description, 100)}</div>
                     </div>
                   </div>
-                  <div
-                    className="flex items-center px-2 hidden md:block"
-                    style={{
-                      fontSize: 12,
-                      padding: "5px 10px",
-                      borderRadius: 18,
-                      ...getStatusColors(c.status)
-                    }}
-                  >
-                    {t(c.status)}
+                  <div>
+                    <div
+                      className="flex items-center px-2 hidden md:block"
+                      style={{
+                        fontSize: 12,
+                        padding: "5px 10px",
+                        borderRadius: 18,
+                        ...getStatusColors(c.status)
+                      }}
+                    >
+                      {t(c.status)}
+                    </div>
+                    {c.assignee && (
+                      <div className={styles.subtitle}>
+                        {`${t("assignee")}: ${c.assignee.last_name} ${c.assignee.first_name}`}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
