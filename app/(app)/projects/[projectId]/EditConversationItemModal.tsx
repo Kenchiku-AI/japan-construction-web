@@ -181,18 +181,20 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
       )
       }
       <Divider />
-      <Select
-        options={statusOptions}
-        value={status}
-        placeholder={t("status")}
-        onChange={(s) => setStatus(s as any)}
-      />
-      <Select
-        options={assigneeOptions}
-        value={assigneeId}
-        placeholder={t("assignee")}
-        onChange={(s) => setAssigneeId(s as any)}
-      />
+      <div className="flex gap-2">
+        <Select
+          options={statusOptions}
+          value={status}
+          placeholder={t("status")}
+          onChange={(s) => setStatus(s as any)}
+        />
+        <Select
+          options={assigneeOptions}
+          value={assigneeId}
+          placeholder={t("assignee")}
+          onChange={(s) => setAssigneeId(s as any)}
+        />
+      </div>
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
         <Button
           disabled={!conversationItem || !name || !description || !status || unchanged}
