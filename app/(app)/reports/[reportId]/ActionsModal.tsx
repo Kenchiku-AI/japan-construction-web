@@ -31,8 +31,7 @@ const ActionsModal: FC<ActionsModalProps> = ({
   const { t } = useTranslation();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t("actions")} >
-      <Divider style={{ background: fontColor2 }} />
+    <Modal isOpen={isOpen} onClose={onClose} >
       {isReportOpen && (
         <>
           <div
