@@ -211,6 +211,8 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
 
             if (assigneeId === "none") {
               request.assignee_id = null;
+            } else if (assigneeId) {
+              request.assignee_id = assigneeId;
             }
 
             onSubmit(request);
