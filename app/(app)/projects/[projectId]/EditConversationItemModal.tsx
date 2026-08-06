@@ -181,7 +181,7 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
       )
       }
       <Divider />
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <Select
           options={statusOptions}
           value={status}

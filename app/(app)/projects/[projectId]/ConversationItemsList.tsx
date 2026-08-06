@@ -4,7 +4,7 @@ import { ConversationItem } from "@/types";
 import styles from "./page.module.css";
 import { AnnotationCheck } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { bgColor5, doneColor1, doneColor2, errorColor1, errorColor2, fontColor1, inProgressColor1, inProgressColor2, } from "@/lib/constants";
+import { bgColor5, doneColor1, doneColor2, errorColor1, errorColor2, fontColor1, fontColor3, inProgressColor1, inProgressColor2, } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 
 interface ConversationItemsListProps {
@@ -82,6 +82,11 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
                     </div>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ color: fontColor1 }}>{c.name}</div>
+                      {c.assignee && (
+                        <div style={{ color: fontColor3 }}>
+                          {`${t("assignee")}: ${c.assignee.last_name} ${c.assignee.first_name}`}
+                        </div>
+                      )}
                       <div className={styles.subtitle}>{truncateText(c.description, 100)}</div>
                     </div>
                   </div>
