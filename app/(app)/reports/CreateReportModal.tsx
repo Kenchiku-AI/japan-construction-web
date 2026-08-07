@@ -33,12 +33,18 @@ const CreateReportModal: FC<CreateReportModalProps> = ({
   const hasEditedName = useRef(false);
   const { t } = useTranslation();
 
+  const toFullWidth = (num: number) =>
+    String(num).replace(/\d/g, (d) => String.fromCharCode(d.charCodeAt(0) + 0xfee0));
+
   useEffect(() => {
     const template = templates.find((t) => t.id === templateId);
     if (!template) return;
 
     if (!name || !hasEditedName.current) {
-      setName(template.name);
+      const now = new Date();
+      const date = `${toFullWidth(now.getMonth() + 1)}月${toFullWidth(now.getDate())}日`;
+
+      setName(`${template.name} ${date}`);
       hasEditedName.current = false;
     }
   }, [templateId, templates]);
