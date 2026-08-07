@@ -434,19 +434,21 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
                     }}
                     iconOnlyMobile
                   />
-                  <Button
-                    variant="tertiary"
-                    label={selectedTag?.name ?? t("filter_by_tag")}
-                    iconLeft={() => <Tag color={buttonColor} size={30} />}
-                    onClick={() => {
-                      setIsFilterByTagModalShown(true);
-                    }}
-                    style={{ height: "auto" }}
-                    textStyle={{
-                      fontWeight: "300",
-                    }}
-                    iconOnlyMobile
-                  />
+                  {!!tags?.length && (
+                    <Button
+                      variant="tertiary"
+                      label={selectedTag?.name ?? t("filter_by_tag")}
+                      iconLeft={() => <Tag color={buttonColor} size={30} />}
+                      onClick={() => {
+                        setIsFilterByTagModalShown(true);
+                      }}
+                      style={{ height: "auto" }}
+                      textStyle={{
+                        fontWeight: "300",
+                      }}
+                      iconOnlyMobile
+                    />
+                  )}
                 </div>
                 <Divider />
                 {filteredImages.length === 0 && (
