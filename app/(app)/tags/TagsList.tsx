@@ -44,7 +44,7 @@ const TagsList: FC<TagsListProps> = ({
             <div className="md:mx-3">
               <div className="flex items-center justify-between">
                 <div
-                  style={{ height: 60, minWidth: 0 }}
+                  style={{ minHeight: 60, minWidth: 0 }}
                   className="flex items-center gap-3"
                 >
                   <div className="hidden md:block">
