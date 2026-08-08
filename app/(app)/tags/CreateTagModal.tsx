@@ -36,6 +36,7 @@ const CreateTagModal: FC<CreateTagModalProps> = ({
       }}
       title={t("create_tag")}
       subtitle={t("create_tag_description")}
+      width={640}
     >
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("name")} onChange={setName} />

@@ -46,7 +46,7 @@ const ProjectsPage = () => {
           />
         )}
       </div>
-      <div className={cardClass}>
+      <div className={loaded ? cardClass : ""}>
         {loaded && projects?.length === 0 && (
           <div className={styles.empty}>{t("empty_projects_description")}</div>
         )}

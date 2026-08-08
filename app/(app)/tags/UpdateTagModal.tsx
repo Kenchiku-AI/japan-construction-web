@@ -46,6 +46,7 @@ const UpdateTagModal: FC<UpdateTagModalProps> = ({
       }}
       title={t("update_tag")}
       subtitle={t("update_tag_description")}
+      width={640}
     >
       <div className="my-8 flex flex-col gap-3">
         <Input value={name} placeholder={t("name")} onChange={setName} />
