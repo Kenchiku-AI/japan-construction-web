@@ -42,7 +42,7 @@ const TagsList: FC<TagsListProps> = ({
           <div key={t.id}>
             {i > 0 && <Divider />}
             <div className="md:mx-3">
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center justify-between gap-5">
                 <div
                   style={{ minHeight: 60, minWidth: 0 }}
                   className="flex items-center gap-3"
@@ -55,7 +55,7 @@ const TagsList: FC<TagsListProps> = ({
                     <div className={styles.subtitle}>{t.description}</div>
                   </div>
                 </div>
-                <div className="flex gap-3 md:gap-5 items-center">
+                <div className="flex gap-3 items-center">
                   {onEdit && (
                     <div
                       className="cursor-pointer pb-1"
