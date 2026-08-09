@@ -31,6 +31,7 @@ export type UpdateCompanyRequest = {
   corporate_number?: string;
   line_channel_secret?: string;
   line_channel_access_token?: string;
+  line_channel_access_token_invalid: boolean;
   billing_plan_id?: string | null;
 };
 
