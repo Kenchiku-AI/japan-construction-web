@@ -147,6 +147,26 @@ export const useCompany = (companyId: string) => {
     [company, companyId],
   );
 
+  const updatePaidFeaturesDisabled = useCallback(
+    async (paid_features_force_disabled: boolean) => {
+      setLoading(true);
+
+      try {
+        const response = await api.updateCompany(companyId, { paid_features_force_disabled });
+
+        if (company && response) {
+          setCompany({
+            ...company,
+            paid_features_force_disabled: response.paid_features_force_disabled,
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [company, companyId],
+  );
+
   const createProject = useCallback(
     async (name: string, description?: string) => {
       if (!company) return;
@@ -222,6 +242,7 @@ export const useCompany = (companyId: string) => {
     updateLineChannelSecret,
     updateLineChannelAccessToken,
     updateBillingPlan,
+    updatePaidFeaturesDisabled,
     templates,
     createTemplate,
     removeUser,

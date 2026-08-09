@@ -8,7 +8,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { Company, ImageTag, UserRole } from "@/types";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
-import { Alert, CreditCard, CreditCardPlus, Edit, LineLogo, Plus } from "@/app/ui/Icons";
+import { Alert, Close, CreditCard, CreditCardPlus, Edit, LineLogo, Plus } from "@/app/ui/Icons";
 import InviteUserModal from "./InviteUserModal";
 import CompanyUsersList from "./CompanyUsersList";
 import CreateProjectModal from "./CreateProjectModal";
@@ -24,7 +24,7 @@ import CreateReportTemplateModal from "../../reports/templates/CreateReportTempl
 import ReportTemplatesList from "../../reports/templates/ReportTemplatesList";
 import RemoveUserModal from "./RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
-import { buttonColor, cardClass, errorColor1, fontColor1, fontColor3 } from "@/lib/constants";
+import { buttonColor, cardClass, errorColor1, fontColor1, fontColor2, fontColor3 } from "@/lib/constants";
 import AddPaymentMethodModal from "../../projects/AddPaymentMethodModal";
 import { useBillingPlans } from "../../billing-plans/useBillingPlans";
 import Select from "@/app/ui/Select/Select";
@@ -45,6 +45,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     createProject,
     updateName,
     updateBillingPlan,
+    updatePaidFeaturesDisabled,
     templates,
     createTemplate,
     removeUser,
@@ -137,6 +138,25 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           <div className="flex flex-col">
             {isAdminOrManager && (
               <div className={cardClass}>
+                {!!company.paid_features_force_disabled && isAdmin && (
+                  <>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <Close color={fontColor2} />
+                        <div style={{ color: fontColor2 }}>
+                          {t("paid_features_force_disabled")}
+                        </div>
+                      </div>
+                      <Button
+                        label={t("enable")}
+                        onClick={() => {
+                          updatePaidFeaturesDisabled(false);
+                        }}
+                      />
+                    </div>
+                    <Divider />
+                  </>
+                )}
                 {billingPlans && isAdmin && (
                   <>
                     <Select

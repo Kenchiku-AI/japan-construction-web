@@ -32,6 +32,7 @@ export type UpdateCompanyRequest = {
   line_channel_secret?: string;
   line_channel_access_token?: string;
   billing_plan_id?: string | null;
+  paid_features_force_disabled?: boolean;
 };
 
 export type UpdateCompanyResponse = {
@@ -41,6 +42,7 @@ export type UpdateCompanyResponse = {
   line_channel_access_token_last5?: string;
   line_channel_access_token_invalid: boolean;
   billing_plan_id?: string;
+  paid_features_force_disabled: boolean;
 };
 
 export type SetupIntentResponse = {
