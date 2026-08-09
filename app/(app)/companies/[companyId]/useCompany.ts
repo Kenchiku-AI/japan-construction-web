@@ -109,6 +109,7 @@ export const useCompany = (companyId: string) => {
           setCompany({
             ...company,
             line_channel_access_token_last5: response.line_channel_access_token_last5,
+            line_channel_access_token_invalid: response.line_channel_access_token_invalid
           });
         }
       } catch (err) {
