@@ -232,7 +232,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                         label={t("disable_paid_features")}
                         iconLeft={() => <Close color={errorColor1} />}
                         onClick={() => {
-                          updatePaidFeaturesDisabled(false);
+                          updatePaidFeaturesDisabled(true);
                         }}
                         style={{ height: 40 }}
                         textStyle={{ color: errorColor1 }}
