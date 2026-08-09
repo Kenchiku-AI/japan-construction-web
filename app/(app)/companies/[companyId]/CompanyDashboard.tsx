@@ -148,6 +148,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                         </div>
                       </div>
                       <Button
+                        variant="tertiary"
                         label={t("enable")}
                         onClick={() => {
                           updatePaidFeaturesDisabled(false);
