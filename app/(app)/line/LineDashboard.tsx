@@ -151,7 +151,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
                   }}
                 />
               </div>
-              {company.line_channel_access_token_invalid && (
+              {!!company.line_channel_access_token_invalid && (
                 <div className="md:px-4" style={{ fontSize: 14, color: errorColor1 }}>
                   {t("channel_access_token_invalid_description")}
                 </div>
