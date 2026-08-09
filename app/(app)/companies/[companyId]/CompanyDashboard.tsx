@@ -198,10 +198,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                       />
                     </div>
                   )}
-                  <MobileDivider />
-                  <div className="flex items-center" style={{ color: fontColor3, height: 40 }}>
-                    <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
-                  </div>
+                  {(!isAdmin || !selectedBillingPlan) && (
+                    <>
+                      <MobileDivider />
+                      <div className="flex items-center" style={{ color: fontColor3, height: 40 }}>
+                        <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
+                      </div>
+                    </>
+                  )}
                 </div>
                 {!company.line_channel_secret_last4 && (
                   <>
@@ -219,7 +223,23 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     </div>
                   </>
                 )}
-                {/* <Divider style={{ background: fontColor2 }} /> */}
+                {!company.paid_features_force_disabled && isAdmin && (
+                  <>
+                    <Divider />
+                    <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                      <Button
+                        variant="tertiary"
+                        label={t("disable_paid_features")}
+                        iconLeft={() => <Close color={errorColor1} />}
+                        onClick={() => {
+                          updatePaidFeaturesDisabled(false);
+                        }}
+                        style={{ height: 40 }}
+                        textStyle={{ color: errorColor1 }}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             )}
             <div>

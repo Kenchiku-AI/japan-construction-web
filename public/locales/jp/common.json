@@ -100,6 +100,7 @@
   "disable": "無効化",
   "disable_billing": "月額請求を停止",
   "disable_billing_description": "この会社の現場ごとの月額請求を停止してもよろしいですか？",
+  "disable_paid_features": "有料機能を無効にする",
   "discard_changes": "変更を破棄",
   "download": "ダウンロード",
   "download_all": "すべてダウンロード",
