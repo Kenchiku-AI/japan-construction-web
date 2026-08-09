@@ -171,7 +171,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     <Divider />
                   </>
                 )}
-                <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                <div className="flex flex-col md:flex-row w-full justify-between py-1 gap-3 md:px-3">
                   {!company.payment_method_name ? (
                     <Button
                       variant="tertiary"
