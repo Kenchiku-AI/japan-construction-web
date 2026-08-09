@@ -138,9 +138,9 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
               )}
             </div>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               <div className="flex items-center gap-3 md:px-4">
-                <div style={{ color: company.line_channel_access_token_invalid ? errorColor1 : undefined }}>
+                <div>
                   {`${t("channel_access_token")}: ••••${company.line_channel_access_token_last5}`}
                 </div>
                 <Button
@@ -152,7 +152,7 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
                 />
               </div>
               {company.line_channel_access_token_invalid && (
-                <div style={{ fontSize: 14 }}>
+                <div className="md:px-4" style={{ fontSize: 14, color: errorColor1 }}>
                   {t("channel_access_token_invalid_description")}
                 </div>
               )}
