@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useCompany } from "../companies/[companyId]/useCompany";
-import { buttonColor, cardClass, fontColor3 } from "@/lib/constants";
+import { buttonColor, cardClass, errorColor1, fontColor3 } from "@/lib/constants";
 import { AnnotationCheck, Edit, Hardhat, Info, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { Button } from "@/app/ui/Button/Button";
@@ -138,18 +138,25 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
               )}
             </div>
           ) : (
-            <div className="flex items-center gap-3 md:px-4">
-              <div>
-                {`${t("channel_access_token")}: ••••${company.line_channel_access_token_last5}`}
+            <>
+              <div className="flex items-center gap-3 md:px-4">
+                <div style={{ color: company.line_channel_access_token_invalid ? errorColor1 : undefined }}>
+                  {`${t("channel_access_token")}: ••••${company.line_channel_access_token_last5}`}
+                </div>
+                <Button
+                  variant="tertiary"
+                  iconLeft={() => <Edit />}
+                  onClick={() => {
+                    setShowChannelAccessToken(true);
+                  }}
+                />
               </div>
-              <Button
-                variant="tertiary"
-                iconLeft={() => <Edit />}
-                onClick={() => {
-                  setShowChannelAccessToken(true);
-                }}
-              />
-            </div>
+              {company.line_channel_access_token_invalid && (
+                <div>
+                  {t("channel_access_token_invalid_description")}
+                </div>
+              )}
+            </>
           )}
         </div>
         <Divider />

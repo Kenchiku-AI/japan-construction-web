@@ -158,4 +158,5 @@ export type AutofillRequest = {
 
 export type AutofillResponse = {
   field_values: ReportFieldValues;
+  image_sync_failed: boolean;
 };

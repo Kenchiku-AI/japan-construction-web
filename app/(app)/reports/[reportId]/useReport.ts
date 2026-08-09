@@ -177,7 +177,15 @@ export const useReport = (reportId: string) => {
 
       try {
         response = await api.autofillReport(reportId, request);
-        getImages(reportId);
+
+        if (response.image_sync_failed) {
+          showModal({
+            title: t("line_image_error"),
+            subtitle: t("line_image_error_description"),
+          });
+        } else {
+          getImages(reportId);
+        }
       } catch (err) {
         showModal({
           title: t("error"),

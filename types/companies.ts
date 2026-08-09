@@ -7,7 +7,9 @@ export type Company = {
   payment_method_name?: string;
   line_channel_secret_last4?: string;
   line_channel_access_token_last5?: string;
+  line_channel_access_token_invalid: boolean;
   is_payment_method_valid: boolean;
+  paid_features_force_disabled: boolean;
   free_trial_days_left?: number;
   billing_plan_id?: string;
   users: CompanyUser[];

@@ -17,7 +17,8 @@ export const useBilling = () => {
   const handleBillingReason = (reason: string) => {
     const reasons = [
       "payment_method_required",
-      "subscription_past_due"
+      "subscription_past_due",
+      "paid_features_force_disabled"
     ];
 
     if (reasons.includes(reason)) {
