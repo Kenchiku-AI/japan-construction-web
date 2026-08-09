@@ -199,14 +199,10 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                       />
                     </div>
                   )}
-                  {(!isAdmin || !selectedBillingPlan) && (
-                    <>
-                      <MobileDivider />
-                      <div className="flex items-center" style={{ color: fontColor3, height: 40 }}>
-                        <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
-                      </div>
-                    </>
-                  )}
+                  <MobileDivider />
+                  <div className="flex items-center" style={{ color: fontColor3, height: 40 }}>
+                    <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
+                  </div>
                 </div>
                 {!company.line_channel_secret_last4 && (
                   <>
