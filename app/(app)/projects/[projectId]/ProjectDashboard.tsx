@@ -5,10 +5,10 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { CompanyGuest, UserRole, Conversation, ConversationItem, CreateConversationItemRequest } from "@/types";
+import { CompanyGuest, UserRole, Conversation, ConversationItem, CreateConversationItemRequest, ProjectStatus } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Check, Close, Edit, Plus } from "@/app/ui/Icons";
+import { Archive, Check, Close, Edit, Plus } from "@/app/ui/Icons";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
@@ -27,6 +27,7 @@ import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
 import DeleteConversationModal from "./DeleteConversationModal";
 import ConversationCreatedModal from "./ConversationCreatedModal";
 import ConversationItemsList from "./ConversationItemsList";
+import Divider from "@/app/ui/Divider";
 // import DownloadExcelModal from "../../reports/DownloadExcelModal";
 // import { useExport } from "../../reports/useExport";
 
@@ -76,6 +77,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
   const isAdmin = currentUser?.role === UserRole.Admin;
   const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
+  const isArchived = project?.status === ProjectStatus.Archived;
   // const { downloadExcel } = useExport();
   // const [showDownloadExcel, setShowDownloadExcel] = useState(false);
   // const [isExcelDownloading, setIsExcelDownloading] = useState(false);
@@ -127,6 +129,28 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
       {project && (
         <>
           <div className={cardClass}>
+            {isArchived && (
+              <>
+                <div className="flex items-center justify-between gap-3 md:px-3">
+                  <div className="flex items-center gap-1">
+                    <Close color={fontColor2} />
+                    <div style={{ color: fontColor2 }}>
+                      {t("project_archived")}
+                    </div>
+                  </div>
+                  {isAdminOrManager && (
+                    <Button
+                      variant="tertiary"
+                      label={t("unarchive")}
+                      onClick={() => {
+                        updateProject({ status: ProjectStatus.Active })
+                      }}
+                    />
+                  )}
+                </div>
+                <Divider />
+              </>
+            )}
             {showEditDescription ? (
               <div className="flex flex-col">
                 <TextArea
@@ -193,6 +217,22 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   </div>
                 )}
               </div>
+            )}
+            {!isArchived && isAdminOrManager && (
+              <>
+                <Divider />
+                <div className="md:px-3">
+                  <Button
+                    variant="tertiary"
+                    label={t("archive_project")}
+                    iconLeft={() => <Archive />}
+                    onClick={() => {
+                      updateProject({ status: ProjectStatus.Archived })
+                    }}
+                    textStyle={{ color: errorColor1 }}
+                  />
+                </div>
+              </>
             )}
             {/* {currentUser?.role === "admin" && (
                 <>

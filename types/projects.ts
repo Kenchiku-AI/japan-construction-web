@@ -22,6 +22,7 @@ export enum ProjectStatus {
   Active = "active",
   Completed = "completed",
   Requested = "request",
+  Archived = "archived"
 }
 
 export type CreateProjectRequest = {
