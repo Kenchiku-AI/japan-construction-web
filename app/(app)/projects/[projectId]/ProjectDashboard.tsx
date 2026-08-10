@@ -592,7 +592,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         }}
       />
       <UnarchiveProjectModal
-        isOpen={showArchiveProjectModal}
+        isOpen={showUnarchiveProjectModal}
         onClose={() => {
           setShowUnarchiveProjectModal(false);
         }}
