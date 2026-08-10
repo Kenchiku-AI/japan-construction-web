@@ -28,6 +28,8 @@ import DeleteConversationModal from "./DeleteConversationModal";
 import ConversationCreatedModal from "./ConversationCreatedModal";
 import ConversationItemsList from "./ConversationItemsList";
 import Divider from "@/app/ui/Divider";
+import UnarchiveProjectModal from "./UnarchiveProjectModal";
+import ArchiveProjectModal from "./ArchiveProjectModal";
 // import DownloadExcelModal from "../../reports/DownloadExcelModal";
 // import { useExport } from "../../reports/useExport";
 
@@ -74,6 +76,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [editConversationItem, setEditConversationItem] = useState<{ item: ConversationItem, typeName: string }>();
   const [conversationItemToDelete, setConversationItemToDelete] = useState<ConversationItem>();
   const [showLoader, setShowLoader] = useState(false);
+  const [showArchiveProjectModal, setShowArchiveProjectModal] = useState(false);
+  const [showUnarchiveProjectModal, setShowUnarchiveProjectModal] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
   const isAdmin = currentUser?.role === UserRole.Admin;
   const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
@@ -143,7 +147,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                       variant="tertiary"
                       label={t("unarchive")}
                       onClick={() => {
-                        updateProject({ status: ProjectStatus.Active })
+                        setShowUnarchiveProjectModal(true);
                       }}
                     />
                   )}
@@ -217,22 +221,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   </div>
                 )}
               </div>
-            )}
-            {!isArchived && isAdminOrManager && (
-              <>
-                <Divider />
-                <div className="md:px-3">
-                  <Button
-                    variant="tertiary"
-                    label={t("archive_project")}
-                    iconLeft={() => <Archive />}
-                    onClick={() => {
-                      updateProject({ status: ProjectStatus.Archived })
-                    }}
-                    textStyle={{ color: errorColor1 }}
-                  />
-                </div>
-              </>
             )}
             {/* {currentUser?.role === "admin" && (
                 <>
@@ -392,6 +380,19 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             />
           </div>
         </>
+      )}
+      {!isArchived && isAdminOrManager && (
+        <div className="mt-3">
+          <Button
+            variant="tertiary"
+            label={t("archive_project")}
+            iconLeft={() => <Archive />}
+            onClick={() => {
+              setShowArchiveProjectModal(true);
+            }}
+            textStyle={{ color: errorColor1 }}
+          />
+        </div>
       )}
       <CreateReportModal
         templates={reportTemplates ?? []}
@@ -578,6 +579,26 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           }
 
           setConversationItemToDelete(undefined);
+        }}
+      />
+      <ArchiveProjectModal
+        isOpen={showArchiveProjectModal}
+        onClose={() => {
+          setShowArchiveProjectModal(false);
+        }}
+        onArchive={() => {
+          updateProject({ status: ProjectStatus.Archived });
+          setShowArchiveProjectModal(false);
+        }}
+      />
+      <UnarchiveProjectModal
+        isOpen={showArchiveProjectModal}
+        onClose={() => {
+          setShowUnarchiveProjectModal(false);
+        }}
+        onUnarchive={() => {
+          updateProject({ status: ProjectStatus.Active });
+          setShowUnarchiveProjectModal(false);
         }}
       />
       {showLoader && <Loader />}
