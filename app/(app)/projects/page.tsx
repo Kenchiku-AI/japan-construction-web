@@ -6,7 +6,7 @@ import { useProjects } from "./useProjects";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Hardhat, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { cardClass, } from "@/lib/constants";
+import { buttonColor, cardClass, } from "@/lib/constants";
 import { FC, useMemo, useState } from "react";
 import { Project, ProjectStatus, UserRole } from "@/types";
 import styles from "./page.module.css";
@@ -104,7 +104,7 @@ const ProjectsPage = () => {
             variant="tertiary"
             label={showArchived ? t("hide_archived") : t("show_archived")}
             iconLeft={() => {
-              return showArchived ? <EyeOff /> : <Eye />
+              return showArchived ? <EyeOff color={buttonColor} /> : <Eye color={buttonColor} />
             }}
             onClick={() => {
               setShowArchived((prev) => !prev);
