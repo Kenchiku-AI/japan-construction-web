@@ -209,7 +209,7 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     currentUser.role !== UserRole.Admin &&
     currentUser.company.id !== report.company_id;
 
-  const hasTopRow = report?.status === ReportStatus.Closed || !!conversations?.length;
+  const hasTopRow = report?.status === ReportStatus.Closed || (isReportEditable && !!conversations?.length);
 
   const ImageList = useMemo(
     () => (
