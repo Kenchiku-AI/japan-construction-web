@@ -4,12 +4,13 @@ import { ConversationItem } from "@/types";
 import styles from "./page.module.css";
 import { AnnotationCheck } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { bgColor5, doneColor1, doneColor2, errorColor1, errorColor2, fontColor1, fontColor3, inProgressColor1, inProgressColor2, } from "@/lib/constants";
+import { doneColor1, doneColor2, errorColor1, errorColor2, fontColor1, fontColor3, inProgressColor1, inProgressColor2, } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 
 interface ConversationItemsListProps {
   conversationItems: ConversationItem[];
   isEmpty: boolean;
+  isDisabled: boolean;
   onClickConversationItem: (conversationItem: ConversationItem) => void;
   onViewAll?: () => void;
 }
@@ -17,6 +18,7 @@ interface ConversationItemsListProps {
 const ConversationItemsList: FC<ConversationItemsListProps> = ({
   conversationItems,
   isEmpty,
+  isDisabled,
   onClickConversationItem,
   onViewAll
 }) => {
@@ -67,9 +69,10 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
             {i > 0 && <Divider />}
             <div
               onClick={() => {
+                if (isDisabled) return;
                 onClickConversationItem(c);
               }}
-              className="hover:opacity-50 cursor-pointer"
+              className={isDisabled ? "" : "hover:opacity-50 cursor-pointer"}
             >
               <div className="md:mx-3">
                 <div className="flex items-center justify-between gap-4">

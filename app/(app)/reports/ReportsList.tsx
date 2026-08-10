@@ -12,6 +12,7 @@ import { useDate } from "@/public/date/useDate";
 interface ReportsListProps {
   reports: Report[];
   isEmpty?: boolean;
+  isDisabled?: boolean;
   needsTemplates?: boolean;
   showCompany?: boolean;
   maxShown?: number;
@@ -22,6 +23,7 @@ interface ReportsListProps {
 const ReportsList: FC<ReportsListProps> = ({
   reports,
   isEmpty,
+  isDisabled,
   needsTemplates,
   showCompany,
   onClickReport,
@@ -51,6 +53,7 @@ const ReportsList: FC<ReportsListProps> = ({
           {i > 0 && <Divider />}
           <ReportsListItem
             report={report}
+            isDisabled={isDisabled}
             showCompany={showCompany}
             onClick={onClickReport}
           />
@@ -74,6 +77,7 @@ const ReportsList: FC<ReportsListProps> = ({
 interface ReportsListItemProps {
   report: Report;
   showCompany?: boolean;
+  isDisabled?: boolean;
   onClick?: (report: Report) => void;
 }
 
@@ -81,6 +85,7 @@ const ReportsListItem: FC<ReportsListItemProps> = ({
   report,
   showCompany,
   onClick,
+  isDisabled
 }) => {
   const router = useRouter();
   const { t } = useTranslation();
@@ -106,8 +111,10 @@ const ReportsListItem: FC<ReportsListItemProps> = ({
   return (
     <div>
       <div
-        className="hover:opacity-50 cursor-pointer md:mx-3"
+        className={`${isDisabled ? "" : "hover:opacity-50 cursor-pointer"} md:mx-3`}
         onClick={() => {
+          if (isDisabled) return;
+
           onClick?.(report);
           router.push(`/reports/${report.id}?name=${report.name}`);
         }}

@@ -3,21 +3,20 @@ import { useTranslation } from "react-i18next";
 import { CompanyGuest } from "@/types";
 import styles from "./page.module.css";
 import Divider from "@/app/ui/Divider";
-import { fontColor2 } from "@/lib/constants";
 import { Trash, User } from "@/app/ui/Icons";
 import { useApi } from "@/lib/api/ApiContext";
 
 interface GuestsListProps {
   guests: CompanyGuest[];
-  projectId: string;
   isEmpty?: boolean;
+  isDisabled?: boolean;
   onDelete: (guest: CompanyGuest) => void;
 }
 
 const GuestsList: FC<GuestsListProps> = ({
   guests,
-  projectId,
   isEmpty,
+  isDisabled,
   onDelete,
 }) => {
   const { t } = useTranslation();
@@ -30,10 +29,11 @@ const GuestsList: FC<GuestsListProps> = ({
   return (
     <>
       {guests.map((guest, i) => {
-        const canDelete =
+        const canDelete = !isDisabled && (
           currentUser?.role === "manager" ||
           currentUser?.role === "admin" ||
-          currentUser?.id === guest.id;
+          currentUser?.id === guest.id
+        );
 
         return (
           <div key={guest.id}>

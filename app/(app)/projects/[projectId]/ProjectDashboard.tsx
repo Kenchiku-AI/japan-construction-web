@@ -337,6 +337,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             <ReportsList
               reports={project.reports?.slice(0, 5) ?? []}
               isEmpty={project.reports?.length === 0}
+              isDisabled={!isEditable}
               onViewAll={
                 (project.reports?.length ?? 0) < 6
                   ? undefined
@@ -372,8 +373,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           <div className={cardClass}>
             <GuestsList
               guests={projectGuests}
-              projectId={projectId}
               isEmpty={projectGuests.length === 0}
+              isDisabled={!isEditable}
               onDelete={(guest) => {
                 setGuestToRemove(guest);
               }}
