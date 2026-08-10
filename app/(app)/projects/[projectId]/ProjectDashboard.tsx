@@ -257,6 +257,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
             <ConversationsList
               conversations={project.conversations}
               isEmpty={(project.conversations ?? []).length === 0}
+              isDisabled={!isEditable}
               onClickConversation={(conversation) => {
                 setEditConversation(conversation);
                 setShowConversationModal(true);
@@ -288,6 +289,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                 <ConversationItemsList
                   conversationItems={c.items.slice(0, 5)}
                   isEmpty={(c.items ?? []).length === 0}
+                  isDisabled={!isEditable}
                   onClickConversationItem={(ci) => {
                     setEditConversationItem({
                       item: ci,

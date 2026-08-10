@@ -9,12 +9,14 @@ import { bgColor2, bgColor3, bgColor5, errorColor1, errorColor2, fontColor1 } fr
 interface ConversationsListProps {
   conversations: Conversation[];
   isEmpty: boolean;
+  isDisabled: boolean;
   onClickConversation: (conversation: Conversation) => void;
 }
 
 const ConversationsList: FC<ConversationsListProps> = ({
   conversations,
   isEmpty,
+  isDisabled,
   onClickConversation
 }) => {
   const { t } = useTranslation();
@@ -43,9 +45,10 @@ const ConversationsList: FC<ConversationsListProps> = ({
             {i > 0 && <Divider />}
             <div
               onClick={() => {
+                if (isDisabled) return;
                 onClickConversation(c);
               }}
-              className={"hover:opacity-50 cursor-pointer"}
+              className={isDisabled ? "" : "hover:opacity-50 cursor-pointer"}
             >
               <div className="md:mx-3">
                 <div className="flex items-center justify-between gap-4">
