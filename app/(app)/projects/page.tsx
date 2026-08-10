@@ -136,15 +136,15 @@ const StatusLabel: FC<{ project: Project }> = ({ project }) => {
   const { t } = useTranslation();
 
   if (project.status === ProjectStatus.Archived) {
-    return <div className={`${styles.subtitle} mr-8`}>{t("archived")}</div>;
+    return <div className={styles.subtitle}>{t("archived")}</div>;
   }
 
   if (project.status === ProjectStatus.Requested) {
-    return <div className={`${styles.subtitle} mr-8`}>{t("requested")}</div>;
+    return <div className={styles.subtitle}>{t("requested")}</div>;
   }
 
   if (project.status === ProjectStatus.Completed) {
-    return <div className={`${styles.subtitle} mr-8`}>{t("completed")}</div>;
+    return <div className={styles.subtitle}>{t("completed")}</div>;
   }
 
   return null;
