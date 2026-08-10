@@ -103,6 +103,7 @@ const ConversationItems: FC<ConversationItemsProps> = ({ projectId }) => {
         <ConversationItemsList
           conversationItems={conversationItems}
           isEmpty={conversationItems.length === 0}
+          isDisabled={!isEditable}
           onClickConversationItem={(conversationItem) => {
             setEditConversationItem(conversationItem);
           }}
