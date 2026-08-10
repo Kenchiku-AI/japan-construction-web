@@ -14,6 +14,7 @@
   "all_projects": "すべてのプロジェクト",
   "assignee": "担当者",
   "archive_project": "プロジェクトをアーカイブ",
+  "archived": "アーカイブ済み",
   "autofill": "自動入力する",
   "autofill_from_chat": "トークから自動入力",
   "autofill_from_chat_description": "報告書に自動入力する情報の元となるトークを以下から選択してください。あわせて、使用するメッセージの日時範囲を指定してください。",

@@ -99,6 +99,10 @@ const ProjectsPage = () => {
 const StatusLabel: FC<{ project: Project }> = ({ project }) => {
   const { t } = useTranslation();
 
+  if (project.status === ProjectStatus.Archived) {
+    return <div className={`${styles.subtitle} mr-8`}>{t("archived")}</div>;
+  }
+
   if (project.status === ProjectStatus.Requested) {
     return <div className={`${styles.subtitle} mr-8`}>{t("requested")}</div>;
   }
