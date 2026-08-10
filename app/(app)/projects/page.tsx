@@ -97,21 +97,24 @@ const ProjectsPage = () => {
             </div>
           </div>
         ))}
+        {loaded && hasArchived && (
+          <>
+            <Divider />
+            <div className="mt-3">
+              <Button
+                variant="tertiary"
+                label={showArchived ? t("hide_archived") : t("show_archived")}
+                iconLeft={() => {
+                  return showArchived ? <EyeOff color={buttonColor} /> : <Eye color={buttonColor} />
+                }}
+                onClick={() => {
+                  setShowArchived((prev) => !prev);
+                }}
+              />
+            </div>
+          </>
+        )}
       </div>
-      {loaded && (
-        <div className="mt-3">
-          <Button
-            variant="tertiary"
-            label={showArchived ? t("hide_archived") : t("show_archived")}
-            iconLeft={() => {
-              return showArchived ? <EyeOff color={buttonColor} /> : <Eye color={buttonColor} />
-            }}
-            onClick={() => {
-              setShowArchived((prev) => !prev);
-            }}
-          />
-        </div>
-      )}
       <CreateProjectModal
         isOpen={showCreateProject}
         onClose={() => {
