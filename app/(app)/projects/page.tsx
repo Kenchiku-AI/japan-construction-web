@@ -6,15 +6,14 @@ import { useProjects } from "./useProjects";
 import { useRouter } from "next/navigation";
 import { Hardhat, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { cardClass, fontColor2 } from "@/lib/constants";
-import { FC, useState } from "react";
+import { cardClass, } from "@/lib/constants";
+import { FC, useMemo, useState } from "react";
 import { Project, ProjectStatus, UserRole } from "@/types";
 import styles from "./page.module.css";
 import { Loader } from "@/app/ui/Loader";
 import { useApi } from "@/lib/api/ApiContext";
 import CreateProjectModal from "../companies/[companyId]/CreateProjectModal";
 import { Button } from "@/app/ui/Button/Button";
-import { useModal } from "@/lib/modal/ModalContext";
 
 const ProjectsPage = () => {
   const { t } = useTranslation();
@@ -23,11 +22,28 @@ const ProjectsPage = () => {
   const { currentUser } = useApi();
   const router = useRouter();
   const [showCreateProject, setShowCreateProject] = useState(false);
-  const { showModal } = useModal();
+  const [showArchived, setShowArchived] = useState(false);
   const companyId =
     currentUser?.role === UserRole.Manager
       ? currentUser?.company?.id
       : undefined;
+
+  const filteredProjects = useMemo(() => {
+    if (!projects) return [];
+
+    if (!showArchived) {
+      return projects.filter(
+        (project) => project.status !== ProjectStatus.Archived
+      );
+    }
+
+    return [...projects].sort((a, b) => {
+      if (a.status === ProjectStatus.Archived) return 1;
+      if (b.status === ProjectStatus.Archived) return -1;
+      return 0;
+    });
+  }, [projects, showArchived]);
+
 
   return (
     <>
@@ -50,7 +66,7 @@ const ProjectsPage = () => {
         {loaded && projects?.length === 0 && (
           <div className={styles.empty}>{t("empty_projects_description")}</div>
         )}
-        {projects.map((p, i) => (
+        {filteredProjects.map((p, i) => (
           <div key={p.id}>
             {i > 0 && <Divider />}
             <div
@@ -78,6 +94,17 @@ const ProjectsPage = () => {
           </div>
         ))}
       </div>
+      {loaded && (
+        <div className="mt-3">
+          <Button
+            variant="tertiary"
+            label={showArchived ? t("hide_archived") : t("show_archived")}
+            onClick={() => {
+              setShowArchived((prev) => !prev);
+            }}
+          />
+        </div>
+      )}
       <CreateProjectModal
         isOpen={showCreateProject}
         onClose={() => {
