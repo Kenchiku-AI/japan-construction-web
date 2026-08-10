@@ -385,7 +385,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         </>
       )}
       {!!project && !isArchived && isAdminOrManager && (
-        <div className="mt-6 mx-4">
+        <div className="mt-8 flex flex-1 justify-end">
           <Button
             variant="tertiary"
             label={t("archive_project")}
