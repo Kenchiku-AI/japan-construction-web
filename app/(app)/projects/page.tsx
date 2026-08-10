@@ -48,7 +48,6 @@ const ProjectsPage = () => {
     return projects.some((p) => p.status === ProjectStatus.Archived);
   }, [projects]);
 
-
   return (
     <>
       <div className="flex justify-between items-end">
