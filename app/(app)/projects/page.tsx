@@ -4,7 +4,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useProjects } from "./useProjects";
 import { useRouter } from "next/navigation";
-import { Hardhat, Plus } from "@/app/ui/Icons";
+import { Eye, EyeOff, Hardhat, Plus } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { cardClass, } from "@/lib/constants";
 import { FC, useMemo, useState } from "react";
@@ -103,6 +103,9 @@ const ProjectsPage = () => {
           <Button
             variant="tertiary"
             label={showArchived ? t("hide_archived") : t("show_archived")}
+            iconLeft={() => {
+              return showArchived ? <EyeOff /> : <Eye />
+            }}
             onClick={() => {
               setShowArchived((prev) => !prev);
             }}
