@@ -384,7 +384,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
         </>
       )}
-      {isLoaded && !isArchived && isAdminOrManager && (
+      {!!project && !isArchived && isAdminOrManager && (
         <div className="mt-6 mx-4">
           <Button
             variant="tertiary"
