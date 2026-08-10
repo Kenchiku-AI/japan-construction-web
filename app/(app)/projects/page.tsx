@@ -44,6 +44,10 @@ const ProjectsPage = () => {
     });
   }, [projects, showArchived]);
 
+  const hasArchived = useMemo(() => {
+    return projects.some((p) => p.status === ProjectStatus.Archived);
+  }, [projects]);
+
 
   return (
     <>
