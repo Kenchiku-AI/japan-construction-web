@@ -26,7 +26,7 @@ const FIELD_ROW_HEIGHT = 22;
 // Fixed minimum vertical space between image blocks.
 // This is deliberately larger than a single normal row so the
 // separation between photos is always clearly visible.
-const IMAGE_SPACING_ROWS = 2;
+const IMAGE_SPACING_ROWS = 1;
 const IMAGE_SPACING_ROW_HEIGHT = 22;
 
 // ─────────────────────────────────────────────────────────────────────────────
