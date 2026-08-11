@@ -2,61 +2,123 @@ import { useCallback, useState } from "react";
 import { saveAs } from "file-saver";
 import { Report, Image } from "@/types";
 
-// ─── colour palette (neutral greys matching app theme) ────────────────────────
-const C = {
-  headerDark: "FF23303B", // fontColor1 — darkest, header background
-  headerMid: "FF3D4E58", // slightly lighter header accent bar
-  labelBg: "FFE8E9EA", // light grey for field label cells
-  valueBg: "FFFDFDFD", // bgColor1 — near-white for field value cells
-  pageBg: "FFF2F2F3", // bgColor2 — page background
-  photoCap: "FF4A5D6B", // mid-dark grey for photo caption bar
-  descBg: "FFF7F7F8", // very light grey for description cells
-  border: "FFD0D2D4", // soft grey border
-  outerBorder: "FF8A9099", // fontColor2-ish for outer box borders
-  darkText: "FF23303B", // fontColor1
-  midText: "FF5A6670", // mid grey for secondary text
-  mutedText: "FFA4A9AE", // fontColor2 — captions, footer
-  white: "FFFFFFFF",
+// ─────────────────────────────────────────────────────────────────────────────
+// Layout
+// ─────────────────────────────────────────────────────────────────────────────
+
+const MARGIN_W = 4;
+
+const IMAGE_COL_START = 2;
+const IMAGE_COL_END = 4;
+
+const DETAILS_COL_START = 5;
+const DETAILS_COL_END = 6;
+
+const IMAGE_COL_WIDTH = 22;
+const IMAGE_GAP_COL_WIDTH = 2;
+const DETAILS_LABEL_WIDTH = 12;
+const DETAILS_VALUE_WIDTH = 42;
+
+const FIELD_LABEL_WIDTH = 22;
+const FIELD_VALUE_WIDTH = 60;
+
+const IMAGE_WIDTH_PX = 260;
+const IMAGE_PADDING_PX = 8;
+
+const IMAGE_MAX_HEIGHT_PX = 260;
+
+const FIELD_ROW_HEIGHT = 22;
+const IMAGE_SPACING_ROWS = 2;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Borders
+// ─────────────────────────────────────────────────────────────────────────────
+
+function border(style: "thin" | "medium" = "thin") {
+  return {
+    style,
+    color: {
+      argb: "FF000000",
+    },
+  };
+}
+
+const thinBorder = {
+  top: border(),
+  bottom: border(),
+  left: border(),
+  right: border(),
 };
 
-function side(style: "thin" | "medium", argb: string) {
-  return { style, color: { argb } };
-}
-const thinBorder: any = {
-  top: side("thin", C.border),
-  bottom: side("thin", C.border),
-  left: side("thin", C.border),
-  right: side("thin", C.border),
+const outerBorder = {
+  top: border("medium"),
+  bottom: border("medium"),
+  left: border("medium"),
+  right: border("medium"),
 };
 
-function estimateColWidth(text: string, fontSize = 9): number {
-  let w = 0;
-  for (const ch of text) {
-    w += ch.charCodeAt(0) > 0x7f ? 1.8 : 1.0;
-  }
-  return (w + 2) * (fontSize / 10);
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// Image
+// ─────────────────────────────────────────────────────────────────────────────
 
 async function fetchImageAsBase64(
   url: string,
 ): Promise<{ base64: string; ext: "jpeg" | "png" } | null> {
   try {
     const res = await fetch(url, { mode: "cors" });
+
     if (!res.ok) return null;
+
     const blob = await res.blob();
-    const ext: "jpeg" | "png" = blob.type.includes("png") ? "png" : "jpeg";
+
+    const ext: "jpeg" | "png" = blob.type.includes("png")
+      ? "png"
+      : "jpeg";
+
     return new Promise((resolve) => {
       const reader = new FileReader();
+
       reader.onloadend = () => {
         const dataUrl = reader.result as string;
-        resolve({ base64: dataUrl.split(",")[1], ext });
+
+        resolve({
+          base64: dataUrl.split(",")[1],
+          ext,
+        });
       };
+
       reader.readAsDataURL(blob);
     });
   } catch {
     return null;
   }
 }
+
+const getImageDimensions = (
+  width: number,
+  height: number,
+  maxWidth: number,
+  maxHeight: number,
+) => {
+  const aspectRatio = width / height;
+
+  let displayWidth = maxWidth;
+  let displayHeight = displayWidth / aspectRatio;
+
+  if (displayHeight > maxHeight) {
+    displayHeight = maxHeight;
+    displayWidth = displayHeight * aspectRatio;
+  }
+
+  return {
+    width: displayWidth,
+    height: displayHeight,
+  };
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Workbook
+// ─────────────────────────────────────────────────────────────────────────────
 
 async function buildReportWorkbook(
   ExcelJS: typeof import("exceljs"),
@@ -65,408 +127,521 @@ async function buildReportWorkbook(
   topLabel: string,
 ) {
   const wb = new ExcelJS.Workbook();
-  const wsName = report.name.replace(/[*?:\\/\[\]]/g, "").slice(0, 31);
+
+  const wsName = report.name
+    .replace(/[*?:\\/\[\]]/g, "")
+    .slice(0, 31);
+
   const ws = wb.addWorksheet(wsName, {
-    pageSetup: { paperSize: 9, orientation: "portrait", fitToPage: true },
-    views: [{ showGridLines: false }],
+    pageSetup: {
+      paperSize: 9,
+      orientation: "portrait",
+      fitToPage: true,
+      fitToWidth: 1,
+      fitToHeight: 0,
+      margins: {
+        left: 0.3,
+        right: 0.3,
+        top: 0.5,
+        bottom: 0.5,
+        header: 0.2,
+        footer: 0.2,
+      },
+    },
+
+    views: [
+      {
+        showGridLines: false,
+      },
+    ],
   });
 
-  // ── pre-calculate field column widths ─────────────────────────────────────
-  const sortedFields = [...(report.fields ?? [])].sort((a, b) =>
-    a.order !== b.order ? a.order - b.order : a.id.localeCompare(b.id),
-  );
-  const half = Math.ceil(sortedFields.length / 2);
-  const leftFields = sortedFields.slice(0, half);
-  const rightFields = sortedFields.slice(half);
-
-  const MIN_LABEL_W = 10;
-  const MIN_VALUE_W = 18;
-  const TOTAL_FIELD_W = 76;
-
-  const leftLabelW = Math.max(
-    MIN_LABEL_W,
-    ...leftFields.map((f) => estimateColWidth(f.name)),
-  );
-  const rightLabelW = rightFields.length
-    ? Math.max(MIN_LABEL_W, ...rightFields.map((f) => estimateColWidth(f.name)))
-    : 0;
-
-  const halfTotal = TOTAL_FIELD_W / 2;
-  const leftValueW = Math.max(MIN_VALUE_W, halfTotal - leftLabelW);
-  const rightValueW = rightFields.length
-    ? Math.max(MIN_VALUE_W, halfTotal - rightLabelW)
-    : 0;
-
-  const GUTTER_W = 3;
-  const MARGIN_W = 6;
-  const TOTAL_COLS = 7;
+  // ───────────────────────────────────────────────────────────────────────────
+  // Columns
+  // ───────────────────────────────────────────────────────────────────────────
 
   ws.columns = [
-    { key: "A", width: MARGIN_W },
-    { key: "B", width: leftLabelW },
-    { key: "C", width: leftValueW },
-    { key: "D", width: GUTTER_W },
-    { key: "E", width: rightFields.length ? rightLabelW : leftLabelW },
-    { key: "F", width: rightFields.length ? rightValueW : leftValueW },
-    { key: "G", width: MARGIN_W },
+    {
+      key: "A",
+      width: MARGIN_W,
+    },
+    {
+      key: "B",
+      width: IMAGE_COL_WIDTH,
+    },
+    {
+      key: "C",
+      width: IMAGE_COL_WIDTH,
+    },
+    {
+      key: "D",
+      width: IMAGE_COL_WIDTH,
+    },
+    {
+      key: "E",
+      width: DETAILS_LABEL_WIDTH,
+    },
+    {
+      key: "F",
+      width: DETAILS_VALUE_WIDTH,
+    },
+    {
+      key: "G",
+      width: MARGIN_W,
+    },
   ];
 
-  // ── style helper ──────────────────────────────────────────────────────────
+  // ───────────────────────────────────────────────────────────────────────────
+  // Generic styling helper
+  // ───────────────────────────────────────────────────────────────────────────
+
   const style = (
     cell: import("exceljs").Cell,
     opts: {
-      bg?: string;
-      color?: string;
       bold?: boolean;
-      italic?: boolean;
       size?: number;
       hAlign?: import("exceljs").Alignment["horizontal"];
       vAlign?: import("exceljs").Alignment["vertical"];
       wrap?: boolean;
       border?: any;
-    },
+    } = {},
   ) => {
-    if (opts.bg)
-      cell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: opts.bg },
-      };
     cell.font = {
       name: "Yu Gothic",
-      size: opts.size ?? 9,
+      size: opts.size ?? 10,
       bold: opts.bold ?? false,
-      italic: opts.italic ?? false,
-      color: { argb: opts.color ?? C.darkText },
+      color: {
+        argb: "FF000000",
+      },
     };
+
     cell.alignment = {
       horizontal: opts.hAlign ?? "left",
       vertical: opts.vAlign ?? "middle",
       wrapText: opts.wrap ?? false,
     };
-    if (opts.border) cell.border = opts.border;
+
+    if (opts.border) {
+      cell.border = opts.border;
+    }
   };
 
-  // ── background ────────────────────────────────────────────────────────────
-  for (let r = 1; r <= 300; r++)
-    for (let c = 1; c <= TOTAL_COLS; c++)
-      ws.getCell(r, c).fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: C.pageBg },
-      };
+  // ───────────────────────────────────────────────────────────────────────────
+  // HEADER
+  // ───────────────────────────────────────────────────────────────────────────
 
-  // ── HEADER (rows 1-5) ─────────────────────────────────────────────────────
-  ws.getRow(1).height = 6;
-  ws.getRow(2).height = 32;
-  ws.getRow(3).height = 12;
-  ws.getRow(4).height = 3;
-  ws.getRow(5).height = 6;
+  ws.getRow(1).height = 8;
+  ws.getRow(2).height = 30;
+  ws.getRow(3).height = 8;
+  ws.getRow(4).height = 4;
 
-  for (let r = 1; r <= 3; r++)
-    for (let c = 1; c <= TOTAL_COLS; c++)
-      ws.getCell(r, c).fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: C.headerDark },
-      };
+  ws.mergeCells(2, 2, 2, 5);
 
-  // accent bar
-  for (let c = 1; c <= TOTAL_COLS; c++)
-    ws.getCell(4, c).fill = {
-      type: "pattern",
-      pattern: "solid",
-      fgColor: { argb: C.headerMid },
-    };
-
-  ws.mergeCells(2, 2, 2, 4);
   const titleCell = ws.getCell(2, 2);
   titleCell.value = report.name;
+
   style(titleCell, {
-    bg: C.headerDark,
-    color: C.white,
     bold: true,
     size: 18,
     vAlign: "middle",
   });
 
-  ws.mergeCells(2, 5, 2, 6);
-  const lblCell = ws.getCell(2, 5);
-  lblCell.value = topLabel;
-  style(lblCell, {
-    bg: C.headerDark,
-    color: "FFB0B6BB",
-    size: 8,
+  ws.mergeCells(2, 6, 2, 6);
+
+  const topLabelCell = ws.getCell(2, 6);
+  topLabelCell.value = topLabel;
+
+  style(topLabelCell, {
+    size: 9,
     hAlign: "right",
     vAlign: "middle",
   });
 
-  // ── FIELD SECTION HEADER (row 6) ──────────────────────────────────────────
-  ws.getRow(6).height = 20;
-  ws.mergeCells(6, 2, 6, 6);
-  const secCell = ws.getCell(6, 2);
-  secCell.value = "作業情報";
-  style(secCell, {
-    bg: C.pageBg,
-    color: C.headerDark,
-    bold: true,
-    size: 10,
-    vAlign: "middle",
-  });
-
-  // ── FIELD ROWS ────────────────────────────────────────────────────────────
-  const FIELD_START = 7;
-  const ROW_H = 19;
-
-  const writeFieldRow = (
-    row: number,
-    label: string,
-    value: string,
-    labelCol: number,
-    valCol: number,
-  ) => {
-    ws.getRow(row).height = ROW_H;
-    const lc = ws.getCell(row, labelCol);
-    lc.value = label;
-    style(lc, {
-      bg: C.labelBg,
-      color: C.midText,
-      bold: true,
-      border: thinBorder,
-    });
-    const vc = ws.getCell(row, valCol);
-    vc.value = value;
-    style(vc, {
-      bg: C.valueBg,
-      color: C.darkText,
-      border: thinBorder,
-      wrap: true,
-    });
-  };
-
-  leftFields.forEach((f, i) =>
-    writeFieldRow(FIELD_START + i, f.name, f.value, 2, 3),
-  );
-  rightFields.forEach((f, i) =>
-    writeFieldRow(FIELD_START + i, f.name, f.value, 5, 6),
-  );
-
-  const applyOuterBox = (r1: number, c1: number, r2: number, c2: number) => {
-    for (let r = r1; r <= r2; r++) {
-      for (let c = c1; c <= c2; c++) {
-        ws.getCell(r, c).border = {
-          top:
-            r === r1 ? side("medium", C.outerBorder) : side("thin", C.border),
-          bottom:
-            r === r2 ? side("medium", C.outerBorder) : side("thin", C.border),
-          left:
-            c === c1 ? side("medium", C.outerBorder) : side("thin", C.border),
-          right:
-            c === c2 ? side("medium", C.outerBorder) : side("thin", C.border),
-        } as any;
-      }
-    }
-  };
-
-  const FIELD_END =
-    FIELD_START + Math.max(leftFields.length, rightFields.length) - 1;
-  applyOuterBox(FIELD_START, 2, FIELD_END, 3);
-  if (rightFields.length > 0) applyOuterBox(FIELD_START, 5, FIELD_END, 6);
-
-  // ── PHOTO SECTION ─────────────────────────────────────────────────────────
-  const PHOTO_SECTION_START = FIELD_END + 2;
-  ws.getRow(PHOTO_SECTION_START - 1).height = 30;
-  ws.getRow(PHOTO_SECTION_START).height = 20;
-
-  ws.mergeCells(PHOTO_SECTION_START, 2, PHOTO_SECTION_START, 6);
-  const phHdr = ws.getCell(PHOTO_SECTION_START, 2);
-  phHdr.value = "現場写真";
-  style(phHdr, {
-    bg: C.pageBg,
-    color: C.headerDark,
-    bold: true,
-    size: 10,
-    vAlign: "middle",
-  });
-
-  const fetchedImages = await Promise.all(
-    images.map((img) => fetchImageAsBase64(img.download_url)),
-  );
-
-  const PX_PER_UNIT = 8;
-  const PADDING_PX = 12;
-  const INSET_PX = 8;
-  const pxToPoints = (px: number) => px * 0.75;
-
-  const IMG_W =
-    Math.round((leftLabelW + leftValueW) * PX_PER_UNIT) - INSET_PX * 2;
-
-  const CAPTION_H = 18;
-  const DESC_H = 45;
-  const SPACER_H = 16;
-
-  const IMG_COL_L = 2;
-  const IMG_COL_R = 5;
-
-  let curRow = PHOTO_SECTION_START + 1;
-
-  for (let pair = 0; pair < Math.ceil(images.length / 2); pair++) {
-    const li = pair * 2;
-    const ri = li + 1;
-
-    const leftImg = images[li];
-    const rightImg = ri < images.length ? images[ri] : null;
-
-    const leftImgH = Math.round(IMG_W * (leftImg.height / leftImg.width));
-    const rightImgH = rightImg
-      ? Math.round(IMG_W * (rightImg.height / rightImg.width))
-      : 0;
-
-    const tallestImgH = Math.max(leftImgH, rightImgH);
-    const photoRowHeight = pxToPoints(tallestImgH + PADDING_PX * 2);
-
-    // ── caption row ────────────────────────────────────────────────────────
-    ws.getRow(curRow).height = CAPTION_H;
-    for (const [col, idx] of [
-      [IMG_COL_L, li],
-      [IMG_COL_R, ri],
-    ] as [number, number][]) {
-      if (idx >= images.length) continue;
-      ws.mergeCells(curRow, col, curRow, col + 1);
-      const cc = ws.getCell(curRow, col);
-      cc.value = `写真 ${String(idx + 1).padStart(2, "0")}`;
-      style(cc, {
-        bg: C.photoCap,
-        color: C.white,
-        bold: true,
-        hAlign: "center",
-        border: thinBorder,
-      });
-    }
-    curRow++;
-
-    // ── photo row ──────────────────────────────────────────────────────────
-    const photoRow = curRow;
-    ws.getRow(photoRow).height = photoRowHeight;
-
-    for (const [col, idx] of [
-      [IMG_COL_L, li],
-      [IMG_COL_R, ri],
-    ] as [number, number][]) {
-      if (idx >= images.length) continue;
-      ws.mergeCells(photoRow, col, photoRow, col + 1);
-      style(ws.getCell(photoRow, col), { bg: C.white, border: thinBorder });
-
-      const fetched = fetchedImages[idx];
-      if (fetched) {
-        const imgId = wb.addImage({
-          base64: fetched.base64,
-          extension: fetched.ext,
-        });
-        const thisImgH = Math.round(
-          IMG_W * (images[idx].height / images[idx].width),
-        );
-
-        // The image is IMG_W wide, the full cell span is (labelW + valueW) * PX_PER_UNIT
-        // Horizontal centering offset = half the surplus
-        const colSpanPx =
-          (col === IMG_COL_L
-            ? leftLabelW + leftValueW
-            : (rightLabelW || leftLabelW) + (rightValueW || leftValueW)) *
-          PX_PER_UNIT;
-        const surplusX = colSpanPx - IMG_W;
-        const offsetXPx = surplusX / 2;
-
-        // tl col fraction is relative to the anchor column only
-        const anchorColWPx =
-          (col === IMG_COL_L ? leftLabelW : rightLabelW || leftLabelW) *
-          PX_PER_UNIT;
-        const tlColFrac = offsetXPx / anchorColWPx;
-
-        // vertical centering
-        const surplusY = tallestImgH - thisImgH;
-        const offsetYPx = PADDING_PX + surplusY / 2;
-        const tlRowFrac = pxToPoints(offsetYPx) / photoRowHeight;
-
-        ws.addImage(imgId, {
-          tl: {
-            col: col - 1 + tlColFrac,
-            row: photoRow - 1 + tlRowFrac,
-          } as any,
-          ext: { width: IMG_W, height: thisImgH },
-        });
-      }
-    }
-    curRow++;
-
-    // ── description row ────────────────────────────────────────────────────
-    ws.getRow(curRow).height = DESC_H;
-    for (const [col, idx] of [
-      [IMG_COL_L, li],
-      [IMG_COL_R, ri],
-    ] as [number, number][]) {
-      if (idx >= images.length) continue;
-      ws.mergeCells(curRow, col, curRow, col + 1);
-      const dc = ws.getCell(curRow, col);
-      dc.value = images[idx].description;
-      style(dc, {
-        bg: C.descBg,
-        color: C.midText,
-        size: 8,
-        vAlign: "top",
-        wrap: true,
-        border: thinBorder,
-      });
-    }
-    curRow++;
-
-    // ── spacer ─────────────────────────────────────────────────────────────
-    ws.getRow(curRow).height = SPACER_H;
-    curRow++;
+  // Divider
+  for (let col = 2; col <= 6; col++) {
+    ws.getCell(4, col).border = {
+      bottom: border("medium"),
+    };
   }
 
-  // ── FOOTER ────────────────────────────────────────────────────────────────
-  ws.getRow(curRow).height = 4;
-  for (let c = 1; c <= TOTAL_COLS; c++)
-    ws.getCell(curRow, c).fill = {
-      type: "pattern",
-      pattern: "solid",
-      fgColor: { argb: C.headerMid },
-    };
-  curRow++;
+  // ───────────────────────────────────────────────────────────────────────────
+  // REPORT FIELDS
+  // ───────────────────────────────────────────────────────────────────────────
 
-  ws.getRow(curRow).height = 16;
-  ws.mergeCells(curRow, 2, curRow, 6);
-  const ftCell = ws.getCell(curRow, 2);
-  ftCell.value = `${report.company_name ?? ""}　　${report.project_name ?? ""}`;
-  style(ftCell, {
-    bg: C.pageBg,
-    color: C.mutedText,
-    size: 8,
-    italic: true,
+  let currentRow = 6;
+
+  const sortedFields = [...(report.fields ?? [])].sort((a, b) =>
+    a.order !== b.order
+      ? a.order - b.order
+      : a.id.localeCompare(b.id),
+  );
+
+  for (const field of sortedFields) {
+    ws.getRow(currentRow).height = FIELD_ROW_HEIGHT;
+
+    // Label
+    const labelCell = ws.getCell(currentRow, 2);
+
+    labelCell.value = field.name;
+
+    style(labelCell, {
+      bold: false,
+      size: 10,
+      border: thinBorder,
+      vAlign: "middle",
+    });
+
+    ws.mergeCells(currentRow, 2, currentRow, 3);
+
+    // Value
+    const valueCell = ws.getCell(currentRow, 4);
+
+    valueCell.value = field.value;
+
+    style(valueCell, {
+      size: 10,
+      border: thinBorder,
+      wrap: true,
+      vAlign: "middle",
+    });
+
+    ws.mergeCells(currentRow, 4, currentRow, 6);
+
+    currentRow++;
+  }
+
+  // Add a little space before images
+  currentRow += 2;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // IMAGES
+  // ───────────────────────────────────────────────────────────────────────────
+
+  const fetchedImages = await Promise.all(
+    images.map((image) =>
+      fetchImageAsBase64(image.download_url),
+    ),
+  );
+
+  const pxToPoints = (px: number) => px * 0.75;
+
+  for (let index = 0; index < images.length; index++) {
+    const image = images[index];
+    const fetched = fetchedImages[index];
+
+    const dims = getImageDimensions(
+      image.width,
+      image.height,
+      IMAGE_WIDTH_PX,
+      IMAGE_MAX_HEIGHT_PX,
+    );
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Image row
+    // ─────────────────────────────────────────────────────────────────────────
+
+    const imageRow = currentRow;
+
+    const imageHeightPx =
+      dims.height + IMAGE_PADDING_PX * 2;
+
+    const imageRowHeight = Math.max(
+      pxToPoints(imageHeightPx),
+      180,
+    );
+
+    ws.getRow(imageRow).height = imageRowHeight;
+
+    // Image cell
+    ws.mergeCells(
+      imageRow,
+      IMAGE_COL_START,
+      imageRow,
+      IMAGE_COL_END,
+    );
+
+    const imageCell = ws.getCell(
+      imageRow,
+      IMAGE_COL_START,
+    );
+
+    style(imageCell, {
+      border: thinBorder,
+    });
+
+    // Details area
+    ws.mergeCells(
+      imageRow,
+      DETAILS_COL_START,
+      imageRow,
+      DETAILS_COL_END,
+    );
+
+    const detailsCell = ws.getCell(
+      imageRow,
+      DETAILS_COL_START,
+    );
+
+    style(detailsCell, {
+      border: thinBorder,
+    });
+
+    // Add image
+    if (fetched) {
+      const imgId = wb.addImage({
+        base64: fetched.base64,
+        extension: fetched.ext,
+      });
+
+      const imageColumnWidthPx =
+        IMAGE_COL_WIDTH * 7;
+
+      const imageAreaWidthPx =
+        imageColumnWidthPx * 3;
+
+      const horizontalOffsetPx =
+        Math.max(
+          0,
+          (imageAreaWidthPx - dims.width) / 2,
+        );
+
+      const verticalOffsetPx =
+        Math.max(
+          0,
+          (imageHeightPx - dims.height) / 2,
+        );
+
+      const firstColumnWidthPx =
+        IMAGE_COL_WIDTH * 7;
+
+      const colFraction =
+        horizontalOffsetPx / firstColumnWidthPx;
+
+      const rowFraction =
+        pxToPoints(verticalOffsetPx) /
+        imageRowHeight;
+
+      ws.addImage(imgId, {
+        tl: {
+          col: IMAGE_COL_START - 1 + colFraction,
+          row: imageRow - 1 + rowFraction,
+        } as any,
+
+        ext: {
+          width: dims.width,
+          height: dims.height,
+        },
+      });
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Details
+    // ─────────────────────────────────────────────────────────────────────────
+
+    const detailStartRow = currentRow;
+
+    // Date
+    ws.getRow(detailStartRow).height = 24;
+
+    const dateLabel = ws.getCell(
+      detailStartRow,
+      DETAILS_COL_START,
+    );
+
+    dateLabel.value = "Date";
+
+    style(dateLabel, {
+      size: 10,
+      border: thinBorder,
+    });
+
+    const dateValue = ws.getCell(
+      detailStartRow,
+      DETAILS_COL_START + 1,
+    );
+
+    dateValue.value = new Date(image.created_at);
+
+    dateValue.numFmt = "yyyy/mm/dd";
+
+    style(dateValue, {
+      size: 10,
+      border: thinBorder,
+    });
+
+    // Description
+    const descriptionRow = detailStartRow + 1;
+
+    ws.getRow(descriptionRow).height = 60;
+
+    const descriptionLabel = ws.getCell(
+      descriptionRow,
+      DETAILS_COL_START,
+    );
+
+    descriptionLabel.value = "Description";
+
+    style(descriptionLabel, {
+      size: 10,
+      border: thinBorder,
+      vAlign: "top",
+    });
+
+    const descriptionValue = ws.getCell(
+      descriptionRow,
+      DETAILS_COL_START + 1,
+    );
+
+    descriptionValue.value = image.description ?? "";
+
+    style(descriptionValue, {
+      size: 10,
+      border: thinBorder,
+      wrap: true,
+      vAlign: "top",
+    });
+
+    // Tags
+    const tagsRow = detailStartRow + 2;
+
+    ws.getRow(tagsRow).height = 40;
+
+    const tagsLabel = ws.getCell(
+      tagsRow,
+      DETAILS_COL_START,
+    );
+
+    tagsLabel.value = "Tags";
+
+    style(tagsLabel, {
+      size: 10,
+      border: thinBorder,
+      vAlign: "top",
+    });
+
+    const tagsValue = ws.getCell(
+      tagsRow,
+      DETAILS_COL_START + 1,
+    );
+
+    tagsValue.value = image.tags
+      .map((tag) => tag.name)
+      .join(", ");
+
+    style(tagsValue, {
+      size: 10,
+      border: thinBorder,
+      wrap: true,
+      vAlign: "top",
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Image/details block outline
+    // ─────────────────────────────────────────────────────────────────────────
+
+    for (
+      let row = imageRow;
+      row <= tagsRow;
+      row++
+    ) {
+      for (
+        let col = IMAGE_COL_START;
+        col <= DETAILS_COL_END;
+        col++
+      ) {
+        const cell = ws.getCell(row, col);
+
+        const isTop = row === imageRow;
+        const isBottom = row === tagsRow;
+        const isLeft = col === IMAGE_COL_START;
+        const isRight = col === DETAILS_COL_END;
+
+        cell.border = {
+          top: isTop ? border("medium") : border(),
+          bottom: isBottom ? border("medium") : border(),
+          left: isLeft ? border("medium") : border(),
+          right: isRight ? border("medium") : border(),
+        };
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Space before next image
+    // ─────────────────────────────────────────────────────────────────────────
+
+    currentRow = tagsRow + IMAGE_SPACING_ROWS + 1;
+  }
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // FOOTER
+  // ───────────────────────────────────────────────────────────────────────────
+
+  ws.mergeCells(
+    currentRow,
+    2,
+    currentRow,
+    6,
+  );
+
+  const footerCell = ws.getCell(
+    currentRow,
+    2,
+  );
+
+  footerCell.value = [
+    report.company_name,
+    report.project_name,
+  ]
+    .filter(Boolean)
+    .join("    ");
+
+  style(footerCell, {
+    size: 9,
     hAlign: "right",
   });
 
   return wb;
 }
 
-// ─── hook ─────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Hook
+// ─────────────────────────────────────────────────────────────────────────────
+
 export const useExportExcel = () => {
-  const [isExcelDownloading, setIsExcelDownloading] = useState(false);
+  const [isExcelDownloading, setIsExcelDownloading] =
+    useState(false);
 
   const downloadExcel = useCallback(
-    async (report: Report, images: Image[], topLabel: string) => {
+    async (
+      report: Report,
+      images: Image[],
+      topLabel: string,
+    ) => {
       setIsExcelDownloading(true);
+
       try {
-        const ExcelJS = (await import("exceljs")) as typeof import("exceljs");
-        const wb = await buildReportWorkbook(ExcelJS, report, images, topLabel);
+        const ExcelJS =
+          (await import("exceljs")) as typeof import("exceljs");
+
+        const wb = await buildReportWorkbook(
+          ExcelJS,
+          report,
+          images,
+          topLabel,
+        );
+
         const buffer = await wb.xlsx.writeBuffer();
+
         const blob = new Blob([buffer], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
+
         saveAs(
           blob,
-          `${report.name.replace(/ /g, "_").replace(/[()]/g, "")}.xlsx`,
+          `${report.name
+            .replace(/ /g, "_")
+            .replace(/[()]/g, "")
+          }.xlsx`,
         );
       } catch (err) {
         console.error("XLSX export failed", err);
@@ -477,5 +652,8 @@ export const useExportExcel = () => {
     [],
   );
 
-  return { downloadExcel, isExcelDownloading };
+  return {
+    downloadExcel,
+    isExcelDownloading,
+  };
 };
