@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { saveAs } from "file-saver";
+import { useTranslation } from "react-i18next";
 import { Report, Image } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -115,11 +116,7 @@ async function buildReportWorkbook(
   report: Report,
   images: Image[],
   topLabel: string,
-  labels: {
-    dateTaken: string;
-    description: string;
-    tags: string;
-  },
+  t: (key: string) => string,
 ) {
   const wb = new ExcelJS.Workbook();
 
@@ -244,7 +241,7 @@ async function buildReportWorkbook(
     vAlign: "middle",
   });
 
-  // No row 3/4.
+  // No rows 3/4.
   // No divider below the title.
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -324,17 +321,16 @@ async function buildReportWorkbook(
       IMAGE_COL,
     );
 
-    // IMPORTANT:
     // No border around the image cell.
     imageCell.border = {};
 
     // ─────────────────────────────────────────────────────────────────────────
-    // DETAILS
+    // DATE
     // ─────────────────────────────────────────────────────────────────────────
 
-    // Date row
     const dateRow = imageRow;
 
+    // Keep date row compact enough for one line.
     ws.getRow(dateRow).height = 22;
 
     const dateLabelCell = ws.getCell(
@@ -347,7 +343,7 @@ async function buildReportWorkbook(
       DETAILS_VALUE_COL,
     );
 
-    dateLabelCell.value = labels.dateTaken;
+    dateLabelCell.value = t("date_taken");
 
     dateValueCell.value = new Date(image.created_at);
     dateValueCell.numFmt = "yyyy/mm/dd";
@@ -364,7 +360,10 @@ async function buildReportWorkbook(
       vAlign: "middle",
     });
 
-    // Description
+    // ─────────────────────────────────────────────────────────────────────────
+    // DESCRIPTION
+    // ─────────────────────────────────────────────────────────────────────────
+
     const descriptionRow = imageRow + 1;
 
     ws.getRow(descriptionRow).height = 65;
@@ -379,7 +378,7 @@ async function buildReportWorkbook(
       DETAILS_VALUE_COL,
     );
 
-    descriptionLabelCell.value = labels.description;
+    descriptionLabelCell.value = t("description");
 
     descriptionValueCell.value =
       image.description ?? "";
@@ -397,7 +396,10 @@ async function buildReportWorkbook(
       vAlign: "top",
     });
 
-    // Tags
+    // ─────────────────────────────────────────────────────────────────────────
+    // TAGS
+    // ─────────────────────────────────────────────────────────────────────────
+
     const tagsRow = imageRow + 2;
 
     ws.getRow(tagsRow).height = 45;
@@ -412,7 +414,7 @@ async function buildReportWorkbook(
       DETAILS_VALUE_COL,
     );
 
-    tagsLabelCell.value = labels.tags;
+    tagsLabelCell.value = t("tags");
 
     tagsValueCell.value = image.tags
       .map((tag) => tag.name)
@@ -476,7 +478,10 @@ async function buildReportWorkbook(
       });
     }
 
-    // Space before next image
+    // ─────────────────────────────────────────────────────────────────────────
+    // SPACE BEFORE NEXT IMAGE
+    // ─────────────────────────────────────────────────────────────────────────
+
     currentRow =
       tagsRow +
       IMAGE_SPACING_ROWS +
@@ -519,6 +524,8 @@ async function buildReportWorkbook(
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const useExportExcel = () => {
+  const { t } = useTranslation();
+
   const [isExcelDownloading, setIsExcelDownloading] =
     useState(false);
 
@@ -527,11 +534,6 @@ export const useExportExcel = () => {
       report: Report,
       images: Image[],
       topLabel: string,
-      labels: {
-        dateTaken: string;
-        description: string;
-        tags: string;
-      },
     ) => {
       setIsExcelDownloading(true);
 
@@ -544,7 +546,7 @@ export const useExportExcel = () => {
           report,
           images,
           topLabel,
-          labels,
+          t,
         );
 
         const buffer =
@@ -569,7 +571,7 @@ export const useExportExcel = () => {
         setIsExcelDownloading(false);
       }
     },
-    [],
+    [t],
   );
 
   return {
