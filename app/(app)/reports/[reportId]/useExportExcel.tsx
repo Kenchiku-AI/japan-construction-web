@@ -257,8 +257,9 @@ async function buildReportWorkbook(
   // HEADER
   // ───────────────────────────────────────────────────────────────────────────
 
-  ws.getRow(1).height = 6;
+  ws.getRow(1).height = 14;
   ws.getRow(2).height = 28;
+  ws.getRow(3).height = 14;
 
   ws.mergeCells(2, 2, 2, 4);
 
@@ -522,18 +523,16 @@ async function buildReportWorkbook(
        * The image itself is positioned at the TOP-LEFT of column B
        * and the Date Taken row.
        */
-      const imageBlockHeight =
+      const imageContentHeight =
         22 +
         65 +
-        45 +
-        IMAGE_SPACING_ROWS *
-        IMAGE_SPACING_ROW_HEIGHT;
+        45;
 
       const CELL_WIDTH_PX =
         IMAGE_COL_WIDTH * 7;
 
       const CELL_HEIGHT_PX =
-        imageBlockHeight * 1.333;
+        imageContentHeight * 1.333;
 
       const dims =
         getContainedImageDimensions(
