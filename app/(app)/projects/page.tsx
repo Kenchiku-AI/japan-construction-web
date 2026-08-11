@@ -104,7 +104,7 @@ const ProjectsPage = () => {
                 variant="tertiary"
                 label={showArchived ? t("hide_archived") : t("show_archived")}
                 iconLeft={() => {
-                  return showArchived ? <UpChevron /> : <DownChevron />
+                  return showArchived ? <UpChevron color={buttonColor} /> : <DownChevron color={buttonColor} />
                 }}
                 onClick={() => {
                   setShowArchived((prev) => !prev);
