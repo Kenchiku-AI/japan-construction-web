@@ -302,6 +302,10 @@ export const useApiData = () => {
       const url = "/projects";
       return call(() => http.post<Project>(url, request));
     },
+    async deleteProject(projectId: string) {
+      const url = `/projects/${projectId}`;
+      return call(() => http.delete(url));
+    },
     async getConversationItems(projectId: string, itemTypeId: string) {
       const url = `/conversation-items?project_id=${projectId}&conversation_item_type_id=${itemTypeId}`;
       return call(() => http.get<ProjectConversationItems>(url));

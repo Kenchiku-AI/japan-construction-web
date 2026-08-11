@@ -8,7 +8,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { CompanyGuest, UserRole, Conversation, ConversationItem, CreateConversationItemRequest, ProjectStatus } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
-import { Archive, Check, Close, Edit, Plus } from "@/app/ui/Icons";
+import { Archive, Check, Close, Edit, Plus, Trash } from "@/app/ui/Icons";
 import CreateReportModal from "../../reports/CreateReportModal";
 import { useReportTemplates } from "../../reports/templates/useReportTemplates";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
@@ -30,6 +30,7 @@ import ConversationItemsList from "./ConversationItemsList";
 import Divider from "@/app/ui/Divider";
 import UnarchiveProjectModal from "./UnarchiveProjectModal";
 import ArchiveProjectModal from "./ArchiveProjectModal";
+import DeleteProjectModal from "./DeleteProjectModal";
 // import DownloadExcelModal from "../../reports/DownloadExcelModal";
 // import { useExport } from "../../reports/useExport";
 
@@ -59,6 +60,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     createConversationItem,
     updateConversationItem,
     deleteConversationItem,
+    deleteProject
   } = useProject(projectId);
   const { conversationItemTypes } = useConversationItemTypes(project?.company_id);
   const isLoaded = useRef(false);
@@ -78,6 +80,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showLoader, setShowLoader] = useState(false);
   const [showArchiveProjectModal, setShowArchiveProjectModal] = useState(false);
   const [showUnarchiveProjectModal, setShowUnarchiveProjectModal] = useState(false);
+  const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<CompanyGuest>();
   const isAdmin = currentUser?.role === UserRole.Admin;
   const isAdminOrManager = isAdmin || currentUser?.role === UserRole.Manager;
@@ -384,17 +387,32 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           </div>
         </>
       )}
-      {!!project && !isArchived && isAdminOrManager && (
+      {!!project && (
         <div className="mt-8 flex flex-1 justify-end">
-          <Button
-            variant="tertiary"
-            label={t("archive_project")}
-            iconLeft={() => <Archive />}
-            onClick={() => {
-              setShowArchiveProjectModal(true);
-            }}
-            textStyle={{ color: errorColor1 }}
-          />
+          <div className="flex gap-4">
+            {isAdmin && (
+              <Button
+                variant="tertiary"
+                label={t("delete_project")}
+                iconLeft={() => <Trash />}
+                onClick={() => {
+                  setShowDeleteProjectModal(true);
+                }}
+                textStyle={{ color: errorColor1 }}
+              />
+            )}
+            {!isArchived && isAdminOrManager && (
+              <Button
+                variant="tertiary"
+                label={t("archive_project")}
+                iconLeft={() => <Archive />}
+                onClick={() => {
+                  setShowArchiveProjectModal(true);
+                }}
+                textStyle={{ color: errorColor1 }}
+              />
+            )}
+          </div>
         </div>
       )}
       <CreateReportModal
@@ -602,6 +620,16 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         onUnarchive={() => {
           updateProject({ status: ProjectStatus.Active });
           setShowUnarchiveProjectModal(false);
+        }}
+      />
+      <DeleteProjectModal
+        isOpen={showDeleteProjectModal}
+        onClose={() => {
+          setShowDeleteProjectModal(false);
+        }}
+        onDelete={() => {
+          setShowDeleteProjectModal(false);
+          deleteProject();
         }}
       />
       {showLoader && <Loader />}

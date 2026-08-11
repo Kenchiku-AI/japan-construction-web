@@ -376,6 +376,25 @@ export const useProject = (projectId: string) => {
     [projectId, project?.company_id],
   );
 
+  const deleteProject = useCallback(
+    async () => {
+      setLoading(true);
+
+      try {
+        await api.deleteProject(projectId);
+        router.replace("/projects");
+      } catch (err) {
+        setLoading(false);
+
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+    },
+    [projectId, api],
+  );
+
   const statusOptions = [
     { label: t("active"), value: "active" },
     { label: t("completed"), value: "completed" },
@@ -401,5 +420,6 @@ export const useProject = (projectId: string) => {
     createConversationItem,
     updateConversationItem,
     deleteConversationItem,
+    deleteProject
   };
 };
