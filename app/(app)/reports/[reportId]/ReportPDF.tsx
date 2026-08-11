@@ -26,9 +26,12 @@ Font.register({
 });
 
 const PAGE_CONTENT_WIDTH = 499;
-const IMAGE_COLUMN_WIDTH = 280;
-const DETAILS_COLUMN_WIDTH = PAGE_CONTENT_WIDTH - IMAGE_COLUMN_WIDTH;
-const MAX_IMAGE_HEIGHT = 580;
+const IMAGE_COLUMN_WIDTH = 260;
+const IMAGE_GAP = 16;
+const DETAILS_COLUMN_WIDTH =
+  PAGE_CONTENT_WIDTH - IMAGE_COLUMN_WIDTH - IMAGE_GAP;
+
+const MAX_IMAGE_HEIGHT = 260;
 
 export const ReportPDF: FC<ReportPDFProps> = ({
   report,
@@ -62,38 +65,37 @@ export const ReportPDF: FC<ReportPDFProps> = ({
             </View>
           ))}
         </View>
-      </Page>
 
-      {images.map((image) => {
-        const dims = getImageDimensions(
-          image.width,
-          image.height,
-          IMAGE_COLUMN_WIDTH,
-          MAX_IMAGE_HEIGHT
-        );
+        {/* Images */}
+        <View style={styles.imageList}>
+          {images.map((image) => {
+            const dims = getImageDimensions(
+              image.width,
+              image.height,
+              IMAGE_COLUMN_WIDTH,
+              MAX_IMAGE_HEIGHT
+            );
 
-        return (
-          <Page size="A4" key={image.id} style={styles.page}>
-            <View style={styles.imageRow}>
-              {/* Image */}
-              <View style={styles.imageColumn}>
-                <PDFImage
-                  src={image.download_url}
-                  style={{
-                    width: dims.width,
-                    height: dims.height,
-                  }}
-                />
-              </View>
+            return (
+              <View key={image.id} style={styles.imageItem} wrap={false}>
+                {/* Image */}
+                <View style={styles.imageColumn}>
+                  <PDFImage
+                    src={image.download_url}
+                    style={{
+                      width: dims.width,
+                      height: dims.height,
+                    }}
+                  />
+                </View>
 
-              {/* Image details */}
-              <View style={styles.detailsColumn}>
-                <View style={styles.detailFields}>
+                {/* Details */}
+                <View style={styles.detailsColumn}>
                   <View style={styles.row}>
-                    <Text style={{ ...styles.label, width: 76 }}>
+                    <Text style={styles.detailLabel}>
                       {t("date_taken")}
                     </Text>
-                    <Text style={styles.value}>
+                    <Text style={styles.detailValue}>
                       {formatDate(image.created_at)}
                     </Text>
                   </View>
@@ -104,10 +106,12 @@ export const ReportPDF: FC<ReportPDFProps> = ({
                       borderTopWidth: 0.5,
                     }}
                   >
-                    <Text style={{ ...styles.label, width: 76 }}>
+                    <Text style={styles.detailLabel}>
                       {t("description")}
                     </Text>
-                    <Text style={styles.value}>{image.description}</Text>
+                    <Text style={styles.detailValue}>
+                      {image.description}
+                    </Text>
                   </View>
 
                   <View
@@ -116,19 +120,19 @@ export const ReportPDF: FC<ReportPDFProps> = ({
                       borderTopWidth: 0.5,
                     }}
                   >
-                    <Text style={{ ...styles.label, width: 76 }}>
+                    <Text style={styles.detailLabel}>
                       {t("tags")}
                     </Text>
-                    <Text style={styles.value}>
+                    <Text style={styles.detailValue}>
                       {image.tags.map((tag) => tag.name).join(", ")}
                     </Text>
                   </View>
                 </View>
               </View>
-            </View>
-          </Page>
-        );
-      })}
+            );
+          })}
+        </View>
+      </Page>
     </Document>
   );
 };
@@ -141,7 +145,7 @@ const getImageDimensions = (
 ) => {
   const aspectRatio = width / height;
 
-  let displayWidth = Math.min(width, maxWidth);
+  let displayWidth = maxWidth;
   let displayHeight = displayWidth / aspectRatio;
 
   if (displayHeight > maxHeight) {
@@ -183,10 +187,15 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  imageRow: {
-    flexDirection: "row",
+  imageList: {
     width: "100%",
     marginTop: 16,
+  },
+
+  imageItem: {
+    flexDirection: "row",
+    width: "100%",
+    marginBottom: 16,
   },
 
   imageColumn: {
@@ -197,10 +206,7 @@ const styles = StyleSheet.create({
 
   detailsColumn: {
     width: DETAILS_COLUMN_WIDTH,
-  },
-
-  detailFields: {
-    width: "100%",
+    marginLeft: IMAGE_GAP,
   },
 
   row: {
@@ -219,5 +225,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: fontColor1,
     width: "80%",
+  },
+
+  detailLabel: {
+    fontSize: 12,
+    color: fontColor2,
+    width: 76,
+  },
+
+  detailValue: {
+    fontSize: 12,
+    color: fontColor1,
+    width: DETAILS_COLUMN_WIDTH - 76 - 24,
   },
 });
