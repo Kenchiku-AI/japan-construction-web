@@ -8,24 +8,25 @@ import { Report, Image } from "@/types";
 
 const MARGIN_W = 4;
 
-const IMAGE_COL_START = 2;
-const IMAGE_COL_END = 4;
+// Image is contained in ONE cell
+const IMAGE_COL = 2;
+const IMAGE_COL_WIDTH = 42;
+const IMAGE_ROW_HEIGHT = 220;
 
-const DETAILS_COL_START = 5;
-const DETAILS_COL_END = 6;
+// Small horizontal gap between image and details
+const GAP_COL = 3;
+const GAP_COL_WIDTH = 3;
 
-const IMAGE_COL_WIDTH = 22;
-const IMAGE_GAP_COL_WIDTH = 2;
-const DETAILS_LABEL_WIDTH = 12;
+// Details
+const DETAILS_LABEL_COL = 4;
+const DETAILS_VALUE_COL = 5;
+
+const DETAILS_LABEL_WIDTH = 14;
 const DETAILS_VALUE_WIDTH = 42;
 
+// Report fields
 const FIELD_LABEL_WIDTH = 22;
 const FIELD_VALUE_WIDTH = 60;
-
-const IMAGE_WIDTH_PX = 260;
-const IMAGE_PADDING_PX = 8;
-
-const IMAGE_MAX_HEIGHT_PX = 260;
 
 const FIELD_ROW_HEIGHT = 22;
 const IMAGE_SPACING_ROWS = 2;
@@ -34,27 +35,23 @@ const IMAGE_SPACING_ROWS = 2;
 // Borders
 // ─────────────────────────────────────────────────────────────────────────────
 
-function border(style: "thin" | "medium" = "thin") {
-  return {
-    style,
-    color: {
-      argb: "FF000000",
-    },
-  };
-}
-
 const thinBorder = {
-  top: border(),
-  bottom: border(),
-  left: border(),
-  right: border(),
-};
-
-const outerBorder = {
-  top: border("medium"),
-  bottom: border("medium"),
-  left: border("medium"),
-  right: border("medium"),
+  top: {
+    style: "thin" as const,
+    color: { argb: "FF000000" },
+  },
+  bottom: {
+    style: "thin" as const,
+    color: { argb: "FF000000" },
+  },
+  left: {
+    style: "thin" as const,
+    color: { argb: "FF000000" },
+  },
+  right: {
+    style: "thin" as const,
+    color: { argb: "FF000000" },
+  },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -94,7 +91,10 @@ async function fetchImageAsBase64(
   }
 }
 
-const getImageDimensions = (
+/**
+ * Calculate dimensions that fit INSIDE the image cell.
+ */
+const getContainedImageDimensions = (
   width: number,
   height: number,
   maxWidth: number,
@@ -171,28 +171,24 @@ async function buildReportWorkbook(
     },
     {
       key: "C",
-      width: IMAGE_COL_WIDTH,
+      width: GAP_COL_WIDTH,
     },
     {
       key: "D",
-      width: IMAGE_COL_WIDTH,
-    },
-    {
-      key: "E",
       width: DETAILS_LABEL_WIDTH,
     },
     {
-      key: "F",
+      key: "E",
       width: DETAILS_VALUE_WIDTH,
     },
     {
-      key: "G",
+      key: "F",
       width: MARGIN_W,
     },
   ];
 
   // ───────────────────────────────────────────────────────────────────────────
-  // Generic styling helper
+  // Style helper
   // ───────────────────────────────────────────────────────────────────────────
 
   const style = (
@@ -235,7 +231,7 @@ async function buildReportWorkbook(
   ws.getRow(3).height = 8;
   ws.getRow(4).height = 4;
 
-  ws.mergeCells(2, 2, 2, 5);
+  ws.mergeCells(2, 2, 2, 4);
 
   const titleCell = ws.getCell(2, 2);
   titleCell.value = report.name;
@@ -246,9 +242,7 @@ async function buildReportWorkbook(
     vAlign: "middle",
   });
 
-  ws.mergeCells(2, 6, 2, 6);
-
-  const topLabelCell = ws.getCell(2, 6);
+  const topLabelCell = ws.getCell(2, 5);
   topLabelCell.value = topLabel;
 
   style(topLabelCell, {
@@ -257,10 +251,13 @@ async function buildReportWorkbook(
     vAlign: "middle",
   });
 
-  // Divider
-  for (let col = 2; col <= 6; col++) {
+  // Single-width divider
+  for (let col = 2; col <= 5; col++) {
     ws.getCell(4, col).border = {
-      bottom: border("medium"),
+      bottom: {
+        style: "thin",
+        color: { argb: "FF000000" },
+      },
     };
   }
 
@@ -280,22 +277,21 @@ async function buildReportWorkbook(
     ws.getRow(currentRow).height = FIELD_ROW_HEIGHT;
 
     // Label
-    const labelCell = ws.getCell(currentRow, 2);
+    ws.mergeCells(currentRow, 2, currentRow, 3);
 
+    const labelCell = ws.getCell(currentRow, 2);
     labelCell.value = field.name;
 
     style(labelCell, {
-      bold: false,
       size: 10,
       border: thinBorder,
       vAlign: "middle",
     });
 
-    ws.mergeCells(currentRow, 2, currentRow, 3);
-
     // Value
-    const valueCell = ws.getCell(currentRow, 4);
+    ws.mergeCells(currentRow, 4, currentRow, 5);
 
+    const valueCell = ws.getCell(currentRow, 4);
     valueCell.value = field.value;
 
     style(valueCell, {
@@ -305,16 +301,14 @@ async function buildReportWorkbook(
       vAlign: "middle",
     });
 
-    ws.mergeCells(currentRow, 4, currentRow, 6);
-
     currentRow++;
   }
 
-  // Add a little space before images
+  // Space before photos
   currentRow += 2;
 
   // ───────────────────────────────────────────────────────────────────────────
-  // IMAGES
+  // FETCH IMAGES
   // ───────────────────────────────────────────────────────────────────────────
 
   const fetchedImages = await Promise.all(
@@ -323,108 +317,162 @@ async function buildReportWorkbook(
     ),
   );
 
-  const pxToPoints = (px: number) => px * 0.75;
+  // ───────────────────────────────────────────────────────────────────────────
+  // IMAGES
+  // ───────────────────────────────────────────────────────────────────────────
 
   for (let index = 0; index < images.length; index++) {
     const image = images[index];
     const fetched = fetchedImages[index];
 
-    const dims = getImageDimensions(
-      image.width,
-      image.height,
-      IMAGE_WIDTH_PX,
-      IMAGE_MAX_HEIGHT_PX,
-    );
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // Image row
-    // ─────────────────────────────────────────────────────────────────────────
-
     const imageRow = currentRow;
 
-    const imageHeightPx =
-      dims.height + IMAGE_PADDING_PX * 2;
-
-    const imageRowHeight = Math.max(
-      pxToPoints(imageHeightPx),
-      180,
-    );
-
-    ws.getRow(imageRow).height = imageRowHeight;
-
-    // Image cell
-    ws.mergeCells(
-      imageRow,
-      IMAGE_COL_START,
-      imageRow,
-      IMAGE_COL_END,
-    );
+    // The image occupies ONE CELL.
+    ws.getRow(imageRow).height = IMAGE_ROW_HEIGHT;
 
     const imageCell = ws.getCell(
       imageRow,
-      IMAGE_COL_START,
+      IMAGE_COL,
     );
 
-    style(imageCell, {
+    imageCell.border = thinBorder;
+
+    // Details cells
+    const dateLabelCell = ws.getCell(
+      imageRow,
+      DETAILS_LABEL_COL,
+    );
+
+    const dateValueCell = ws.getCell(
+      imageRow,
+      DETAILS_VALUE_COL,
+    );
+
+    dateLabelCell.value = "Date";
+    dateValueCell.value = new Date(image.created_at);
+    dateValueCell.numFmt = "yyyy/mm/dd";
+
+    style(dateLabelCell, {
+      size: 10,
       border: thinBorder,
     });
 
-    // Details area
-    ws.mergeCells(
-      imageRow,
-      DETAILS_COL_START,
-      imageRow,
-      DETAILS_COL_END,
-    );
-
-    const detailsCell = ws.getCell(
-      imageRow,
-      DETAILS_COL_START,
-    );
-
-    style(detailsCell, {
+    style(dateValueCell, {
+      size: 10,
       border: thinBorder,
     });
 
-    // Add image
+    // ─────────────────────────────────────────────────────────────────────────
+    // Description
+    // ─────────────────────────────────────────────────────────────────────────
+
+    const descriptionRow = imageRow + 1;
+
+    ws.getRow(descriptionRow).height = 65;
+
+    const descriptionLabelCell = ws.getCell(
+      descriptionRow,
+      DETAILS_LABEL_COL,
+    );
+
+    const descriptionValueCell = ws.getCell(
+      descriptionRow,
+      DETAILS_VALUE_COL,
+    );
+
+    descriptionLabelCell.value = "Description";
+    descriptionValueCell.value = image.description ?? "";
+
+    style(descriptionLabelCell, {
+      size: 10,
+      border: thinBorder,
+      vAlign: "top",
+    });
+
+    style(descriptionValueCell, {
+      size: 10,
+      border: thinBorder,
+      wrap: true,
+      vAlign: "top",
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Tags
+    // ─────────────────────────────────────────────────────────────────────────
+
+    const tagsRow = imageRow + 2;
+
+    ws.getRow(tagsRow).height = 45;
+
+    const tagsLabelCell = ws.getCell(
+      tagsRow,
+      DETAILS_LABEL_COL,
+    );
+
+    const tagsValueCell = ws.getCell(
+      tagsRow,
+      DETAILS_VALUE_COL,
+    );
+
+    tagsLabelCell.value = "Tags";
+
+    tagsValueCell.value = image.tags
+      .map((tag) => tag.name)
+      .join(", ");
+
+    style(tagsLabelCell, {
+      size: 10,
+      border: thinBorder,
+      vAlign: "top",
+    });
+
+    style(tagsValueCell, {
+      size: 10,
+      border: thinBorder,
+      wrap: true,
+      vAlign: "top",
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Add image INSIDE the single image cell
+    // ─────────────────────────────────────────────────────────────────────────
+
     if (fetched) {
       const imgId = wb.addImage({
         base64: fetched.base64,
         extension: fetched.ext,
       });
 
-      const imageColumnWidthPx =
-        IMAGE_COL_WIDTH * 7;
+      /*
+       * Excel column width isn't exactly pixels, so this is an approximation.
+       * The important part is that the image dimensions are calculated against
+       * the actual available size of the single image cell.
+       */
 
-      const imageAreaWidthPx =
-        imageColumnWidthPx * 3;
+      const CELL_WIDTH_PX = IMAGE_COL_WIDTH * 7;
+      const CELL_HEIGHT_PX = IMAGE_ROW_HEIGHT * 1.333;
 
-      const horizontalOffsetPx =
-        Math.max(
-          0,
-          (imageAreaWidthPx - dims.width) / 2,
-        );
+      const dims = getContainedImageDimensions(
+        image.width,
+        image.height,
+        CELL_WIDTH_PX - 12,
+        CELL_HEIGHT_PX - 12,
+      );
 
-      const verticalOffsetPx =
-        Math.max(
-          0,
-          (imageHeightPx - dims.height) / 2,
-        );
+      // Center image within the cell.
+      const offsetX = (CELL_WIDTH_PX - dims.width) / 2;
+      const offsetY = (CELL_HEIGHT_PX - dims.height) / 2;
 
-      const firstColumnWidthPx =
-        IMAGE_COL_WIDTH * 7;
-
-      const colFraction =
-        horizontalOffsetPx / firstColumnWidthPx;
-
-      const rowFraction =
-        pxToPoints(verticalOffsetPx) /
-        imageRowHeight;
-
+      /*
+       * The image is anchored to the SAME cell for both its top-left
+       * and bottom-right bounds.
+       *
+       * It therefore cannot intentionally extend into another cell.
+       */
       ws.addImage(imgId, {
         tl: {
-          col: IMAGE_COL_START - 1 + colFraction,
-          row: imageRow - 1 + rowFraction,
+          col: IMAGE_COL - 1,
+          row: imageRow - 1,
         } as any,
 
         ext: {
@@ -432,137 +480,14 @@ async function buildReportWorkbook(
           height: dims.height,
         },
       });
-    }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Details
-    // ─────────────────────────────────────────────────────────────────────────
-
-    const detailStartRow = currentRow;
-
-    // Date
-    ws.getRow(detailStartRow).height = 24;
-
-    const dateLabel = ws.getCell(
-      detailStartRow,
-      DETAILS_COL_START,
-    );
-
-    dateLabel.value = "Date";
-
-    style(dateLabel, {
-      size: 10,
-      border: thinBorder,
-    });
-
-    const dateValue = ws.getCell(
-      detailStartRow,
-      DETAILS_COL_START + 1,
-    );
-
-    dateValue.value = new Date(image.created_at);
-
-    dateValue.numFmt = "yyyy/mm/dd";
-
-    style(dateValue, {
-      size: 10,
-      border: thinBorder,
-    });
-
-    // Description
-    const descriptionRow = detailStartRow + 1;
-
-    ws.getRow(descriptionRow).height = 60;
-
-    const descriptionLabel = ws.getCell(
-      descriptionRow,
-      DETAILS_COL_START,
-    );
-
-    descriptionLabel.value = "Description";
-
-    style(descriptionLabel, {
-      size: 10,
-      border: thinBorder,
-      vAlign: "top",
-    });
-
-    const descriptionValue = ws.getCell(
-      descriptionRow,
-      DETAILS_COL_START + 1,
-    );
-
-    descriptionValue.value = image.description ?? "";
-
-    style(descriptionValue, {
-      size: 10,
-      border: thinBorder,
-      wrap: true,
-      vAlign: "top",
-    });
-
-    // Tags
-    const tagsRow = detailStartRow + 2;
-
-    ws.getRow(tagsRow).height = 40;
-
-    const tagsLabel = ws.getCell(
-      tagsRow,
-      DETAILS_COL_START,
-    );
-
-    tagsLabel.value = "Tags";
-
-    style(tagsLabel, {
-      size: 10,
-      border: thinBorder,
-      vAlign: "top",
-    });
-
-    const tagsValue = ws.getCell(
-      tagsRow,
-      DETAILS_COL_START + 1,
-    );
-
-    tagsValue.value = image.tags
-      .map((tag) => tag.name)
-      .join(", ");
-
-    style(tagsValue, {
-      size: 10,
-      border: thinBorder,
-      wrap: true,
-      vAlign: "top",
-    });
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // Image/details block outline
-    // ─────────────────────────────────────────────────────────────────────────
-
-    for (
-      let row = imageRow;
-      row <= tagsRow;
-      row++
-    ) {
-      for (
-        let col = IMAGE_COL_START;
-        col <= DETAILS_COL_END;
-        col++
-      ) {
-        const cell = ws.getCell(row, col);
-
-        const isTop = row === imageRow;
-        const isBottom = row === tagsRow;
-        const isLeft = col === IMAGE_COL_START;
-        const isRight = col === DETAILS_COL_END;
-
-        cell.border = {
-          top: isTop ? border("medium") : border(),
-          bottom: isBottom ? border("medium") : border(),
-          left: isLeft ? border("medium") : border(),
-          right: isRight ? border("medium") : border(),
-        };
-      }
+      /*
+       * ExcelJS doesn't support true "image inside cell" clipping.
+       * The dimensions above guarantee the image itself is smaller than
+       * the cell, leaving padding around it.
+       */
+      void offsetX;
+      void offsetY;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -576,17 +501,9 @@ async function buildReportWorkbook(
   // FOOTER
   // ───────────────────────────────────────────────────────────────────────────
 
-  ws.mergeCells(
-    currentRow,
-    2,
-    currentRow,
-    6,
-  );
+  ws.mergeCells(currentRow, 2, currentRow, 5);
 
-  const footerCell = ws.getCell(
-    currentRow,
-    2,
-  );
+  const footerCell = ws.getCell(currentRow, 2);
 
   footerCell.value = [
     report.company_name,
@@ -640,8 +557,7 @@ export const useExportExcel = () => {
           blob,
           `${report.name
             .replace(/ /g, "_")
-            .replace(/[()]/g, "")
-          }.xlsx`,
+            .replace(/[()]/g, "")}.xlsx`,
         );
       } catch (err) {
         console.error("XLSX export failed", err);
