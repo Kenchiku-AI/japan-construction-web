@@ -230,12 +230,12 @@ const styles = StyleSheet.create({
   detailLabel: {
     fontSize: 12,
     color: fontColor2,
-    width: 76,
+    width: 50,
   },
 
   detailValue: {
     fontSize: 12,
     color: fontColor1,
-    width: DETAILS_COLUMN_WIDTH - 76 - 24,
+    width: DETAILS_COLUMN_WIDTH - 50 - 24,
   },
 });
