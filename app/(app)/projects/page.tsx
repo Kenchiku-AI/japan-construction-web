@@ -99,7 +99,7 @@ const ProjectsPage = () => {
         {loaded && hasArchived && (
           <>
             <Divider />
-            <div className="mx-4">
+            <div className="mx-3">
               <Button
                 variant="tertiary"
                 label={showArchived ? t("hide_archived") : t("show_archived")}

@@ -389,7 +389,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
       )}
       {!!project && (
         <div className="mt-8 flex flex-1 justify-end">
-          <div className="flex gap-4">
+          <div className="flex gap-8">
             {isAdmin && (
               <Button
                 variant="tertiary"
