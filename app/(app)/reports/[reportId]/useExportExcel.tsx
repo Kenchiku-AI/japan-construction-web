@@ -150,6 +150,13 @@ async function buildReportWorkbook(
 
   // ───────────────────────────────────────────────────────────────────────────
   // Columns
+  //
+  // A = left gutter
+  // B = image / report content
+  // C = gap between image and details
+  // D = detail labels
+  // E = detail values
+  // F = right gutter
   // ───────────────────────────────────────────────────────────────────────────
 
   ws.columns = [
@@ -178,6 +185,12 @@ async function buildReportWorkbook(
       width: MARGIN_W,
     },
   ];
+
+  // Explicitly keep the gutter columns completely borderless.
+  for (let row = 1; row <= 1000; row++) {
+    ws.getCell(row, 1).border = {};
+    ws.getCell(row, 6).border = {};
+  }
 
   // ───────────────────────────────────────────────────────────────────────────
   // Style helper
@@ -211,6 +224,8 @@ async function buildReportWorkbook(
 
     if (opts.border) {
       cell.border = opts.border;
+    } else {
+      cell.border = {};
     }
   };
 
@@ -241,8 +256,8 @@ async function buildReportWorkbook(
     vAlign: "middle",
   });
 
-  // No rows 3/4.
   // No divider below the title.
+  // No extra rows between title and fields.
 
   // ───────────────────────────────────────────────────────────────────────────
   // REPORT FIELDS
@@ -321,7 +336,7 @@ async function buildReportWorkbook(
       IMAGE_COL,
     );
 
-    // No border around the image cell.
+    // Image cell has NO border.
     imageCell.border = {};
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -330,7 +345,7 @@ async function buildReportWorkbook(
 
     const dateRow = imageRow;
 
-    // Keep date row compact enough for one line.
+    // Compact row that fits one line of text.
     ws.getRow(dateRow).height = 22;
 
     const dateLabelCell = ws.getCell(
@@ -443,6 +458,10 @@ async function buildReportWorkbook(
         extension: fetched.ext,
       });
 
+      /*
+       * Excel column width and row height use different units.
+       * Keep the image comfortably inside the image column/row.
+       */
       const CELL_WIDTH_PX = IMAGE_COL_WIDTH * 7;
       const CELL_HEIGHT_PX = IMAGE_ROW_HEIGHT * 1.333;
 
