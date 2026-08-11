@@ -505,26 +505,10 @@ async function buildReportWorkbook(
           CELL_HEIGHT_PX - 12,
         );
 
-      const offsetX =
-        (CELL_WIDTH_PX - dims.width) / 2;
-
-      const offsetY =
-        (CELL_HEIGHT_PX - dims.height) / 2;
-
       ws.addImage(imgId, {
         tl: {
-          /*
-           * Start at the exact top of the Date Taken row.
-           * There is intentionally no vertical offset here.
-           */
-          col:
-            IMAGE_COL -
-            1 +
-            offsetX / 7,
-          row:
-            imageRow -
-            1 +
-            offsetY / 20,
+          col: IMAGE_COL - 1,
+          row: imageRow - 1,
         } as any,
 
         ext: {
