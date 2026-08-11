@@ -27,7 +27,7 @@ const FIELD_ROW_HEIGHT = 22;
 // This is deliberately larger than a single normal row so the
 // separation between photos is always clearly visible.
 const IMAGE_SPACING_ROWS = 1;
-const IMAGE_SPACING_ROW_HEIGHT = 22;
+const IMAGE_SPACING_ROW_HEIGHT = 30;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Borders
