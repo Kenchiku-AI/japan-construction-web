@@ -23,9 +23,11 @@ const DETAILS_VALUE_WIDTH = 42;
 
 const FIELD_ROW_HEIGHT = 22;
 
-// Height of the blank space below the tags for every image.
-// This keeps the spacing between image blocks consistent.
-const IMAGE_PADDING_ROW_HEIGHT = 22;
+// Fixed minimum vertical space between image blocks.
+// This is deliberately larger than a single normal row so the
+// separation between photos is always clearly visible.
+const IMAGE_SPACING_ROWS = 2;
+const IMAGE_SPACING_ROW_HEIGHT = 22;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Borders
@@ -188,10 +190,30 @@ async function buildReportWorkbook(
     },
   ];
 
-  // Explicitly keep the gutter columns completely borderless.
+  // Explicitly set the gutter column widths as well.
+  // This ensures the right gutter exists even though it contains
+  // no report content.
+  ws.getColumn(1).width = MARGIN_W;
+  ws.getColumn(6).width = MARGIN_W;
+
+  // Keep both gutter columns completely borderless.
+  //
+  // Assigning an alignment also causes ExcelJS to retain the cells
+  // as part of the worksheet layout without adding visible content.
   for (let row = 1; row <= 1000; row++) {
-    ws.getCell(row, 1).border = {};
-    ws.getCell(row, 6).border = {};
+    const leftGutterCell = ws.getCell(row, 1);
+    leftGutterCell.border = {};
+    leftGutterCell.alignment = {
+      horizontal: "left",
+      vertical: "middle",
+    };
+
+    const rightGutterCell = ws.getCell(row, 6);
+    rightGutterCell.border = {};
+    rightGutterCell.alignment = {
+      horizontal: "left",
+      vertical: "middle",
+    };
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -325,21 +347,21 @@ async function buildReportWorkbook(
     const imageRow = currentRow;
 
     // ─────────────────────────────────────────────────────────────────────────
-    // IMAGE DETAILS ROWS
+    // IMAGE DETAIL ROWS
     //
-    // The image begins at imageRow, exactly aligned with the Date Taken row.
+    // The image starts at the exact same row as Date Taken.
     //
-    // The image spans:
-    //   - Date row
-    //   - Description row
-    //   - Tags row
-    //   - Fixed padding row(s)
+    //   imageRow       = Date Taken
+    //   imageRow + 1   = Description
+    //   imageRow + 2   = Tags
+    //   imageRow + 3   = blank spacing
+    //   imageRow + 4   = blank spacing
+    //   next image     = imageRow + 5
     // ─────────────────────────────────────────────────────────────────────────
 
     const dateRow = imageRow;
     const descriptionRow = imageRow + 1;
     const tagsRow = imageRow + 2;
-    const paddingRow = imageRow + 3;
 
     // Date
     ws.getRow(dateRow).height = 22;
@@ -350,10 +372,31 @@ async function buildReportWorkbook(
     // Tags
     ws.getRow(tagsRow).height = 45;
 
-    // Fixed padding below tags.
-    // This row is intentionally blank and borderless.
-    ws.getRow(paddingRow).height =
-      IMAGE_PADDING_ROW_HEIGHT;
+    // ─────────────────────────────────────────────────────────────────────────
+    // FIXED IMAGE SPACING
+    //
+    // These are intentionally blank rows. Their fixed heights guarantee
+    // that there is always a minimum amount of visible vertical space
+    // between one image block and the next.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    for (
+      let spacingIndex = 1;
+      spacingIndex <= IMAGE_SPACING_ROWS;
+      spacingIndex++
+    ) {
+      const spacingRow =
+        tagsRow + spacingIndex;
+
+      ws.getRow(spacingRow).height =
+        IMAGE_SPACING_ROW_HEIGHT;
+
+      // Make sure all cells in the spacing rows are completely
+      // borderless.
+      for (let col = 1; col <= 6; col++) {
+        ws.getCell(spacingRow, col).border = {};
+      }
+    }
 
     // ─────────────────────────────────────────────────────────────────────────
     // IMAGE CELL
@@ -473,23 +516,18 @@ async function buildReportWorkbook(
       });
 
       /*
-       * Excel column width and row height use different units.
+       * The image is allowed to use the entire image column width and
+       * the entire image-block height.
        *
-       * The image now occupies the entire image block:
-       *
-       *   Date       22
-       *   Description 65
-       *   Tags       45
-       *   Padding    22
-       *
-       * The top of the image is exactly aligned with the top of
-       * the Date Taken row.
+       * The image itself is positioned at the TOP-LEFT of column B
+       * and the Date Taken row.
        */
       const imageBlockHeight =
         22 +
         65 +
         45 +
-        IMAGE_PADDING_ROW_HEIGHT;
+        IMAGE_SPACING_ROWS *
+        IMAGE_SPACING_ROW_HEIGHT;
 
       const CELL_WIDTH_PX =
         IMAGE_COL_WIDTH * 7;
@@ -507,6 +545,7 @@ async function buildReportWorkbook(
 
       ws.addImage(imgId, {
         tl: {
+          // Exact top-left of column B / Date Taken row.
           col: IMAGE_COL - 1,
           row: imageRow - 1,
         } as any,
@@ -519,10 +558,15 @@ async function buildReportWorkbook(
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // SPACE BEFORE NEXT IMAGE
+    // MOVE TO NEXT IMAGE
+    //
+    // The next image starts AFTER all of the fixed spacing rows.
     // ─────────────────────────────────────────────────────────────────────────
 
-    currentRow = paddingRow + 1;
+    currentRow =
+      tagsRow +
+      IMAGE_SPACING_ROWS +
+      1;
   }
 
   // ───────────────────────────────────────────────────────────────────────────
