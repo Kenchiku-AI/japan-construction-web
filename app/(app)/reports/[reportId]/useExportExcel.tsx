@@ -501,8 +501,8 @@ async function buildReportWorkbook(
         getContainedImageDimensions(
           image.width,
           image.height,
-          CELL_WIDTH_PX - 12,
-          CELL_HEIGHT_PX - 12,
+          CELL_WIDTH_PX,
+          CELL_HEIGHT_PX,
         );
 
       ws.addImage(imgId, {
