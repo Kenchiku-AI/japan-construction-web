@@ -26,6 +26,8 @@ Font.register({
 });
 
 const PAGE_CONTENT_WIDTH = 499;
+const IMAGE_COLUMN_WIDTH = 280;
+const DETAILS_COLUMN_WIDTH = PAGE_CONTENT_WIDTH - IMAGE_COLUMN_WIDTH;
 const MAX_IMAGE_HEIGHT = 580;
 
 export const ReportPDF: FC<ReportPDFProps> = ({
@@ -43,6 +45,7 @@ export const ReportPDF: FC<ReportPDFProps> = ({
         <Text style={styles.topLabel}>{topLabel}</Text>
         <Text style={styles.title}>{report.name}</Text>
         <View style={styles.divider} />
+
         <View style={styles.fields}>
           {report.fields.map((field, index) => (
             <View
@@ -60,48 +63,67 @@ export const ReportPDF: FC<ReportPDFProps> = ({
           ))}
         </View>
       </Page>
-      {images.map((image, index) => {
-        const dims = getImageDimensions(image.width, image.height);
+
+      {images.map((image) => {
+        const dims = getImageDimensions(
+          image.width,
+          image.height,
+          IMAGE_COLUMN_WIDTH,
+          MAX_IMAGE_HEIGHT
+        );
 
         return (
           <Page size="A4" key={image.id} style={styles.page}>
-            <PDFImage
-              src={image.download_url}
-              style={{ width: dims.width, height: dims.height }}
-            />
-            <View style={styles.fields}>
-              <View
-                style={{
-                  ...styles.row,
-                  marginTop: 16,
-                }}
-              >
-                <Text style={{ ...styles.label, width: 76 }}>
-                  {t("date_taken")}
-                </Text>
-                <Text style={styles.value}>{formatDate(image.created_at)}</Text>
+            <View style={styles.imageRow}>
+              {/* Image */}
+              <View style={styles.imageColumn}>
+                <PDFImage
+                  src={image.download_url}
+                  style={{
+                    width: dims.width,
+                    height: dims.height,
+                  }}
+                />
               </View>
-              <View
-                style={{
-                  ...styles.row,
-                  borderTopWidth: 0.5,
-                }}
-              >
-                <Text style={{ ...styles.label, width: 76 }}>
-                  {t("description")}
-                </Text>
-                <Text style={styles.value}>{image.description}</Text>
-              </View>
-              <View
-                style={{
-                  ...styles.row,
-                  borderTopWidth: 0.5,
-                }}
-              >
-                <Text style={{ ...styles.label, width: 76 }}>{t("tags")}</Text>
-                <Text style={styles.value}>
-                  {image.tags.map((tag) => tag.name).join(", ")}
-                </Text>
+
+              {/* Image details */}
+              <View style={styles.detailsColumn}>
+                <View style={styles.detailFields}>
+                  <View style={styles.row}>
+                    <Text style={{ ...styles.label, width: 76 }}>
+                      {t("date_taken")}
+                    </Text>
+                    <Text style={styles.value}>
+                      {formatDate(image.created_at)}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.row,
+                      borderTopWidth: 0.5,
+                    }}
+                  >
+                    <Text style={{ ...styles.label, width: 76 }}>
+                      {t("description")}
+                    </Text>
+                    <Text style={styles.value}>{image.description}</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.row,
+                      borderTopWidth: 0.5,
+                    }}
+                  >
+                    <Text style={{ ...styles.label, width: 76 }}>
+                      {t("tags")}
+                    </Text>
+                    <Text style={styles.value}>
+                      {image.tags.map((tag) => tag.name).join(", ")}
+                    </Text>
+                  </View>
+                </View>
               </View>
             </View>
           </Page>
@@ -111,18 +133,26 @@ export const ReportPDF: FC<ReportPDFProps> = ({
   );
 };
 
-const getImageDimensions = (width: number, height: number) => {
+const getImageDimensions = (
+  width: number,
+  height: number,
+  maxWidth: number,
+  maxHeight: number
+) => {
   const aspectRatio = width / height;
 
-  let displayWidth = Math.min(width, PAGE_CONTENT_WIDTH);
+  let displayWidth = Math.min(width, maxWidth);
   let displayHeight = displayWidth / aspectRatio;
 
-  if (displayHeight > MAX_IMAGE_HEIGHT) {
-    displayHeight = MAX_IMAGE_HEIGHT;
+  if (displayHeight > maxHeight) {
+    displayHeight = maxHeight;
     displayWidth = displayHeight * aspectRatio;
   }
 
-  return { width: displayWidth, height: displayHeight };
+  return {
+    width: displayWidth,
+    height: displayHeight,
+  };
 };
 
 const styles = StyleSheet.create({
@@ -130,34 +160,61 @@ const styles = StyleSheet.create({
     padding: 48,
     fontFamily: "NotoSansJP",
   },
+
   topLabel: {
     fontSize: 12,
     color: fontColor2,
     marginBottom: 12,
   },
+
   title: {
     fontSize: 20,
     color: fontColor1,
     marginBottom: 12,
   },
+
   divider: {
     height: 1,
     backgroundColor: fontColor2,
     width: "100%",
   },
+
   fields: {
     width: "100%",
   },
+
+  imageRow: {
+    flexDirection: "row",
+    width: "100%",
+    marginTop: 16,
+  },
+
+  imageColumn: {
+    width: IMAGE_COLUMN_WIDTH,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+  },
+
+  detailsColumn: {
+    width: DETAILS_COLUMN_WIDTH,
+  },
+
+  detailFields: {
+    width: "100%",
+  },
+
   row: {
     flexDirection: "row",
     borderTopColor: fontColor2,
     padding: 12,
   },
+
   label: {
     fontSize: 12,
     color: fontColor2,
     width: "20%",
   },
+
   value: {
     fontSize: 12,
     color: fontColor1,
