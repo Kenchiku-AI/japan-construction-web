@@ -189,13 +189,13 @@ const styles = StyleSheet.create({
 
   imageList: {
     width: "100%",
-    marginTop: 16,
+    marginTop: 32,
   },
 
   imageItem: {
     flexDirection: "row",
     width: "100%",
-    marginBottom: 16,
+    marginBottom: 32,
   },
 
   imageColumn: {
