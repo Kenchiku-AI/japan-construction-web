@@ -11,7 +11,6 @@ const MARGIN_W = 4;
 
 const IMAGE_COL = 2;
 const IMAGE_COL_WIDTH = 42;
-const IMAGE_ROW_HEIGHT = 220;
 
 const GAP_COL = 3;
 const GAP_COL_WIDTH = 3;
@@ -23,7 +22,10 @@ const DETAILS_LABEL_WIDTH = 14;
 const DETAILS_VALUE_WIDTH = 42;
 
 const FIELD_ROW_HEIGHT = 22;
-const IMAGE_SPACING_ROWS = 2;
+
+// Height of the blank space below the tags for every image.
+// This keeps the spacing between image blocks consistent.
+const IMAGE_PADDING_ROW_HEIGHT = 22;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Borders
@@ -256,9 +258,6 @@ async function buildReportWorkbook(
     vAlign: "middle",
   });
 
-  // No divider below the title.
-  // No extra rows between title and fields.
-
   // ───────────────────────────────────────────────────────────────────────────
   // REPORT FIELDS
   // ───────────────────────────────────────────────────────────────────────────
@@ -326,27 +325,50 @@ async function buildReportWorkbook(
     const imageRow = currentRow;
 
     // ─────────────────────────────────────────────────────────────────────────
-    // IMAGE CELL
+    // IMAGE DETAILS ROWS
+    //
+    // The image begins at imageRow, exactly aligned with the Date Taken row.
+    //
+    // The image spans:
+    //   - Date row
+    //   - Description row
+    //   - Tags row
+    //   - Fixed padding row(s)
     // ─────────────────────────────────────────────────────────────────────────
 
-    ws.getRow(imageRow).height = IMAGE_ROW_HEIGHT;
+    const dateRow = imageRow;
+    const descriptionRow = imageRow + 1;
+    const tagsRow = imageRow + 2;
+    const paddingRow = imageRow + 3;
+
+    // Date
+    ws.getRow(dateRow).height = 22;
+
+    // Description
+    ws.getRow(descriptionRow).height = 65;
+
+    // Tags
+    ws.getRow(tagsRow).height = 45;
+
+    // Fixed padding below tags.
+    // This row is intentionally blank and borderless.
+    ws.getRow(paddingRow).height =
+      IMAGE_PADDING_ROW_HEIGHT;
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // IMAGE CELL
+    // ─────────────────────────────────────────────────────────────────────────
 
     const imageCell = ws.getCell(
       imageRow,
       IMAGE_COL,
     );
 
-    // Image cell has NO border.
     imageCell.border = {};
 
     // ─────────────────────────────────────────────────────────────────────────
     // DATE
     // ─────────────────────────────────────────────────────────────────────────
-
-    const dateRow = imageRow;
-
-    // Compact row that fits one line of text.
-    ws.getRow(dateRow).height = 22;
 
     const dateLabelCell = ws.getCell(
       dateRow,
@@ -379,10 +401,6 @@ async function buildReportWorkbook(
     // DESCRIPTION
     // ─────────────────────────────────────────────────────────────────────────
 
-    const descriptionRow = imageRow + 1;
-
-    ws.getRow(descriptionRow).height = 65;
-
     const descriptionLabelCell = ws.getCell(
       descriptionRow,
       DETAILS_LABEL_COL,
@@ -401,23 +419,19 @@ async function buildReportWorkbook(
     style(descriptionLabelCell, {
       size: 10,
       border: thinBorder,
-      vAlign: "top",
+      vAlign: "middle",
     });
 
     style(descriptionValueCell, {
       size: 10,
       border: thinBorder,
       wrap: true,
-      vAlign: "top",
+      vAlign: "middle",
     });
 
     // ─────────────────────────────────────────────────────────────────────────
     // TAGS
     // ─────────────────────────────────────────────────────────────────────────
-
-    const tagsRow = imageRow + 2;
-
-    ws.getRow(tagsRow).height = 45;
 
     const tagsLabelCell = ws.getCell(
       tagsRow,
@@ -438,14 +452,14 @@ async function buildReportWorkbook(
     style(tagsLabelCell, {
       size: 10,
       border: thinBorder,
-      vAlign: "top",
+      vAlign: "middle",
     });
 
     style(tagsValueCell, {
       size: 10,
       border: thinBorder,
       wrap: true,
-      vAlign: "top",
+      vAlign: "middle",
     });
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -460,17 +474,36 @@ async function buildReportWorkbook(
 
       /*
        * Excel column width and row height use different units.
-       * Keep the image comfortably inside the image column/row.
+       *
+       * The image now occupies the entire image block:
+       *
+       *   Date       22
+       *   Description 65
+       *   Tags       45
+       *   Padding    22
+       *
+       * The top of the image is exactly aligned with the top of
+       * the Date Taken row.
        */
-      const CELL_WIDTH_PX = IMAGE_COL_WIDTH * 7;
-      const CELL_HEIGHT_PX = IMAGE_ROW_HEIGHT * 1.333;
+      const imageBlockHeight =
+        22 +
+        65 +
+        45 +
+        IMAGE_PADDING_ROW_HEIGHT;
 
-      const dims = getContainedImageDimensions(
-        image.width,
-        image.height,
-        CELL_WIDTH_PX - 12,
-        CELL_HEIGHT_PX - 12,
-      );
+      const CELL_WIDTH_PX =
+        IMAGE_COL_WIDTH * 7;
+
+      const CELL_HEIGHT_PX =
+        imageBlockHeight * 1.333;
+
+      const dims =
+        getContainedImageDimensions(
+          image.width,
+          image.height,
+          CELL_WIDTH_PX - 12,
+          CELL_HEIGHT_PX - 12,
+        );
 
       const offsetX =
         (CELL_WIDTH_PX - dims.width) / 2;
@@ -480,6 +513,10 @@ async function buildReportWorkbook(
 
       ws.addImage(imgId, {
         tl: {
+          /*
+           * Start at the exact top of the Date Taken row.
+           * There is intentionally no vertical offset here.
+           */
           col:
             IMAGE_COL -
             1 +
@@ -501,10 +538,7 @@ async function buildReportWorkbook(
     // SPACE BEFORE NEXT IMAGE
     // ─────────────────────────────────────────────────────────────────────────
 
-    currentRow =
-      tagsRow +
-      IMAGE_SPACING_ROWS +
-      1;
+    currentRow = paddingRow + 1;
   }
 
   // ───────────────────────────────────────────────────────────────────────────
