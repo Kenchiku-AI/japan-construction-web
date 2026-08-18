@@ -44,6 +44,8 @@ import {
   AutofillRequest,
   AutofillResponse,
   CompanyUser,
+  CustomFieldDefinition,
+  CustomFieldDefinitionsResponse,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -470,6 +472,10 @@ export const useApiData = () => {
       const url = "/invitations/accept";
       return call(() => http.post<AcceptInvitationResponse>(url, request));
     },
+    async getCustomFieldDefinitions(companyId: string) {
+      const url = `/custom-fields/definitions?company_id=${companyId}`;
+      return call(() => http.get<CustomFieldDefinitionsResponse>(url));
+    }
   };
 
   return {

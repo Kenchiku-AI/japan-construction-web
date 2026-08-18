@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 import { Chat, Check } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { bgColor2, bgColor3, bgColor5, errorColor1, errorColor2, fontColor1 } from "@/lib/constants";
+import { truncateText } from "@/lib/helpers";
 
 interface ConversationsListProps {
   conversations: Conversation[];
@@ -23,13 +24,6 @@ const ConversationsList: FC<ConversationsListProps> = ({
 
   if (isEmpty) {
     return <div className={styles.empty}>{t("empty_conversations_description")}</div>;
-  }
-
-  const truncateText = (text: string, maxLength: number) => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + '...';
-    }
-    return text;
   }
 
   return (

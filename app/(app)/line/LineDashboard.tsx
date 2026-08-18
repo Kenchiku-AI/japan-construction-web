@@ -20,6 +20,7 @@ import EditConversationItemTypeModal from "./EditConversationItemTypeModal";
 import ConfirmDeleteModal from "../projects/[projectId]/ConfirmDeleteModal";
 import { ConversationItemType } from "@/types";
 import { useConversationItemTypes } from "@/lib/useConversationItemTypes";
+import { truncateText } from "@/lib/helpers";
 
 interface LineDashboardProps {
   companyId: string;
@@ -60,13 +61,6 @@ const LineDashboard: FC<LineDashboardProps> = ({ companyId }) => {
     return (
       <Loader />
     );
-  }
-
-  const truncateText = (text: string, maxLength: number) => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + '...';
-    }
-    return text;
   }
 
   return (

@@ -6,7 +6,7 @@ import { Company } from "@/types/companies";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { ConversationItemTypeRequest, ReportTemplate, ReportTemplateRequest } from "@/types";
+import { ReportTemplate, ReportTemplateRequest } from "@/types";
 
 export const useCompany = (companyId: string) => {
   const [loading, setLoading] = useState(false);

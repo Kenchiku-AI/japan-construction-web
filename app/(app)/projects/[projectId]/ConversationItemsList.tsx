@@ -6,6 +6,7 @@ import { AnnotationCheck } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { doneColor1, doneColor2, errorColor1, errorColor2, fontColor1, fontColor3, inProgressColor1, inProgressColor2, } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
+import { truncateText } from "@/lib/helpers";
 
 interface ConversationItemsListProps {
   conversationItems: ConversationItem[];
@@ -26,13 +27,6 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
 
   if (isEmpty) {
     return <div className={styles.empty}>{t("empty_conversation_items_description")}</div>;
-  }
-
-  const truncateText = (text: string, maxLength: number) => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + '...';
-    }
-    return text;
   }
 
   const getStatusColors = (status: string) => {

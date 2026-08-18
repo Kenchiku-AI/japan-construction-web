@@ -37,6 +37,7 @@ const Select: FC<SelectProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
+  const openUpwardRef = useRef(false);
   const [dropdownStyles, setDropdownStyles] = useState<CSSProperties>({});
 
   const selectedOption = useMemo(() => {
@@ -54,8 +55,10 @@ const Select: FC<SelectProps> = ({
       const rect = triggerRef.current.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
       const spaceAbove = rect.top;
-      const maxHeight = Math.max(spaceBelow, spaceAbove) - 8; // padding from edge
+      const maxHeight = Math.max(spaceBelow, spaceAbove) - 8;
       const openUpward = spaceBelow < 200 && spaceAbove > spaceBelow;
+
+      openUpwardRef.current = openUpward;
 
       setDropdownStyles({
         position: "fixed",
@@ -94,8 +97,10 @@ const Select: FC<SelectProps> = ({
           paddingTop: !value ? undefined : 16,
           pointerEvents: disabled ? "none" : undefined,
           outlineColor: "var(--text-color-1)",
-          borderBottomLeftRadius: open ? 0 : undefined,
-          borderBottomRightRadius: open ? 0 : undefined,
+          borderTopLeftRadius: open && openUpwardRef.current ? 0 : undefined,
+          borderTopRightRadius: open && openUpwardRef.current ? 0 : undefined,
+          borderBottomLeftRadius: open && !openUpwardRef.current ? 0 : undefined,
+          borderBottomRightRadius: open && !openUpwardRef.current ? 0 : undefined,
           ...style,
         }}
       >
@@ -111,8 +116,10 @@ const Select: FC<SelectProps> = ({
               ...dropdownStyles,
               backgroundColor: bgColor2,
               fontSize: 18,
-              borderTopLeftRadius: 0,
-              borderTopRightRadius: 0,
+              borderTopLeftRadius: openUpwardRef.current ? undefined : 0,
+              borderTopRightRadius: openUpwardRef.current ? undefined : 0,
+              borderBottomLeftRadius: openUpwardRef.current ? 0 : undefined,
+              borderBottomRightRadius: openUpwardRef.current ? 0 : undefined,
             }}
           >
             {options.map((option, index) => (
