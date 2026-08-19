@@ -10,11 +10,11 @@ import { useRouter } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
 import { useFeatures } from "@/lib/useFeatures";
 import { cardClass } from "@/lib/constants";
-import CustomFieldsList from "./CustomFieldsList";
+import CustomFieldsList from "../../../custom-object-definitions/[customObjectDefinitionId]/CustomFieldsList";
 import { useCustomFields } from "./useCustomFields";
 import CreateCustomFieldModal from "./CreateCustomFieldModal";
 import EditCustomFieldModal from "./EditCustomFieldModal";
-import { CustomFieldDefinition } from "@/types";
+import { CustomFieldDefinition, CustomFieldEntityType, CustomRelationshipType } from "@/types";
 import CustomObjectsList from "./CustomObjectsList";
 
 interface CustomInfoDashboardProps {
@@ -27,11 +27,12 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
   const { isFormsEnabled } = useFeatures();
   const { currentUser } = useApi();
   const {
-    companyFields,
-    projectFields,
-    userFields,
+    companyItems,
+    projectItems,
+    userItems,
     customObjects,
     createCustomFieldDefinition,
+    createCustomRelationshipDefinition,
     loading
   } = useCustomFields(companyId);
   const [showLoader, setShowLoader] = useState(false);
@@ -86,10 +87,16 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         </div>
         <div className={cardClass}>
           <CustomFieldsList
-            fields={companyFields}
-            isEmpty={companyFields.length === 0 && !loading}
-            onClickField={(f) => {
-              setEditCustomField(f);
+            items={companyItems}
+            isEmpty={companyItems.length === 0 && !loading}
+            onChangeOrder={() => {
+
+            }}
+            onEdit={(i) => {
+
+            }}
+            onDelete={(i) => {
+
             }}
           />
         </div>
@@ -110,10 +117,16 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         </div>
         <div className={cardClass}>
           <CustomFieldsList
-            fields={userFields}
-            isEmpty={userFields.length === 0 && !loading}
-            onClickField={(f) => {
-              setEditCustomField(f);
+            items={userItems}
+            isEmpty={userItems.length === 0 && !loading}
+            onChangeOrder={() => {
+
+            }}
+            onEdit={(i) => {
+
+            }}
+            onDelete={(i) => {
+
             }}
           />
         </div>
@@ -134,10 +147,16 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         </div>
         <div className={cardClass}>
           <CustomFieldsList
-            fields={projectFields}
-            isEmpty={projectFields.length === 0 && !loading}
-            onClickField={(f) => {
-              setEditCustomField(f);
+            items={projectItems}
+            isEmpty={projectItems.length === 0 && !loading}
+            onChangeOrder={() => {
+
+            }}
+            onEdit={(i) => {
+
+            }}
+            onDelete={(i) => {
+
             }}
           />
         </div>
@@ -148,8 +167,20 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         onClose={() => {
           setCreateCustomFieldType("");
         }}
-        onCreateField={async (name, description) => {
-          await api
+        onCreate={async (name, description, fieldType, relationshipType, relationshipTarget) => {
+          if (fieldType === "relationship") {
+            createCustomRelationshipDefinition({
+              name,
+              description,
+              source_entity_type: createCustomFieldType as CustomFieldEntityType,
+              target_entity_type: relationshipTarget as CustomFieldEntityType,
+              cardinality: relationshipType as CustomRelationshipType,
+              company_id: companyId
+            })
+          } else {
+
+          }
+
           setCreateCustomFieldType("");
         }}
       />

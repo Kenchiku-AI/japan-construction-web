@@ -12,6 +12,11 @@ export enum CustomFieldEntityType {
   CustomObject = "custom_object"
 }
 
+export enum CustomRelationshipType {
+  One = "one",
+  Many = "many"
+}
+
 export type CustomFieldDefinition = {
   id: string;
   name: string;
@@ -54,6 +59,7 @@ export type CustomRelationshipDefinition = {
   id: string;
   name: string;
   description: string;
+  sort_order: number;
 }
 
 export type CustomRelationship = {}
@@ -62,9 +68,11 @@ export type CreateCustomRelationshipDefinitionRequest = {
   company_id: string;
   name: string;
   description: string;
-  data_type: CustomFieldDataType;
-  entity_type: CustomFieldEntityType;
-  custom_object_definition_id?: string;
+  cardinality: CustomRelationshipType;
+  source_entity_type: CustomFieldEntityType;
+  target_entity_type: CustomFieldEntityType;
+  source_custom_object_definition_id?: string;
+  target_custom_object_definition_id?: string;
 }
 
 

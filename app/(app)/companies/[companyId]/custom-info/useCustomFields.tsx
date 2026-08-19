@@ -1,20 +1,57 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { CreateCustomFieldDefinitionRequest, CustomFieldDefinition, CustomFieldEntityType, CustomObject, UpdateUserRequest, User } from "@/types";
+import {
+  CreateCustomFieldDefinitionRequest,
+  CreateCustomRelationshipDefinitionRequest,
+  CustomFieldDefinition,
+  CustomFieldEntityType,
+  CustomObjectDefinition,
+  CustomRelationshipDefinition,
+} from "@/types";
 
 export const useCustomFields = (companyId: string) => {
   const [loading, setLoading] = useState(true);
   const [companyFields, setCompanyFields] = useState<CustomFieldDefinition[]>([]);
+  const [companyRelationships, setCompanyRelationships] = useState<CustomRelationshipDefinition[]>([]);
   const [projectFields, setProjectFields] = useState<CustomFieldDefinition[]>([]);
+  const [projectRelationships, setProjectRelationships] = useState<CustomRelationshipDefinition[]>([]);
   const [userFields, setUserFields] = useState<CustomFieldDefinition[]>([]);
-  const [customObjects, setCustomObjects] = useState<CustomObject[]>([]);
+  const [userRelationships, setUserRelationships] = useState<CustomRelationshipDefinition[]>([]);
+  const [customObjects, setCustomObjects] = useState<CustomObjectDefinition[]>([]);
   const api = useApi();
   const { showModal } = useModal();
   const { t } = useTranslation();
+
+  const companyItems = useMemo(() => {
+    return [
+      ...companyFields,
+      ...companyRelationships
+    ].sort(
+      (a, b) => a.sort_order - b.sort_order
+    );
+  }, [companyFields, companyRelationships]);
+
+  const projectItems = useMemo(() => {
+    return [
+      ...projectFields,
+      ...projectRelationships
+    ].sort(
+      (a, b) => a.sort_order - b.sort_order
+    );
+  }, [projectFields, projectRelationships]);
+
+  const userItems = useMemo(() => {
+    return [
+      ...userFields,
+      ...userRelationships
+    ].sort(
+      (a, b) => a.sort_order - b.sort_order
+    );
+  }, [userFields, userRelationships]);
 
   useEffect(() => {
     getCustomFieldDefinitions(companyId);
@@ -82,25 +119,25 @@ export const useCustomFields = (companyId: string) => {
     setLoading(true);
 
     try {
-      const response = await api.createCustomFieldDefinition(request);
+      const response = await api.createCustomRelationshipDefinition(request);
 
       if (response) {
-        switch (request.entity_type) {
+        switch (request.source_entity_type) {
           case CustomFieldEntityType.Project:
-            setProjectFields([
-              ...projectFields,
+            setProjectRelationships([
+              ...projectRelationships,
               response
             ]);
             break;
           case CustomFieldEntityType.User:
-            setUserFields([
-              ...userFields,
+            setUserRelationships([
+              ...userRelationships,
               response
             ]);
             break;
           case CustomFieldEntityType.Company:
-            setCompanyFields([
-              ...companyFields,
+            setCompanyRelationships([
+              ...companyRelationships,
               response
             ]);
             break;
@@ -118,10 +155,11 @@ export const useCustomFields = (companyId: string) => {
 
   return {
     loading,
-    companyFields,
-    userFields,
-    projectFields,
-    createCustomFieldDefinition,
+    companyItems,
+    userItems,
+    projectItems,
     customObjects,
+    createCustomFieldDefinition,
+    createCustomRelationshipDefinition,
   };
 };

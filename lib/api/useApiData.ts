@@ -49,6 +49,8 @@ import {
   CustomObjectDefinition,
   CustomObject,
   CreateCustomFieldDefinitionRequest,
+  CreateCustomRelationshipDefinitionRequest,
+  CustomRelationshipDefinition,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -481,7 +483,11 @@ export const useApiData = () => {
     },
     async createCustomFieldDefinition(request: CreateCustomFieldDefinitionRequest) {
       const url = `/custom-fields/definitions`;
-      return call(() => http.post<CustomFieldDefinition>(url));
+      return call(() => http.post<CustomFieldDefinition>(url, request));
+    },
+    async createCustomRelationshipDefinition(request: CreateCustomRelationshipDefinitionRequest) {
+      const url = `/custom-relationships/definitions`;
+      return call(() => http.post<CustomRelationshipDefinition>(url, request));
     },
     async getCustomObjectDefinitions(companyId: string) {
       const url = `/custom-objects/definitions?company_id=${companyId}`;

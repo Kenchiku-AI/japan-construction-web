@@ -12,7 +12,13 @@ interface CreateCustomFieldModalProps {
   ownerType: string;
   customObjects?: CustomObjectDefinition[];
   onClose: () => void;
-  onCreateField: (name: string, description: string) => void;
+  onCreate: (
+    name: string,
+    description: string,
+    fieldType: string,
+    relationshipType?: string,
+    relationshipTarget?: string
+  ) => void;
 }
 
 const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
@@ -20,14 +26,14 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
   ownerType,
   customObjects,
   onClose,
-  onCreateField,
+  onCreate,
 }) => {
   const [title, setTitle] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [fieldType, setFieldType] = useState("text");
   const [relationshipType, setRelationshipType] = useState("one");
-  const [relationshipTarget, setRelationshipTarget] = useState("one");
+  const [relationshipTarget, setRelationshipTarget] = useState("project");
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -68,6 +74,8 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
       setName("");
       setDescription("");
       setFieldType("text");
+      setRelationshipType("one");
+      setRelationshipTarget("project");
     }, 500);
   };
 
@@ -133,7 +141,13 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
         label={t("create")}
         onClick={() => {
           reset();
-          onCreateField(name, description,);
+          onCreate(
+            name,
+            description,
+            fieldType,
+            relationshipType,
+            relationshipTarget
+          );
         }}
       />
     </Modal>

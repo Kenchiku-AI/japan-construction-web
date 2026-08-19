@@ -7,15 +7,17 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS as DndCSS } from "@dnd-kit/utilities";
-import { Edit, Plus, Trash } from "@/app/ui/Icons";
-import { bgColor5, cardClass, fontColor1 } from "@/lib/constants";
+import { Edit, Trash } from "@/app/ui/Icons";
+import { bgColor5, fontColor1 } from "@/lib/constants";
 import styles from "./page.module.css";
 import { CustomFieldDefinition, CustomRelationshipDefinition } from "@/types";
+import { useTranslation } from "react-i18next";
 
 type CustomFieldListItem = CustomFieldDefinition | CustomRelationshipDefinition;
 
 interface CustomFieldsListProps {
   items: CustomFieldListItem[];
+  isEmpty: boolean;
   onChangeOrder: (items: CustomFieldListItem[]) => void;
   onEdit: (item: CustomFieldListItem) => void;
   onDelete: (item: CustomFieldListItem) => void;
@@ -24,11 +26,13 @@ interface CustomFieldsListProps {
 
 const CustomFieldsList: FC<CustomFieldsListProps> = ({
   items,
+  isEmpty,
   onChangeOrder,
   onEdit,
   onDelete,
-  hideCard
 }) => {
+  const { t } = useTranslation();
+
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
@@ -48,35 +52,39 @@ const CustomFieldsList: FC<CustomFieldsListProps> = ({
     [items],
   );
 
-  return (
-    <>
-      <div className={hideCard ? "mt-3" : cardClass}>
-        <div className={"flex flex-col gap-3"}>
-          <DndContext
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={items.map((item) => item.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              {items.map((item) => (
-                <CustomFieldListCell
-                  key={item.id}
-                  item={item}
-                  onEdit={() => {
-                    onEdit(item);
-                  }}
-                  onDelete={() => {
-                    onDelete(item);
-                  }}
-                />
-              ))}
-            </SortableContext>
-          </DndContext>
-        </div>
+  if (isEmpty) {
+    return (
+      <div className={styles.empty}>
+        {t("empty_custom_fields_description")}
       </div>
-    </>
+    );
+  }
+
+  return (
+    <div className={"flex flex-col gap-3"}>
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={items.map((item) => item.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {items.map((item) => (
+            <CustomFieldListCell
+              key={item.id}
+              item={item}
+              onEdit={() => {
+                onEdit(item);
+              }}
+              onDelete={() => {
+                onDelete(item);
+              }}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
+    </div>
   );
 };
 
