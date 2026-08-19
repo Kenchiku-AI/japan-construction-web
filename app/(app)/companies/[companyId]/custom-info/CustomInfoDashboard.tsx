@@ -167,6 +167,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
       <CreateCustomFieldModal
         isOpen={!!createCustomFieldType}
         ownerType={createCustomFieldType}
+        customObjects={customObjects}
         onClose={() => {
           setCreateCustomFieldType("");
         }}
