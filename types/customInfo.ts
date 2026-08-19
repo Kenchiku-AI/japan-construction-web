@@ -86,3 +86,9 @@ export type CustomObjectDefinition = {
 
 export type CustomObject = {}
 
+export type CustomFieldListItem = CustomFieldDefinition | CustomRelationshipDefinition;
+
+export type SortOrderRequest = {
+  id: string;
+  sort_order: number;
+}

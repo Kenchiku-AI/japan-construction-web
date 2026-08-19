@@ -11,10 +11,10 @@ import { Loader } from "@/app/ui/Loader";
 import { useFeatures } from "@/lib/useFeatures";
 import { cardClass } from "@/lib/constants";
 import CustomFieldsList from "../../../custom-object-definitions/[customObjectDefinitionId]/CustomFieldsList";
-import { useCustomFields } from "./useCustomFields";
+import { useCustomInfo } from "./useCustomInfo";
 import CreateCustomFieldModal from "./CreateCustomFieldModal";
 import EditCustomFieldModal from "./EditCustomFieldModal";
-import { CustomFieldDefinition, CustomFieldEntityType, CustomRelationshipType } from "@/types";
+import { CustomFieldDataType, CustomFieldDefinition, CustomFieldEntityType, CustomRelationshipType } from "@/types";
 import CustomObjectsList from "./CustomObjectsList";
 
 interface CustomInfoDashboardProps {
@@ -28,13 +28,16 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
   const { currentUser } = useApi();
   const {
     companyItems,
+    onUpdateCompanyItemsOrder,
     projectItems,
+    onUpdateProjectItemsOrder,
     userItems,
+    onUpdateUserItemsOrder,
     customObjects,
     createCustomFieldDefinition,
     createCustomRelationshipDefinition,
     loading
-  } = useCustomFields(companyId);
+  } = useCustomInfo(companyId);
   const [showLoader, setShowLoader] = useState(false);
   const [showCreateCustomObject, setShowCreateCustomObject] = useState(false);
   const [createCustomFieldType, setCreateCustomFieldType] = useState("");
@@ -76,7 +79,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           <div className="self-end">{t("custom_company_fields")}</div>
           <Button
             variant="tertiary"
-            label={t("create_custom_company_field")}
+            label={t("create_field")}
             iconLeft={() => <Plus />}
             onClick={() => {
               setCreateCustomFieldType("company");
@@ -106,7 +109,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           <div className="self-end">{t("custom_user_fields")}</div>
           <Button
             variant="tertiary"
-            label={t("create_custom_user_field")}
+            label={t("create_field")}
             iconLeft={() => <Plus />}
             onClick={() => {
               setCreateCustomFieldType("user");
@@ -119,8 +122,8 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           <CustomFieldsList
             items={userItems}
             isEmpty={userItems.length === 0 && !loading}
-            onChangeOrder={() => {
-
+            onChangeOrder={(newItems) => {
+              onUpdateUserItemsOrder(newItems);
             }}
             onEdit={(i) => {
 
@@ -136,7 +139,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           <div className="self-end">{t("custom_project_fields")}</div>
           <Button
             variant="tertiary"
-            label={t("create_custom_project_field")}
+            label={t("create_field")}
             iconLeft={() => <Plus />}
             onClick={() => {
               setCreateCustomFieldType("project");
@@ -149,8 +152,8 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           <CustomFieldsList
             items={projectItems}
             isEmpty={projectItems.length === 0 && !loading}
-            onChangeOrder={() => {
-
+            onChangeOrder={(newItems) => {
+              onUpdateProjectItemsOrder(newItems)
             }}
             onEdit={(i) => {
 
@@ -176,9 +179,15 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
               target_entity_type: relationshipTarget as CustomFieldEntityType,
               cardinality: relationshipType as CustomRelationshipType,
               company_id: companyId
-            })
+            });
           } else {
-
+            createCustomFieldDefinition({
+              name,
+              description,
+              data_type: fieldType as CustomFieldDataType,
+              entity_type: createCustomFieldType as CustomFieldEntityType,
+              company_id: companyId
+            });
           }
 
           setCreateCustomFieldType("");

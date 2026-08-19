@@ -10,10 +10,8 @@ import { CSS as DndCSS } from "@dnd-kit/utilities";
 import { Edit, Trash } from "@/app/ui/Icons";
 import { bgColor5, fontColor1 } from "@/lib/constants";
 import styles from "./page.module.css";
-import { CustomFieldDefinition, CustomRelationshipDefinition } from "@/types";
+import { CustomFieldListItem } from "@/types";
 import { useTranslation } from "react-i18next";
-
-type CustomFieldListItem = CustomFieldDefinition | CustomRelationshipDefinition;
 
 interface CustomFieldsListProps {
   items: CustomFieldListItem[];
@@ -44,7 +42,7 @@ const CustomFieldsList: FC<CustomFieldsListProps> = ({
 
       const newItems = arrayMove(items, oldIndex, newIndex).map((item, i) => ({
         ...item,
-        order: i,
+        sort_order: i,
       }));
 
       onChangeOrder(newItems);
@@ -112,18 +110,17 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({
           position: "relative",
           transform: DndCSS.Transform.toString(transform),
           background: "white",
-          padding: "0 16px",
           borderColor: bgColor5
         }}
         className={`border rounded-xl ${isDragging ? "shadow z-500" : ""}`}
       >
-        <div>
+        <div className="flex">
           <div
             {...attributes}
             {...listeners}
-            className="cursor-grab active:cursor-grabbing md:mx-3"
+            className="cursor-grab active:cursor-grabbing md:mx-3 px-3 py-2 flex-1"
           >
-            <div className="flex items-center justify-between gap-5">
+            <div className="flex items-center justify-between">
               <div
                 style={{ minHeight: 60, minWidth: 0 }}
                 className="flex items-center gap-3"
@@ -135,7 +132,10 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex gap-3 items-center">
+          <div
+            className="flex gap-4 items-center"
+            style={{ paddingRight: 20 }}
+          >
             <div
               className="cursor-pointer pb-1"
               onClick={onEdit}

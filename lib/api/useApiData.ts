@@ -51,6 +51,7 @@ import {
   CreateCustomFieldDefinitionRequest,
   CreateCustomRelationshipDefinitionRequest,
   CustomRelationshipDefinition,
+  SortOrderRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -485,9 +486,17 @@ export const useApiData = () => {
       const url = `/custom-fields/definitions`;
       return call(() => http.post<CustomFieldDefinition>(url, request));
     },
+    async updateCustomFieldsSortOrder(request: SortOrderRequest[]) {
+      const url = `/custom-fields/definitions/sort-order`;
+      return call(() => http.patch<CustomRelationshipDefinition[]>(url, request));
+    },
     async createCustomRelationshipDefinition(request: CreateCustomRelationshipDefinitionRequest) {
       const url = `/custom-relationships/definitions`;
       return call(() => http.post<CustomRelationshipDefinition>(url, request));
+    },
+    async updateCustomRelationshipsSortOrder(request: SortOrderRequest[]) {
+      const url = `/custom-relationships/definitions/sort-order`;
+      return call(() => http.patch<CustomRelationshipDefinition[]>(url, request));
     },
     async getCustomObjectDefinitions(companyId: string) {
       const url = `/custom-objects/definitions?company_id=${companyId}`;
@@ -504,7 +513,7 @@ export const useApiData = () => {
     async getCustomObject(objectId: string) {
       const url = `/custom-objects/${objectId}`;
       return call(() => http.get<CustomObject>(url));
-    }
+    },
   };
 
   return {

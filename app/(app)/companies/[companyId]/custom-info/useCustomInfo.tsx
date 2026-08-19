@@ -9,11 +9,12 @@ import {
   CreateCustomRelationshipDefinitionRequest,
   CustomFieldDefinition,
   CustomFieldEntityType,
+  CustomFieldListItem,
   CustomObjectDefinition,
   CustomRelationshipDefinition,
 } from "@/types";
 
-export const useCustomFields = (companyId: string) => {
+export const useCustomInfo = (companyId: string) => {
   const [loading, setLoading] = useState(true);
   const [companyFields, setCompanyFields] = useState<CustomFieldDefinition[]>([]);
   const [companyRelationships, setCompanyRelationships] = useState<CustomRelationshipDefinition[]>([]);
@@ -63,8 +64,11 @@ export const useCustomFields = (companyId: string) => {
 
       if (response) {
         setCompanyFields(response.company_fields);
+        setCompanyRelationships(response.company_relationships);
         setProjectFields(response.project_fields);
+        setProjectRelationships(response.project_relationships);
         setUserFields(response.user_fields);
+        setUserRelationships(response.user_relationships);
         setCustomObjects(response.custom_objects);
       }
     } catch (err) {
@@ -153,11 +157,76 @@ export const useCustomFields = (companyId: string) => {
     setLoading(false);
   };
 
+  const onUpdateCompanyItemsOrder = (newItems: CustomFieldListItem[]) => {
+    const newFields = companyFields.map((f) => {
+      const sort_order = newItems.find((i) => i.id === f.id)?.sort_order ?? 0;
+      return { ...f, sort_order }
+    });
+    setCompanyFields(newFields);
+
+    const newRelationships = companyRelationships.map((r) => {
+      const sort_order = newItems.find((i) => i.id === r.id)?.sort_order ?? 0;
+      return { ...r, sort_order }
+    });
+    setCompanyRelationships(newRelationships);
+
+    updateSortOrder(newFields, newRelationships);
+  };
+
+  const onUpdateUserItemsOrder = (newItems: CustomFieldListItem[]) => {
+    const newFields = userFields.map((f) => {
+      const sort_order = newItems.find((i) => i.id === f.id)?.sort_order ?? 0;
+      return { ...f, sort_order }
+    });
+    setUserFields(newFields);
+
+    const newRelationships = userRelationships.map((r) => {
+      const sort_order = newItems.find((i) => i.id === r.id)?.sort_order ?? 0;
+      return { ...r, sort_order }
+    });
+    setUserRelationships(newRelationships);
+
+    updateSortOrder(newFields, newRelationships);
+  };
+
+  const onUpdateProjectItemsOrder = (newItems: CustomFieldListItem[]) => {
+    const newFields = projectFields.map((f) => {
+      const sort_order = newItems.find((i) => i.id === f.id)?.sort_order ?? 0;
+      return { ...f, sort_order }
+    });
+    setProjectFields(newFields);
+
+    const newRelationships = projectRelationships.map((r) => {
+      const sort_order = newItems.find((i) => i.id === r.id)?.sort_order ?? 0;
+      return { ...r, sort_order }
+    });
+    setProjectRelationships(newRelationships);
+
+    updateSortOrder(newFields, newRelationships);
+  }
+
+  const updateSortOrder = (newFields: CustomFieldDefinition[], newRelationships: CustomRelationshipDefinition[]) => {
+    const fieldsRequest = newFields.map((f) => ({
+      id: f.id,
+      sort_order: f.sort_order
+    }));
+    api.updateCustomFieldsSortOrder(fieldsRequest);
+
+    const relationshipsRequest = newRelationships.map((f) => ({
+      id: f.id,
+      sort_order: f.sort_order
+    }));
+    api.updateCustomRelationshipsSortOrder(relationshipsRequest);
+  }
+
   return {
     loading,
     companyItems,
+    onUpdateCompanyItemsOrder,
     userItems,
+    onUpdateUserItemsOrder,
     projectItems,
+    onUpdateProjectItemsOrder,
     customObjects,
     createCustomFieldDefinition,
     createCustomRelationshipDefinition,
