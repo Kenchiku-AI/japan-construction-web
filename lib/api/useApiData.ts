@@ -46,6 +46,9 @@ import {
   CompanyUser,
   CustomFieldDefinition,
   CustomFieldDefinitionsResponse,
+  CustomObjectDefinition,
+  CustomObject,
+  CreateCustomFieldDefinitionRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -475,6 +478,26 @@ export const useApiData = () => {
     async getCustomFieldDefinitions(companyId: string) {
       const url = `/custom-fields/definitions?company_id=${companyId}`;
       return call(() => http.get<CustomFieldDefinitionsResponse>(url));
+    },
+    async createCustomFieldDefinition(request: CreateCustomFieldDefinitionRequest) {
+      const url = `/custom-fields/definitions`;
+      return call(() => http.post<CustomFieldDefinition>(url));
+    },
+    async getCustomObjectDefinitions(companyId: string) {
+      const url = `/custom-objects/definitions?company_id=${companyId}`;
+      return call(() => http.get<CustomObjectDefinition[]>(url));
+    },
+    async getCustomObjectDefinition(definitionId: string) {
+      const url = `/custom-objects/definitions/${definitionId}`;
+      return call(() => http.get<CustomObjectDefinition>(url));
+    },
+    async getCustomObjects(definitionId: string) {
+      const url = `/custom-objects?custom_object_definition_id=${definitionId}`;
+      return call(() => http.get<CustomObject[]>(url));
+    },
+    async getCustomObject(objectId: string) {
+      const url = `/custom-objects/${objectId}`;
+      return call(() => http.get<CustomObject>(url));
     }
   };
 
