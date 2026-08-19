@@ -1,8 +1,4 @@
-export type CustomFieldDefinition = {
-  id: string;
-  name: string;
-  description: string;
-};
+// Custom Fields
 
 export enum CustomFieldDataType {
   Text = "text",
@@ -16,6 +12,22 @@ export enum CustomFieldEntityType {
   CustomObject = "custom_object"
 }
 
+export type CustomFieldDefinition = {
+  id: string;
+  name: string;
+  description: string;
+  data_type: CustomFieldDataType;
+  entity_type: CustomFieldEntityType;
+  custom_object_definition_id?: string;
+  sort_order: number;
+};
+
+export type CustomField = {
+  id?: string;
+  value?: string;
+  definition: CustomFieldDefinition;
+}
+
 export type CreateCustomFieldDefinitionRequest = {
   company_id: string;
   name: string;
@@ -25,29 +37,44 @@ export type CreateCustomFieldDefinitionRequest = {
   custom_object_definition_id?: string;
 }
 
+export type CustomFieldDefinitionsResponse = {
+  custom_objects: CustomObjectDefinition[];
+  project_fields: CustomFieldDefinition[];
+  project_relationships: CustomRelationshipDefinition[];
+  user_fields: CustomFieldDefinition[];
+  user_relationships: CustomRelationshipDefinition[];
+  company_fields: CustomFieldDefinition[];
+  company_relationships: CustomRelationshipDefinition[];
+}
+
+
+// Custom Relationships
+
 export type CustomRelationshipDefinition = {
   id: string;
   name: string;
   description: string;
 }
 
+export type CustomRelationship = {}
+
+export type CreateCustomRelationshipDefinitionRequest = {
+  company_id: string;
+  name: string;
+  description: string;
+  data_type: CustomFieldDataType;
+  entity_type: CustomFieldEntityType;
+  custom_object_definition_id?: string;
+}
+
+
+// Custom Objects
+
 export type CustomObjectDefinition = {
   id: string;
   name: string;
   description: string;
-  fields: CustomFieldDefinition[];
-}
-
-export type CustomFieldDefinitionsResponse = {
-  project_fields: CustomFieldDefinition[];
-  user_fields: CustomFieldDefinition[];
-  company_fields: CustomFieldDefinition[];
-  custom_objects: CustomObjectDefinition[];
 }
 
 export type CustomObject = {}
-
-export type CustomField = {
-  id: string;
-}
 

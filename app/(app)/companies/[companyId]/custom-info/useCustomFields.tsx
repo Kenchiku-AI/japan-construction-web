@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { CustomFieldDefinition, CustomObject, UpdateUserRequest, User } from "@/types";
+import { CreateCustomFieldDefinitionRequest, CustomFieldDefinition, CustomFieldEntityType, CustomObject, UpdateUserRequest, User } from "@/types";
 
 export const useCustomFields = (companyId: string) => {
   const [loading, setLoading] = useState(true);
@@ -40,11 +40,88 @@ export const useCustomFields = (companyId: string) => {
     setLoading(false);
   };
 
+  const createCustomFieldDefinition = async (request: CreateCustomFieldDefinitionRequest) => {
+    setLoading(true);
+
+    try {
+      const response = await api.createCustomFieldDefinition(request);
+
+      if (response) {
+        switch (request.entity_type) {
+          case CustomFieldEntityType.Project:
+            setProjectFields([
+              ...projectFields,
+              response
+            ]);
+            break;
+          case CustomFieldEntityType.User:
+            setUserFields([
+              ...userFields,
+              response
+            ]);
+            break;
+          case CustomFieldEntityType.Company:
+            setCompanyFields([
+              ...companyFields,
+              response
+            ]);
+            break;
+        }
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const createCustomRelationshipDefinition = async (request: CreateCustomRelationshipDefinitionRequest) => {
+    setLoading(true);
+
+    try {
+      const response = await api.createCustomFieldDefinition(request);
+
+      if (response) {
+        switch (request.entity_type) {
+          case CustomFieldEntityType.Project:
+            setProjectFields([
+              ...projectFields,
+              response
+            ]);
+            break;
+          case CustomFieldEntityType.User:
+            setUserFields([
+              ...userFields,
+              response
+            ]);
+            break;
+          case CustomFieldEntityType.Company:
+            setCompanyFields([
+              ...companyFields,
+              response
+            ]);
+            break;
+        }
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
   return {
     loading,
     companyFields,
     userFields,
     projectFields,
+    createCustomFieldDefinition,
     customObjects,
   };
 };

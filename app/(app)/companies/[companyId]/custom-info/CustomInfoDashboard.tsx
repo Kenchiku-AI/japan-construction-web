@@ -31,6 +31,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
     projectFields,
     userFields,
     customObjects,
+    createCustomFieldDefinition,
     loading
   } = useCustomFields(companyId);
   const [showLoader, setShowLoader] = useState(false);
@@ -147,7 +148,8 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         onClose={() => {
           setCreateCustomFieldType("");
         }}
-        onCreateField={() => {
+        onCreateField={async (name, description) => {
+          await api
           setCreateCustomFieldType("");
         }}
       />
