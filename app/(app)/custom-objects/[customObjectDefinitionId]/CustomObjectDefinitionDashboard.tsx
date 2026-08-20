@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useRef } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -22,7 +22,9 @@ interface CustomObjectDefinitionDashboardProps {
 
 const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> = ({ customObjectDefinitionId }) => {
   const [name, setName] = useState("");
+  const nameInputRef = useRef<any>(null);
   const [description, setDescription] = useState("");
+  const [descriptionShouldFocus, setDescriptionShouldFocus] = useState(false);
   const [showEditName, setShowEditName] = useState(false);
   const [showEditDescription, setShowEditDescription] = useState(false);
   const [showCreateField, setShowCreateField] = useState(false);
@@ -32,6 +34,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
     customObjectDefinitions,
     customObjects,
     fieldListItems,
+    updateCustomObjectDefinition,
     createCustomRelationshipDefinition,
     onUpdateItemsOrder,
     loading
@@ -83,6 +86,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
         {showEditName ? (
           <div className="flex flex-col">
             <Input
+              ref={nameInputRef}
               value={name}
               placeholder={t("custom_object_name")}
               onChange={setName}
@@ -91,8 +95,10 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
               style={{
                 display: "flex",
                 alignItems: "flex-end",
+                justifyContent: "flex-end",
                 marginTop: 12,
                 marginBottom: 6,
+                marginLeft: 6,
                 gap: 24,
               }}
             >
@@ -101,8 +107,9 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
                 iconLeft={() => <Check />}
                 style={{ height: "auto" }}
                 label={t("update")}
+                disabled={!name || name === customObjectDefinition.name}
                 onClick={() => {
-                  // call update
+                  updateCustomObjectDefinition({ name });
                   setShowEditName(false);
                 }}
               />
@@ -139,6 +146,9 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
               className="cursor-pointer md:pr-3"
               onClick={() => {
                 setShowEditName(true);
+                setTimeout(() => {
+                  nameInputRef.current?.focus();
+                }, 1);
               }}
             >
               <Edit />
@@ -152,13 +162,16 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
               value={description}
               placeholder={t("custom_object_description")}
               onChange={setDescription}
+              shouldFocus={descriptionShouldFocus}
             />
             <div
               style={{
                 display: "flex",
                 alignItems: "flex-end",
+                justifyContent: "flex-end",
                 marginTop: 12,
                 marginBottom: 6,
+                marginLeft: 6,
                 gap: 24,
               }}
             >
@@ -167,8 +180,9 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
                 iconLeft={() => <Check />}
                 style={{ height: "auto" }}
                 label={t("update")}
+                disabled={!description || description === customObjectDefinition.description}
                 onClick={() => {
-                  // call update
+                  updateCustomObjectDefinition({ description });
                   setShowEditDescription(false);
                 }}
               />
@@ -205,6 +219,13 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
               className="cursor-pointer md:pr-3"
               onClick={() => {
                 setShowEditDescription(true);
+                setTimeout(() => {
+                  setDescriptionShouldFocus(true);
+
+                  setTimeout(() => {
+                    setDescriptionShouldFocus(false);
+                  }, 1);
+                }, 1);
               }}
             >
               <Edit />

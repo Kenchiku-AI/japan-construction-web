@@ -10,6 +10,7 @@ interface TextAreaProps {
   error?: boolean;
   disabled?: boolean;
   loading?: boolean;
+  shouldFocus?: boolean;
 }
 
 export const TextArea: FC<TextAreaProps> = ({
@@ -20,6 +21,7 @@ export const TextArea: FC<TextAreaProps> = ({
   error,
   disabled,
   loading,
+  shouldFocus
 }) => {
   const [isEmpty, setIsEmpty] = useState(!value && !defaultValue);
   const textAreaRef = useRef<any>(null);
@@ -42,6 +44,12 @@ export const TextArea: FC<TextAreaProps> = ({
     lastChangeWasUser.current = false;
     resize();
   }, [value]);
+
+  useEffect(() => {
+    if (shouldFocus) {
+      textAreaRef.current?.focus();
+    }
+  }, [shouldFocus]);
 
   useEffect(() => {
     if (!loading) {

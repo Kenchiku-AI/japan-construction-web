@@ -529,6 +529,10 @@ export const useApiData = () => {
       const url = `/custom-objects/definitions`;
       return call(() => http.post<CustomObjectDefinition>(url, request));
     },
+    async updateCustomObjectDefinition(definitionId: string, request: UpdateCustomFieldDefinitionRequest) {
+      const url = `/custom-objects/definitions/${definitionId}`;
+      return call(() => http.patch<CustomObjectDefinitionDetail>(url, request));
+    },
     async getCustomObjects(definitionId: string) {
       const url = `/custom-objects?custom_object_definition_id=${definitionId}`;
       return call(() => http.get<CustomObject[]>(url));

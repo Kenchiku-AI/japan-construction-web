@@ -12,6 +12,7 @@ import {
   CustomObjectDefinitionDetail,
   CustomRelationshipDefinition,
   CustomRelationshipType,
+  UpdateCustomFieldDefinitionRequest,
 } from "@/types";
 import { useModal } from "@/lib/modal/ModalContext";
 
@@ -84,6 +85,25 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
 
     setLoading(false);
   };
+
+  const updateCustomObjectDefinition = useCallback(async (request: UpdateCustomFieldDefinitionRequest) => {
+    setLoading(true);
+
+    try {
+      const response = await api.updateCustomObjectDefinition(customObjectDefinitionId, request);
+
+      if (response) {
+        setCustomObjectDefinition(response);
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  }, [customObjectDefinition]);
 
   const getCustomObjectDefinitions = async (companyId: string) => {
     try {
@@ -212,6 +232,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     customObjectDefinitions,
     customObjects,
     fieldListItems,
+    updateCustomObjectDefinition,
     onUpdateItemsOrder,
     createCustomRelationshipDefinition
   };

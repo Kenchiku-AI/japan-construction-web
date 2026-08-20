@@ -43,8 +43,8 @@ export type CreateCustomFieldDefinitionRequest = {
 }
 
 export type UpdateCustomFieldDefinitionRequest = {
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
 }
 
 export type CustomFieldDefinitionsResponse = {
