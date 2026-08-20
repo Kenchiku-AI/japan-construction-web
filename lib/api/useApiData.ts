@@ -497,6 +497,10 @@ export const useApiData = () => {
       const url = `/custom-fields/definitions/sort-order`;
       return call(() => http.patch<CustomRelationshipDefinition[]>(url, request));
     },
+    async deleteCustomFieldDefinition(definitionId: string) {
+      const url = `/custom-fields/definitions/${definitionId}`;
+      return call(() => http.delete(url));
+    },
     async createCustomRelationshipDefinition(request: CreateCustomRelationshipDefinitionRequest) {
       const url = `/custom-relationships/definitions`;
       return call(() => http.post<CustomRelationshipDefinition>(url, request));
@@ -508,6 +512,10 @@ export const useApiData = () => {
     async updateCustomRelationshipsSortOrder(request: SortOrderRequest[]) {
       const url = `/custom-relationships/definitions/sort-order`;
       return call(() => http.patch<CustomRelationshipDefinition[]>(url, request));
+    },
+    async deleteCustomRelationshipDefinition(definitionId: string) {
+      const url = `/custom-relationships/definitions/${definitionId}`;
+      return call(() => http.delete(url));
     },
     async getCustomObjectDefinitions(companyId: string) {
       const url = `/custom-objects/definitions?company_id=${companyId}`;

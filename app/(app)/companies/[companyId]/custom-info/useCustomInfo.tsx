@@ -150,24 +150,66 @@ export const useCustomInfo = (companyId: string) => {
       if (response) {
         switch (entityType) {
           case CustomFieldEntityType.Project:
-            setProjectFields([
-              ...projectFields,
-              response
-            ]);
+            setProjectFields((fields) =>
+              fields.map((field) =>
+                field.id === definitionId ? response : field
+              )
+            );
             break;
           case CustomFieldEntityType.User:
-            setUserFields([
-              ...userFields,
-              response
-            ]);
+            setUserFields((fields) =>
+              fields.map((field) =>
+                field.id === definitionId ? response : field
+              )
+            );
             break;
           case CustomFieldEntityType.Company:
-            setCompanyFields([
-              ...companyFields,
-              response
-            ]);
+            setCompanyFields((fields) =>
+              fields.map((field) =>
+                field.id === definitionId ? response : field
+              )
+            );
             break;
         }
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const deleteCustomFieldDefinition = async (definitionId: string, entityType: CustomFieldEntityType) => {
+    setLoading(true);
+
+    try {
+      await api.deleteCustomFieldDefinition(definitionId);
+
+      switch (entityType) {
+        case CustomFieldEntityType.Project:
+          setProjectFields((fields) =>
+            fields.filter((field) =>
+              field.id !== definitionId
+            )
+          );
+          break;
+        case CustomFieldEntityType.User:
+          setUserFields((fields) =>
+            fields.filter((field) =>
+              field.id !== definitionId
+            )
+          );
+          break;
+        case CustomFieldEntityType.Company:
+          setCompanyFields((fields) =>
+            fields.filter((field) =>
+              field.id !== definitionId
+            )
+          );
+          break;
       }
     } catch (err) {
       showModal({
@@ -226,25 +268,68 @@ export const useCustomInfo = (companyId: string) => {
       if (response) {
         switch (entityType) {
           case CustomFieldEntityType.Project:
-            setProjectRelationships([
-              ...projectRelationships,
-              response
-            ]);
+            setProjectRelationships((relationships) =>
+              relationships.map((relationship) =>
+                relationship.id === definitionId ? response : relationship
+              )
+            );
             break;
           case CustomFieldEntityType.User:
-            setUserRelationships([
-              ...userRelationships,
-              response
-            ]);
+            setUserRelationships((relationships) =>
+              relationships.map((relationship) =>
+                relationship.id === definitionId ? response : relationship
+              )
+            );
             break;
           case CustomFieldEntityType.Company:
-            setCompanyRelationships([
-              ...companyRelationships,
-              response
-            ]);
+            setCompanyRelationships((relationships) =>
+              relationships.map((relationship) =>
+                relationship.id === definitionId ? response : relationship
+              )
+            );
             break;
         }
       }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const deleteCustomRelationshipDefinition = async (definitionId: string, entityType: CustomFieldEntityType) => {
+    setLoading(true);
+
+    try {
+      await api.deleteCustomRelationshipDefinition(definitionId);
+
+      switch (entityType) {
+        case CustomFieldEntityType.Project:
+          setProjectRelationships((relationships) =>
+            relationships.filter((relationship) =>
+              relationship.id !== definitionId
+            )
+          );
+          break;
+        case CustomFieldEntityType.User:
+          setUserRelationships((relationships) =>
+            relationships.filter((relationship) =>
+              relationship.id !== definitionId
+            )
+          );
+          break;
+        case CustomFieldEntityType.Company:
+          setCompanyRelationships((relationships) =>
+            relationships.filter((relationship) =>
+              relationship.id !== definitionId
+            )
+          );
+          break;
+      }
+
     } catch (err) {
       showModal({
         title: t("error"),
@@ -351,8 +436,10 @@ export const useCustomInfo = (companyId: string) => {
     customObjectDefinitions,
     createCustomFieldDefinition,
     updateCustomFieldDefinition,
+    deleteCustomFieldDefinition,
     createCustomRelationshipDefinition,
     updateCustomRelationshipDefinition,
+    deleteCustomRelationshipDefinition,
     createCustomObjectDefinition,
   };
 };

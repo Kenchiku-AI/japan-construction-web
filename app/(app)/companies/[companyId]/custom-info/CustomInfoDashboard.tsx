@@ -42,8 +42,10 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
     customObjectDefinitions,
     createCustomFieldDefinition,
     updateCustomFieldDefinition,
+    deleteCustomFieldDefinition,
     createCustomRelationshipDefinition,
     updateCustomRelationshipDefinition,
+    deleteCustomRelationshipDefinition,
     createCustomObjectDefinition,
     loading
   } = useCustomInfo(companyId);
@@ -151,7 +153,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
             onDelete={(i) => {
               setDeleteCustomField({
                 ...i,
-                entityType: CustomFieldEntityType.Company
+                entityType: CustomFieldEntityType.User
               });
             }}
           />
@@ -180,10 +182,16 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
               onUpdateProjectItemsOrder(newItems)
             }}
             onEdit={(i) => {
-              setEditCustomField(i);
+              setEditCustomField({
+                ...i,
+                entityType: CustomFieldEntityType.Project
+              });
             }}
             onDelete={(i) => {
-              setDeleteCustomField(i);
+              setDeleteCustomField({
+                ...i,
+                entityType: CustomFieldEntityType.Project
+              });
             }}
           />
         </div>
@@ -275,6 +283,16 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           setDeleteCustomField(undefined);
         }}
         onDelete={() => {
+          if (!deleteCustomField) return;
+
+          const { id, entityType } = deleteCustomField;
+
+          if ("source_entity_type" in deleteCustomField) {
+            deleteCustomRelationshipDefinition(id, entityType);
+          } else {
+            deleteCustomFieldDefinition(id, entityType);
+          }
+
           setDeleteCustomField(undefined);
         }}
       />

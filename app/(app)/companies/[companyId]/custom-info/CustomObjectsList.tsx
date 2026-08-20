@@ -2,10 +2,10 @@ import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CustomObjectDefinition } from "@/types";
 import styles from "./page.module.css";
-import { AnnotationCheck, DownChevron, UpChevron } from "@/app/ui/Icons";
+import { Cube, DownChevron, RightChevron, UpChevron } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { Button } from "@/app/ui/Button/Button";
-import { buttonColor, fontColor1 } from "@/lib/constants";
+import { buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
 import { truncateText } from "@/lib/helpers";
 
 interface CustomObjectsListProps {
@@ -55,13 +55,14 @@ const CustomObjectsList: FC<CustomObjectsListProps> = ({
                     className="flex flex-1 items-center gap-4 py-1"
                   >
                     <div className="hidden md:block">
-                      <AnnotationCheck />
+                      <Cube />
                     </div>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ color: fontColor1 }}>{object.name}</div>
                       <div className={styles.subtitle}>{truncateText(object.description, 100)}</div>
                     </div>
                   </div>
+                  <RightChevron color={fontColor2} />
                 </div>
               </div>
             </div>
