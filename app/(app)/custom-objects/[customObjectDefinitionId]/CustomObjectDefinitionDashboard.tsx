@@ -133,8 +133,6 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             </div>
           </div>
         ) : (
-
-
           <div className="flex items-center">
             <div className="p-1 md:p-3 flex flex-1">
               <div>
@@ -237,25 +235,6 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
         }}
         onCreate={async (name, description, fieldType, relationshipType, relationshipTarget) => {
           if (fieldType === "relationship") {
-            const entityTypes: string[] = [
-              CustomFieldEntityType.Company,
-              CustomFieldEntityType.Project,
-              CustomFieldEntityType.User
-            ];
-            const isCustomObject = !entityTypes.includes(relationshipTarget ?? "");
-            const target_entity_type = isCustomObject ? CustomFieldEntityType.CustomObject : relationshipTarget as CustomFieldEntityType;
-
-            createCustomRelationshipDefinition({
-              name,
-              description,
-              source_entity_type: createCustomFieldType as CustomFieldEntityType,
-              target_entity_type,
-              target_custom_object_definition_id: isCustomObject ? relationshipTarget : undefined;
-              cardinality: relationshipType as CustomRelationshipType,
-              company_id: companyId
-            });
-
-
             createCustomRelationshipDefinition(
               name,
               description,

@@ -114,7 +114,7 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({
         return t(item.target_entity_type);
       }
 
-      const object = customObjects.find((o) => o.id === item.target_entity_type);
+      const object = customObjects.find((o) => o.id === item.target_custom_object_definition_id);
       return object?.name ?? "";
     }
 
