@@ -13,6 +13,8 @@ import { Check, Close, Edit, Plus } from "@/app/ui/Icons";
 import styles from "./page.module.css";
 import { Input } from "@/app/ui/Input/Input";
 import Divider from "@/app/ui/Divider";
+import CreateCustomFieldModal from "../../companies/[companyId]/custom-info/CreateCustomFieldModal";
+import { CustomFieldEntityType, CustomRelationshipType } from "@/types";
 
 interface CustomObjectDefinitionDashboardProps {
   customObjectDefinitionId: string;
@@ -28,7 +30,9 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
   const { t } = useTranslation();
   const {
     customObjectDefinition,
+    customObjectDefinitions,
     customObjects,
+    createCustomRelationshipDefinition,
     loading
   } = useCustomObjectDefinition(customObjectDefinitionId);
 
@@ -89,7 +93,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           <div className="flex flex-col">
             <Input
               value={name}
-              placeholder={t("name")}
+              placeholder={t("custom_object_name")}
               onChange={setName}
             />
             <div
@@ -129,12 +133,21 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             </div>
           </div>
         ) : (
-          <div className="flex">
-            <div className="p-1 md:p-3 flex flex-1" style={{ color: !description ? fontColor2 : fontColor1 }}>
-              {name ?? ""}
+
+
+          <div className="flex items-center">
+            <div className="p-1 md:p-3 flex flex-1">
+              <div>
+                {!!name && (
+                  <div className={styles.label}>{t("custom_object_name")}</div>
+                )}
+                <div style={{ color: fontColor1 }}>
+                  {name ?? ""}
+                </div>
+              </div>
             </div>
             <div
-              className="cursor-pointer pt-1 md:pt-3 md:pr-3"
+              className="cursor-pointer md:pr-3"
               onClick={() => {
                 setShowEditName(true);
               }}
@@ -148,7 +161,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           <div className="flex flex-col">
             <TextArea
               value={description}
-              placeholder={t("description")}
+              placeholder={t("custom_object_description")}
               onChange={setDescription}
             />
             <div
@@ -188,12 +201,19 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             </div>
           </div>
         ) : (
-          <div className="flex">
-            <div className="p-1 md:p-3 flex flex-1" style={{ color: !description ? fontColor2 : fontColor1 }}>
-              {description || t("add_description")}
+          <div className="flex items-center">
+            <div className="p-1 md:p-3 flex flex-1">
+              <div>
+                {!!description && (
+                  <div className={styles.label}>{t("custom_object_description")}</div>
+                )}
+                <div style={{ color: !description ? fontColor2 : fontColor1 }}>
+                  {description || t("add_description")}
+                </div>
+              </div>
             </div>
             <div
-              className="cursor-pointer pt-1 md:pt-3 md:pr-3"
+              className="cursor-pointer md:pr-3"
               onClick={() => {
                 setShowEditDescription(true);
               }}
@@ -209,6 +229,52 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           </>
         )}
       </div>
+      <CreateCustomFieldModal
+        isOpen={showCreateField}
+        customObjects={customObjectDefinitions}
+        onClose={() => {
+          setShowCreateField(false);
+        }}
+        onCreate={async (name, description, fieldType, relationshipType, relationshipTarget) => {
+          if (fieldType === "relationship") {
+            const entityTypes: string[] = [
+              CustomFieldEntityType.Company,
+              CustomFieldEntityType.Project,
+              CustomFieldEntityType.User
+            ];
+            const isCustomObject = !entityTypes.includes(relationshipTarget ?? "");
+            const target_entity_type = isCustomObject ? CustomFieldEntityType.CustomObject : relationshipTarget as CustomFieldEntityType;
+
+            createCustomRelationshipDefinition({
+              name,
+              description,
+              source_entity_type: createCustomFieldType as CustomFieldEntityType,
+              target_entity_type,
+              target_custom_object_definition_id: isCustomObject ? relationshipTarget : undefined;
+              cardinality: relationshipType as CustomRelationshipType,
+              company_id: companyId
+            });
+
+
+            createCustomRelationshipDefinition(
+              name,
+              description,
+              relationshipTarget as CustomFieldEntityType,
+              relationshipType as CustomRelationshipType
+            );
+          } else {
+            // createCustomFieldDefinition({
+            //   name,
+            //   description,
+            //   data_type: fieldType as CustomFieldDataType,
+            //   entity_type: createCustomFieldType as CustomFieldEntityType,
+            //   company_id: companyId
+            // });
+          }
+
+          setShowCreateField(false);
+        }}
+      />
       {loading && <Loader />}
     </>
   );

@@ -84,6 +84,7 @@ export type CreateCustomRelationshipDefinitionRequest = {
 
 export type CustomObjectDefinition = {
   id: string;
+  company_id: string;
   name: string;
   description: string;
 }

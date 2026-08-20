@@ -24,7 +24,7 @@ export const useCustomInfo = (companyId: string) => {
   const [projectRelationships, setProjectRelationships] = useState<CustomRelationshipDefinition[]>([]);
   const [userFields, setUserFields] = useState<CustomFieldDefinition[]>([]);
   const [userRelationships, setUserRelationships] = useState<CustomRelationshipDefinition[]>([]);
-  const [customObjects, setCustomObjects] = useState<CustomObjectDefinition[]>([]);
+  const [customObjectDefinitions, setCustomObjectDefinitions] = useState<CustomObjectDefinition[]>([]);
   const api = useApi();
   const { showModal } = useModal();
   const { t } = useTranslation();
@@ -89,7 +89,7 @@ export const useCustomInfo = (companyId: string) => {
       const response = await api.getCustomObjectDefinitions(companyId);
 
       if (response) {
-        setCustomObjects(response);
+        setCustomObjectDefinitions(response);
       }
     } catch (err) {
       showModal({
@@ -266,7 +266,7 @@ export const useCustomInfo = (companyId: string) => {
     onUpdateUserItemsOrder,
     projectItems,
     onUpdateProjectItemsOrder,
-    customObjects,
+    customObjectDefinitions,
     createCustomFieldDefinition,
     createCustomRelationshipDefinition,
     createCustomObjectDefinition,

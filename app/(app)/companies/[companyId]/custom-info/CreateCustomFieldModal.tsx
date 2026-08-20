@@ -9,7 +9,7 @@ import { CustomObjectDefinition } from "@/types";
 
 interface CreateCustomFieldModalProps {
   isOpen: boolean;
-  ownerType: string;
+  ownerType?: string;
   customObjects?: CustomObjectDefinition[];
   onClose: () => void;
   onCreate: (
@@ -37,9 +37,11 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!ownerType) return;
-
-    setTitle(`create_custom_${ownerType}_field`);
+    if (!ownerType) {
+      setTitle(`create_field`);
+    } else {
+      setTitle(`create_custom_${ownerType}_field`);
+    }
   }, [ownerType]);
 
   const showRelationshipConfig = useMemo(() => {

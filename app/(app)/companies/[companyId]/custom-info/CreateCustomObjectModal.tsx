@@ -36,7 +36,7 @@ const CreateCustomFieldModal: FC<CreateCustomObjectModalProps> = ({
         reset();
       }}
       title={t("create_custom_object")}
-      subtitle={t("custom_object_description")}
+      subtitle={t("custom_object_modal_description")}
       width={640}
     >
       <div className="my-8 flex flex-col gap-3">

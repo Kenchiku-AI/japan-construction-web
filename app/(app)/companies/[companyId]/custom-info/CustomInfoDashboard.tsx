@@ -34,7 +34,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
     onUpdateProjectItemsOrder,
     userItems,
     onUpdateUserItemsOrder,
-    customObjects,
+    customObjectDefinitions,
     createCustomFieldDefinition,
     createCustomRelationshipDefinition,
     createCustomObjectDefinition,
@@ -67,10 +67,10 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
       </div>
       <div className={cardClass}>
         <CustomObjectsList
-          objects={customObjects}
-          isEmpty={customObjects.length === 0 && !loading}
+          objects={customObjectDefinitions}
+          isEmpty={customObjectDefinitions.length === 0 && !loading}
           onClickObject={(o) => {
-
+            router.push(`/custom-objects/${o.id}`)
           }}
         />
       </div>
@@ -92,7 +92,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         <div className={cardClass}>
           <CustomFieldsList
             items={companyItems}
-            customObjects={customObjects}
+            customObjects={customObjectDefinitions}
             isEmpty={companyItems.length === 0 && !loading}
             onChangeOrder={(newItems) => {
               onUpdateCompanyItemsOrder(newItems);
@@ -123,7 +123,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         <div className={cardClass}>
           <CustomFieldsList
             items={userItems}
-            customObjects={customObjects}
+            customObjects={customObjectDefinitions}
             isEmpty={userItems.length === 0 && !loading}
             onChangeOrder={(newItems) => {
               onUpdateUserItemsOrder(newItems);
@@ -154,7 +154,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         <div className={cardClass}>
           <CustomFieldsList
             items={projectItems}
-            customObjects={customObjects}
+            customObjects={customObjectDefinitions}
             isEmpty={projectItems.length === 0 && !loading}
             onChangeOrder={(newItems) => {
               onUpdateProjectItemsOrder(newItems)
@@ -185,17 +185,26 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
       <CreateCustomFieldModal
         isOpen={!!createCustomFieldType}
         ownerType={createCustomFieldType}
-        customObjects={customObjects}
+        customObjects={customObjectDefinitions}
         onClose={() => {
           setCreateCustomFieldType("");
         }}
         onCreate={async (name, description, fieldType, relationshipType, relationshipTarget) => {
           if (fieldType === "relationship") {
+            const entityTypes: string[] = [
+              CustomFieldEntityType.Company,
+              CustomFieldEntityType.Project,
+              CustomFieldEntityType.User
+            ];
+            const isCustomObject = !entityTypes.includes(relationshipTarget ?? "");
+            const target_entity_type = isCustomObject ? CustomFieldEntityType.CustomObject : relationshipTarget as CustomFieldEntityType;
+
             createCustomRelationshipDefinition({
               name,
               description,
               source_entity_type: createCustomFieldType as CustomFieldEntityType,
-              target_entity_type: relationshipTarget as CustomFieldEntityType,
+              target_entity_type,
+              target_custom_object_definition_id: isCustomObject ? relationshipTarget : undefined,
               cardinality: relationshipType as CustomRelationshipType,
               company_id: companyId
             });
