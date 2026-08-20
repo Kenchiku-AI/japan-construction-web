@@ -10,12 +10,13 @@ import { useRouter } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
 import { useFeatures } from "@/lib/useFeatures";
 import { cardClass } from "@/lib/constants";
-import CustomFieldsList from "../../../custom-object-definitions/[customObjectDefinitionId]/CustomFieldsList";
+import CustomFieldsList from "../../../custom-objects/[customObjectDefinitionId]/CustomFieldsList";
 import { useCustomInfo } from "./useCustomInfo";
 import CreateCustomFieldModal from "./CreateCustomFieldModal";
 import EditCustomFieldModal from "./EditCustomFieldModal";
 import { CustomFieldDataType, CustomFieldDefinition, CustomFieldEntityType, CustomRelationshipType } from "@/types";
 import CustomObjectsList from "./CustomObjectsList";
+import CreateCustomObjectModal from "./CreateCustomObjectModal";
 
 interface CustomInfoDashboardProps {
   companyId: string;
@@ -36,9 +37,9 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
     customObjects,
     createCustomFieldDefinition,
     createCustomRelationshipDefinition,
+    createCustomObjectDefinition,
     loading
   } = useCustomInfo(companyId);
-  const [showLoader, setShowLoader] = useState(false);
   const [showCreateCustomObject, setShowCreateCustomObject] = useState(false);
   const [createCustomFieldType, setCreateCustomFieldType] = useState("");
   const [editCustomField, setEditCustomField] = useState<CustomFieldDefinition>();
@@ -91,9 +92,10 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         <div className={cardClass}>
           <CustomFieldsList
             items={companyItems}
+            customObjects={customObjects}
             isEmpty={companyItems.length === 0 && !loading}
-            onChangeOrder={() => {
-
+            onChangeOrder={(newItems) => {
+              onUpdateCompanyItemsOrder(newItems);
             }}
             onEdit={(i) => {
 
@@ -121,6 +123,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         <div className={cardClass}>
           <CustomFieldsList
             items={userItems}
+            customObjects={customObjects}
             isEmpty={userItems.length === 0 && !loading}
             onChangeOrder={(newItems) => {
               onUpdateUserItemsOrder(newItems);
@@ -151,6 +154,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         <div className={cardClass}>
           <CustomFieldsList
             items={projectItems}
+            customObjects={customObjects}
             isEmpty={projectItems.length === 0 && !loading}
             onChangeOrder={(newItems) => {
               onUpdateProjectItemsOrder(newItems)
@@ -164,6 +168,20 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           />
         </div>
       </div>
+      <CreateCustomObjectModal
+        isOpen={showCreateCustomObject}
+        onClose={() => {
+          setShowCreateCustomObject(false);
+        }}
+        onCreate={async (name, description) => {
+          setShowCreateCustomObject(false);
+          createCustomObjectDefinition({
+            name,
+            description,
+            company_id: companyId
+          });
+        }}
+      />
       <CreateCustomFieldModal
         isOpen={!!createCustomFieldType}
         ownerType={createCustomFieldType}
@@ -204,7 +222,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           setEditCustomField(undefined);
         }}
       />
-      {showLoader && <Loader />}
+      {loading && <Loader />}
     </>
   );
 };

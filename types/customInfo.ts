@@ -43,7 +43,6 @@ export type CreateCustomFieldDefinitionRequest = {
 }
 
 export type CustomFieldDefinitionsResponse = {
-  custom_objects: CustomObjectDefinition[];
   project_fields: CustomFieldDefinition[];
   project_relationships: CustomRelationshipDefinition[];
   user_fields: CustomFieldDefinition[];
@@ -60,6 +59,11 @@ export type CustomRelationshipDefinition = {
   name: string;
   description: string;
   sort_order: number;
+  source_entity_type: CustomFieldEntityType;
+  source_custom_object_definition_id?: string;
+  target_entity_type: CustomFieldEntityType;
+  target_custom_object_definition_id?: string;
+  cardinality: CustomRelationshipType;
 }
 
 export type CustomRelationship = {}
@@ -85,6 +89,12 @@ export type CustomObjectDefinition = {
 }
 
 export type CustomObject = {}
+
+export type CreateCustomObjectDefinitionRequest = {
+  company_id: string;
+  name: string;
+  description: string;
+}
 
 export type CustomFieldListItem = CustomFieldDefinition | CustomRelationshipDefinition;
 

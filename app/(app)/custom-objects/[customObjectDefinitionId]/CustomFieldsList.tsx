@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { FC, useCallback, useMemo } from "react";
 import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -10,12 +10,13 @@ import { CSS as DndCSS } from "@dnd-kit/utilities";
 import { Edit, Trash } from "@/app/ui/Icons";
 import { bgColor5, fontColor1 } from "@/lib/constants";
 import styles from "./page.module.css";
-import { CustomFieldListItem } from "@/types";
+import { CustomFieldDataType, CustomFieldEntityType, CustomFieldListItem, CustomObjectDefinition } from "@/types";
 import { useTranslation } from "react-i18next";
 
 interface CustomFieldsListProps {
   items: CustomFieldListItem[];
   isEmpty: boolean;
+  customObjects: CustomObjectDefinition[];
   onChangeOrder: (items: CustomFieldListItem[]) => void;
   onEdit: (item: CustomFieldListItem) => void;
   onDelete: (item: CustomFieldListItem) => void;
@@ -25,6 +26,7 @@ interface CustomFieldsListProps {
 const CustomFieldsList: FC<CustomFieldsListProps> = ({
   items,
   isEmpty,
+  customObjects,
   onChangeOrder,
   onEdit,
   onDelete,
@@ -72,6 +74,7 @@ const CustomFieldsList: FC<CustomFieldsListProps> = ({
             <CustomFieldListCell
               key={item.id}
               item={item}
+              customObjects={customObjects}
               onEdit={() => {
                 onEdit(item);
               }}
@@ -88,19 +91,43 @@ const CustomFieldsList: FC<CustomFieldsListProps> = ({
 
 interface CustomFieldListCellProps {
   item: CustomFieldListItem;
+  customObjects: CustomObjectDefinition[];
   onEdit: () => void;
   onDelete: () => void;
 }
 
 const CustomFieldListCell: FC<CustomFieldListCellProps> = ({
   item,
+  customObjects,
   onEdit,
   onDelete
 }) => {
+  const { t } = useTranslation();
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useSortable({
       id: item.id,
     });
+
+  const fieldTypeLabel = useMemo(() => {
+    if ("target_entity_type" in item) {
+      if (item.target_entity_type !== CustomFieldEntityType.CustomObject) {
+        return t(item.target_entity_type);
+      }
+
+      const object = customObjects.find((o) => o.id === item.target_entity_type);
+      return object?.name ?? "";
+    }
+
+    if (item.data_type === CustomFieldDataType.Text) {
+      return t("text");
+    }
+
+    if (item.data_type === CustomFieldDataType.Boolean) {
+      return t("checkbox");
+    }
+
+    return "";
+  }, [item, customObjects])
 
   return (
     <div>
@@ -126,7 +153,15 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({
                 className="flex items-center gap-3"
               >
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ color: fontColor1 }}>{item.name}</div>
+                  <div className="flex items-center gap-3">
+                    <div style={{ color: fontColor1 }}>{item.name}</div>
+                    {fieldTypeLabel && (
+                      <>
+                        <div className={styles.subtitle}>•</div>
+                        <div className={styles.subtitle}>{fieldTypeLabel}</div>
+                      </>
+                    )}
+                  </div>
                   <div className={styles.subtitle}>{item.description}</div>
                 </div>
               </div>

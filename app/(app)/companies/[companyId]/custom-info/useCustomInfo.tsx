@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 import {
   CreateCustomFieldDefinitionRequest,
+  CreateCustomObjectDefinitionRequest,
   CreateCustomRelationshipDefinitionRequest,
   CustomFieldDefinition,
   CustomFieldEntityType,
@@ -13,6 +14,7 @@ import {
   CustomObjectDefinition,
   CustomRelationshipDefinition,
 } from "@/types";
+import { useRouter } from "next/navigation";
 
 export const useCustomInfo = (companyId: string) => {
   const [loading, setLoading] = useState(true);
@@ -26,6 +28,7 @@ export const useCustomInfo = (companyId: string) => {
   const api = useApi();
   const { showModal } = useModal();
   const { t } = useTranslation();
+  const router = useRouter();
 
   const companyItems = useMemo(() => {
     return [
@@ -56,6 +59,7 @@ export const useCustomInfo = (companyId: string) => {
 
   useEffect(() => {
     getCustomFieldDefinitions(companyId);
+    getCustomObjectDefinitions(companyId);
   }, [companyId]);
 
   const getCustomFieldDefinitions = async (companyId: string) => {
@@ -69,7 +73,23 @@ export const useCustomInfo = (companyId: string) => {
         setProjectRelationships(response.project_relationships);
         setUserFields(response.user_fields);
         setUserRelationships(response.user_relationships);
-        setCustomObjects(response.custom_objects);
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const getCustomObjectDefinitions = async (companyId: string) => {
+    try {
+      const response = await api.getCustomObjectDefinitions(companyId);
+
+      if (response) {
+        setCustomObjects(response);
       }
     } catch (err) {
       showModal({
@@ -157,6 +177,25 @@ export const useCustomInfo = (companyId: string) => {
     setLoading(false);
   };
 
+  const createCustomObjectDefinition = async (request: CreateCustomObjectDefinitionRequest) => {
+    setLoading(true);
+
+    try {
+      const response = await api.createCustomObjectDefinition(request);
+
+      if (response?.id) {
+        router.push(`/custom-objects/${response.id}`);
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  }
+
   const onUpdateCompanyItemsOrder = (newItems: CustomFieldListItem[]) => {
     const newFields = companyFields.map((f) => {
       const sort_order = newItems.find((i) => i.id === f.id)?.sort_order ?? 0;
@@ -230,5 +269,6 @@ export const useCustomInfo = (companyId: string) => {
     customObjects,
     createCustomFieldDefinition,
     createCustomRelationshipDefinition,
+    createCustomObjectDefinition,
   };
 };

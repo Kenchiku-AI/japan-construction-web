@@ -12,7 +12,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { useRouter } from "next/navigation";
 import Divider from "@/app/ui/Divider";
-import { cardClass, fontColor2 } from "@/lib/constants";
+import { cardClass } from "@/lib/constants";
 import { Loader } from "@/app/ui/Loader";
 
 const CompaniesPage = () => {

@@ -52,6 +52,7 @@ import {
   CreateCustomRelationshipDefinitionRequest,
   CustomRelationshipDefinition,
   SortOrderRequest,
+  CreateCustomObjectDefinitionRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -505,6 +506,10 @@ export const useApiData = () => {
     async getCustomObjectDefinition(definitionId: string) {
       const url = `/custom-objects/definitions/${definitionId}`;
       return call(() => http.get<CustomObjectDefinition>(url));
+    },
+    async createCustomObjectDefinition(request: CreateCustomObjectDefinitionRequest) {
+      const url = `/custom-objects/definitions`;
+      return call(() => http.post<CustomObjectDefinition>(url, request));
     },
     async getCustomObjects(definitionId: string) {
       const url = `/custom-objects?custom_object_definition_id=${definitionId}`;

@@ -26,7 +26,7 @@ const ConversationItemsList: FC<ConversationItemsListProps> = ({
   const { t } = useTranslation();
 
   if (isEmpty) {
-    return <div className={styles.empty}>{t("empty_conversation_items_description")}</div>;
+    return <div className={styles.empty}>{t("empty_description")}</div>;
   }
 
   const getStatusColors = (status: string) => {
