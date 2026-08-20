@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
-import { CustomFieldDefinition } from "@/types";
+import { CustomFieldListItem } from "@/types";
 
 interface EditCustomFieldModalProps {
   isOpen: boolean;
-  field?: CustomFieldDefinition;
+  field?: CustomFieldListItem;
   onClose: () => void;
   onSubmit: (name: string, description: string) => void;
 }
@@ -24,6 +24,11 @@ const EditCustomFieldModal: FC<EditCustomFieldModalProps> = ({
   const { t } = useTranslation();
 
   useEffect(() => {
+    if (!field) {
+      reset();
+      return;
+    }
+
     setName(field?.name ?? "");
     setDescription(field?.description ?? "");
   }, [field]);
@@ -56,7 +61,7 @@ const EditCustomFieldModal: FC<EditCustomFieldModalProps> = ({
       </div>
       <Button
         disabled={!name || !description}
-        label={t("create")}
+        label={t("update")}
         onClick={() => {
           reset();
           onSubmit(name, description);

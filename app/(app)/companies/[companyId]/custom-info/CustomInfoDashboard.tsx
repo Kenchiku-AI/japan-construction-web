@@ -14,12 +14,17 @@ import CustomFieldsList from "../../../custom-objects/[customObjectDefinitionId]
 import { useCustomInfo } from "./useCustomInfo";
 import CreateCustomFieldModal from "./CreateCustomFieldModal";
 import EditCustomFieldModal from "./EditCustomFieldModal";
-import { CustomFieldDataType, CustomFieldDefinition, CustomFieldEntityType, CustomRelationshipType } from "@/types";
+import { CustomFieldDataType, CustomFieldDefinition, CustomFieldEntityType, CustomFieldListItem, CustomRelationshipType } from "@/types";
 import CustomObjectsList from "./CustomObjectsList";
 import CreateCustomObjectModal from "./CreateCustomObjectModal";
+import DeleteCustomFieldModal from "./DeleteCustomFieldModal";
 
 interface CustomInfoDashboardProps {
   companyId: string;
+}
+
+type EditCustomFieldListItem = CustomFieldListItem & {
+  entityType: CustomFieldEntityType
 }
 
 const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
@@ -36,13 +41,16 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
     onUpdateUserItemsOrder,
     customObjectDefinitions,
     createCustomFieldDefinition,
+    updateCustomFieldDefinition,
     createCustomRelationshipDefinition,
+    updateCustomRelationshipDefinition,
     createCustomObjectDefinition,
     loading
   } = useCustomInfo(companyId);
   const [showCreateCustomObject, setShowCreateCustomObject] = useState(false);
   const [createCustomFieldType, setCreateCustomFieldType] = useState("");
-  const [editCustomField, setEditCustomField] = useState<CustomFieldDefinition>();
+  const [editCustomField, setEditCustomField] = useState<EditCustomFieldListItem>();
+  const [deleteCustomField, setDeleteCustomField] = useState<EditCustomFieldListItem>();
 
   useEffect(() => {
     if (!isFormsEnabled) {
@@ -98,10 +106,16 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
               onUpdateCompanyItemsOrder(newItems);
             }}
             onEdit={(i) => {
-
+              setEditCustomField({
+                ...i,
+                entityType: CustomFieldEntityType.Company
+              });
             }}
             onDelete={(i) => {
-
+              setDeleteCustomField({
+                ...i,
+                entityType: CustomFieldEntityType.Company
+              });
             }}
           />
         </div>
@@ -129,10 +143,16 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
               onUpdateUserItemsOrder(newItems);
             }}
             onEdit={(i) => {
-
+              setEditCustomField({
+                ...i,
+                entityType: CustomFieldEntityType.User
+              });
             }}
             onDelete={(i) => {
-
+              setDeleteCustomField({
+                ...i,
+                entityType: CustomFieldEntityType.Company
+              });
             }}
           />
         </div>
@@ -160,10 +180,10 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
               onUpdateProjectItemsOrder(newItems)
             }}
             onEdit={(i) => {
-
+              setEditCustomField(i);
             }}
             onDelete={(i) => {
-
+              setDeleteCustomField(i);
             }}
           />
         </div>
@@ -227,8 +247,35 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         onClose={() => {
           setEditCustomField(undefined);
         }}
-        onSubmit={() => {
+        onSubmit={(name, description) => {
+          if (!editCustomField) return;
+
+          const request = { name, description };
+
+          if ("source_entity_type" in editCustomField) {
+            updateCustomRelationshipDefinition(
+              editCustomField.id,
+              request,
+              editCustomField.entityType
+            );
+          } else {
+            updateCustomFieldDefinition(
+              editCustomField.id,
+              request,
+              editCustomField.entityType
+            );
+          }
+
           setEditCustomField(undefined);
+        }}
+      />
+      <DeleteCustomFieldModal
+        isOpen={!!deleteCustomField}
+        onClose={() => {
+          setDeleteCustomField(undefined);
+        }}
+        onDelete={() => {
+          setDeleteCustomField(undefined);
         }}
       />
       {loading && <Loader />}

@@ -4,7 +4,6 @@ import { FC, useEffect, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
 import { useCustomObjectDefinition } from "./useCustomObjectDefinition";
 import { cardClass, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
@@ -15,13 +14,13 @@ import { Input } from "@/app/ui/Input/Input";
 import Divider from "@/app/ui/Divider";
 import CreateCustomFieldModal from "../../companies/[companyId]/custom-info/CreateCustomFieldModal";
 import { CustomFieldEntityType, CustomRelationshipType } from "@/types";
+import CustomFieldsList from "./CustomFieldsList";
 
 interface CustomObjectDefinitionDashboardProps {
   customObjectDefinitionId: string;
 }
 
 const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> = ({ customObjectDefinitionId }) => {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [showEditName, setShowEditName] = useState(false);
@@ -32,7 +31,9 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
     customObjectDefinition,
     customObjectDefinitions,
     customObjects,
+    fieldListItems,
     createCustomRelationshipDefinition,
+    onUpdateItemsOrder,
     loading
   } = useCustomObjectDefinition(customObjectDefinitionId);
 
@@ -77,16 +78,6 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
       </div>
       <div className="flex justify-between mt-12">
         <div className="self-end">{t("custom_object_settings")}</div>
-        <Button
-          variant="tertiary"
-          label={t("create_field")}
-          iconLeft={() => <Plus />}
-          onClick={() => {
-            setShowCreateField(true);
-          }}
-          style={{ height: "auto" }}
-          iconOnlyMobile
-        />
       </div>
       <div className={cardClass}>
         {showEditName ? (
@@ -134,7 +125,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           </div>
         ) : (
           <div className="flex items-center">
-            <div className="p-1 md:p-3 flex flex-1">
+            <div className="p-1 md:py-2 md:px-3 flex flex-1">
               <div>
                 {!!name && (
                   <div className={styles.label}>{t("custom_object_name")}</div>
@@ -200,7 +191,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           </div>
         ) : (
           <div className="flex items-center">
-            <div className="p-1 md:p-3 flex flex-1">
+            <div className="px-1 py-2 md:px-3 flex flex-1">
               <div>
                 {!!description && (
                   <div className={styles.label}>{t("custom_object_description")}</div>
@@ -220,12 +211,35 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             </div>
           </div>
         )}
-        {!!customObjects.length && (
-          <>
-            <Divider />
+      </div>
+      <div className="flex justify-between mt-12">
+        <div className="self-end">{t("custom_object_fields")}</div>
+        <Button
+          variant="tertiary"
+          label={t("create_field")}
+          iconLeft={() => <Plus />}
+          onClick={() => {
+            setShowCreateField(true);
+          }}
+          style={{ height: "auto" }}
+          iconOnlyMobile
+        />
+      </div>
+      <div className={cardClass}>
+        <CustomFieldsList
+          items={fieldListItems}
+          isEmpty={!fieldListItems.length}
+          customObjects={customObjectDefinitions ?? []}
+          onChangeOrder={(newItems) => {
+            onUpdateItemsOrder(newItems);
+          }}
+          onEdit={() => {
 
-          </>
-        )}
+          }}
+          onDelete={() => {
+
+          }}
+        />
       </div>
       <CreateCustomFieldModal
         isOpen={showCreateField}

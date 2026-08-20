@@ -53,6 +53,8 @@ import {
   CustomRelationshipDefinition,
   SortOrderRequest,
   CreateCustomObjectDefinitionRequest,
+  CustomObjectDefinitionDetail,
+  UpdateCustomFieldDefinitionRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -487,6 +489,10 @@ export const useApiData = () => {
       const url = `/custom-fields/definitions`;
       return call(() => http.post<CustomFieldDefinition>(url, request));
     },
+    async updateCustomFieldDefinition(definitionId: string, request: UpdateCustomFieldDefinitionRequest) {
+      const url = `/custom-fields/definitions/${definitionId}`;
+      return call(() => http.patch<CustomFieldDefinition>(url, request));
+    },
     async updateCustomFieldsSortOrder(request: SortOrderRequest[]) {
       const url = `/custom-fields/definitions/sort-order`;
       return call(() => http.patch<CustomRelationshipDefinition[]>(url, request));
@@ -494,6 +500,10 @@ export const useApiData = () => {
     async createCustomRelationshipDefinition(request: CreateCustomRelationshipDefinitionRequest) {
       const url = `/custom-relationships/definitions`;
       return call(() => http.post<CustomRelationshipDefinition>(url, request));
+    },
+    async updateCustomRelationshipDefinition(definitionId: string, request: UpdateCustomFieldDefinitionRequest) {
+      const url = `/custom-relationships/definitions/${definitionId}`;
+      return call(() => http.patch<CustomRelationshipDefinition>(url, request));
     },
     async updateCustomRelationshipsSortOrder(request: SortOrderRequest[]) {
       const url = `/custom-relationships/definitions/sort-order`;
@@ -505,7 +515,7 @@ export const useApiData = () => {
     },
     async getCustomObjectDefinition(definitionId: string) {
       const url = `/custom-objects/definitions/${definitionId}`;
-      return call(() => http.get<CustomObjectDefinition>(url));
+      return call(() => http.get<CustomObjectDefinitionDetail>(url));
     },
     async createCustomObjectDefinition(request: CreateCustomObjectDefinitionRequest) {
       const url = `/custom-objects/definitions`;

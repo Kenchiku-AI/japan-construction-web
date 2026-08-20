@@ -42,6 +42,11 @@ export type CreateCustomFieldDefinitionRequest = {
   custom_object_definition_id?: string;
 }
 
+export type UpdateCustomFieldDefinitionRequest = {
+  name: string;
+  description: string;
+}
+
 export type CustomFieldDefinitionsResponse = {
   project_fields: CustomFieldDefinition[];
   project_relationships: CustomRelationshipDefinition[];
@@ -84,9 +89,17 @@ export type CreateCustomRelationshipDefinitionRequest = {
 
 export type CustomObjectDefinition = {
   id: string;
+  name: string;
+  description: string;
+}
+
+export type CustomObjectDefinitionDetail = {
+  id: string;
   company_id: string;
   name: string;
   description: string;
+  fields: CustomFieldDefinition[];
+  relationships: CustomRelationshipDefinition[];
 }
 
 export type CustomObject = {}

@@ -8,11 +8,13 @@ import {
   CreateCustomFieldDefinitionRequest,
   CreateCustomObjectDefinitionRequest,
   CreateCustomRelationshipDefinitionRequest,
+  CustomFieldDataType,
   CustomFieldDefinition,
   CustomFieldEntityType,
   CustomFieldListItem,
   CustomObjectDefinition,
   CustomRelationshipDefinition,
+  UpdateCustomFieldDefinitionRequest,
 } from "@/types";
 import { useRouter } from "next/navigation";
 
@@ -139,6 +141,44 @@ export const useCustomInfo = (companyId: string) => {
     setLoading(false);
   };
 
+  const updateCustomFieldDefinition = async (definitionId: string, request: UpdateCustomFieldDefinitionRequest, entityType: CustomFieldEntityType) => {
+    setLoading(true);
+
+    try {
+      const response = await api.updateCustomFieldDefinition(definitionId, request);
+
+      if (response) {
+        switch (entityType) {
+          case CustomFieldEntityType.Project:
+            setProjectFields([
+              ...projectFields,
+              response
+            ]);
+            break;
+          case CustomFieldEntityType.User:
+            setUserFields([
+              ...userFields,
+              response
+            ]);
+            break;
+          case CustomFieldEntityType.Company:
+            setCompanyFields([
+              ...companyFields,
+              response
+            ]);
+            break;
+        }
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
   const createCustomRelationshipDefinition = async (request: CreateCustomRelationshipDefinitionRequest) => {
     setLoading(true);
 
@@ -147,6 +187,44 @@ export const useCustomInfo = (companyId: string) => {
 
       if (response) {
         switch (request.source_entity_type) {
+          case CustomFieldEntityType.Project:
+            setProjectRelationships([
+              ...projectRelationships,
+              response
+            ]);
+            break;
+          case CustomFieldEntityType.User:
+            setUserRelationships([
+              ...userRelationships,
+              response
+            ]);
+            break;
+          case CustomFieldEntityType.Company:
+            setCompanyRelationships([
+              ...companyRelationships,
+              response
+            ]);
+            break;
+        }
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const updateCustomRelationshipDefinition = async (definitionId: string, request: UpdateCustomFieldDefinitionRequest, entityType: CustomFieldEntityType) => {
+    setLoading(true);
+
+    try {
+      const response = await api.updateCustomRelationshipDefinition(definitionId, request);
+
+      if (response) {
+        switch (entityType) {
           case CustomFieldEntityType.Project:
             setProjectRelationships([
               ...projectRelationships,
@@ -245,17 +323,21 @@ export const useCustomInfo = (companyId: string) => {
   }
 
   const updateSortOrder = (newFields: CustomFieldDefinition[], newRelationships: CustomRelationshipDefinition[]) => {
-    const fieldsRequest = newFields.map((f) => ({
-      id: f.id,
-      sort_order: f.sort_order
-    }));
-    api.updateCustomFieldsSortOrder(fieldsRequest);
+    if (newFields.length) {
+      const fieldsRequest = newFields.map((f) => ({
+        id: f.id,
+        sort_order: f.sort_order
+      }));
+      api.updateCustomFieldsSortOrder(fieldsRequest);
+    }
 
-    const relationshipsRequest = newRelationships.map((f) => ({
-      id: f.id,
-      sort_order: f.sort_order
-    }));
-    api.updateCustomRelationshipsSortOrder(relationshipsRequest);
+    if (newRelationships.length) {
+      const relationshipsRequest = newRelationships.map((f) => ({
+        id: f.id,
+        sort_order: f.sort_order
+      }));
+      api.updateCustomRelationshipsSortOrder(relationshipsRequest);
+    }
   }
 
   return {
@@ -268,7 +350,9 @@ export const useCustomInfo = (companyId: string) => {
     onUpdateProjectItemsOrder,
     customObjectDefinitions,
     createCustomFieldDefinition,
+    updateCustomFieldDefinition,
     createCustomRelationshipDefinition,
+    updateCustomRelationshipDefinition,
     createCustomObjectDefinition,
   };
 };
