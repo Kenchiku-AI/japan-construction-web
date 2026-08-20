@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useTranslation } from "react-i18next";
 import {
+  CustomFieldDataType,
   CustomFieldDefinition,
   CustomFieldEntityType,
   CustomFieldListItem,
@@ -141,6 +142,64 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     setLoading(false);
   };
 
+  const createCustomFieldDefinition = useCallback(
+    async (
+      name: string, description: string, data_type: CustomFieldDataType
+    ) => {
+      if (!customObjectDefinition) return;
+
+      setLoading(true);
+
+      try {
+        const request = {
+          name,
+          description,
+          data_type,
+          entity_type: CustomFieldEntityType.CustomObject,
+          custom_object_definition_id: customObjectDefinition.id,
+          company_id: customObjectDefinition.company_id
+        }
+
+        const response = await api.createCustomFieldDefinition(request);
+
+        if (response) {
+          setFields((prevFields) => [...prevFields, response]);
+        }
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+
+      setLoading(false);
+    },
+    [customObjectDefinition]
+  );
+
+  const updateCustomFieldDefinition = async (definitionId: string, request: UpdateCustomFieldDefinitionRequest) => {
+    setLoading(true);
+
+    try {
+      const response = await api.updateCustomFieldDefinition(definitionId, request);
+
+      if (response) {
+        setFields((prevFields) =>
+          prevFields.map((field) =>
+            field.id === definitionId ? response : field
+          )
+        );
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
   const createCustomRelationshipDefinition = useCallback(
     async (
       name: string,
@@ -174,11 +233,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
         const response = await api.createCustomRelationshipDefinition(request);
 
         if (response) {
-          const newItems = [...fieldListItems, response].sort(
-            (a, b) => a.sort_order - b.sort_order
-          );
-
-          setFieldListItems(newItems);
+          setRelationships((prevRelationships) => [...prevRelationships, response]);
         }
       } catch (err) {
         showModal({
@@ -191,6 +246,29 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     },
     [customObjectDefinition]
   );
+
+  const updateCustomRelationshipDefinition = async (definitionId: string, request: UpdateCustomFieldDefinitionRequest) => {
+    setLoading(true);
+
+    try {
+      const response = await api.updateCustomRelationshipDefinition(definitionId, request);
+
+      if (response) {
+        setRelationships((prevRelationships) =>
+          prevRelationships.map((relationship) =>
+            relationship.id === definitionId ? response : relationship
+          )
+        );
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
 
   const onUpdateItemsOrder = (newItems: CustomFieldListItem[]) => {
     const newFields = fields.map((f) => {
@@ -226,6 +304,48 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     }
   }
 
+  const deleteCustomFieldDefinition = async (definitionId: string) => {
+    setLoading(true);
+
+    try {
+      await api.deleteCustomFieldDefinition(definitionId);
+
+      setFields((prevFields) =>
+        prevFields.filter((field) =>
+          field.id !== definitionId
+        )
+      );
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const deleteCustomRelationshipDefinition = async (definitionId: string) => {
+    setLoading(true);
+
+    try {
+      await api.deleteCustomRelationshipDefinition(definitionId);
+
+      setRelationships((prevRelationships) =>
+        prevRelationships.filter((relationship) =>
+          relationship.id !== definitionId
+        )
+      );
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
   return {
     loading,
     customObjectDefinition,
@@ -234,6 +354,11 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     fieldListItems,
     updateCustomObjectDefinition,
     onUpdateItemsOrder,
-    createCustomRelationshipDefinition
+    createCustomFieldDefinition,
+    updateCustomFieldDefinition,
+    deleteCustomFieldDefinition,
+    createCustomRelationshipDefinition,
+    updateCustomRelationshipDefinition,
+    deleteCustomRelationshipDefinition,
   };
 };

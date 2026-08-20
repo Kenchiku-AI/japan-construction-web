@@ -13,8 +13,10 @@ import styles from "./page.module.css";
 import { Input } from "@/app/ui/Input/Input";
 import Divider from "@/app/ui/Divider";
 import CreateCustomFieldModal from "../../companies/[companyId]/custom-info/CreateCustomFieldModal";
-import { CustomFieldEntityType, CustomRelationshipType } from "@/types";
+import { CustomFieldDataType, CustomFieldEntityType, CustomFieldListItem, CustomRelationshipType } from "@/types";
 import CustomFieldsList from "./CustomFieldsList";
+import DeleteCustomFieldModal from "../../companies/[companyId]/custom-info/DeleteCustomFieldModal";
+import EditCustomFieldModal from "../../companies/[companyId]/custom-info/EditCustomFieldModal";
 
 interface CustomObjectDefinitionDashboardProps {
   customObjectDefinitionId: string;
@@ -28,6 +30,8 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
   const [showEditName, setShowEditName] = useState(false);
   const [showEditDescription, setShowEditDescription] = useState(false);
   const [showCreateField, setShowCreateField] = useState(false);
+  const [editCustomField, setEditCustomField] = useState<CustomFieldListItem>();
+  const [deleteCustomField, setDeleteCustomField] = useState<CustomFieldListItem>();
   const { t } = useTranslation();
   const {
     customObjectDefinition,
@@ -35,7 +39,12 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
     customObjects,
     fieldListItems,
     updateCustomObjectDefinition,
+    createCustomFieldDefinition,
+    updateCustomFieldDefinition,
+    deleteCustomFieldDefinition,
     createCustomRelationshipDefinition,
+    updateCustomRelationshipDefinition,
+    deleteCustomRelationshipDefinition,
     onUpdateItemsOrder,
     loading
   } = useCustomObjectDefinition(customObjectDefinitionId);
@@ -104,17 +113,6 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             >
               <Button
                 variant="tertiary"
-                iconLeft={() => <Check />}
-                style={{ height: "auto" }}
-                label={t("update")}
-                disabled={!name || name === customObjectDefinition.name}
-                onClick={() => {
-                  updateCustomObjectDefinition({ name });
-                  setShowEditName(false);
-                }}
-              />
-              <Button
-                variant="tertiary"
                 iconLeft={() => (
                   <div style={{ marginRight: -3 }}>
                     <Close color={errorColor1} />
@@ -127,6 +125,17 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
                   setShowEditName(false);
                 }}
                 textStyle={{ color: errorColor1 }}
+              />
+              <Button
+                variant="tertiary"
+                iconLeft={() => <Check />}
+                style={{ height: "auto" }}
+                label={t("update")}
+                disabled={!name || name === customObjectDefinition.name}
+                onClick={() => {
+                  updateCustomObjectDefinition({ name });
+                  setShowEditName(false);
+                }}
               />
             </div>
           </div>
@@ -177,17 +186,6 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             >
               <Button
                 variant="tertiary"
-                iconLeft={() => <Check />}
-                style={{ height: "auto" }}
-                label={t("update")}
-                disabled={!description || description === customObjectDefinition.description}
-                onClick={() => {
-                  updateCustomObjectDefinition({ description });
-                  setShowEditDescription(false);
-                }}
-              />
-              <Button
-                variant="tertiary"
                 iconLeft={() => (
                   <div style={{ marginRight: -3 }}>
                     <Close color={errorColor1} />
@@ -200,6 +198,17 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
                   setShowEditDescription(false);
                 }}
                 textStyle={{ color: errorColor1 }}
+              />
+              <Button
+                variant="tertiary"
+                iconLeft={() => <Check />}
+                style={{ height: "auto" }}
+                label={t("update")}
+                disabled={!description || description === customObjectDefinition.description}
+                onClick={() => {
+                  updateCustomObjectDefinition({ description });
+                  setShowEditDescription(false);
+                }}
               />
             </div>
           </div>
@@ -219,6 +228,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
               className="cursor-pointer md:pr-3"
               onClick={() => {
                 setShowEditDescription(true);
+
                 setTimeout(() => {
                   setDescriptionShouldFocus(true);
 
@@ -254,11 +264,11 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           onChangeOrder={(newItems) => {
             onUpdateItemsOrder(newItems);
           }}
-          onEdit={() => {
-
+          onEdit={(f) => {
+            setEditCustomField(f);
           }}
-          onDelete={() => {
-
+          onDelete={(f) => {
+            setDeleteCustomField(f);
           }}
         />
       </div>
@@ -277,16 +287,57 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
               relationshipType as CustomRelationshipType
             );
           } else {
-            // createCustomFieldDefinition({
-            //   name,
-            //   description,
-            //   data_type: fieldType as CustomFieldDataType,
-            //   entity_type: createCustomFieldType as CustomFieldEntityType,
-            //   company_id: companyId
-            // });
+            createCustomFieldDefinition(
+              name,
+              description,
+              fieldType as CustomFieldDataType
+            );
           }
 
           setShowCreateField(false);
+        }}
+      />
+      <EditCustomFieldModal
+        isOpen={!!editCustomField}
+        field={editCustomField}
+        onClose={() => {
+          setEditCustomField(undefined);
+        }}
+        onSubmit={(name, description) => {
+          if (!editCustomField) return;
+
+          const request = { name, description };
+
+          if ("source_entity_type" in editCustomField) {
+            updateCustomRelationshipDefinition(
+              editCustomField.id,
+              request
+            );
+          } else {
+            updateCustomFieldDefinition(
+              editCustomField.id,
+              request
+            );
+          }
+
+          setEditCustomField(undefined);
+        }}
+      />
+      <DeleteCustomFieldModal
+        isOpen={!!deleteCustomField}
+        onClose={() => {
+          setDeleteCustomField(undefined);
+        }}
+        onDelete={() => {
+          if (!deleteCustomField) return;
+
+          if ("source_entity_type" in deleteCustomField) {
+            deleteCustomRelationshipDefinition(deleteCustomField.id);
+          } else {
+            deleteCustomFieldDefinition(deleteCustomField.id);
+          }
+
+          setDeleteCustomField(undefined);
         }}
       />
       {loading && <Loader />}
