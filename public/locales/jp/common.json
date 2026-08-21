@@ -254,6 +254,7 @@
   "new_password_description": "新しいパスワードを入力してください。パスワードは以下の条件を満たす必要があります。",
   "new_password_created": "パスワードを設定しました",
   "new_password_created_description": "新しいパスワードが設定されました。ログインしてご利用ください。",
+  "no_options": "選択肢なし",
   "no_projects": "有効な現場がありません",
   "no_projects_description": "利用可能な現場がありません。再度ログインする前に、会社に所属しているか、現場のゲストとして追加されていることを確認してください。",
   "none": "なし",

@@ -37,11 +37,9 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!ownerType) {
-      setTitle(`create_field`);
-    } else {
-      setTitle(`create_custom_${ownerType}_field`);
-    }
+    if (!ownerType) return;
+
+    setTitle(`create_custom_${ownerType}_field`);
   }, [ownerType]);
 
   const showRelationshipConfig = useMemo(() => {
@@ -77,6 +75,7 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
       setFieldType("text");
       setRelationshipType("one");
       setRelationshipTarget("project");
+      setTitle(`create_field`);
     }, 500);
   };
 

@@ -9,6 +9,7 @@ import {
 import { CSSProperties, FC, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Select.module.css";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 
 interface SelectOption {
   value?: string | number;
@@ -39,6 +40,7 @@ const Select: FC<SelectProps> = ({
   const triggerRef = useRef<HTMLDivElement>(null);
   const openUpwardRef = useRef(false);
   const [dropdownStyles, setDropdownStyles] = useState<CSSProperties>({});
+  const { t } = useTranslation();
 
   const selectedOption = useMemo(() => {
     return options.find((o) => o.value === value);
@@ -122,18 +124,29 @@ const Select: FC<SelectProps> = ({
               borderBottomRightRadius: openUpwardRef.current ? 0 : undefined,
             }}
           >
-            {options.map((option, index) => (
+            {!options.length ? (
               <li
-                key={option.value ?? `select_option_${index}`}
-                className="px-3 py-2 cursor-pointer text-sm hover:bg-black/5 rounded"
-                style={{
-                  color: option.value ? fontColor1 : fontColor2,
-                }}
-                onMouseDown={() => handleSelect(option)}
+                className="px-3 py-2 cursor-pointer text-sm rounded"
+                style={{ color: fontColor2 }}
               >
-                {option.label}
+                {t("no_options")}
               </li>
-            ))}
+            ) : (
+              <>
+                {options.map((option, index) => (
+                  <li
+                    key={option.value ?? `select_option_${index}`}
+                    className="px-3 py-2 cursor-pointer text-sm hover:bg-black/5 rounded"
+                    style={{
+                      color: option.value ? fontColor1 : fontColor2,
+                    }}
+                    onMouseDown={() => handleSelect(option)}
+                  >
+                    {option.label}
+                  </li>
+                ))}
+              </>
+            )}
           </ul>,
           document.body,
         )}

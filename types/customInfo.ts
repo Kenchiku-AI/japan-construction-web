@@ -109,7 +109,10 @@ export type CustomObjectDefinitionDetail = {
 
 export type CustomObject = {
   id: string;
-  definition: CustomObjectDefinition
+  company_id: string
+  definition: CustomObjectDefinitionDetail
+  fields: CustomField[]
+  relationships: CustomRelationship[]
 }
 
 export interface CustomObjectListItem {
@@ -134,6 +137,12 @@ export type CustomObjectsByDefinitionsRequest = {
 
 export type CreateCustomObjectRequest = {
   company_id: string;
+  custom_object_definition_id: string;
+  fields: Record<string, string>;
+  relationships: Record<string, string[]>;
+}
+
+export type UpdateCustomObjectRequest = {
   custom_object_definition_id: string;
   fields: Record<string, string>;
   relationships: Record<string, string[]>;

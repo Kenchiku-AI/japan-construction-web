@@ -10,8 +10,6 @@ interface CustomInfoPageProps {
 const CustomInfoPage: FC<CustomInfoPageProps> = async ({ params }) => {
   const { companyId } = await params;
 
-  console.log("company id", companyId);
-
   return <CustomInfoDashboard companyId={companyId} />;
 };
 

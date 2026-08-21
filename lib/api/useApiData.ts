@@ -57,6 +57,8 @@ import {
   UpdateCustomFieldDefinitionRequest,
   CustomObjectsByDefinitionsRequest,
   CustomObjectsByDefinition,
+  CreateCustomObjectRequest,
+  UpdateCustomObjectRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -546,6 +548,18 @@ export const useApiData = () => {
     async getCustomObject(objectId: string) {
       const url = `/custom-objects/${objectId}`;
       return call(() => http.get<CustomObject>(url));
+    },
+    async createCustomObject(request: CreateCustomObjectRequest) {
+      const url = `/custom-objects`;
+      return call(() => http.post<CustomObject>(url, request));
+    },
+    async updateCustomObject(objectId: string, request: UpdateCustomObjectRequest) {
+      const url = `/custom-objects/${objectId}`;
+      return call(() => http.patch<CustomObject>(url, request));
+    },
+    async deleteCustomObject(objectId: string) {
+      const url = `/custom-objects/${objectId}`;
+      return call(() => http.delete(url));
     },
   };
 

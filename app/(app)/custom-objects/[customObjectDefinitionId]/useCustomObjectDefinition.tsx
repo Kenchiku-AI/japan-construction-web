@@ -17,6 +17,8 @@ import {
   Project,
   UserOrGuest,
   CustomObjectsByDefinition,
+  CreateCustomObjectRequest,
+  UpdateCustomObjectRequest,
 } from "@/types";
 import { useModal } from "@/lib/modal/ModalContext";
 
@@ -453,6 +455,73 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     setLoading(false);
   }, [customObjectDefinition]);
 
+  const createCustomObject = async (request: CreateCustomObjectRequest) => {
+    setLoading(true);
+
+    try {
+      const response = await api.createCustomObject(request);
+
+      if (response) {
+        setCustomObjects((prev) => [
+          response,
+          ...prev
+        ])
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const updateCustomObject = async (objectId: string, request: UpdateCustomObjectRequest) => {
+    setLoading(true);
+
+    try {
+      const response = await api.updateCustomObject(objectId, request);
+
+      if (response) {
+        setCustomObjects((prev) => {
+          const index = prev.findIndex((o) => o.id === objectId);
+          if (index === -1) return prev;
+
+          const newObjects = [...prev];
+          newObjects[index] = response;
+          return newObjects;
+        });
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const deleteCustomObject = async (objectId: string) => {
+    setLoading(true);
+
+    try {
+      await api.deleteCustomObject(objectId);
+
+      setCustomObjects((prev) => (
+        prev.filter((o) => o.id !== objectId)
+      ));
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
   return {
     loading,
     customObjectDefinition,
@@ -462,6 +531,9 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     fieldListItems,
     projects,
     users,
+    createCustomObject,
+    updateCustomObject,
+    deleteCustomObject,
     updateCustomObjectDefinition,
     onUpdateItemsOrder,
     createCustomFieldDefinition,

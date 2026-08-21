@@ -8,16 +8,18 @@ import { Loader } from "@/app/ui/Loader";
 import { useCustomObjectDefinition } from "./useCustomObjectDefinition";
 import { cardClass, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
-import { Check, Close, Edit, Plus } from "@/app/ui/Icons";
+import { Check, Close, Cube, Edit, Plus } from "@/app/ui/Icons";
 import styles from "./page.module.css";
 import { Input } from "@/app/ui/Input/Input";
 import Divider from "@/app/ui/Divider";
 import CreateCustomFieldModal from "../../companies/[companyId]/custom-info/CreateCustomFieldModal";
-import { CustomFieldDataType, CustomFieldEntityType, CustomFieldDefinitionListItem, CustomRelationshipType } from "@/types";
+import { CustomFieldDataType, CustomFieldEntityType, CustomFieldDefinitionListItem, CustomRelationshipType, CustomObject } from "@/types";
 import CustomFieldDefinitionsList from "./CustomFieldDefinitionsList";
 import DeleteCustomFieldModal from "../../companies/[companyId]/custom-info/DeleteCustomFieldModal";
 import EditCustomFieldModal from "../../companies/[companyId]/custom-info/EditCustomFieldModal";
 import CreateCustomObjectModal from "./CreateCustomObjectModal";
+import EditCustomObjectModal from "./EditCustomObjectModal";
+import ConfirmDeleteModal from "../../projects/[projectId]/ConfirmDeleteModal";
 
 interface CustomObjectDefinitionDashboardProps {
   customObjectDefinitionId: string;
@@ -25,6 +27,8 @@ interface CustomObjectDefinitionDashboardProps {
 
 const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> = ({ customObjectDefinitionId }) => {
   const [showCreateObject, setShowCreateObject] = useState(false);
+  const [editObject, setEditObject] = useState<CustomObject>();
+  const [deleteObject, setDeleteObject] = useState<CustomObject>();
   const [name, setName] = useState("");
   const nameInputRef = useRef<any>(null);
   const [description, setDescription] = useState("");
@@ -51,6 +55,9 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
     updateCustomRelationshipDefinition,
     deleteCustomRelationshipDefinition,
     onUpdateItemsOrder,
+    createCustomObject,
+    updateCustomObject,
+    deleteCustomObject,
     loading
   } = useCustomObjectDefinition(customObjectDefinitionId);
 
@@ -87,9 +94,39 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           </div>
         ) : (
           <div>
-            {customObjects.map((o) => (
-              <div></div>
-            ))}
+            {customObjects.map((object, i) => {
+              const sortedFields = object.fields?.sort((a, b) => a.definition.sort_order - b.definition.sort_order);
+              const labelValue = sortedFields?.[0]?.value;
+              const label = labelValue ?? object.definition.name;
+
+              return (
+                <div key={object.id}>
+                  {i > 0 && <Divider />}
+                  <div
+                    onClick={() => {
+                      setEditObject(object);
+                    }}
+                    className="hover:opacity-50 cursor-pointer"
+                  >
+                    <div className="md:mx-3">
+                      <div className="flex items-center justify-between gap-4">
+                        <div
+                          style={{ minHeight: 60, minWidth: 0 }}
+                          className="flex flex-1 items-center gap-4 py-1"
+                        >
+                          <div className="hidden md:block">
+                            <Cube />
+                          </div>
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ color: labelValue ? fontColor1 : fontColor2 }}>{label}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         )}
       </div>
@@ -281,12 +318,45 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
         definition={customObjectDefinition}
         projects={projects}
         users={users}
-        customObjects={customObjectsByDefinition}
+        customObjectsByDefinition={customObjectsByDefinition}
         isOpen={showCreateObject}
         onClose={() => {
           setShowCreateObject(false);
         }}
-        onCreate={() => { }}
+        onCreate={(fields, relationships) => {
+          createCustomObject({
+            company_id: customObjectDefinition.company_id,
+            custom_object_definition_id: customObjectDefinition.id,
+            fields,
+            relationships
+          });
+        }}
+      />
+      <EditCustomObjectModal
+        definition={customObjectDefinition}
+        object={editObject}
+        projects={projects}
+        users={users}
+        customObjectsByDefinition={customObjectsByDefinition}
+        isOpen={!!editObject}
+        onClose={() => {
+          setEditObject(undefined);
+        }}
+        onSubmit={(fields, relationships) => {
+          if (!editObject) return;
+
+          const request = {
+            custom_object_definition_id: customObjectDefinition.id,
+            fields,
+            relationships
+          };
+
+          updateCustomObject(editObject.id, request);
+        }}
+        onDelete={() => {
+          setDeleteObject(editObject);
+          setEditObject(undefined);
+        }}
       />
       <CreateCustomFieldModal
         isOpen={showCreateField}
@@ -354,6 +424,18 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           }
 
           setDeleteCustomField(undefined);
+        }}
+      />
+      <ConfirmDeleteModal
+        isOpen={!!deleteObject}
+        onClose={() => {
+          setDeleteObject(undefined);
+        }}
+        onDelete={() => {
+          if (!deleteObject) return;
+
+          deleteCustomObject(deleteObject.id);
+          setDeleteObject(undefined);
         }}
       />
       {loading && <Loader />}

@@ -1,6 +1,7 @@
 import { FC, useMemo } from "react";
 import {
   CustomFieldEntityType,
+  CustomObjectListItem,
   CustomObjectsByDefinition,
   CustomRelationshipDefinition,
   CustomRelationshipType,
@@ -14,7 +15,7 @@ interface CustomRelationshipInputProps {
   definition: CustomRelationshipDefinition;
   projects: Project[];
   users: UserOrGuest[];
-  customObjects: CustomObjectsByDefinition;
+  customObjectsByDefinition: CustomObjectsByDefinition;
   value?: string[];
   onChange: (value: string[]) => void;
 }
@@ -23,7 +24,7 @@ const CustomRelationshipInput: FC<CustomRelationshipInputProps> = ({
   definition,
   projects,
   users,
-  customObjects,
+  customObjectsByDefinition,
   value,
   onChange
 }) => {
@@ -42,17 +43,14 @@ const CustomRelationshipInput: FC<CustomRelationshipInputProps> = ({
       ));
     }
 
-    if (!Object.hasOwn(customObjects, definition.id)) {
+    const entityDefinitionId = definition.target_custom_object_definition_id;
+    if (!entityDefinitionId) {
       return [];
     }
 
-    const { objects } = customObjects[definition.id];
-    return objects.map((o) => (
-      { label: o.name, value: o.id }
-    ));
-  }, [definition, projects, users]);
-
-  const isDisabled = !options.length;
+    const customObjects = customObjectsByDefinition?.[entityDefinitionId]?.objects;
+    return customObjects?.map((o) => ({ label: o.name, value: o.id })) ?? [];
+  }, [definition, customObjectsByDefinition, projects, users]);
 
   if (definition.cardinality === CustomRelationshipType.One) {
     return (
@@ -63,7 +61,6 @@ const CustomRelationshipInput: FC<CustomRelationshipInputProps> = ({
         onChange={(v) => {
           onChange([v as string]);
         }}
-        disabled={isDisabled}
       />
     );
   }
