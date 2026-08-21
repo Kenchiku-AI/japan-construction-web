@@ -328,6 +328,8 @@
   "select_project": "プロジェクト名を選択",
   "select_template": "テンプレートを選択",
   "show_archived": "アーカイブ済みを表示",
+  "show_more": "もっと見る",
+  "show_less": "折りたたむ",
   "sign_up": "新規アカウント作成",
   "sign_up_description": "以下の項目を入力して、ユーザーアカウントを作成してください。",
   "sign_up_modal_description": "会社名とメールアドレスを入力してください。登録用リンクをメールでお送りします。",

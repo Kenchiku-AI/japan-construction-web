@@ -35,7 +35,7 @@ const CustomObjectsList: FC<CustomObjectsListProps> = ({
       <div
         className="overflow-hidden"
         style={{
-          maxHeight: showAll ? 2500 : 500,
+          maxHeight: showAll ? undefined : 390,
           transition: "max-height 0.5s ease-in-out",
         }}
       >
@@ -70,15 +70,18 @@ const CustomObjectsList: FC<CustomObjectsListProps> = ({
         ))}
       </div>
       {objects.length > 5 && (
-        <Button
-          variant="tertiary"
-          style={{ marginLeft: 40 }}
-          label={showAll ? t("show_less") : t("show_more")}
-          iconLeft={() => showAll ? <UpChevron color={buttonColor} /> : <DownChevron color={buttonColor} />}
-          onClick={() => {
-            setShowAll(!showAll);
-          }}
-        />
+        <>
+          <Divider />
+          <Button
+            variant="tertiary"
+            style={{ marginLeft: 10 }}
+            label={showAll ? t("show_less") : t("show_more")}
+            iconLeft={() => showAll ? <UpChevron color={buttonColor} /> : <DownChevron color={buttonColor} />}
+            onClick={() => {
+              setShowAll(!showAll);
+            }}
+          />
+        </>
       )}
     </>
   );

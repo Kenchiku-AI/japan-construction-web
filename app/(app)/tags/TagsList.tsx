@@ -2,9 +2,9 @@ import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ImageTag } from "@/types";
 import styles from "./page.module.css";
-import { Edit, Tag, Trash } from "@/app/ui/Icons";
+import { DownChevron, Edit, Tag, Trash, UpChevron } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { fontColor1, fontColor2 } from "@/lib/constants";
+import { buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 
 interface TagsListProps {
@@ -34,7 +34,7 @@ const TagsList: FC<TagsListProps> = ({
       <div
         className="overflow-hidden"
         style={{
-          maxHeight: showAll ? 2500 : 500,
+          maxHeight: showAll ? undefined : 390,
           transition: "max-height 0.5s ease-in-out",
         }}
       >
@@ -76,14 +76,18 @@ const TagsList: FC<TagsListProps> = ({
         ))}
       </div>
       {isCollapsible && tags.length > 5 && (
-        <Button
-          variant="tertiary"
-          style={{ marginLeft: 40 }}
-          label={showAll ? t("show_less") : t("show_more")}
-          onClick={() => {
-            setShowAll(!showAll);
-          }}
-        />
+        <>
+          <Divider />
+          <Button
+            variant="tertiary"
+            style={{ marginLeft: 10 }}
+            label={showAll ? t("show_less") : t("show_more")}
+            iconLeft={() => showAll ? <UpChevron color={buttonColor} /> : <DownChevron color={buttonColor} />}
+            onClick={() => {
+              setShowAll(!showAll);
+            }}
+          />
+        </>
       )}
     </>
   );
