@@ -11,7 +11,7 @@ interface CreateCustomObjectModalProps {
   onCreate: (name: string, description: string) => void;
 }
 
-const CreateCustomFieldModal: FC<CreateCustomObjectModalProps> = ({
+const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
   isOpen,
   onClose,
   onCreate,
@@ -59,4 +59,4 @@ const CreateCustomFieldModal: FC<CreateCustomObjectModalProps> = ({
   );
 };
 
-export default CreateCustomFieldModal;
+export default CreateCustomObjectModal;

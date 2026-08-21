@@ -83,6 +83,12 @@ export type CompanyGuest = {
   projects: CompanyGuestProject[];
 };
 
+export type UserOrGuest = {
+  id: string;
+  first_name: string;
+  last_name: string;
+}
+
 export type CompanyGuestProject = {
   project_id: string;
   project_name: string;

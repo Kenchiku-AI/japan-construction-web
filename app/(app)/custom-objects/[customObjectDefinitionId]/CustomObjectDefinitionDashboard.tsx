@@ -13,8 +13,8 @@ import styles from "./page.module.css";
 import { Input } from "@/app/ui/Input/Input";
 import Divider from "@/app/ui/Divider";
 import CreateCustomFieldModal from "../../companies/[companyId]/custom-info/CreateCustomFieldModal";
-import { CustomFieldDataType, CustomFieldEntityType, CustomFieldListItem, CustomRelationshipType } from "@/types";
-import CustomFieldsList from "./CustomFieldsList";
+import { CustomFieldDataType, CustomFieldEntityType, CustomFieldDefinitionListItem, CustomRelationshipType } from "@/types";
+import CustomFieldDefinitionsList from "./CustomFieldDefinitionsList";
 import DeleteCustomFieldModal from "../../companies/[companyId]/custom-info/DeleteCustomFieldModal";
 import EditCustomFieldModal from "../../companies/[companyId]/custom-info/EditCustomFieldModal";
 
@@ -30,8 +30,8 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
   const [showEditName, setShowEditName] = useState(false);
   const [showEditDescription, setShowEditDescription] = useState(false);
   const [showCreateField, setShowCreateField] = useState(false);
-  const [editCustomField, setEditCustomField] = useState<CustomFieldListItem>();
-  const [deleteCustomField, setDeleteCustomField] = useState<CustomFieldListItem>();
+  const [editCustomField, setEditCustomField] = useState<CustomFieldDefinitionListItem>();
+  const [deleteCustomField, setDeleteCustomField] = useState<CustomFieldDefinitionListItem>();
   const { t } = useTranslation();
   const {
     customObjectDefinition,
@@ -107,7 +107,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
                 justifyContent: "flex-end",
                 marginTop: 12,
                 marginBottom: 6,
-                marginLeft: 6,
+                marginRight: 12,
                 gap: 24,
               }}
             >
@@ -140,7 +140,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             </div>
           </div>
         ) : (
-          <div className="flex items-center">
+          <div className="flex">
             <div className="p-1 md:py-2 md:px-3 flex flex-1">
               <div>
                 {!!name && (
@@ -152,7 +152,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
               </div>
             </div>
             <div
-              className="cursor-pointer md:pr-3"
+              className="cursor-pointer md:pr-3 mt-4"
               onClick={() => {
                 setShowEditName(true);
                 setTimeout(() => {
@@ -180,7 +180,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
                 justifyContent: "flex-end",
                 marginTop: 12,
                 marginBottom: 6,
-                marginLeft: 6,
+                marginRight: 12,
                 gap: 24,
               }}
             >
@@ -213,7 +213,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             </div>
           </div>
         ) : (
-          <div className="flex items-center">
+          <div className="flex">
             <div className="px-1 py-2 md:px-3 flex flex-1">
               <div>
                 {!!description && (
@@ -225,7 +225,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
               </div>
             </div>
             <div
-              className="cursor-pointer md:pr-3"
+              className="cursor-pointer md:pr-3 mt-4"
               onClick={() => {
                 setShowEditDescription(true);
 
@@ -257,7 +257,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
         />
       </div>
       <div className={cardClass}>
-        <CustomFieldsList
+        <CustomFieldDefinitionsList
           items={fieldListItems}
           isEmpty={!fieldListItems.length}
           customObjects={customObjectDefinitions ?? []}

@@ -52,7 +52,6 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
     const options = [
       { label: t("project"), value: "project" },
       { label: t("user"), value: "user" },
-      { label: t("company"), value: "company" },
     ];
 
     if (!customObjects?.length) {

@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
-import { CustomFieldListItem } from "@/types";
+import { CustomFieldDefinitionListItem } from "@/types";
 
 interface EditCustomFieldModalProps {
   isOpen: boolean;
-  field?: CustomFieldListItem;
+  field?: CustomFieldDefinitionListItem;
   onClose: () => void;
   onSubmit: (name: string, description: string) => void;
 }

@@ -10,27 +10,81 @@ import { CSS as DndCSS } from "@dnd-kit/utilities";
 import { Edit, Trash } from "@/app/ui/Icons";
 import { bgColor5, fontColor1 } from "@/lib/constants";
 import styles from "./page.module.css";
-import { CustomField, CustomFieldDataType, CustomFieldEntityType, CustomFieldDefinitionListItem, CustomObjectDefinition } from "@/types";
+import { CustomFieldDataType, CustomFieldEntityType, CustomFieldDefinitionListItem, CustomObjectDefinition } from "@/types";
 import { useTranslation } from "react-i18next";
 
-interface CustomFieldsListProps {
+interface CustomFieldDefinitionsListProps {
   items: CustomFieldDefinitionListItem[];
-  onChange: (fields: CustomField[]) => void;
+  isEmpty: boolean;
+  customObjects: CustomObjectDefinition[];
+  onChangeOrder: (items: CustomFieldDefinitionListItem[]) => void;
+  onEdit: (item: CustomFieldDefinitionListItem) => void;
+  onDelete: (item: CustomFieldDefinitionListItem) => void;
+  hideCard?: boolean;
 }
 
-const CustomFieldsList: FC<CustomFieldsListProps> = ({
-  fields,
-  onChange,
+const CustomFieldDefinitionsList: FC<CustomFieldDefinitionsListProps> = ({
+  items,
+  isEmpty,
+  customObjects,
+  onChangeOrder,
+  onEdit,
+  onDelete,
 }) => {
   const { t } = useTranslation();
 
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+
+      if (!over || active.id === over.id) return;
+
+      const oldIndex = items.findIndex((item) => item.id === active.id);
+      const newIndex = items.findIndex((item) => item.id === over.id);
+
+      const newItems = arrayMove(items, oldIndex, newIndex).map((item, i) => ({
+        ...item,
+        sort_order: i,
+      }));
+
+      onChangeOrder(newItems);
+    },
+    [items],
+  );
+
+  if (isEmpty) {
+    return (
+      <div className={styles.empty}>
+        {t("empty_custom_fields_description")}
+      </div>
+    );
+  }
+
   return (
     <div className={"flex flex-col gap-3"}>
-      {items.map((item) => {
-        if (f.definition.data_type === CustomFieldDataType.Boolean) {
-
-        }
-      })}
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={items.map((item) => item.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {items.map((item) => (
+            <CustomFieldDefinitionsListCell
+              key={item.id}
+              item={item}
+              customObjects={customObjects}
+              onEdit={() => {
+                onEdit(item);
+              }}
+              onDelete={() => {
+                onDelete(item);
+              }}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
     </div>
   );
 };

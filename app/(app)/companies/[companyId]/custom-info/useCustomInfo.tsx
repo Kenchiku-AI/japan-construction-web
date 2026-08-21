@@ -11,7 +11,7 @@ import {
   CustomFieldDataType,
   CustomFieldDefinition,
   CustomFieldEntityType,
-  CustomFieldListItem,
+  CustomFieldDefinitionListItem,
   CustomObjectDefinition,
   CustomRelationshipDefinition,
   UpdateCustomFieldDefinitionRequest,
@@ -359,7 +359,7 @@ export const useCustomInfo = (companyId: string) => {
     setLoading(false);
   }
 
-  const onUpdateCompanyItemsOrder = (newItems: CustomFieldListItem[]) => {
+  const onUpdateCompanyItemsOrder = (newItems: CustomFieldDefinitionListItem[]) => {
     const newFields = companyFields.map((f) => {
       const sort_order = newItems.find((i) => i.id === f.id)?.sort_order ?? 0;
       return { ...f, sort_order }
@@ -375,7 +375,7 @@ export const useCustomInfo = (companyId: string) => {
     updateSortOrder(newFields, newRelationships);
   };
 
-  const onUpdateUserItemsOrder = (newItems: CustomFieldListItem[]) => {
+  const onUpdateUserItemsOrder = (newItems: CustomFieldDefinitionListItem[]) => {
     const newFields = userFields.map((f) => {
       const sort_order = newItems.find((i) => i.id === f.id)?.sort_order ?? 0;
       return { ...f, sort_order }
@@ -391,7 +391,7 @@ export const useCustomInfo = (companyId: string) => {
     updateSortOrder(newFields, newRelationships);
   };
 
-  const onUpdateProjectItemsOrder = (newItems: CustomFieldListItem[]) => {
+  const onUpdateProjectItemsOrder = (newItems: CustomFieldDefinitionListItem[]) => {
     const newFields = projectFields.map((f) => {
       const sort_order = newItems.find((i) => i.id === f.id)?.sort_order ?? 0;
       return { ...f, sort_order }

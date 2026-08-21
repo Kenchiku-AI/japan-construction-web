@@ -55,6 +55,8 @@ import {
   CreateCustomObjectDefinitionRequest,
   CustomObjectDefinitionDetail,
   UpdateCustomFieldDefinitionRequest,
+  CustomObjectsByDefinitionsRequest,
+  CustomObjectsByDefinition,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -536,6 +538,10 @@ export const useApiData = () => {
     async getCustomObjects(definitionId: string) {
       const url = `/custom-objects?custom_object_definition_id=${definitionId}`;
       return call(() => http.get<CustomObject[]>(url));
+    },
+    async getCustomObjectsByDefinition(request: CustomObjectsByDefinitionsRequest) {
+      const url = "/custom-objects/by-definitions";
+      return call(() => http.post<CustomObjectsByDefinition>(url, request));
     },
     async getCustomObject(objectId: string) {
       const url = `/custom-objects/${objectId}`;

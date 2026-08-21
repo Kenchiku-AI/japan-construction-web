@@ -10,11 +10,11 @@ import { useRouter } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
 import { useFeatures } from "@/lib/useFeatures";
 import { cardClass } from "@/lib/constants";
-import CustomFieldsList from "../../../custom-objects/[customObjectDefinitionId]/CustomFieldsList";
+import CustomFieldDefinitionsList from "../../../custom-objects/[customObjectDefinitionId]/CustomFieldDefinitionsList";
 import { useCustomInfo } from "./useCustomInfo";
 import CreateCustomFieldModal from "./CreateCustomFieldModal";
 import EditCustomFieldModal from "./EditCustomFieldModal";
-import { CustomFieldDataType, CustomFieldDefinition, CustomFieldEntityType, CustomFieldListItem, CustomRelationshipType } from "@/types";
+import { CustomFieldDataType, CustomFieldEntityType, CustomFieldDefinitionListItem, CustomRelationshipType } from "@/types";
 import CustomObjectsList from "./CustomObjectsList";
 import CreateCustomObjectModal from "./CreateCustomObjectModal";
 import DeleteCustomFieldModal from "./DeleteCustomFieldModal";
@@ -23,7 +23,7 @@ interface CustomInfoDashboardProps {
   companyId: string;
 }
 
-type EditCustomFieldListItem = CustomFieldListItem & {
+type EditCustomFieldDefinitionListItem = CustomFieldDefinitionListItem & {
   entityType: CustomFieldEntityType
 }
 
@@ -51,8 +51,8 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
   } = useCustomInfo(companyId);
   const [showCreateCustomObject, setShowCreateCustomObject] = useState(false);
   const [createCustomFieldType, setCreateCustomFieldType] = useState("");
-  const [editCustomField, setEditCustomField] = useState<EditCustomFieldListItem>();
-  const [deleteCustomField, setDeleteCustomField] = useState<EditCustomFieldListItem>();
+  const [editCustomField, setEditCustomField] = useState<EditCustomFieldDefinitionListItem>();
+  const [deleteCustomField, setDeleteCustomField] = useState<EditCustomFieldDefinitionListItem>();
 
   useEffect(() => {
     if (!isFormsEnabled) {
@@ -100,7 +100,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           />
         </div>
         <div className={cardClass}>
-          <CustomFieldsList
+          <CustomFieldDefinitionsList
             items={companyItems}
             customObjects={customObjectDefinitions}
             isEmpty={companyItems.length === 0 && !loading}
@@ -137,7 +137,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           />
         </div>
         <div className={cardClass}>
-          <CustomFieldsList
+          <CustomFieldDefinitionsList
             items={userItems}
             customObjects={customObjectDefinitions}
             isEmpty={userItems.length === 0 && !loading}
@@ -174,7 +174,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           />
         </div>
         <div className={cardClass}>
-          <CustomFieldsList
+          <CustomFieldDefinitionsList
             items={projectItems}
             customObjects={customObjectDefinitions}
             isEmpty={projectItems.length === 0 && !loading}

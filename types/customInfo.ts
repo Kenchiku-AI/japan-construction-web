@@ -71,7 +71,12 @@ export type CustomRelationshipDefinition = {
   cardinality: CustomRelationshipType;
 }
 
-export type CustomRelationship = {}
+export type CustomRelationship = {
+  id: string;
+  source_entity_id: string;
+  target_entity_id: string;
+  definition: CustomRelationshipDefinition
+}
 
 export type CreateCustomRelationshipDefinitionRequest = {
   company_id: string;
@@ -102,7 +107,29 @@ export type CustomObjectDefinitionDetail = {
   relationships: CustomRelationshipDefinition[];
 }
 
-export type CustomObject = {}
+export type CustomObject = {
+  id: string;
+  definition: CustomObjectDefinition
+}
+
+export interface CustomObjectListItem {
+  id: string;
+}
+
+export interface CustomObjectsByDefinitionItem {
+  name: string;
+  objects: CustomObjectListItem[];
+}
+
+export type CustomObjectsByDefinition = Record<
+  string,
+  CustomObjectsByDefinitionItem
+>;
+
+export type CustomObjectsByDefinitionsRequest = {
+  company_id: string;
+  definition_ids: string[];
+}
 
 export type CreateCustomObjectDefinitionRequest = {
   company_id: string;
@@ -110,7 +137,9 @@ export type CreateCustomObjectDefinitionRequest = {
   description: string;
 }
 
-export type CustomFieldListItem = CustomFieldDefinition | CustomRelationshipDefinition;
+export type CustomFieldListItem = CustomField | CustomRelationship;
+
+export type CustomFieldDefinitionListItem = CustomFieldDefinition | CustomRelationshipDefinition;
 
 export type SortOrderRequest = {
   id: string;

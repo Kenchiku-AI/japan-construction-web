@@ -1,30 +1,37 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useTranslation } from "react-i18next";
 import {
   CustomFieldDataType,
   CustomFieldDefinition,
   CustomFieldEntityType,
-  CustomFieldListItem,
+  CustomFieldDefinitionListItem,
   CustomObject,
   CustomObjectDefinition,
   CustomObjectDefinitionDetail,
   CustomRelationshipDefinition,
   CustomRelationshipType,
   UpdateCustomFieldDefinitionRequest,
+  Project,
+  UserOrGuest,
+  CustomObjectsByDefinition,
 } from "@/types";
 import { useModal } from "@/lib/modal/ModalContext";
 
 export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
   const [loading, setLoading] = useState(false);
   const [customObjects, setCustomObjects] = useState<CustomObject[]>([]);
+  const [customObjectsByDefinitionId, setCustomObjectsByDefinitionId] = useState<CustomObjectsByDefinition>({});
   const [customObjectDefinition, setCustomObjectDefinition] = useState<CustomObjectDefinitionDetail>();
   const [customObjectDefinitions, setCustomObjectDefinitions] = useState<CustomObjectDefinition[]>();
   const [fields, setFields] = useState<CustomFieldDefinition[]>([]);
   const [relationships, setRelationships] = useState<CustomRelationshipDefinition[]>([]);
-  const [fieldListItems, setFieldListItems] = useState<CustomFieldListItem[]>([]);
+  const relationshipsRef = useRef(relationships);
+  const [fieldListItems, setFieldListItems] = useState<CustomFieldDefinitionListItem[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [users, setUsers] = useState<UserOrGuest[]>([]);
   const { t } = useTranslation();
   const { showModal } = useModal();
   const api = useApi();
@@ -53,6 +60,29 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
 
     setRelationships(customObjectDefinition.relationships);
   }, [customObjectDefinition?.relationships]);
+
+  useEffect(() => {
+    const needsProjects = !projects.length && relationships.find((r) => (
+      r.target_entity_type === CustomFieldEntityType.Project
+    ));
+    if (needsProjects) {
+      getProjects();
+    }
+
+    const needsUsers = !users.length && relationships.find((r) => (
+      r.target_entity_type === CustomFieldEntityType.User
+    ));
+    if (needsUsers) {
+      getUsers();
+    }
+
+    const needsObjects = relationshipsRef.current.length < relationships.length;
+    if (needsObjects) {
+      getCustomObjectsByDefinitionId();
+    }
+
+    relationshipsRef.current = relationships;
+  }, [relationships]);
 
   useEffect(() => {
     const items = [
@@ -141,6 +171,59 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
 
     setLoading(false);
   };
+
+  const getUsers = useCallback(async () => {
+    const companyId = customObjectDefinition?.company_id;
+    if (!companyId) return;
+
+    try {
+      const userResponse = await api.getUsers(companyId);
+      const guestResponse = await api.getGuests(companyId);
+
+      setUsers([
+        ...(userResponse ?? []),
+        ...(guestResponse ?? [])
+      ]);
+    } catch (err) {
+      // console.log(err);
+    }
+  }, [customObjectDefinition?.company_id]);
+
+  const getProjects = useCallback(async () => {
+    const companyId = customObjectDefinition?.company_id;
+    if (!companyId) return;
+
+    try {
+      const response = await api.getProjects();
+
+      if (response) {
+        const companyProjects = response.filter((p) => p.company_id === companyId);
+        setProjects(companyProjects);
+      }
+    } catch (err) {
+      // console.log(err);
+    }
+  }, [customObjectDefinition?.company_id]);
+
+  const getCustomObjectsByDefinitionId = useCallback(async () => {
+    const company_id = customObjectDefinition?.company_id;
+    if (!company_id) return;
+
+    const targetIds = relationships.map((r) => r.target_custom_object_definition_id);
+    const definition_ids = targetIds.filter((id) => id != null);
+    if (!definition_ids.length) return;
+
+    try {
+      const request = { company_id, definition_ids };
+      const response = await api.getCustomObjectsByDefinition(request);
+
+      if (response) {
+        setCustomObjectsByDefinitionId(response);
+      }
+    } catch (err) {
+      // console.log(err);
+    }
+  }, [relationships]);
 
   const createCustomFieldDefinition = useCallback(
     async (
@@ -270,7 +353,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     setLoading(false);
   };
 
-  const onUpdateItemsOrder = (newItems: CustomFieldListItem[]) => {
+  const onUpdateItemsOrder = (newItems: CustomFieldDefinitionListItem[]) => {
     const newFields = fields.map((f) => {
       const sort_order = newItems.find((i) => i.id === f.id)?.sort_order ?? 0;
       return { ...f, sort_order }
@@ -350,8 +433,11 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     loading,
     customObjectDefinition,
     customObjectDefinitions,
+    customObjectsByDefinitionId,
     customObjects,
     fieldListItems,
+    projects,
+    users,
     updateCustomObjectDefinition,
     onUpdateItemsOrder,
     createCustomFieldDefinition,
