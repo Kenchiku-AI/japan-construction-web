@@ -26,10 +26,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
   const [customObjectsByDefinition, setCustomObjectsByDefinition] = useState<CustomObjectsByDefinition>({});
   const [customObjectDefinition, setCustomObjectDefinition] = useState<CustomObjectDefinitionDetail>();
   const [customObjectDefinitions, setCustomObjectDefinitions] = useState<CustomObjectDefinition[]>();
-  const [fields, setFields] = useState<CustomFieldDefinition[]>([]);
-  const [relationships, setRelationships] = useState<CustomRelationshipDefinition[]>([]);
-  const relationshipsRef = useRef(relationships);
-  const [fieldListItems, setFieldListItems] = useState<CustomFieldDefinitionListItem[]>([]);
+  const relationshipsRef = useRef<CustomRelationshipDefinition[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [users, setUsers] = useState<UserOrGuest[]>([]);
   const { t } = useTranslation();
@@ -47,21 +44,12 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     if (!customObjectDefinition) return;
 
     getCustomObjectDefinitions(customObjectDefinition.company_id);
-  }, [customObjectDefinition]);
+  }, [customObjectDefinition?.company_id]);
 
   useEffect(() => {
     if (!customObjectDefinition) return;
+    const { relationships } = customObjectDefinition;
 
-    setFields(customObjectDefinition.fields);
-  }, [customObjectDefinition?.fields]);
-
-  useEffect(() => {
-    if (!customObjectDefinition) return;
-
-    setRelationships(customObjectDefinition.relationships);
-  }, [customObjectDefinition?.relationships]);
-
-  useEffect(() => {
     const needsProjects = !projects.length && relationships.find((r) => (
       r.target_entity_type === CustomFieldEntityType.Project
     ));
@@ -82,20 +70,18 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     }
 
     relationshipsRef.current = relationships;
-  }, [relationships]);
+  }, [customObjectDefinition?.relationships]);
 
-  useEffect(() => {
-    const items = [
-      ...fields,
-      ...relationships
+  const fieldListItems = useMemo(() => {
+    return [
+      ...(customObjectDefinition?.fields ?? []),
+      ...(customObjectDefinition?.relationships ?? [])
     ].sort(
       (a, b) => a.sort_order - b.sort_order
     );
-
-    setFieldListItems(items);
   }, [
-    fields,
-    relationships
+    customObjectDefinition?.fields,
+    customObjectDefinition?.relationships
   ]);
 
   const getCustomObjectDefinition = async (customObjectDefinitionId: string) => {
@@ -209,7 +195,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     const company_id = customObjectDefinition?.company_id;
     if (!company_id) return;
 
-    const targetIds = relationships.map((r) => r.target_custom_object_definition_id);
+    const targetIds = customObjectDefinition.relationships.map((r) => r.target_custom_object_definition_id);
     const definition_ids = targetIds.filter((id) => id != null);
     if (!definition_ids.length) return;
 
@@ -223,7 +209,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     } catch (err) {
       // console.log(err);
     }
-  }, [relationships]);
+  }, [customObjectDefinition?.relationships]);
 
   const createCustomFieldDefinition = useCallback(
     async (
@@ -246,7 +232,13 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
         const response = await api.createCustomFieldDefinition(request);
 
         if (response) {
-          setFields((prevFields) => [...prevFields, response]);
+          setCustomObjectDefinition({
+            ...customObjectDefinition,
+            fields: [
+              ...customObjectDefinition.fields,
+              response
+            ]
+          });
         }
       } catch (err) {
         showModal({
@@ -260,18 +252,23 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     [customObjectDefinition]
   );
 
-  const updateCustomFieldDefinition = async (definitionId: string, request: UpdateCustomFieldDefinitionRequest) => {
+  const updateCustomFieldDefinition = useCallback(async (definitionId: string, request: UpdateCustomFieldDefinitionRequest) => {
+    if (!customObjectDefinition) return;
+
     setLoading(true);
 
     try {
       const response = await api.updateCustomFieldDefinition(definitionId, request);
 
       if (response) {
-        setFields((prevFields) =>
-          prevFields.map((field) =>
-            field.id === definitionId ? response : field
-          )
+        const fields = customObjectDefinition.fields.map((field) =>
+          field.id === definitionId ? response : field
         );
+
+        setCustomObjectDefinition({
+          ...customObjectDefinition,
+          fields
+        });
       }
     } catch (err) {
       showModal({
@@ -281,7 +278,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [customObjectDefinition]);
 
   const createCustomRelationshipDefinition = useCallback(
     async (
@@ -316,7 +313,13 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
         const response = await api.createCustomRelationshipDefinition(request);
 
         if (response) {
-          setRelationships((prevRelationships) => [...prevRelationships, response]);
+          setCustomObjectDefinition({
+            ...customObjectDefinition,
+            relationships: [
+              ...customObjectDefinition.relationships,
+              response
+            ]
+          });
         }
       } catch (err) {
         showModal({
@@ -330,18 +333,23 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     [customObjectDefinition]
   );
 
-  const updateCustomRelationshipDefinition = async (definitionId: string, request: UpdateCustomFieldDefinitionRequest) => {
+  const updateCustomRelationshipDefinition = useCallback(async (definitionId: string, request: UpdateCustomFieldDefinitionRequest) => {
+    if (!customObjectDefinition) return;
+
     setLoading(true);
 
     try {
       const response = await api.updateCustomRelationshipDefinition(definitionId, request);
 
       if (response) {
-        setRelationships((prevRelationships) =>
-          prevRelationships.map((relationship) =>
-            relationship.id === definitionId ? response : relationship
-          )
+        const relationships = customObjectDefinition.relationships.map((relationship) =>
+          relationship.id === definitionId ? response : relationship
         );
+
+        setCustomObjectDefinition({
+          ...customObjectDefinition,
+          relationships
+        });
       }
     } catch (err) {
       showModal({
@@ -351,23 +359,29 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [customObjectDefinition]);
 
-  const onUpdateItemsOrder = (newItems: CustomFieldDefinitionListItem[]) => {
-    const newFields = fields.map((f) => {
+  const onUpdateItemsOrder = useCallback((newItems: CustomFieldDefinitionListItem[]) => {
+    if (!customObjectDefinition) return;
+
+    const newFields = customObjectDefinition.fields.map((f) => {
       const sort_order = newItems.find((i) => i.id === f.id)?.sort_order ?? 0;
       return { ...f, sort_order }
     });
-    setFields(newFields);
 
-    const newRelationships = relationships.map((r) => {
+    const newRelationships = customObjectDefinition.relationships.map((r) => {
       const sort_order = newItems.find((i) => i.id === r.id)?.sort_order ?? 0;
       return { ...r, sort_order }
     });
-    setRelationships(newRelationships);
+
+    setCustomObjectDefinition({
+      ...customObjectDefinition,
+      fields: newFields,
+      relationships: newRelationships,
+    });
 
     updateSortOrder(newFields, newRelationships);
-  }
+  }, [customObjectDefinition]);
 
   const updateSortOrder = (newFields: CustomFieldDefinition[], newRelationships: CustomRelationshipDefinition[]) => {
     if (newFields.length) {
@@ -387,17 +401,22 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     }
   }
 
-  const deleteCustomFieldDefinition = async (definitionId: string) => {
+  const deleteCustomFieldDefinition = useCallback(async (definitionId: string) => {
+    if (!customObjectDefinition) return;
+
     setLoading(true);
 
     try {
       await api.deleteCustomFieldDefinition(definitionId);
 
-      setFields((prevFields) =>
-        prevFields.filter((field) =>
-          field.id !== definitionId
-        )
+      const fields = customObjectDefinition.fields.filter((field) =>
+        field.id !== definitionId
       );
+
+      setCustomObjectDefinition({
+        ...customObjectDefinition,
+        fields,
+      });
     } catch (err) {
       showModal({
         title: t("error"),
@@ -406,19 +425,24 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [customObjectDefinition]);
 
-  const deleteCustomRelationshipDefinition = async (definitionId: string) => {
+  const deleteCustomRelationshipDefinition = useCallback(async (definitionId: string) => {
+    if (!customObjectDefinition) return;
+
     setLoading(true);
 
     try {
       await api.deleteCustomRelationshipDefinition(definitionId);
 
-      setRelationships((prevRelationships) =>
-        prevRelationships.filter((relationship) =>
-          relationship.id !== definitionId
-        )
+      const relationships = customObjectDefinition.relationships.filter((relationship) =>
+        relationship.id !== definitionId
       );
+
+      setCustomObjectDefinition({
+        ...customObjectDefinition,
+        relationships,
+      });
     } catch (err) {
       showModal({
         title: t("error"),
@@ -427,7 +451,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [customObjectDefinition]);
 
   return {
     loading,

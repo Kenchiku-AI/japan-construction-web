@@ -40,7 +40,7 @@ const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
   const [fields, setFields] = useState<Record<string, string>>({});
   const [relationships, setRelationships] = useState<Record<string, string[]>>({});
 
-  const definitions = useMemo(() => {
+  const fieldDefinitions = useMemo(() => {
     return [
       ...definition.fields,
       ...definition.relationships
@@ -52,7 +52,8 @@ const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
   const closeAndReset = useCallback(() => {
     onClose();
     setTimeout(() => {
-
+      setFields({});
+      setRelationships({});
     }, 500);
   }, [onClose]);
 
@@ -63,7 +64,7 @@ const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
       title={t("create_custom_object_modal_title", { name: definition.name })}
     >
       <div className="my-8 flex flex-col">
-        {definitions.map((definition, i) => (
+        {fieldDefinitions.map((definition, i) => (
           <div key={definition.id}>
             {i > 0 && <Divider />}
             <CustomObjectFieldsListItem

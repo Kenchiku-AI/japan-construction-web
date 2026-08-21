@@ -140,6 +140,7 @@ const Multiselect: FC<MultiselectProps> = ({
           minHeight: 60,
           height: "auto",
           paddingTop: hasValues ? 20 : 0,
+          paddingLeft: hasValues ? 8 : 16,
           pointerEvents: disabled ? "none" : undefined,
           outlineColor: "var(--text-color-1)",
           borderTopLeftRadius: open && openUpwardRef.current ? 0 : undefined,
@@ -156,7 +157,7 @@ const Multiselect: FC<MultiselectProps> = ({
             return (
               <span
                 key={value}
-                className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm"
+                className="inline-flex items-center gap-2 rounded-full pl-4 pr-3 py-2 text-sm"
                 style={{
                   backgroundColor: "white",
                   color: fontColor1,
