@@ -17,12 +17,14 @@ import { CustomFieldDataType, CustomFieldEntityType, CustomFieldDefinitionListIt
 import CustomFieldDefinitionsList from "./CustomFieldDefinitionsList";
 import DeleteCustomFieldModal from "../../companies/[companyId]/custom-info/DeleteCustomFieldModal";
 import EditCustomFieldModal from "../../companies/[companyId]/custom-info/EditCustomFieldModal";
+import CreateCustomObjectModal from "./CreateCustomObjectModal";
 
 interface CustomObjectDefinitionDashboardProps {
   customObjectDefinitionId: string;
 }
 
 const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> = ({ customObjectDefinitionId }) => {
+  const [showCreateObject, setShowCreateObject] = useState(false);
   const [name, setName] = useState("");
   const nameInputRef = useRef<any>(null);
   const [description, setDescription] = useState("");
@@ -36,7 +38,10 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
   const {
     customObjectDefinition,
     customObjectDefinitions,
+    customObjectsByDefinition,
     customObjects,
+    projects,
+    users,
     fieldListItems,
     updateCustomObjectDefinition,
     createCustomFieldDefinition,
@@ -69,7 +74,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           label={t("create")}
           iconLeft={() => <Plus />}
           onClick={() => {
-
+            setShowCreateObject(true);
           }}
           style={{ height: "auto" }}
           iconOnlyMobile
@@ -272,6 +277,17 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           }}
         />
       </div>
+      <CreateCustomObjectModal
+        definition={customObjectDefinition}
+        projects={projects}
+        users={users}
+        customObjects={customObjectsByDefinition}
+        isOpen={showCreateObject}
+        onClose={() => {
+          setShowCreateObject(false);
+        }}
+        onCreate={() => { }}
+      />
       <CreateCustomFieldModal
         isOpen={showCreateField}
         customObjects={customObjectDefinitions}

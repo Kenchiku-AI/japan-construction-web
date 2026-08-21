@@ -23,7 +23,7 @@ import { useModal } from "@/lib/modal/ModalContext";
 export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
   const [loading, setLoading] = useState(false);
   const [customObjects, setCustomObjects] = useState<CustomObject[]>([]);
-  const [customObjectsByDefinitionId, setCustomObjectsByDefinitionId] = useState<CustomObjectsByDefinition>({});
+  const [customObjectsByDefinition, setCustomObjectsByDefinition] = useState<CustomObjectsByDefinition>({});
   const [customObjectDefinition, setCustomObjectDefinition] = useState<CustomObjectDefinitionDetail>();
   const [customObjectDefinitions, setCustomObjectDefinitions] = useState<CustomObjectDefinition[]>();
   const [fields, setFields] = useState<CustomFieldDefinition[]>([]);
@@ -218,7 +218,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
       const response = await api.getCustomObjectsByDefinition(request);
 
       if (response) {
-        setCustomObjectsByDefinitionId(response);
+        setCustomObjectsByDefinition(response);
       }
     } catch (err) {
       // console.log(err);
@@ -433,7 +433,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     loading,
     customObjectDefinition,
     customObjectDefinitions,
-    customObjectsByDefinitionId,
+    customObjectsByDefinition,
     customObjects,
     fieldListItems,
     projects,

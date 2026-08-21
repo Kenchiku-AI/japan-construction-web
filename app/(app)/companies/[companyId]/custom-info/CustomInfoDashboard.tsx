@@ -16,7 +16,7 @@ import CreateCustomFieldModal from "./CreateCustomFieldModal";
 import EditCustomFieldModal from "./EditCustomFieldModal";
 import { CustomFieldDataType, CustomFieldEntityType, CustomFieldDefinitionListItem, CustomRelationshipType } from "@/types";
 import CustomObjectsList from "./CustomObjectsList";
-import CreateCustomObjectModal from "./CreateCustomObjectModal";
+import CreateCustomObjectDefinitionModal from "./CreateCustomObjectDefinitionModal";
 import DeleteCustomFieldModal from "./DeleteCustomFieldModal";
 
 interface CustomInfoDashboardProps {
@@ -196,7 +196,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           />
         </div>
       </div>
-      <CreateCustomObjectModal
+      <CreateCustomObjectDefinitionModal
         isOpen={showCreateCustomObject}
         onClose={() => {
           setShowCreateCustomObject(false);

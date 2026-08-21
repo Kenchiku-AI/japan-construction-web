@@ -105,7 +105,7 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
             onChange={(t) => setFieldType(t as any)}
             options={[
               { label: t("text"), value: "text" },
-              { label: t("checkbox"), value: "checkbox" },
+              { label: t("checkbox"), value: "boolean" },
               { label: t("relationship"), value: "relationship" },
             ]}
           />

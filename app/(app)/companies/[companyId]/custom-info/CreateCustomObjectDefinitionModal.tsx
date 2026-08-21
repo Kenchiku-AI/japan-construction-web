@@ -5,13 +5,13 @@ import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 
-interface CreateCustomObjectModalProps {
+interface CreateCustomObjectDefinitionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCreate: (name: string, description: string) => void;
 }
 
-const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
+const CreateCustomObjectDefinitionModal: FC<CreateCustomObjectDefinitionModalProps> = ({
   isOpen,
   onClose,
   onCreate,
@@ -59,4 +59,4 @@ const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
   );
 };
 
-export default CreateCustomObjectModal;
+export default CreateCustomObjectDefinitionModal;
