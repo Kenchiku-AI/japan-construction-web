@@ -2,7 +2,6 @@
 
 import { FC, useMemo, useState } from "react";
 import { Check, Close, Edit } from "../Icons";
-import styles from "./CustomFieldListCell.module.css";
 import { errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
 import { Button } from "../Button/Button";
@@ -25,6 +24,7 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCancel,
           onSubmit={onSubmit}
           onCancel={() => {
             setShowEdit(false);
+            onCancel();
           }}
         />
       ) : (
