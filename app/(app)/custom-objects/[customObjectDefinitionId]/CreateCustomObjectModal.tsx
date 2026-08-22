@@ -3,18 +3,13 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import {
-  CustomFieldDataType,
-  CustomFieldDefinitionListItem,
   CustomObjectDefinitionDetail,
-  CustomObjectListItem,
   CustomObjectsByDefinition,
   Project,
   UserOrGuest
 } from "@/types";
-import { Input } from "@/app/ui/Input/Input";
-import CustomRelationshipInput from "./CustomRelationshipInput";
-import { fontColor1 } from "@/lib/constants";
 import Divider from "@/app/ui/Divider";
+import { FieldsListInput } from "./FieldsListInput";
 
 interface CreateCustomObjectModalProps {
   definition: CustomObjectDefinitionDetail;
@@ -66,7 +61,7 @@ const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
         {fieldDefinitions.map((definition, i) => (
           <div key={definition.id}>
             {i > 0 && <Divider />}
-            <CustomObjectFieldsListItem
+            <FieldsListInput
               fields={fields}
               relationships={relationships}
               definition={definition}
@@ -99,66 +94,5 @@ const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
     </Modal>
   );
 };
-
-interface CustomObjectFieldsListItemProps {
-  fields: Record<string, string>;
-  relationships: Record<string, string[]>;
-  definition: CustomFieldDefinitionListItem;
-  projects: Project[];
-  users: UserOrGuest[];
-  customObjectsByDefinition: CustomObjectsByDefinition;
-  onFieldChange: (value: string) => void;
-  onRelationshipChange: (values: string[]) => void;
-}
-
-const CustomObjectFieldsListItem: FC<CustomObjectFieldsListItemProps> = ({
-  fields,
-  relationships,
-  definition,
-  projects,
-  users,
-  customObjectsByDefinition,
-  onFieldChange,
-  onRelationshipChange
-}) => {
-  if ("target_entity_type" in definition) {
-    return (
-      <CustomRelationshipInput
-        definition={definition}
-        projects={projects}
-        users={users}
-        customObjectsByDefinition={customObjectsByDefinition}
-        value={relationships?.[definition.id]}
-        onChange={onRelationshipChange}
-      />
-    )
-  }
-
-  if (definition.data_type === CustomFieldDataType.Boolean) {
-    return (
-      <label className="label flex gap-4 mx-3 py-2" style={{ color: fontColor1 }}>
-        <input
-          type="checkbox"
-          className="checkbox checkbox-neutral"
-          checked={fields?.[definition.id] === "true"}
-          onChange={(e) => {
-            const newValue = e.target.checked.toString();
-            onFieldChange(newValue);
-          }}
-        />
-        {definition.name}
-      </label>
-    );
-  }
-
-  return (
-    <Input
-      placeholder={definition.name}
-      value={fields?.[definition.id] ?? ""}
-      onChange={onFieldChange}
-    />
-  )
-}
-
 
 export default CreateCustomObjectModal;
