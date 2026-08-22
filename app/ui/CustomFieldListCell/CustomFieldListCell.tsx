@@ -17,7 +17,7 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCancel,
   const [showEdit, setShowEdit] = useState(false);
 
   return (
-    <div className="flex">
+    <div className="flex flex-1 h-full">
       {showEdit ? (
         <EditCustomFieldListCell
           {...props}
@@ -132,7 +132,7 @@ const EditCustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCan
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col flex-1 h-full">
       <FieldsListInput
         {...props}
       />

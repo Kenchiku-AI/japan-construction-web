@@ -185,11 +185,11 @@ export const useProject = (projectId: string) => {
         setProject((prev) => {
           if (!prev) return prev;
 
-          const customFieldIndex = prev.custom_fields.findIndex((f) => f.definition.id === itemId);
-          if (customFieldIndex === -1) return prev;
+          // const customReleIndex = prev.custom_fields.findIndex((f) => f.definition.id === itemId);
+          // if (customFieldIndex === -1) return prev;
 
-          const newCustomFields = [...prev.custom_fields];
-          newCustomFields[customFieldIndex] = response;
+          // const newCustomFields = [...prev.custom_fields];
+          // newCustomFields[customFieldIndex] = response;
 
           return {
             ...prev,
