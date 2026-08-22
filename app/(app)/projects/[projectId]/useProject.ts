@@ -47,16 +47,16 @@ export const useProject = (projectId: string) => {
 
   useEffect(() => {
     if (!project) return;
-    const relationships = project.custom_relationships.map((r) => r.definition);
+    const relationshipDefs = project.custom_relationships.map((r) => r.definition);
 
-    const needsProjects = !projects.length && relationships.find((r) => (
+    const needsProjects = !projects.length && relationshipDefs.find((r) => (
       r.target_entity_type === CustomFieldEntityType.Project
     ));
     if (needsProjects) {
       getProjects();
     }
 
-    const targetIds = relationships.map((r) => r.target_custom_object_definition_id);
+    const targetIds = relationshipDefs.map((r) => r.target_custom_object_definition_id);
     const definitionIds = targetIds.filter((id) => id != null);
     if (!!definitionIds.length) {
       getCustomObjectsByDefinitionId(project.company_id, definitionIds);
@@ -96,7 +96,12 @@ export const useProject = (projectId: string) => {
     if (!project) return [];
 
     const fields = project?.custom_fields.map((f) => f.definition);
-    const relationships = project?.custom_relationships.map((r) => r.definition);
+
+    const relationships = Array.from(
+      new Map(
+        project?.custom_relationships.map((r) => [r.definition.id, r.definition])
+      ).values()
+    );
 
     return [
       ...fields,
@@ -132,8 +137,6 @@ export const useProject = (projectId: string) => {
     if (!project) return;
     const field = project.custom_fields.find((f) => f.definition.id === itemId);
 
-    console.log("field", field)
-
     if (field) {
       const value = customFields[itemId] ?? "";
 
@@ -154,15 +157,15 @@ export const useProject = (projectId: string) => {
           setProject((prev) => {
             if (!prev) return prev;
 
-            const customFieldIndex = prev.custom_fields.findIndex((f) => f.definition.id === itemId);
-            if (customFieldIndex === -1) return prev;
+            const fieldIndex = prev.custom_fields.findIndex((f) => f.definition.id === itemId);
+            if (fieldIndex === -1) return prev;
 
-            const newCustomFields = [...prev.custom_fields];
-            newCustomFields[customFieldIndex] = response;
+            const newFields = [...prev.custom_fields];
+            newFields[fieldIndex] = response;
 
             return {
               ...prev,
-              custom_fields: newCustomFields
+              custom_fields: newFields
             }
           });
         }
@@ -182,20 +185,21 @@ export const useProject = (projectId: string) => {
       try {
         const response = await api.updateCustomRelationship(itemId, request);
 
-        setProject((prev) => {
-          if (!prev) return prev;
+        if (response) {
+          setProject((prev) => {
+            if (!prev) return prev;
 
-          // const customReleIndex = prev.custom_fields.findIndex((f) => f.definition.id === itemId);
-          // if (customFieldIndex === -1) return prev;
+            const newRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
 
-          // const newCustomFields = [...prev.custom_fields];
-          // newCustomFields[customFieldIndex] = response;
-
-          return {
-            ...prev,
-            custom_fields: newCustomFields
-          }
-        });
+            return {
+              ...prev,
+              custom_relationships: [
+                ...newRelationships,
+                ...response
+              ]
+            }
+          });
+        }
       } catch (e) {
         showModal({
           title: t("error"),

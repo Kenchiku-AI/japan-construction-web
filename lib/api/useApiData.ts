@@ -576,7 +576,7 @@ export const useApiData = () => {
     },
     async updateCustomRelationship(definitionId: string, request: UpdateCustomRelationshipRequest) {
       const url = `/custom-relationships?custom_relationship_definition_id=${definitionId}`;
-      return call(() => http.patch<CustomRelationship>(url, request));
+      return call(() => http.patch<CustomRelationship[]>(url, request));
     },
   };
 
