@@ -59,6 +59,9 @@ import {
   CustomObjectsByDefinition,
   CreateCustomObjectRequest,
   UpdateCustomObjectRequest,
+  UpdateCustomFieldRequest,
+  CustomField,
+  CustomRelationship,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -560,6 +563,10 @@ export const useApiData = () => {
     async deleteCustomObject(objectId: string) {
       const url = `/custom-objects/${objectId}`;
       return call(() => http.delete(url));
+    },
+    async updateCustomRelationship(relationshipId: string, request: UpdateCustomRelationshipRequest) {
+      const url = `/custom-relationships/${relationshipId}`;
+      return call(() => http.patch<CustomRelationship>(url, request));
     },
   };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,8 @@ import {
   CreateConversationItemRequest,
   CreateConversationRequest,
   CreateReportRequest,
+  CustomFieldEntityType,
+  CustomObjectsByDefinition,
   Project,
   ProjectConversationItems,
   UpdateConversationItemRequest,
@@ -24,6 +26,10 @@ import { useBilling } from "@/lib/useBilling";
 export const useProject = (projectId: string) => {
   const [loading, setLoading] = useState(false);
   const [project, setProject] = useState<Project>();
+  const [customFields, setCustomFields] = useState<Record<string, string>>({});
+  const [customRelationships, setCustomRelationships] = useState<Record<string, string[]>>({});
+  const [customObjectsByDefinition, setCustomObjectsByDefinition] = useState<CustomObjectsByDefinition>({});
+  const [projects, setProjects] = useState<Project[]>([]);
   const [projectGuests, setProjectGuests] = useState<CompanyGuest[]>([]);
   const [nonProjectGuests, setNonProjectGuests] = useState<CompanyGuest[]>([]);
   const [companyUsers, setCompanyUsers] = useState<CompanyUser[]>([]);
@@ -38,6 +44,118 @@ export const useProject = (projectId: string) => {
 
     getProject(projectId);
   }, [projectId]);
+
+  useEffect(() => {
+    if (!project) return;
+    const relationships = project.custom_relationships.map((r) => r.definition);
+
+    const needsProjects = !projects.length && relationships.find((r) => (
+      r.target_entity_type === CustomFieldEntityType.Project
+    ));
+    if (needsProjects) {
+      getProjects();
+    }
+
+    const targetIds = relationships.map((r) => r.target_custom_object_definition_id);
+    const definitionIds = targetIds.filter((id) => id != null);
+    if (!!definitionIds.length) {
+      getCustomObjectsByDefinitionId(project.company_id, definitionIds);
+    }
+  }, [project?.custom_relationships]);
+
+  const getCustomObjectsByDefinitionId = async (company_id: string, definition_ids: string[]) => {
+    try {
+      const request = { company_id, definition_ids };
+      const response = await api.getCustomObjectsByDefinition(request);
+
+      if (response) {
+        setCustomObjectsByDefinition(response);
+      }
+    } catch (err) {
+      // console.log(err);
+    }
+  };
+
+  const getProjects = useCallback(async () => {
+    const companyId = project?.company_id;
+    if (!companyId) return;
+
+    try {
+      const response = await api.getProjects();
+
+      if (response) {
+        const companyProjects = response.filter((p) => p.company_id === companyId);
+        setProjects(companyProjects);
+      }
+    } catch (err) {
+      // console.log(err);
+    }
+  }, [project?.company_id]);
+
+  const customFieldDefinitions = useMemo(() => {
+    if (!project) return [];
+
+    const fields = project?.custom_fields.map((f) => f.definition);
+    const relationships = project?.custom_relationships.map((r) => r.definition);
+
+    return [
+      ...fields,
+      ...relationships
+    ].sort(
+      (a, b) => a.sort_order - b.sort_order
+    );
+  }, [
+    project?.custom_fields,
+    project?.custom_relationships
+  ]);
+
+  useEffect(() => {
+    if (!project) return;
+
+    const newFields: Record<string, string> = {};
+    project.custom_fields.forEach((f) => {
+      if (f.value) newFields[f.definition.id] = f.value;
+    });
+    setCustomFields(newFields);
+
+    const newRelationships: Record<string, string[]> = {};
+    project.custom_relationships.forEach((r) => {
+      newRelationships[r.definition.id] = [
+        ...(newRelationships?.[r.definition.id] ?? []),
+        r.target_entity_id
+      ];
+    });
+    setCustomRelationships(newRelationships);
+  }, [project?.custom_fields, project?.custom_relationships]);
+
+  const resetCustomField = useCallback((itemId: string) => {
+    if (!project) return;
+    const isField = Object.keys(customFields).includes(itemId);
+
+    if (isField) {
+      const value = project.custom_fields.find((f) => f.definition.id === itemId)?.value;
+
+      if (value) {
+        setCustomFields((prev) => ({
+          ...prev,
+          [itemId]: value
+        }));
+      } else {
+        setCustomFields((prev) => {
+          let newFields = { ...prev };
+          delete newFields[itemId];
+          return newFields;
+        });
+      }
+    } else {
+      const relationships = project.custom_relationships.filter((r) => r.definition.id === itemId);
+      const targetIds = relationships.map((r) => r.target_entity_id);
+      setCustomRelationships((prev) => ({
+        ...prev,
+        [itemId]: targetIds
+      }));
+    }
+  }, [project]);
 
   const getProject = useCallback(
     async (projectId: string, redirectOnError: boolean = true) => {
@@ -420,6 +538,14 @@ export const useProject = (projectId: string) => {
     createConversationItem,
     updateConversationItem,
     deleteConversationItem,
-    deleteProject
+    deleteProject,
+    customFieldDefinitions,
+    customFields,
+    setCustomFields,
+    customRelationships,
+    setCustomRelationships,
+    customObjectsByDefinition,
+    resetCustomField,
+    projects
   };
 };

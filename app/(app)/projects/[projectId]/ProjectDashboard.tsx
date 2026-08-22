@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -31,6 +31,8 @@ import Divider from "@/app/ui/Divider";
 import UnarchiveProjectModal from "./UnarchiveProjectModal";
 import ArchiveProjectModal from "./ArchiveProjectModal";
 import DeleteProjectModal from "./DeleteProjectModal";
+import { FieldsListInput } from "../../custom-objects/[customObjectDefinitionId]/FieldsListInput";
+import CustomFieldListCell from "@/app/ui/CustomFieldListCell/CustomFieldListCell";
 // import DownloadExcelModal from "../../reports/DownloadExcelModal";
 // import { useExport } from "../../reports/useExport";
 
@@ -60,7 +62,15 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     createConversationItem,
     updateConversationItem,
     deleteConversationItem,
-    deleteProject
+    deleteProject,
+    customFieldDefinitions,
+    customFields,
+    setCustomFields,
+    customRelationships,
+    setCustomRelationships,
+    customObjectsByDefinition,
+    resetCustomField,
+    projects,
   } = useProject(projectId);
   const { conversationItemTypes } = useConversationItemTypes(project?.company_id);
   const isLoaded = useRef(false);
@@ -225,6 +235,37 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                 )}
               </div>
             )}
+            {customFieldDefinitions.map((item) => (
+              <div key={item.id}>
+                <Divider />
+                <CustomFieldListCell
+                  fields={customFields}
+                  relationships={customRelationships}
+                  definition={item}
+                  projects={projects}
+                  users={[...companyUsers, ...projectGuests]}
+                  customObjectsByDefinition={customObjectsByDefinition}
+                  onFieldChange={(value) => {
+                    setCustomFields((prev) => ({
+                      ...prev,
+                      [item.id]: value
+                    }));
+                  }}
+                  onRelationshipChange={(value) => {
+                    setCustomRelationships((prev) => ({
+                      ...prev,
+                      [item.id]: value
+                    }));
+                  }}
+                  onCancel={() => {
+                    resetCustomField(item.id);
+                  }}
+                  onSubmit={() => {
+                    updateCustomField(item.id);
+                  }}
+                />
+              </div>
+            ))}
             {/* {currentUser?.role === "admin" && (
                 <>
                   <Divider />

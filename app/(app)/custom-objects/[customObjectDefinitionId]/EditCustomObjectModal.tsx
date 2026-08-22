@@ -77,7 +77,6 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
         ];
       }
     });
-
     setRelationships(newRelationships);
   }, [object, definition]);
 

@@ -5,9 +5,9 @@ import { fontColor1 } from "@/lib/constants";
 import { Input } from "@/app/ui/Input/Input";
 
 export interface FieldsListInputProps {
+  definition: CustomFieldDefinitionListItem;
   fields: Record<string, string>;
   relationships: Record<string, string[]>;
-  definition: CustomFieldDefinitionListItem;
   projects: Project[];
   users: UserOrGuest[];
   customObjectsByDefinition: CustomObjectsByDefinition;
@@ -16,9 +16,9 @@ export interface FieldsListInputProps {
 }
 
 export const FieldsListInput: FC<FieldsListInputProps> = ({
+  definition,
   fields,
   relationships,
-  definition,
   projects,
   users,
   customObjectsByDefinition,

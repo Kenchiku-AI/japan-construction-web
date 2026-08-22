@@ -1,62 +1,138 @@
 "use client";
 
-import { FC, useState } from "react";
-import { CustomFieldListItem } from "@/types";
+import { FC, useMemo, useState } from "react";
 import { Check, Close, Edit } from "../Icons";
 import styles from "./CustomFieldListCell.module.css";
-import { Input } from "../Input/Input";
-import { errorColor1, fontColor1 } from "@/lib/constants";
+import { errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
 import { Button } from "../Button/Button";
 import { FieldsListInput, FieldsListInputProps } from "@/app/(app)/custom-objects/[customObjectDefinitionId]/FieldsListInput";
+import { CustomFieldDataType, CustomFieldEntityType } from "@/types";
 
 type CustomFieldListCellProps = FieldsListInputProps & {
-  item: CustomFieldListItem;
-  onEdit: () => void;
+  onSubmit: () => void;
+  onCancel: () => void;
 }
 
-const CustomFieldListCell: FC<CustomFieldListCellProps> = ({ item, onEdit }) => {
+const CustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCancel, ...props }) => {
   const [showEdit, setShowEdit] = useState(false);
 
   return (
     <div className="flex">
       {showEdit ? (
         <EditCustomFieldListCell
-          item={item}
-          onEdit={onEdit}
+          {...props}
+          onSubmit={onSubmit}
+          onCancel={() => {
+            setShowEdit(false);
+          }}
         />
       ) : (
-        <div className="p-1 md:py-2 md:px-3 flex flex-1">
-          <div>
-            <div className={styles.label}>{item.definition.name}</div>
-            <div style={{ color: fontColor1 }}>
-              {/* display goes here */}
-            </div>
-          </div >
-        </div >
+        <CustomFieldListLabel
+          {...props}
+          onEdit={() => {
+            setShowEdit(true);
+          }}
+        />
       )}
+    </div>
+  );
+};
+
+type CustomFieldListLabelProps = FieldsListInputProps & {
+  onEdit: () => void;
+}
+
+const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
+  onEdit,
+  definition,
+  fields,
+  relationships,
+  customObjectsByDefinition,
+  projects,
+  users
+}) => {
+  const { t } = useTranslation();
+
+  const label = useMemo(() => {
+    if ("target_entity_type" in definition) {
+      const targetIds = relationships?.[definition.id];
+      if (!targetIds?.length) return "";
+
+      if (definition.target_entity_type === CustomFieldEntityType.Project) {
+        const projectNames = targetIds.map((id) => (
+          projects.find((p) => p.id === id)?.name
+        ));
+        return projectNames.filter(Boolean).join(", ");
+      }
+
+      if (definition.target_entity_type === CustomFieldEntityType.User) {
+        const userNames = targetIds.map((id) => {
+          const user = users.find((u) => u.id === id);
+          return !user ? undefined : `${user.last_name} ${user.first_name}`;
+        });
+        return userNames.filter(Boolean).join(", ");
+      }
+
+      const entityDefinitionId = definition.target_custom_object_definition_id;
+      if (!entityDefinitionId) return "";
+
+      const customObjects = customObjectsByDefinition?.[entityDefinitionId]?.objects;
+      const selectedObjects = customObjects?.filter((o) => targetIds.includes(o.id));
+      return selectedObjects?.map((o) => o.name).join(", ") ?? "";
+    }
+
+    if (definition.data_type === CustomFieldDataType.Boolean) {
+      return t(fields?.[definition.id] === "true" ? "enabled" : "disabled");
+    }
+
+    return fields?.[definition.id] ?? "";
+  }, [
+    definition,
+    fields,
+    relationships,
+    customObjectsByDefinition,
+    projects,
+    users,
+    t
+  ]);
+
+
+  return (
+    <>
+      <div className="p-1 md:py-2 md:px-3 flex flex-1">
+        <div>
+          <div
+            style={{
+              color: fontColor2,
+              fontSize: !label ? 16 : 12
+            }}>
+            {definition.name}
+          </div>
+          {!!label && (
+            <div style={{ color: fontColor1 }}>
+              {label}
+            </div>
+          )}
+        </div >
+      </div >
       <div
         className="cursor-pointer md:pr-3 mt-4"
-        onClick={() => {
-          setShowEdit(true);
-        }}
+        onClick={onEdit}
       >
         <Edit />
       </div>
-    </div>
-  );
+    </>
+  )
+}
 
-
-};
-
-
-const EditCustomFieldListCell: FC<CustomFieldListCellProps> = ({ item }) => {
+const EditCustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCancel, ...props }) => {
   const { t } = useTranslation();
 
   return (
     <div className="flex flex-col">
       <FieldsListInput
-
+        {...props}
       />
       <div
         style={{
@@ -78,9 +154,7 @@ const EditCustomFieldListCell: FC<CustomFieldListCellProps> = ({ item }) => {
           )}
           style={{ height: "auto" }}
           label={t("cancel")}
-          onClick={() => {
-
-          }}
+          onClick={onCancel}
           textStyle={{ color: errorColor1 }}
         />
         <Button
@@ -88,12 +162,11 @@ const EditCustomFieldListCell: FC<CustomFieldListCellProps> = ({ item }) => {
           iconLeft={() => <Check />}
           style={{ height: "auto" }}
           label={t("update")}
-          disabled={false}
-          onClick={() => {
-
-          }}
+          onClick={onSubmit}
         />
       </div>
     </div>
   )
 }
+
+export default CustomFieldListCell;

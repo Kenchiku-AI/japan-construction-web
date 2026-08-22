@@ -148,6 +148,15 @@ export type UpdateCustomObjectRequest = {
   relationships: Record<string, string[]>;
 }
 
+export type UpdateCustomFieldRequest = {
+  value: string;
+}
+
+export type UpdateCustomRelationshipRequest = {
+  source_entity_id: string;
+  target_entity_ids: string[];
+}
+
 export type CreateCustomObjectDefinitionRequest = {
   company_id: string;
   name: string;

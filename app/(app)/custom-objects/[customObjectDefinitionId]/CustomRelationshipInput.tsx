@@ -68,7 +68,7 @@ const CustomRelationshipInput: FC<CustomRelationshipInputProps> = ({
   return (
     <Multiselect
       placeholder={definition.name}
-      values={value ?? []}
+      values={value?.filter((v) => v != null) ?? []}
       options={options}
       onChange={onChange}
     />

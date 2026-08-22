@@ -1,3 +1,4 @@
+import { CustomField, CustomRelationship } from "./customInfo";
 import { Report } from "./reports";
 
 export type Project = {
@@ -10,6 +11,8 @@ export type Project = {
   company_name?: string;
   conversations: Conversation[];
   conversation_items: ProjectConversationItems[];
+  custom_fields: CustomField[];
+  custom_relationships: CustomRelationship[];
 };
 
 export type ProjectConversationItems = {
