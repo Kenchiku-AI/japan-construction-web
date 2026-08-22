@@ -62,6 +62,8 @@ import {
   UpdateCustomFieldRequest,
   CustomField,
   CustomRelationship,
+  UpdateCustomRelationshipRequest,
+  CreateCustomFieldRequest,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -564,8 +566,16 @@ export const useApiData = () => {
       const url = `/custom-objects/${objectId}`;
       return call(() => http.delete(url));
     },
-    async updateCustomRelationship(relationshipId: string, request: UpdateCustomRelationshipRequest) {
-      const url = `/custom-relationships/${relationshipId}`;
+    async createProjectCustomField(projectId: string, request: CreateCustomFieldRequest) {
+      const url = `/custom-fields/project/${projectId}`;
+      return call(() => http.post<CustomField>(url, request));
+    },
+    async updateCustomField(fieldId: string, request: UpdateCustomFieldRequest) {
+      const url = `/custom-fields/${fieldId}`;
+      return call(() => http.patch<CustomField>(url, request));
+    },
+    async updateCustomRelationship(definitionId: string, request: UpdateCustomRelationshipRequest) {
+      const url = `/custom-relationships?custom_relationship_definition_id=${definitionId}`;
       return call(() => http.patch<CustomRelationship>(url, request));
     },
   };

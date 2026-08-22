@@ -21,7 +21,10 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCancel,
       {showEdit ? (
         <EditCustomFieldListCell
           {...props}
-          onSubmit={onSubmit}
+          onSubmit={() => {
+            setShowEdit(false);
+            onSubmit();
+          }}
           onCancel={() => {
             setShowEdit(false);
             onCancel();
@@ -97,15 +100,14 @@ const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
     t
   ]);
 
-
   return (
-    <>
-      <div className="p-1 md:py-2 md:px-3 flex flex-1">
+    <div className="flex flex-1 items-center">
+      <div className="p-1 py-3 md:px-3 flex flex-1">
         <div>
           <div
             style={{
               color: fontColor2,
-              fontSize: !label ? 16 : 12
+              fontSize: !label ? 18 : 12
             }}>
             {definition.name}
           </div>
@@ -117,12 +119,12 @@ const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
         </div >
       </div >
       <div
-        className="cursor-pointer md:pr-3 mt-4"
+        className="cursor-pointer md:pr-3"
         onClick={onEdit}
       >
         <Edit />
       </div>
-    </>
+    </div>
   )
 }
 

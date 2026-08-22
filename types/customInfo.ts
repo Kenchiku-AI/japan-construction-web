@@ -135,6 +135,11 @@ export type CustomObjectsByDefinitionsRequest = {
   definition_ids: string[];
 }
 
+export type CreateCustomFieldRequest = {
+  custom_field_definition_id: string;
+  value: string;
+}
+
 export type CreateCustomObjectRequest = {
   company_id: string;
   custom_object_definition_id: string;

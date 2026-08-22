@@ -69,6 +69,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     customRelationships,
     setCustomRelationships,
     customObjectsByDefinition,
+    updateCustomField,
     resetCustomField,
     projects,
   } = useProject(projectId);
