@@ -574,6 +574,10 @@ export const useApiData = () => {
       const url = `/custom-fields/company/${companyId}`;
       return call(() => http.post<CustomField>(url, request));
     },
+    async createUserCustomField(userId: string, request: CreateCustomFieldRequest) {
+      const url = `/custom-fields/user/${userId}`;
+      return call(() => http.post<CustomField>(url, request));
+    },
     async updateCustomField(fieldId: string, request: UpdateCustomFieldRequest) {
       const url = `/custom-fields/${fieldId}`;
       return call(() => http.patch<CustomField>(url, request));

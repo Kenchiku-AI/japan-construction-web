@@ -153,7 +153,7 @@ export const useUser = (userId: string) => {
             value,
             custom_field_definition_id: itemId
           };
-          response = await api.createCompanyCustomField(company.id, request);
+          response = await api.createUserCustomField(userId, request);
         }
 
         if (response) {
@@ -181,7 +181,7 @@ export const useUser = (userId: string) => {
       }
     } else {
       const request = {
-        source_entity_id: user.id,
+        source_entity_id: userId,
         target_entity_ids: customRelationships[itemId].filter(Boolean)
       };
 
@@ -201,7 +201,7 @@ export const useUser = (userId: string) => {
               if (definition) {
                 newRelationships.push(
                   {
-                    source_entity_id: user.id,
+                    source_entity_id: userId,
                     definition
                   }
                 )

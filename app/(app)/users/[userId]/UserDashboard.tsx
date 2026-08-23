@@ -206,7 +206,6 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                     }}
                     isEditable={!isEditDisabled}
                   />
-
                 </div>
               ))}
             </div>
