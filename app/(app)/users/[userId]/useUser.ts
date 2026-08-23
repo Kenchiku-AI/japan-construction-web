@@ -62,10 +62,10 @@ export const useUser = (userId: string) => {
           });
         }
 
-        showModal({
-          title: t("success"),
-          subtitle: t("user_updated"),
-        });
+        // showModal({
+        //   title: t("success"),
+        //   subtitle: t("user_updated"),
+        // });
       } catch (err) {
         showModal({
           title: t("error"),

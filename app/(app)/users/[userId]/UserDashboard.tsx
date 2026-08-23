@@ -28,13 +28,9 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const { currentUser, logout } = useApi();
   const { showModal } = useModal();
   const [firstName, setFirstName] = useState("");
-  const [showEditFirstName, setShowEditFirstName] = useState(false);
   const [lastName, setLastName] = useState("");
-  const [showEditLastName, setShowEditLastName] = useState(false);
   const [email, setEmail] = useState("");
-  const [showEditEmail, setShowEditEmail] = useState(false);
-  const [role, setRole] = useState<UserRole>();
-  const [showEditRole, setShowEditRole] = useState();
+  const [role, setRole] = useState("");
   const [isConfirmLogoutShown, setIsConfirmLogoutShown] = useState(false);
 
   const isEditDisabled = useMemo(() => {
@@ -65,11 +61,6 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
 
     userRef.current = user;
   }, [user]);
-
-  const roleOptions = [
-    { label: t("manager"), value: UserRole.Manager },
-    { label: t("user"), value: UserRole.User },
-  ];
 
   if (
     user &&
@@ -107,7 +98,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                   setLastName(t);
                 }}
                 onSubmit={() => {
-
+                  updateUser({ last_name: lastName });
                 }}
                 onCancel={() => {
                   setLastName(user.last_name ?? "");
@@ -122,7 +113,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                   setFirstName(t);
                 }}
                 onSubmit={() => {
-
+                  updateUser({ first_name: firstName });
                 }}
                 onCancel={() => {
                   setFirstName(user.first_name ?? "");
@@ -134,10 +125,18 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                 label={t("email")}
                 value={email}
                 onChange={(t) => {
-                  setFirstName(t);
+                  setEmail(t);
                 }}
                 onSubmit={() => {
+                  if (!emailRegex.test(email)) {
+                    showModal({
+                      title: t("invalid_email"),
+                      subtitle: t("invalid_email_description"),
+                    });
+                    return;
+                  }
 
+                  updateUser({ email });
                 }}
                 onCancel={() => {
                   setEmail(user.email ?? "");
@@ -145,40 +144,22 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                 isDisabled={isEditDisabled}
               />
               <Divider />
-              <Select
-                placeholder={t("role")}
-                options={roleOptions}
+              <EditableField
+                label={t("role")}
                 value={role}
-                onChange={(r) => setRole(r as UserRole)}
-                disabled={isRoleDisabled}
+                onChange={(t) => {
+                  setRole(t);
+                }}
+                onSubmit={() => {
+                  updateUser({ role: role as UserRole });
+                }}
+                onCancel={() => {
+                  setRole(user.role ?? "");
+                }}
+                isDisabled={isRoleDisabled}
+                isRole
               />
             </div>
-            {true && (
-              <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
-                <Button
-                  label={t("update_user")}
-                  onClick={() => {
-                    if (!role) return;
-
-                    if (!emailRegex.test(email)) {
-                      showModal({
-                        title: t("invalid_email"),
-                        subtitle: t("invalid_email_description"),
-                      });
-                      return;
-                    }
-
-                    updateUser({
-                      first_name: firstName,
-                      last_name: lastName,
-                      email: email,
-                      role: role,
-                    });
-                  }}
-
-                />
-              </div>
-            )}
           </>
         )}
       </div>
@@ -210,6 +191,7 @@ interface EditableFieldProps {
   onSubmit: () => void;
   onCancel: () => void;
   isDisabled: boolean;
+  isRole?: boolean;
 }
 
 const EditableField: FC<EditableFieldProps> = ({
@@ -219,18 +201,34 @@ const EditableField: FC<EditableFieldProps> = ({
   onSubmit,
   onCancel,
   isDisabled,
+  isRole
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { t } = useTranslation();
 
+  const roleOptions = [
+    { label: t("manager"), value: UserRole.Manager },
+    { label: t("user"), value: UserRole.User },
+  ];
+
   if (isEditing) {
     return (
       <div className="flex flex-col">
-        <Input
-          value={value}
-          placeholder={label}
-          onChange={onChange}
-        />
+        {isRole ? (
+          <Select
+            placeholder={t("role")}
+            options={roleOptions}
+            value={value}
+            onChange={(v) => onChange(v as string)}
+            disabled={isDisabled}
+          />
+        ) : (
+          <Input
+            value={value}
+            placeholder={label}
+            onChange={onChange}
+          />
+        )}
         <div
           style={{
             display: "flex",
@@ -250,6 +248,7 @@ const EditableField: FC<EditableFieldProps> = ({
               setIsEditing(false);
               onSubmit();
             }}
+            disabled={!value}
           />
           <Button
             variant="tertiary"
@@ -292,7 +291,7 @@ const EditableField: FC<EditableFieldProps> = ({
               color: !value ? fontColor2 : fontColor1,
             }}
           >
-            {value || label}
+            {(isRole ? t(value) : value) || label}
           </div>
         </div>
       </div>
