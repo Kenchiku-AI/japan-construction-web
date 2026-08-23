@@ -1,3 +1,4 @@
+import { CustomField, CustomRelationship } from "./customInfo";
 import { Project } from "./projects";
 
 export type LoginRequest = {
@@ -35,6 +36,8 @@ export type User = {
   email: string;
   company_id?: string;
   role: UserRole;
+  custom_fields: CustomField[];
+  custom_relationships: CustomRelationship[];
 };
 
 export type UpdateUserRequest = {

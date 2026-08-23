@@ -16,6 +16,7 @@ import { useUser } from "./useUser";
 import { Loader } from "@/app/ui/Loader";
 import Select from "@/app/ui/Select/Select";
 import Divider from "@/app/ui/Divider";
+import CustomFieldListCell from "@/app/ui/CustomFieldListCell/CustomFieldListCell";
 
 interface UserDashboardProps {
   userId: string;
@@ -23,7 +24,21 @@ interface UserDashboardProps {
 
 const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const { t } = useTranslation();
-  const { loading, user, updateUser } = useUser(userId);
+  const {
+    loading,
+    user,
+    updateUser,
+    customFieldDefinitions,
+    customFields,
+    setCustomFields,
+    customRelationships,
+    setCustomRelationships,
+    customObjectsByDefinition,
+    projects,
+    users,
+    resetCustomField,
+    updateCustomField,
+  } = useUser(userId);
   const userRef = useRef(user);
   const { currentUser, logout } = useApi();
   const { showModal } = useModal();
@@ -43,6 +58,8 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
 
   const isRoleDisabled = useMemo(() => {
     if (!currentUser || !user) return true;
+
+    if (currentUser.id === user.id) return true;
 
     if (currentUser.role === UserRole.Admin) return false;
 
@@ -159,6 +176,39 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                 isDisabled={isRoleDisabled}
                 isRole
               />
+              {customFieldDefinitions.map((item) => (
+                <div key={item.id}>
+                  <Divider />
+                  <CustomFieldListCell
+                    fields={customFields}
+                    relationships={customRelationships}
+                    definition={item}
+                    projects={projects}
+                    users={users}
+                    customObjectsByDefinition={customObjectsByDefinition}
+                    onFieldChange={(value) => {
+                      setCustomFields((prev) => ({
+                        ...prev,
+                        [item.id]: value
+                      }));
+                    }}
+                    onRelationshipChange={(value) => {
+                      setCustomRelationships((prev) => ({
+                        ...prev,
+                        [item.id]: value
+                      }));
+                    }}
+                    onCancel={() => {
+                      resetCustomField(item.id);
+                    }}
+                    onSubmit={() => {
+                      updateCustomField(item.id);
+                    }}
+                    isEditable={!isEditDisabled}
+                  />
+
+                </div>
+              ))}
             </div>
           </>
         )}
