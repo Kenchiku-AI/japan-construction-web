@@ -145,14 +145,23 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             <div
               style={{
                 display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "flex-end",
                 marginTop: 12,
                 marginBottom: 6,
-                marginRight: 12,
+                marginLeft: 6,
                 gap: 24,
               }}
             >
+              <Button
+                variant="tertiary"
+                iconLeft={() => <Check />}
+                style={{ height: "auto" }}
+                label={t("update")}
+                disabled={!name || name === customObjectDefinition.name}
+                onClick={() => {
+                  updateCustomObjectDefinition({ name });
+                  setShowEditName(false);
+                }}
+              />
               <Button
                 variant="tertiary"
                 iconLeft={() => (
@@ -167,17 +176,6 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
                   setShowEditName(false);
                 }}
                 textStyle={{ color: errorColor1 }}
-              />
-              <Button
-                variant="tertiary"
-                iconLeft={() => <Check />}
-                style={{ height: "auto" }}
-                label={t("update")}
-                disabled={!name || name === customObjectDefinition.name}
-                onClick={() => {
-                  updateCustomObjectDefinition({ name });
-                  setShowEditName(false);
-                }}
               />
             </div>
           </div>
@@ -218,14 +216,23 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             <div
               style={{
                 display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "flex-end",
                 marginTop: 12,
                 marginBottom: 6,
-                marginRight: 12,
+                marginLeft: 6,
                 gap: 24,
               }}
             >
+              <Button
+                variant="tertiary"
+                iconLeft={() => <Check />}
+                style={{ height: "auto" }}
+                label={t("update")}
+                disabled={!description || description === customObjectDefinition.description}
+                onClick={() => {
+                  updateCustomObjectDefinition({ description });
+                  setShowEditDescription(false);
+                }}
+              />
               <Button
                 variant="tertiary"
                 iconLeft={() => (
@@ -240,17 +247,6 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
                   setShowEditDescription(false);
                 }}
                 textStyle={{ color: errorColor1 }}
-              />
-              <Button
-                variant="tertiary"
-                iconLeft={() => <Check />}
-                style={{ height: "auto" }}
-                label={t("update")}
-                disabled={!description || description === customObjectDefinition.description}
-                onClick={() => {
-                  updateCustomObjectDefinition({ description });
-                  setShowEditDescription(false);
-                }}
               />
             </div>
           </div>
