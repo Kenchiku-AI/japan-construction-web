@@ -95,8 +95,12 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
         ) : (
           <div>
             {customObjects.map((object, i) => {
-              const sortedFields = object.fields?.sort((a, b) => a.definition.sort_order - b.definition.sort_order);
-              const labelValue = sortedFields?.[0]?.value;
+              const labelFields = object.fields?.filter((f) => (
+                f.definition.data_type === CustomFieldDataType.Text
+              )).sort((a, b) => (
+                a.definition.sort_order - b.definition.sort_order
+              ));
+              const labelValue = labelFields?.[0]?.value;
               const label = labelValue ?? object.definition.name;
 
               return (

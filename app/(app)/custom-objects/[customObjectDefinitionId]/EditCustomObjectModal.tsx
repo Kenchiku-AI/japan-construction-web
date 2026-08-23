@@ -3,6 +3,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import {
+  CustomFieldDataType,
   CustomObject,
   CustomObjectDefinitionDetail,
   CustomObjectsByDefinition,
@@ -54,8 +55,12 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
   useEffect(() => {
     if (!object) return;
 
-    const sortedFields = object.fields?.sort((a, b) => a.definition.sort_order - b.definition.sort_order);
-    const labelValue = sortedFields?.[0]?.value;
+    const labelFields = object.fields?.filter((f) => (
+      f.definition.data_type === CustomFieldDataType.Text
+    )).sort((a, b) => (
+      a.definition.sort_order - b.definition.sort_order
+    ));
+    const labelValue = labelFields?.[0]?.value;
     const name = labelValue ?? object.definition.name;
     setTitle(t("edit_custom_object_modal_title", { name }));
 

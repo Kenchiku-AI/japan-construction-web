@@ -147,7 +147,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         <>
           <div className="flex flex-col">
             <div className={cardClass}>
-              {customFieldDefinitions.map((item) => (
+              {customFieldDefinitions.map((item, index) => (
                 <div key={item.id}>
                   <CustomFieldListCell
                     fields={customFields}
@@ -179,7 +179,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     }}
                     isEditable={isAdminOrManager}
                   />
-                  <Divider />
+                  {(isAdminOrManager || index < customFieldDefinitions.length - 1) && (
+                    <Divider />
+                  )}
                 </div>
               ))}
               {isAdminOrManager && (

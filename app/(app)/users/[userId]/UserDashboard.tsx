@@ -59,7 +59,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const isRoleDisabled = useMemo(() => {
     if (!currentUser || !user) return true;
 
-    if (currentUser.id === user.id) return true;
+    if (currentUser.id === userId) return true;
 
     if (currentUser.role === UserRole.Admin) return false;
 
