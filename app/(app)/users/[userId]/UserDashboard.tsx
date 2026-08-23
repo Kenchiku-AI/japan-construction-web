@@ -2,11 +2,11 @@
 
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
-import { Logout } from "@/app/ui/Icons";
+import { Check, Close, Edit, Logout } from "@/app/ui/Icons";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { useApi } from "@/lib/api/ApiContext";
-import { cardClass, emailRegex, fontColor2 } from "@/lib/constants";
+import { cardClass, emailRegex, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
 import { UserRole } from "@/types";
 import { redirect } from "next/navigation";
@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { useUser } from "./useUser";
 import { Loader } from "@/app/ui/Loader";
 import Select from "@/app/ui/Select/Select";
+import Divider from "@/app/ui/Divider";
 
 interface UserDashboardProps {
   userId: string;
@@ -27,9 +28,13 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const { currentUser, logout } = useApi();
   const { showModal } = useModal();
   const [firstName, setFirstName] = useState("");
+  const [showEditFirstName, setShowEditFirstName] = useState(false);
   const [lastName, setLastName] = useState("");
+  const [showEditLastName, setShowEditLastName] = useState(false);
   const [email, setEmail] = useState("");
+  const [showEditEmail, setShowEditEmail] = useState(false);
   const [role, setRole] = useState<UserRole>();
+  const [showEditRole, setShowEditRole] = useState();
   const [isConfirmLogoutShown, setIsConfirmLogoutShown] = useState(false);
 
   const isEditDisabled = useMemo(() => {
@@ -50,16 +55,6 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
     return user.role === UserRole.Admin;
   }, [user, currentUser]);
 
-  const isUpdateDisabled = useMemo(() => {
-    if (!email || !firstName || !lastName || !user) return true;
-    if (email !== user.email) return false;
-    if (firstName !== user.first_name) return false;
-    if (lastName !== user.last_name) return false;
-    if (role !== user.role) return false;
-
-    return true;
-  }, [firstName, lastName, email, user, role]);
-
   useEffect(() => {
     if (!!userRef.current || !user) return;
 
@@ -75,8 +70,6 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
     { label: t("manager"), value: UserRole.Manager },
     { label: t("user"), value: UserRole.User },
   ];
-
-  const showUpdateButton = !isEditDisabled || !isRoleDisabled;
 
   if (
     user &&
@@ -106,31 +99,52 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
       <div className={cardClass}>
         {!!user && (
           <>
-            <div className="flex flex-col gap-3 mt-3">
-              <Input
-                placeholder={t("last_name")}
+            <div className="flex flex-col">
+              <EditableField
+                label={t("last_name")}
                 value={lastName}
                 onChange={(t) => {
                   setLastName(t);
                 }}
-                disabled={isEditDisabled}
+                onSubmit={() => {
+
+                }}
+                onCancel={() => {
+                  setLastName(user.last_name ?? "");
+                }}
+                isDisabled={isEditDisabled}
               />
-              <Input
-                placeholder={t("first_name")}
+              <Divider />
+              <EditableField
+                label={t("first_name")}
                 value={firstName}
                 onChange={(t) => {
                   setFirstName(t);
                 }}
-                disabled={isEditDisabled}
+                onSubmit={() => {
+
+                }}
+                onCancel={() => {
+                  setFirstName(user.first_name ?? "");
+                }}
+                isDisabled={isEditDisabled}
               />
-              <Input
-                placeholder={t("email")}
+              <Divider />
+              <EditableField
+                label={t("email")}
                 value={email}
                 onChange={(t) => {
-                  setEmail(t);
+                  setFirstName(t);
                 }}
-                disabled={isEditDisabled}
+                onSubmit={() => {
+
+                }}
+                onCancel={() => {
+                  setEmail(user.email ?? "");
+                }}
+                isDisabled={isEditDisabled}
               />
+              <Divider />
               <Select
                 placeholder={t("role")}
                 options={roleOptions}
@@ -139,7 +153,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                 disabled={isRoleDisabled}
               />
             </div>
-            {showUpdateButton && (
+            {true && (
               <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
                 <Button
                   label={t("update_user")}
@@ -161,7 +175,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                       role: role,
                     });
                   }}
-                  disabled={isUpdateDisabled}
+
                 />
               </div>
             )}
@@ -188,5 +202,112 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
     </>
   );
 };
+
+interface EditableFieldProps {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+  onCancel: () => void;
+  isDisabled: boolean;
+}
+
+const EditableField: FC<EditableFieldProps> = ({
+  label,
+  value,
+  onChange,
+  onSubmit,
+  onCancel,
+  isDisabled,
+}) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const { t } = useTranslation();
+
+  if (isEditing) {
+    return (
+      <div className="flex flex-col">
+        <Input
+          value={value}
+          placeholder={label}
+          onChange={onChange}
+        />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            marginTop: 12,
+            marginBottom: 6,
+            marginLeft: 6,
+            gap: 24,
+          }}
+        >
+          <Button
+            variant="tertiary"
+            iconLeft={() => <Check />}
+            style={{ height: "auto" }}
+            label={t("update")}
+            onClick={() => {
+              setIsEditing(false);
+              onSubmit();
+            }}
+          />
+          <Button
+            variant="tertiary"
+            iconLeft={() => (
+              <div style={{ marginRight: -3 }}>
+                <Close color={errorColor1} />
+              </div>
+            )}
+            style={{ height: "auto" }}
+            label={t("cancel")}
+            onClick={() => {
+              setIsEditing(false);
+              onCancel();
+            }}
+            textStyle={{ color: errorColor1 }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="flex flex-1 items-center"
+      style={{ minHeight: 60 }}
+    >
+      <div className="md:px-3 flex flex-1">
+        <div>
+          {!!value && (
+            <div
+              style={{
+                color: fontColor2,
+                fontSize: 12
+              }}>
+              {label}
+            </div>
+          )}
+          <div
+            style={{
+              color: !value ? fontColor2 : fontColor1,
+            }}
+          >
+            {value || label}
+          </div>
+        </div>
+      </div>
+      {!isDisabled && (
+        <div
+          className="cursor-pointer md:pr-3"
+          onClick={() => {
+            setIsEditing(true);
+          }}
+        >
+          <Edit />
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default UserDashboard;

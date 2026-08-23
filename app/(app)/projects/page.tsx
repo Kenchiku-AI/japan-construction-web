@@ -4,9 +4,9 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useProjects } from "./useProjects";
 import { useRouter } from "next/navigation";
-import { DownChevron, Eye, EyeOff, Hardhat, Plus, UpChevron } from "@/app/ui/Icons";
+import { DownChevron, Eye, EyeOff, Hardhat, Plus, RightChevron, UpChevron } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { buttonColor, cardClass, } from "@/lib/constants";
+import { buttonColor, cardClass, fontColor2, } from "@/lib/constants";
 import { FC, useMemo, useState } from "react";
 import { Project, ProjectStatus, UserRole } from "@/types";
 import styles from "./page.module.css";
@@ -92,6 +92,7 @@ const ProjectsPage = () => {
                   </div>
                 </div>
                 <StatusLabel project={p} />
+                <RightChevron color={fontColor2} />
               </div>
             </div>
           </div>

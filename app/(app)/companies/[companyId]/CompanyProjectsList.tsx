@@ -55,7 +55,7 @@ const CompanyProjectsList: FC<CompanyProjectsListProps> = ({
                 </div>
                 <div>
                   <StatusLabel project={p} />
-                  <RightChevron />
+                  <RightChevron color={fontColor2} />
                 </div>
               </div>
             </div>
