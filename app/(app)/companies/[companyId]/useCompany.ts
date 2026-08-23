@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
-import { Company } from "@/types/companies";
+import { Company, CompanyGuest } from "@/types/companies";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { CustomObjectsByDefinition, ReportTemplate, ReportTemplateRequest } from "@/types";
+import { CustomFieldEntityType, CustomObjectsByDefinition, ReportTemplate, ReportTemplateRequest } from "@/types";
 
 export const useCompany = (companyId: string) => {
   const [loading, setLoading] = useState(false);
@@ -14,6 +14,7 @@ export const useCompany = (companyId: string) => {
   const [customFields, setCustomFields] = useState<Record<string, string>>({});
   const [customRelationships, setCustomRelationships] = useState<Record<string, string[]>>({});
   const [customObjectsByDefinition, setCustomObjectsByDefinition] = useState<CustomObjectsByDefinition>({});
+  const [guests, setGuests] = useState<CompanyGuest[]>();
   const [templates, setTemplates] = useState<ReportTemplate[]>([]);
   const { t } = useTranslation();
   const router = useRouter();
@@ -32,6 +33,12 @@ export const useCompany = (companyId: string) => {
     if (!company) return;
     const relationshipDefs = company.custom_relationships.map((r) => r.definition);
 
+    const needsGuests = guests == null && relationshipDefs.find((r) => (
+      r.target_entity_type === CustomFieldEntityType.User
+    ));
+    if (needsGuests) {
+      getGuests();
+    }
 
     const targetIds = relationshipDefs.map((r) => r.target_custom_object_definition_id);
     const definitionIds = targetIds.filter((id) => id != null);
@@ -39,6 +46,17 @@ export const useCompany = (companyId: string) => {
       getCustomObjectsByDefinitionId(company.id, definitionIds);
     }
   }, [company?.custom_relationships]);
+
+  const getGuests = async () => {
+    if (!companyId) return;
+
+    try {
+      const guestResponse = await api.getGuests(companyId);
+      setGuests(guestResponse);
+    } catch (err) {
+      // console.log(err);
+    }
+  };
 
   const getCustomObjectsByDefinitionId = async (company_id: string, definition_ids: string[]) => {
     try {
@@ -444,5 +462,6 @@ export const useCompany = (companyId: string) => {
     customObjectsByDefinition,
     updateCustomField,
     resetCustomField,
+    guests,
   };
 };

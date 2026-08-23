@@ -57,7 +57,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     setCustomRelationships,
     customObjectsByDefinition,
     updateCustomField,
-    resetCustomField
+    resetCustomField,
+    guests
   } = useCompany(companyId);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -145,143 +146,148 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
       {company && (
         <>
           <div className="flex flex-col">
-            {isAdminOrManager && (
-              <div className={cardClass}>
-                {!!company.paid_features_force_disabled && isAdmin && (
-                  <>
-                    <div className="flex items-center justify-between gap-3 md:px-3">
-                      <div className="flex items-center gap-1">
-                        <Close color={fontColor2} />
-                        <div style={{ color: fontColor2 }}>
-                          {t("paid_features_force_disabled")}
-                        </div>
-                      </div>
-                      <Button
-                        variant="tertiary"
-                        label={t("enable")}
-                        onClick={() => {
-                          updatePaidFeaturesDisabled(false);
-                        }}
-                      />
-                    </div>
-                    <Divider />
-                  </>
-                )}
-                {billingPlans && isAdmin && (
-                  <>
-                    <Select
-                      options={billingPlanOptions}
-                      placeholder={t("billing_plan")}
-                      value={selectedBillingPlan?.id ?? "none"}
-                      onChange={(id) => {
-                        setBillingPlanIdToUpdate(id as string);
-                      }}
-                    />
-                    <Divider />
-                  </>
-                )}
-                <div className="flex flex-col md:flex-row w-full justify-between md:px-3">
-                  <div className="flex items-center" style={{ minHeight: 60 }}>
-                    {!company.payment_method_name ? (
-                      <Button
-                        variant="tertiary"
-                        label={
-                          loadingPaymentMethod
-                            ? `${t("loading")}...`
-                            : t("add_payment_method")
-                        }
-                        iconLeft={() => <CreditCardPlus />}
-                        onClick={onClickPaymentMethod}
-                        disabled={loadingPaymentMethod}
-                        style={{ height: 40 }}
-                      />
-                    ) : (
-                      <div className="flex flex-row gap-2 items-center">
-                        <CreditCard color={fontColor1} />
-                        <div >
-                          {`${t("payment_method")}: ${company.payment_method_name}`}
+            <div className={cardClass}>
+              {customFieldDefinitions.map((item) => (
+                <div key={item.id}>
+                  <CustomFieldListCell
+                    fields={customFields}
+                    relationships={customRelationships}
+                    definition={item}
+                    projects={company.projects}
+                    users={[
+                      ...company.users,
+                      ...(guests ?? [])
+                    ]}
+                    customObjectsByDefinition={customObjectsByDefinition}
+                    onFieldChange={(value) => {
+                      setCustomFields((prev) => ({
+                        ...prev,
+                        [item.id]: value
+                      }));
+                    }}
+                    onRelationshipChange={(value) => {
+                      setCustomRelationships((prev) => ({
+                        ...prev,
+                        [item.id]: value
+                      }));
+                    }}
+                    onCancel={() => {
+                      resetCustomField(item.id);
+                    }}
+                    onSubmit={() => {
+                      updateCustomField(item.id);
+                    }}
+                    isEditable={isAdminOrManager}
+                  />
+                  <Divider />
+                </div>
+              ))}
+              {isAdminOrManager && (
+                <>
+                  {!!company.paid_features_force_disabled && isAdmin && (
+                    <>
+                      <div className="flex items-center justify-between gap-3 md:px-3">
+                        <div className="flex items-center gap-1">
+                          <Close color={fontColor2} />
+                          <div style={{ color: fontColor2 }}>
+                            {t("paid_features_force_disabled")}
+                          </div>
                         </div>
                         <Button
                           variant="tertiary"
-                          iconLeft={() => <Edit />}
-                          onClick={onClickPaymentMethod}
-                          disabled={loadingPaymentMethod}
+                          label={t("enable")}
+                          onClick={() => {
+                            updatePaidFeaturesDisabled(false);
+                          }}
                         />
                       </div>
-                    )}
-                  </div>
-                  <MobileDivider />
-                  <div className="flex items-center" style={{ color: fontColor3, minHeight: 60 }}>
-                    <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
-                  </div>
-                </div>
-                {!company.line_channel_secret_last4 && (
-                  <>
-                    <Divider />
-                    <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
-                      <Button
-                        variant="tertiary"
-                        label={t("connect_line")}
-                        iconLeft={() => <LineLogo color={buttonColor} />}
-                        onClick={() => {
-                          router.push("/line");
+                      <Divider />
+                    </>
+                  )}
+                  {billingPlans && isAdmin && (
+                    <>
+                      <Select
+                        options={billingPlanOptions}
+                        placeholder={t("billing_plan")}
+                        value={selectedBillingPlan?.id ?? "none"}
+                        onChange={(id) => {
+                          setBillingPlanIdToUpdate(id as string);
                         }}
-                        style={{ height: 40 }}
                       />
+                      <Divider />
+                    </>
+                  )}
+                  <div className="flex flex-col md:flex-row w-full justify-between md:px-3">
+                    <div className="flex items-center" style={{ minHeight: 60 }}>
+                      {!company.payment_method_name ? (
+                        <Button
+                          variant="tertiary"
+                          label={
+                            loadingPaymentMethod
+                              ? `${t("loading")}...`
+                              : t("add_payment_method")
+                          }
+                          iconLeft={() => <CreditCardPlus />}
+                          onClick={onClickPaymentMethod}
+                          disabled={loadingPaymentMethod}
+                          style={{ height: 40 }}
+                        />
+                      ) : (
+                        <div className="flex flex-row gap-2 items-center">
+                          <CreditCard color={fontColor1} />
+                          <div >
+                            {`${t("payment_method")}: ${company.payment_method_name}`}
+                          </div>
+                          <Button
+                            variant="tertiary"
+                            iconLeft={() => <Edit />}
+                            onClick={onClickPaymentMethod}
+                            disabled={loadingPaymentMethod}
+                          />
+                        </div>
+                      )}
                     </div>
-                  </>
-                )}
-                {!company.paid_features_force_disabled && isAdmin && (
-                  <>
-                    <Divider />
-                    <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
-                      <Button
-                        variant="tertiary"
-                        label={t("disable_paid_features")}
-                        iconLeft={() => <Close color={errorColor1} />}
-                        onClick={() => {
-                          updatePaidFeaturesDisabled(true);
-                        }}
-                        style={{ height: 40 }}
-                        textStyle={{ color: errorColor1 }}
-                      />
+                    <MobileDivider />
+                    <div className="flex items-center" style={{ color: fontColor3, minHeight: 60 }}>
+                      <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
                     </div>
-                  </>
-                )}
-                {customFieldDefinitions.map((item) => (
-                  <div key={item.id}>
-                    <Divider />
-                    <CustomFieldListCell
-                      fields={customFields}
-                      relationships={customRelationships}
-                      definition={item}
-                      projects={company.projects}
-                      users={[]}
-                      customObjectsByDefinition={customObjectsByDefinition}
-                      onFieldChange={(value) => {
-                        setCustomFields((prev) => ({
-                          ...prev,
-                          [item.id]: value
-                        }));
-                      }}
-                      onRelationshipChange={(value) => {
-                        setCustomRelationships((prev) => ({
-                          ...prev,
-                          [item.id]: value
-                        }));
-                      }}
-                      onCancel={() => {
-                        resetCustomField(item.id);
-                      }}
-                      onSubmit={() => {
-                        updateCustomField(item.id);
-                      }}
-                      isEditable={isAdminOrManager}
-                    />
                   </div>
-                ))}
-              </div>
-            )}
+                  {!company.line_channel_secret_last4 && (
+                    <>
+                      <Divider />
+                      <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                        <Button
+                          variant="tertiary"
+                          label={t("connect_line")}
+                          iconLeft={() => <LineLogo color={buttonColor} />}
+                          onClick={() => {
+                            router.push("/line");
+                          }}
+                          style={{ height: 40 }}
+                        />
+                      </div>
+                    </>
+                  )}
+                  {!company.paid_features_force_disabled && isAdmin && (
+                    <>
+                      <Divider />
+                      <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                        <Button
+                          variant="tertiary"
+                          label={t("disable_paid_features")}
+                          iconLeft={() => <Close color={errorColor1} />}
+                          onClick={() => {
+                            updatePaidFeaturesDisabled(true);
+                          }}
+                          style={{ height: 40 }}
+                          textStyle={{ color: errorColor1 }}
+                        />
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
             <div>
               <div className="flex justify-between mt-12">
                 <div className="self-end">{t("projects")}</div>
@@ -382,8 +388,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
             )}
           </div>
         </>
-      )
-      }
+      )}
       <InviteUserModal
         isOpen={showInviteUser}
         onClose={() => {
