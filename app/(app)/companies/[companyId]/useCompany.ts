@@ -1,16 +1,19 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { Company } from "@/types/companies";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { ReportTemplate, ReportTemplateRequest } from "@/types";
+import { CustomObjectsByDefinition, ReportTemplate, ReportTemplateRequest } from "@/types";
 
 export const useCompany = (companyId: string) => {
   const [loading, setLoading] = useState(false);
   const [company, setCompany] = useState<Company>();
+  const [customFields, setCustomFields] = useState<Record<string, string>>({});
+  const [customRelationships, setCustomRelationships] = useState<Record<string, string[]>>({});
+  const [customObjectsByDefinition, setCustomObjectsByDefinition] = useState<CustomObjectsByDefinition>({});
   const [templates, setTemplates] = useState<ReportTemplate[]>([]);
   const { t } = useTranslation();
   const router = useRouter();
@@ -24,6 +27,192 @@ export const useCompany = (companyId: string) => {
       getTemplates(companyId);
     }
   }, [companyId]);
+
+  useEffect(() => {
+    if (!company) return;
+    const relationshipDefs = company.custom_relationships.map((r) => r.definition);
+
+
+    const targetIds = relationshipDefs.map((r) => r.target_custom_object_definition_id);
+    const definitionIds = targetIds.filter((id) => id != null);
+    if (!!definitionIds.length) {
+      getCustomObjectsByDefinitionId(company.id, definitionIds);
+    }
+  }, [company?.custom_relationships]);
+
+  const getCustomObjectsByDefinitionId = async (company_id: string, definition_ids: string[]) => {
+    try {
+      const request = { company_id, definition_ids };
+      const response = await api.getCustomObjectsByDefinition(request);
+
+      if (response) {
+        setCustomObjectsByDefinition(response);
+      }
+    } catch (err) {
+      // console.log(err);
+    }
+  };
+
+  const customFieldDefinitions = useMemo(() => {
+    if (!company) return [];
+
+    const fields = company?.custom_fields.map((f) => f.definition);
+
+    const relationships = Array.from(
+      new Map(
+        company?.custom_relationships.map((r) => [r.definition.id, r.definition])
+      ).values()
+    );
+
+    return [
+      ...fields,
+      ...relationships
+    ].sort(
+      (a, b) => a.sort_order - b.sort_order
+    );
+  }, [
+    company?.custom_fields,
+    company?.custom_relationships
+  ]);
+
+  useEffect(() => {
+    if (!company) return;
+
+    const newFields: Record<string, string> = {};
+    company.custom_fields.forEach((f) => {
+      if (f.value) newFields[f.definition.id] = f.value;
+    });
+    setCustomFields(newFields);
+
+    const newRelationships: Record<string, string[]> = {};
+    company.custom_relationships.forEach((r) => {
+      newRelationships[r.definition.id] = [
+        ...(newRelationships?.[r.definition.id] ?? []),
+        r.target_entity_id as string
+      ];
+    });
+    setCustomRelationships(newRelationships);
+  }, [company?.custom_fields, company?.custom_relationships]);
+
+  const updateCustomField = useCallback(async (itemId: string) => {
+    if (!company) return;
+    const field = company.custom_fields.find((f) => f.definition.id === itemId);
+
+    if (field) {
+      const value = customFields[itemId] ?? "";
+
+      try {
+        let response;
+
+        if (field.id) {
+          response = await api.updateCustomField(field.id, { value });
+        } else if (value) {
+          const request = {
+            value,
+            custom_field_definition_id: itemId
+          };
+          response = await api.createCompanyCustomField(company.id, request);
+        }
+
+        if (response) {
+          setCompany((prev) => {
+            if (!prev) return prev;
+
+            const fieldIndex = prev.custom_fields.findIndex((f) => f.definition.id === itemId);
+            if (fieldIndex === -1) return prev;
+
+            const newFields = [...prev.custom_fields];
+            newFields[fieldIndex] = response;
+
+            return {
+              ...prev,
+              custom_fields: newFields
+            }
+          });
+        }
+      } catch (e) {
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+        resetCustomField(itemId);
+      }
+    } else {
+      const request = {
+        source_entity_id: company.id,
+        target_entity_ids: customRelationships[itemId].filter(Boolean)
+      };
+
+      try {
+        const response = await api.updateCustomRelationship(itemId, request);
+
+        if (response) {
+          setCompany((prev) => {
+            if (!prev) return prev;
+
+            const otherRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
+            const newRelationships = response;
+
+            if (!newRelationships.length) {
+              const definition = prev.custom_relationships.find((r) => r.definition.id === itemId)?.definition;
+
+              if (definition) {
+                newRelationships.push(
+                  {
+                    source_entity_id: companyId,
+                    definition
+                  }
+                )
+              }
+            }
+
+            return {
+              ...prev,
+              custom_relationships: [
+                ...otherRelationships,
+                ...newRelationships
+              ]
+            }
+          });
+        }
+      } catch (e) {
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+        resetCustomField(itemId);
+      }
+    }
+  }, [company, customFields, customRelationships]);
+
+  const resetCustomField = useCallback((itemId: string) => {
+    if (!company) return;
+    const field = company.custom_fields.find((f) => f.definition.id === itemId);
+
+    if (field) {
+      const { value } = field;
+
+      if (value) {
+        setCustomFields((prev) => ({
+          ...prev,
+          [itemId]: value
+        }));
+      } else {
+        setCustomFields((prev) => {
+          let newFields = { ...prev };
+          delete newFields[itemId];
+          return newFields;
+        });
+      }
+    } else {
+      const relationships = company.custom_relationships.filter((r) => r.definition.id === itemId);
+      const targetIds = relationships.map((r) => r.target_entity_id);
+      setCustomRelationships((prev) => ({
+        ...prev,
+        [itemId]: targetIds as string[]
+      }));
+    }
+  }, [company]);
 
   const getCompany = useCallback(
     async (companyId: string) => {
@@ -247,5 +436,13 @@ export const useCompany = (companyId: string) => {
     createTemplate,
     removeUser,
     getCompany,
+    customFieldDefinitions,
+    customFields,
+    setCustomFields,
+    customRelationships,
+    setCustomRelationships,
+    customObjectsByDefinition,
+    updateCustomField,
+    resetCustomField,
   };
 };

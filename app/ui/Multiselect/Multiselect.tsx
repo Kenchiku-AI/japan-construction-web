@@ -111,7 +111,13 @@ const Multiselect: FC<MultiselectProps> = ({
 
     if (values.includes(value)) return;
 
-    onChange?.([...values, value]);
+    const newValues = [...values, value];
+
+    onChange?.(newValues);
+
+    if (newValues.length === options.length) {
+      setOpen(false);
+    }
   };
 
   const handleRemove = (value: string) => {

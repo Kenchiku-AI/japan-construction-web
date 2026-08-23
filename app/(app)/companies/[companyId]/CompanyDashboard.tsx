@@ -30,6 +30,7 @@ import { useBillingPlans } from "../../billing-plans/useBillingPlans";
 import Select from "@/app/ui/Select/Select";
 import { BillingPlan } from "@/types/billingPlans";
 import UpdateBillingPlanModal from "./UpdateBillingPlanModal";
+import CustomFieldListCell from "@/app/ui/CustomFieldListCell/CustomFieldListCell";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -49,6 +50,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     templates,
     createTemplate,
     removeUser,
+    customFieldDefinitions,
+    customFields,
+    setCustomFields,
+    customRelationships,
+    setCustomRelationships,
+    customObjectsByDefinition,
+    updateCustomField,
+    resetCustomField
   } = useCompany(companyId);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -171,36 +180,38 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     <Divider />
                   </>
                 )}
-                <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
-                  {!company.payment_method_name ? (
-                    <Button
-                      variant="tertiary"
-                      label={
-                        loadingPaymentMethod
-                          ? `${t("loading")}...`
-                          : t("add_payment_method")
-                      }
-                      iconLeft={() => <CreditCardPlus />}
-                      onClick={onClickPaymentMethod}
-                      disabled={loadingPaymentMethod}
-                      style={{ height: 40 }}
-                    />
-                  ) : (
-                    <div className="flex flex-row gap-2 items-center">
-                      <CreditCard color={fontColor1} />
-                      <div >
-                        {`${t("payment_method")}: ${company.payment_method_name}`}
-                      </div>
+                <div className="flex flex-col md:flex-row w-full justify-between md:px-3">
+                  <div className="flex items-center" style={{ minHeight: 60 }}>
+                    {!company.payment_method_name ? (
                       <Button
                         variant="tertiary"
-                        iconLeft={() => <Edit />}
+                        label={
+                          loadingPaymentMethod
+                            ? `${t("loading")}...`
+                            : t("add_payment_method")
+                        }
+                        iconLeft={() => <CreditCardPlus />}
                         onClick={onClickPaymentMethod}
                         disabled={loadingPaymentMethod}
+                        style={{ height: 40 }}
                       />
-                    </div>
-                  )}
+                    ) : (
+                      <div className="flex flex-row gap-2 items-center">
+                        <CreditCard color={fontColor1} />
+                        <div >
+                          {`${t("payment_method")}: ${company.payment_method_name}`}
+                        </div>
+                        <Button
+                          variant="tertiary"
+                          iconLeft={() => <Edit />}
+                          onClick={onClickPaymentMethod}
+                          disabled={loadingPaymentMethod}
+                        />
+                      </div>
+                    )}
+                  </div>
                   <MobileDivider />
-                  <div className="flex items-center" style={{ color: fontColor3, height: 40 }}>
+                  <div className="flex items-center" style={{ color: fontColor3, minHeight: 60 }}>
                     <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
                   </div>
                 </div>
@@ -237,6 +248,38 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     </div>
                   </>
                 )}
+                {customFieldDefinitions.map((item) => (
+                  <div key={item.id}>
+                    <Divider />
+                    <CustomFieldListCell
+                      fields={customFields}
+                      relationships={customRelationships}
+                      definition={item}
+                      projects={company.projects}
+                      users={[]}
+                      customObjectsByDefinition={customObjectsByDefinition}
+                      onFieldChange={(value) => {
+                        setCustomFields((prev) => ({
+                          ...prev,
+                          [item.id]: value
+                        }));
+                      }}
+                      onRelationshipChange={(value) => {
+                        setCustomRelationships((prev) => ({
+                          ...prev,
+                          [item.id]: value
+                        }));
+                      }}
+                      onCancel={() => {
+                        resetCustomField(item.id);
+                      }}
+                      onSubmit={() => {
+                        updateCustomField(item.id);
+                      }}
+                      isEditable={isAdminOrManager}
+                    />
+                  </div>
+                ))}
               </div>
             )}
             <div>
@@ -467,7 +510,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
 };
 
 const MobileDivider = () => (
-  <div className="py-1">
+  <div>
     <Divider
       style={{
         marginTop: 10,

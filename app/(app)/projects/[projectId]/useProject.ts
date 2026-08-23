@@ -127,7 +127,7 @@ export const useProject = (projectId: string) => {
     project.custom_relationships.forEach((r) => {
       newRelationships[r.definition.id] = [
         ...(newRelationships?.[r.definition.id] ?? []),
-        r.target_entity_id
+        r.target_entity_id as string
       ];
     });
     setCustomRelationships(newRelationships);
@@ -179,7 +179,7 @@ export const useProject = (projectId: string) => {
     } else {
       const request = {
         source_entity_id: project.id,
-        target_entity_ids: customRelationships[itemId]
+        target_entity_ids: customRelationships[itemId].filter(Boolean)
       };
 
       try {
@@ -189,13 +189,27 @@ export const useProject = (projectId: string) => {
           setProject((prev) => {
             if (!prev) return prev;
 
-            const newRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
+            const otherRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
+            const newRelationships = response;
+
+            if (!newRelationships.length) {
+              const definition = prev.custom_relationships.find((r) => r.definition.id === itemId)?.definition;
+
+              if (definition) {
+                newRelationships.push(
+                  {
+                    source_entity_id: projectId,
+                    definition
+                  }
+                )
+              }
+            }
 
             return {
               ...prev,
               custom_relationships: [
-                ...newRelationships,
-                ...response
+                ...otherRelationships,
+                ...newRelationships
               ]
             }
           });
@@ -234,7 +248,7 @@ export const useProject = (projectId: string) => {
       const targetIds = relationships.map((r) => r.target_entity_id);
       setCustomRelationships((prev) => ({
         ...prev,
-        [itemId]: targetIds
+        [itemId]: targetIds as string[]
       }));
     }
   }, [project]);

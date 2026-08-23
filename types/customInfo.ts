@@ -72,9 +72,9 @@ export type CustomRelationshipDefinition = {
 }
 
 export type CustomRelationship = {
-  id: string;
+  id?: string;
   source_entity_id: string;
-  target_entity_id: string;
+  target_entity_id?: string;
   definition: CustomRelationshipDefinition
 }
 

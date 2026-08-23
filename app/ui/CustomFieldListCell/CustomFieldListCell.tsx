@@ -11,9 +11,15 @@ import { CustomFieldDataType, CustomFieldEntityType } from "@/types";
 type CustomFieldListCellProps = FieldsListInputProps & {
   onSubmit: () => void;
   onCancel: () => void;
+  isEditable?: boolean;
 }
 
-const CustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCancel, ...props }) => {
+const CustomFieldListCell: FC<CustomFieldListCellProps> = ({
+  onSubmit,
+  onCancel,
+  isEditable = true,
+  ...props
+}) => {
   const [showEdit, setShowEdit] = useState(false);
 
   return (
@@ -36,6 +42,7 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCancel,
           onEdit={() => {
             setShowEdit(true);
           }}
+          isEditable={isEditable}
         />
       )}
     </div>
@@ -44,6 +51,7 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCancel,
 
 type CustomFieldListLabelProps = FieldsListInputProps & {
   onEdit: () => void;
+  isEditable?: boolean;
 }
 
 const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
@@ -53,7 +61,8 @@ const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
   relationships,
   customObjectsByDefinition,
   projects,
-  users
+  users,
+  isEditable
 }) => {
   const { t } = useTranslation();
 
@@ -101,8 +110,11 @@ const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
   ]);
 
   return (
-    <div className="flex flex-1 items-center">
-      <div className="p-1 py-3 md:px-3 flex flex-1">
+    <div
+      className="flex flex-1 items-center"
+      style={{ minHeight: 60 }}
+    >
+      <div className="md:px-3 flex flex-1">
         <div>
           <div
             style={{
@@ -118,12 +130,14 @@ const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
           )}
         </div >
       </div >
-      <div
-        className="cursor-pointer md:pr-3"
-        onClick={onEdit}
-      >
-        <Edit />
-      </div>
+      {isEditable && (
+        <div
+          className="cursor-pointer md:pr-3"
+          onClick={onEdit}
+        >
+          <Edit />
+        </div>
+      )}
     </div>
   )
 }
@@ -139,14 +153,19 @@ const EditCustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCan
       <div
         style={{
           display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "flex-end",
           marginTop: 12,
           marginBottom: 6,
-          marginRight: 12,
+          marginLeft: 6,
           gap: 24,
         }}
       >
+        <Button
+          variant="tertiary"
+          iconLeft={() => <Check />}
+          style={{ height: "auto" }}
+          label={t("update")}
+          onClick={onSubmit}
+        />
         <Button
           variant="tertiary"
           iconLeft={() => (
@@ -158,13 +177,6 @@ const EditCustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCan
           label={t("cancel")}
           onClick={onCancel}
           textStyle={{ color: errorColor1 }}
-        />
-        <Button
-          variant="tertiary"
-          iconLeft={() => <Check />}
-          style={{ height: "auto" }}
-          label={t("update")}
-          onClick={onSubmit}
         />
       </div>
     </div>

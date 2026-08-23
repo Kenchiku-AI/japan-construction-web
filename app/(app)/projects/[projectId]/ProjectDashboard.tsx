@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -31,7 +31,6 @@ import Divider from "@/app/ui/Divider";
 import UnarchiveProjectModal from "./UnarchiveProjectModal";
 import ArchiveProjectModal from "./ArchiveProjectModal";
 import DeleteProjectModal from "./DeleteProjectModal";
-import { FieldsListInput } from "../../custom-objects/[customObjectDefinitionId]/FieldsListInput";
 import CustomFieldListCell from "@/app/ui/CustomFieldListCell/CustomFieldListCell";
 // import DownloadExcelModal from "../../reports/DownloadExcelModal";
 // import { useExport } from "../../reports/useExport";
@@ -79,7 +78,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [showCreateReport, setShowCreateReport] = useState(false);
   const [description, setDescription] = useState("");
   const [showEditDescription, setShowEditDescription] = useState(false);
-  const [status, setStatus] = useState("");
   const [showAddGuest, setShowAddGuest] = useState(false);
   const [showConversationModal, setShowConversationModal] = useState(false);
   const [conversationCreatedCode, setConversationCreatedCode] = useState("");
@@ -105,7 +103,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
 
     isLoaded.current = true;
     setDescription(project.description);
-    setStatus(project.status);
 
     const isAdmin = currentUser?.role === "admin";
     const companyId = isAdmin ? project.company_id : undefined;
@@ -183,6 +180,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     alignItems: "flex-end",
                     marginTop: 12,
                     marginBottom: 6,
+                    marginLeft: 6,
                     gap: 24,
                   }}
                 >
@@ -194,12 +192,6 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                     onClick={() => {
                       updateProject({ description });
                       setShowEditDescription(false);
-
-                      // if (currentUser?.role === "admin") {
-                      //   updateProject({ description, status });
-                      // } else {
-                      //   updateProject({ description });
-                      // }
                     }}
                   />
                   <Button
@@ -220,13 +212,33 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                 </div>
               </div>
             ) : (
-              <div className="flex">
-                <div className="p-1 md:p-3 flex flex-1" style={{ color: !description ? fontColor2 : fontColor1 }}>
-                  {description || t("add_description")}
+              <div
+                className="flex flex-1 items-center"
+                style={{ minHeight: 60 }}
+              >
+                <div className="md:px-3 flex flex-1">
+                  <div>
+                    {!!description && (
+                      <div
+                        style={{
+                          color: fontColor2,
+                          fontSize: 12
+                        }}>
+                        {t("description")}
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        color: !description ? fontColor2 : fontColor1,
+                      }}
+                    >
+                      {description || t("add_description")}
+                    </div>
+                  </div>
                 </div>
                 {isEditable && (
                   <div
-                    className="cursor-pointer pt-1 md:pt-3 md:pr-3"
+                    className="cursor-pointer md:pr-3"
                     onClick={() => {
                       setShowEditDescription(true);
                     }}
@@ -264,22 +276,10 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   onSubmit={() => {
                     updateCustomField(item.id);
                   }}
+                  isEditable={isEditable}
                 />
               </div>
             ))}
-            {/* {currentUser?.role === "admin" && (
-                <>
-                  <Divider />
-                  <Select
-                    options={statusOptions}
-                    value={status}
-                    placeholder={t("status")}
-                    onChange={(s) => {
-                      setStatus(s as string);
-                    }}
-                  />
-                </>
-              )} */}
           </div>
 
           {/* Conversations */}

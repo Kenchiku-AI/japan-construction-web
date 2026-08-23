@@ -1,4 +1,5 @@
-import { ConversationItemType, Project } from "./projects";
+import { CustomField, CustomRelationship } from "./customInfo";
+import { Project } from "./projects";
 
 export type Company = {
   id: string;
@@ -14,6 +15,8 @@ export type Company = {
   billing_plan_id?: string;
   users: CompanyUser[];
   projects: Project[];
+  custom_fields: CustomField[];
+  custom_relationships: CustomRelationship[];
 };
 
 export type CreateCompanyRequest = {
