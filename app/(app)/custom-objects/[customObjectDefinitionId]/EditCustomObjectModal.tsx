@@ -78,7 +78,7 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
       if (definitionHasRelationship) {
         newRelationships[r.definition.id] = [
           ...(newRelationships?.[r.definition.id] ?? []),
-          r.target_entity_id
+          r.target_entity_id as string
         ];
       }
     });
