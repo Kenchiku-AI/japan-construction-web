@@ -14,7 +14,7 @@ interface FormsListProps {
 }
 
 const FormsList: FC<FormsListProps> = ({
-  guests,
+  forms,
   isEmpty,
   isDisabled,
   onDelete,
@@ -28,7 +28,7 @@ const FormsList: FC<FormsListProps> = ({
 
   return (
     <>
-      {guests.map((guest, i) => {
+      {forms.map((guest, i) => {
         const canDelete = !isDisabled && (
           currentUser?.role === "manager" ||
           currentUser?.role === "admin" ||
