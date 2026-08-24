@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
-import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard, LineLogo, Info, DataFlow } from "./Icons";
+import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard, LineLogo, Info, DataFlow, Form } from "./Icons";
 import { bgColor4, bgColor5, buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
 import Divider from "./Divider";
 import Link from "next/link";
@@ -101,11 +101,18 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                       path={"/tags"}
                     />
                     {isFormsEnabled && currentUser.company && (
-                      <SidebarItem
-                        name={t("custom_info")}
-                        icon={() => <DataFlow size={18} />}
-                        path={`/companies/${currentUser.company.id}/custom-info`}
-                      />
+                      <>
+                        <SidebarItem
+                          name={t("forms")}
+                          icon={() => <Form />}
+                          path={`/forms`}
+                        />
+                        <SidebarItem
+                          name={t("custom_info")}
+                          icon={() => <DataFlow size={18} />}
+                          path={`/companies/${currentUser.company.id}/custom-info`}
+                        />
+                      </>
                     )}
                     <SidebarItem
                       name={t("user_guide")}
