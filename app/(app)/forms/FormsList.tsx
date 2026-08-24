@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { CompanyGuest } from "@/types";
 import styles from "./page.module.css";
 import Divider from "@/app/ui/Divider";
-import { Trash } from "@/app/ui/Icons";
+import { Form, Trash } from "@/app/ui/Icons";
 import { useApi } from "@/lib/api/ApiContext";
 
 interface FormsListProps {
@@ -40,7 +40,7 @@ const FormsList: FC<FormsListProps> = ({
             {i > 0 && <Divider />}
             <div className="mx-4 flex items-center justify-between">
               <div style={{ height: 60 }} className="flex items-center gap-4">
-                <User />
+                <Form />
                 <div className="flex flex-col">
                   <div>{`${guest.last_name} ${guest.first_name}`}</div>
                   <div className={styles.subtitle}>{guest.email}</div>
