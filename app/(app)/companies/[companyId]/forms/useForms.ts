@@ -56,6 +56,8 @@ export const useForms = (companyId?: string) => {
 
         if (!uploadResponse.ok) throw new Error();
 
+        console.log("CREATE RESPONSE ID", createResponse.id);
+
         pollFormJob(createResponse.id);
       } catch (err) {
         showModal({
@@ -69,7 +71,7 @@ export const useForms = (companyId?: string) => {
     [companyId],
   );
 
-  const pollFormJob = useCallback(async (formJobId: string) => {
+  const pollFormJob = async (formJobId: string) => {
     let failCount = 0;
 
     for (let attempt = 0; attempt < 200; attempt++) {
@@ -80,9 +82,12 @@ export const useForms = (companyId?: string) => {
           throw new Error("Failed to get form job status.");
         }
 
-        const index = (formJobs ?? []).findIndex((f) => f.id === formJobId);
-
         setFormJobs((prev) => {
+          const index = (prev ?? []).findIndex((f) => f.id === formJobId);
+
+          console.log("prev", prev);
+          console.log("index", index);
+
           if (index === -1) {
             return [
               response,
@@ -111,7 +116,7 @@ export const useForms = (companyId?: string) => {
         (resolve) => setTimeout(resolve, 3000),
       );
     }
-  }, [formJobs]);
+  };
 
   return {
     loading,
