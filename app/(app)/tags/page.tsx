@@ -16,7 +16,7 @@ import DeleteTagModal from "./DeleteTagModal";
 import Divider from "@/app/ui/Divider";
 import { cardClass } from "@/lib/constants";
 
-const ReportTemplatesPage = () => {
+const TagsPage = () => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
   const { tags, updateTag, createTag, deleteTag, loading } = useTags(
@@ -99,4 +99,4 @@ const ReportTemplatesPage = () => {
   );
 };
 
-export default ReportTemplatesPage;
+export default TagsPage;

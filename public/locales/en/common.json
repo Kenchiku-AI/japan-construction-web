@@ -149,6 +149,7 @@
   "type": "Type",
   "update": "Update",
   "update_description": "Update Description",
+  "upload_form": "フォームをアップロード",
   "upload_image_error": "An error occurred while uploading the image.",
   "upload_photo": "Upload Photo",
   "update_report": "Update Report",

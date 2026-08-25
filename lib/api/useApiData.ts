@@ -64,6 +64,9 @@ import {
   CustomRelationship,
   UpdateCustomRelationshipRequest,
   CreateCustomFieldRequest,
+  FormJob,
+  CreateFormJobRequest,
+  CreateFormJobResponse,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -586,9 +589,17 @@ export const useApiData = () => {
       const url = `/custom-relationships?custom_relationship_definition_id=${definitionId}`;
       return call(() => http.patch<CustomRelationship[]>(url, request));
     },
-    async getFormJobs(definitionId: string, request: UpdateCustomRelationshipRequest) {
-      const url = `/custom-relationships?custom_relationship_definition_id=${definitionId}`;
-      return call(() => http.patch<CustomRelationship[]>(url, request));
+    async getFormJobs(companyId: string) {
+      const url = `/form-jobs?company_id=${companyId}`;
+      return call(() => http.get<FormJob[]>(url));
+    },
+    async createFormJob(request: CreateFormJobRequest) {
+      const url = "/form-jobs";
+      return call(() => http.post<CreateFormJobResponse>(url, request));
+    },
+    async getFormJob(formJobId: string) {
+      const url = `/form-jobs/${formJobId}`;
+      return call(() => http.get<FormJob>(url));
     },
   };
 
