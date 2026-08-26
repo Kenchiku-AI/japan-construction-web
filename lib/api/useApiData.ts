@@ -601,6 +601,10 @@ export const useApiData = () => {
       const url = `/form-jobs/${formJobId}`;
       return call(() => http.get<FormJob>(url));
     },
+    async deleteFormJob(formJobId: string) {
+      const url = `/form-jobs/${formJobId}`;
+      return call(() => http.delete(url));
+    },
   };
 
   return {

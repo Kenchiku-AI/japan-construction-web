@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
@@ -8,7 +8,7 @@ import { FormJob, FormJobFile } from "@/types";
 import Divider from "@/app/ui/Divider";
 
 interface CreateFormJobModalProps {
-  formJob: FormJob
+  formJob?: FormJob
   isOpen: boolean;
   onClose: () => void;
   onDownload: (files: FormJobFile[]) => void;
@@ -23,22 +23,39 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
   onDelete,
 }) => {
   const { t } = useTranslation();
+  const [title, setTitle] = useState("");
+  const [files, setFiles] = useState<FormJobFile[]>([]);
+  const [status, setStatus] = useState("");
+  const [description, setDescription] = useState("");
+
   const [showDownloadAll, setShowDownloadAll] = useState(false);
 
-  const files = useMemo(() => {
+  useEffect(() => {
+    if (!formJob) {
+      setTimeout(() => {
+        setTitle("");
+        setFiles([]);
+        setStatus("");
+      }, 500);
+      return;
+    }
+
+    setTitle(formJob.name);
+    setStatus(t(formJob.status));
+
+
     const completedFiles = formJob.files.filter((f) => !f.is_input);
     setShowDownloadAll(completedFiles.length > 1);
+    setFiles(completedFiles.length ? completedFiles : formJob.files);
+  }, [formJob]);
 
-    if (completedFiles.length) return completedFiles;
-
-    return formJob.files;
-  }, [formJob.files]);
+  console.log("FORM JOB", formJob);
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={formJob.name}
+      title={formJob?.name}
       width={640}
     >
       {showDownloadAll && (
@@ -80,7 +97,9 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
         </>
       ))}
       <Divider />
-      <Row label={t("status")} value={t(formJob.status)} />
+      <Row label={t("status")} value={status} />
+      <Divider />
+      <Row label={t("description")} value={description} />
       <Divider />
       <Button
         variant="secondary"

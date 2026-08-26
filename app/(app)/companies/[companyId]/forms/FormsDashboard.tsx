@@ -6,12 +6,14 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { Plus } from "@/app/ui/Icons";
 import { useApi } from "@/lib/api/ApiContext";
-import { UserRole } from "@/types";
+import { FormJob, UserRole } from "@/types";
 import FormsList from "./FormsList";
 import { redirect } from "next/navigation";
 import { cardClass } from "@/lib/constants";
 import { useForms } from "./useForms";
 import CreateFormJobModal from "./CreateFormJobModal";
+import FormJobModal from "./FormJobModal";
+import DeleteFormJobModal from "./DeleteFormJobModal";
 
 interface FormsDashboardProps {
   companyId: string;
@@ -20,8 +22,10 @@ interface FormsDashboardProps {
 const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const { loading, formJobs, createFormJob } = useForms(companyId);
+  const { loading, formJobs, createFormJob, deleteFormJob } = useForms(companyId);
   const [isCreateFormModalShown, setIsCreateFormModalShown] = useState(false);
+  const [showFormJob, setShowFormJob] = useState<FormJob>();
+  const [jobToDelete, setJobToDelete] = useState<FormJob>();
 
   if (currentUser?.role === UserRole.User) {
     redirect("/");
@@ -47,6 +51,9 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
           <FormsList
             forms={formJobs ?? []}
             isEmpty={!loading && formJobs?.length === 0}
+            onClick={(formJob) => {
+              setShowFormJob(formJob);
+            }}
           />
         </div>
       )}
@@ -58,6 +65,32 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
         onSubmit={(file, name, description) => {
           createFormJob(file, name, description);
           setIsCreateFormModalShown(false);
+        }}
+      />
+      <FormJobModal
+        formJob={showFormJob}
+        isOpen={!!showFormJob}
+        onClose={() => {
+          setShowFormJob(undefined);
+        }}
+        onDownload={(files) => {
+
+        }}
+        onDelete={() => {
+          if (!showFormJob) return;
+
+          setJobToDelete(showFormJob);
+          setShowFormJob(undefined);
+        }}
+      />
+      <DeleteFormJobModal
+        isOpen={!!jobToDelete}
+        onClose={() => {
+          setJobToDelete(undefined);
+        }}
+        onDelete={() => {
+          if (!jobToDelete) return;
+          deleteFormJob(jobToDelete.id);
         }}
       />
     </>

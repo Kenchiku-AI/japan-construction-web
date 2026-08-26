@@ -118,6 +118,8 @@
   "delete_conversation_description": "このトークを削除してもよろしいですか？",
   "delete_custom_field": "項目を削除",
   "delete_custom_field_description": "この項目を削除してもよろしいですか？",
+  "delete_form": "フォームを削除する",
+  "delete_form_description": "このフォームを削除してもよろしいですか？",
   "delete_photo": "写真削除",
   "delete_photo_error": "写真の削除中にエラーが発生しました。",
   "delete_project": "プロジェクトを削除",

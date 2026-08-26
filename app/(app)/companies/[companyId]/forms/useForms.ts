@@ -71,6 +71,25 @@ export const useForms = (companyId?: string) => {
     [companyId],
   );
 
+  const deleteFormJob = async (formJobId: string) => {
+    setLoading(true);
+
+    try {
+      await api.deleteFormJob(formJobId);
+
+      setFormJobs((prev) => {
+        return prev?.filter((f) => f.id !== formJobId);
+      })
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
   const pollFormJob = async (formJobId: string) => {
     let failCount = 0;
 
@@ -118,6 +137,7 @@ export const useForms = (companyId?: string) => {
   return {
     loading,
     formJobs,
-    createFormJob
+    createFormJob,
+    deleteFormJob
   };
 };
