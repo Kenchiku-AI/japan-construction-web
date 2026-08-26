@@ -34,16 +34,17 @@ const FormsList: FC<FormsListProps> = ({
             >
               <div style={{ height: 60 }} className="flex items-center gap-4">
                 <Form />
-
-                <div>{form.name}</div>
-              </div>
-              {!!form.description && (
-                <div className={styles.subtitle}>
-                  {`${t("status")}: ${t(form.status)}`}
+                <div>
+                  <div>{form.name}</div>
+                  {!!form.description && (
+                    <div className={styles.subtitle}>
+                      {`${t("status")}: ${t(form.status)}`}
+                    </div>
+                  )}
                 </div>
-              )}
+              </div >
             </div >
-          </div >
+          </div>
         );
       })}
     </>

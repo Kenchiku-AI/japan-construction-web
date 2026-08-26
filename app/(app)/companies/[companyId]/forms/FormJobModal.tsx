@@ -3,7 +3,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import { Download, Form, Trash } from "@/app/ui/Icons";
-import { errorColor1, fontColor2 } from "@/lib/constants";
+import { errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { FormJob, FormJobFile } from "@/types";
 import Divider from "@/app/ui/Divider";
 
@@ -55,7 +55,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={formJob?.name}
+      title={title}
       width={640}
     >
       {showDownloadAll && (
@@ -76,7 +76,10 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
       {files.map((file) => (
         <>
           <Divider />
-          <div className="flex justify-between">
+          <div
+            className="flex justify-between"
+            style={{ height: 60 }}
+          >
             <div className="flex gap-3">
               <Form />
               <div>
@@ -101,14 +104,16 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
       <Divider />
       <Row label={t("description")} value={description} />
       <Divider />
-      <Button
-        variant="secondary"
-        iconLeft={() => <Trash />}
-        style={{ borderColor: errorColor1, height: 60 }}
-        textStyle={{ color: errorColor1 }}
-        label={t("delete")}
-        onClick={onDelete}
-      />
+      <div className="mt-8">
+        <Button
+          variant="secondary"
+          iconLeft={() => <Trash />}
+          style={{ borderColor: errorColor1, height: 60 }}
+          textStyle={{ color: errorColor1 }}
+          label={t("delete")}
+          onClick={onDelete}
+        />
+      </div>
     </Modal>
   );
 };
@@ -133,7 +138,7 @@ const Row: FC<RowProps> = ({ label, value }) => (
         >
           {label}
         </div>
-        <div style={{ color: fontColor2 }}>
+        <div style={{ color: fontColor1 }}>
           {value}
         </div>
       </div>

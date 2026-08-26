@@ -6,3 +6,11 @@
   align-items: center;
   height: 60px;
 }
+
+.subtitle {
+  color: var(--text-color-2);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
