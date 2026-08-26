@@ -91,6 +91,7 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
         onDelete={() => {
           if (!jobToDelete) return;
           deleteFormJob(jobToDelete.id);
+          setJobToDelete(undefined);
         }}
       />
     </>

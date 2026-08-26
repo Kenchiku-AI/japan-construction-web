@@ -56,64 +56,63 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title={title}
-      width={640}
     >
-      {showDownloadAll && (
-        <Button
-          variant="tertiary"
-          label={t("download_all")}
-          iconLeft={() => <Download />}
-          onClick={() => {
-            onDownload(files);
-          }}
-          style={{ height: "auto" }}
-          textStyle={{
-            fontWeight: "300",
-          }}
-          iconOnlyMobile
-        />
-      )}
-      {files.map((file) => (
-        <>
-          <Divider />
-          <div
-            className="flex justify-between"
-            style={{ height: 60 }}
-          >
-            <div className="flex gap-3">
-              <Form />
-              <div>
-                {file.filename}
+      <div className="my-4">
+        {showDownloadAll && (
+          <Button
+            variant="tertiary"
+            label={t("download_all")}
+            iconLeft={() => <Download />}
+            onClick={() => {
+              onDownload(files);
+            }}
+            style={{ height: "auto" }}
+            textStyle={{
+              fontWeight: "300",
+            }}
+            iconOnlyMobile
+          />
+        )}
+        {files.map((file) => (
+          <>
+            <Divider />
+            <div
+              className="flex justify-between items-center md:px-3"
+              style={{ height: 50 }}
+            >
+              <div className="flex gap-3">
+                <Form />
+                <div>
+                  {file.filename}
+                </div>
               </div>
+              {!file.is_input && (
+                <div
+                  className="cursor-pointer hover:opacity-50"
+                  onClick={() => {
+                    onDownload([file]);
+                  }}
+                >
+                  <Download />
+                </div>
+              )}
             </div>
-            {!file.is_input && (
-              <div
-                className="cursor-pointer hover:opacity-50"
-                onClick={() => {
-                  onDownload([file]);
-                }}
-              >
-                <Download />
-              </div>
-            )}
-          </div>
-        </>
-      ))}
-      <Divider />
-      <Row label={t("status")} value={status} />
-      <Divider />
-      <Row label={t("description")} value={description} />
-      <Divider />
-      <div className="mt-8">
-        <Button
-          variant="secondary"
-          iconLeft={() => <Trash />}
-          style={{ borderColor: errorColor1, height: 60 }}
-          textStyle={{ color: errorColor1 }}
-          label={t("delete")}
-          onClick={onDelete}
-        />
+          </>
+        ))}
+        <Divider />
+        <Row label={t("status")} value={status} />
+        <Divider />
+        <Row label={t("description")} value={description} />
+        <Divider />
       </div>
+      <Button
+        variant="secondary"
+        iconLeft={() => <Trash />}
+        style={{ borderColor: errorColor1, height: 60, width: "100%" }}
+        textStyle={{ color: errorColor1 }}
+        label={t("delete")}
+        onClick={onDelete}
+      />
     </Modal>
   );
 };
@@ -126,7 +125,7 @@ interface RowProps {
 const Row: FC<RowProps> = ({ label, value }) => (
   <div
     className="flex flex-1 items-center"
-    style={{ minHeight: 60 }}
+    style={{ minHeight: 50 }}
   >
     <div className="md:px-3 flex flex-1">
       <div>
