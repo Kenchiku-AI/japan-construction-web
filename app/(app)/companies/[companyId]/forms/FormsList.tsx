@@ -4,7 +4,6 @@ import { FormJob } from "@/types";
 import styles from "./page.module.css";
 import Divider from "@/app/ui/Divider";
 import { Form } from "@/app/ui/Icons";
-import { useApi } from "@/lib/api/ApiContext";
 
 interface FormsListProps {
   forms: FormJob[];
@@ -16,7 +15,6 @@ const FormsList: FC<FormsListProps> = ({
   isEmpty,
 }) => {
   const { t } = useTranslation();
-  const { currentUser } = useApi();
 
   if (isEmpty) {
     return <div className={styles.empty}>{t("empty_forms_description")}</div>;

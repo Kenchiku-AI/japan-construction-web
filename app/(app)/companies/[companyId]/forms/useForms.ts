@@ -85,9 +85,6 @@ export const useForms = (companyId?: string) => {
         setFormJobs((prev) => {
           const index = (prev ?? []).findIndex((f) => f.id === formJobId);
 
-          console.log("prev", prev);
-          console.log("index", index);
-
           if (index === -1) {
             return [
               response,

@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
 import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
-import { Form, Trash } from "@/app/ui/Icons";
-import { bgColor5, fontColor1 } from "@/lib/constants";
+import { Close, Form, Trash } from "@/app/ui/Icons";
+import { bgColor5, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 
 interface CreateFormJobModalProps {
   isOpen: boolean;
@@ -81,27 +81,32 @@ const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
 
         {!file ? (
           <div
+            style={{
+              height: 60,
+              borderColor: bgColor5
+            }}
             onClick={() => fileInputRef.current?.click()}
-            className="cursor-pointer hover:opacity-50 flex min-h-36 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-base-300 bg-base-100 px-6 py-8 text-center"
+            className="cursor-pointer hover:opacity-50 flex w-full items-center rounded-lg border-2 border-dashed px-5 gap-3"
           >
             <Form color={fontColor1} />
 
-            <span className="text-sm font-medium">
+            <div style={{ color: fontColor2 }}>
               {t("choose_file")}
-            </span>
-
-            <span className="mt-1 text-xs text-base-content/60">
-              {t("choose_file_description")}
-            </span>
+            </div>
           </div>
         ) : (
           <div
-            className="flex items-center justify-between rounded-lg border px-4 py-3"
-            style={{ borderColor: bgColor5 }}
+            className="flex items-center justify-between rounded-lg border-2 px-5"
+            style={{
+              height: 60,
+              borderColor: bgColor5
+            }}
           >
-            <div className="flex min-w-0 items-center gap-3">
-              <Form />
-
+            <div
+              className="cursor-pointer hover:opacity-50 flex gap-3 items-center"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Form color={fontColor1} />
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">
                   {file.name}
@@ -115,7 +120,7 @@ const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
               className="cursor-pointer"
               onClick={removeFile}
             >
-              <Trash />
+              <Close color={errorColor1} />
             </div>
           </div>
         )}
