@@ -153,7 +153,7 @@ interface RowProps {
 
 const Row: FC<RowProps> = ({ label, value, hideLabel }) => (
   <>
-    {hideLabel && <Divider />}
+    {!hideLabel && <Divider />}
     <div
       className="flex flex-1 items-center"
       style={{ minHeight: 50 }}
