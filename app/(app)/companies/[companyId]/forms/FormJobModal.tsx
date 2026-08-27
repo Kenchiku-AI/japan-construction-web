@@ -98,7 +98,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
             <>
               {i > 0 && <Divider />}
               <div
-                className="flex justify-between items-center md:px-3"
+                className="flex justify-between items-center px-4"
                 style={{ height: 60 }}
               >
                 <div className="flex gap-3">
