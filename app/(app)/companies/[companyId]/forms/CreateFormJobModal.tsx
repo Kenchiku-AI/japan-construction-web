@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/app/ui/Input/Input";
@@ -6,11 +6,19 @@ import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import { Close, Form, Trash } from "@/app/ui/Icons";
 import { bgColor5, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
+import Select from "@/app/ui/Select/Select";
+import { useApi } from "@/lib/api/ApiContext";
+import { ProjectStatus } from "@/types";
 
 interface CreateFormJobModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (file: File, name: string, description: string) => void;
+  onSubmit: (
+    file: File,
+    name: string,
+    description: string,
+    projectId?: string
+  ) => void;
 }
 
 const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
@@ -21,14 +29,32 @@ const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [projectId, setProjectId] = useState("none");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { currentUser } = useApi();
   const { t } = useTranslation();
+
+  const projectOptions = useMemo(() => {
+    const projects = currentUser?.projects
+      .filter((p) => p.status === ProjectStatus.Active)
+      .map((p) => ({
+        label: p.name,
+        value: p.id,
+      })) ?? [];
+
+    return [
+      { label: t("none"), value: "none" },
+      ...projects
+    ]
+  }, [currentUser?.projects]);
+
 
   const reset = () => {
     setTimeout(() => {
       setFile(null);
       setName("");
       setDescription("");
+      setProjectId("");
     }, 500);
   };
 
@@ -136,6 +162,14 @@ const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
           placeholder={t("description")}
           onChange={setDescription}
         />
+
+        <Select
+          options={projectOptions}
+          value={projectId}
+          placeholder={t("project")}
+          onChange={(id) => setProjectId(id as string)}
+          style={{ paddingRight: 40 }}
+        />
       </div>
 
       <Button
@@ -147,7 +181,7 @@ const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
           }
 
           reset();
-          onSubmit(file, name, description);
+          onSubmit(file, name, description, projectId);
         }}
       />
     </Modal>

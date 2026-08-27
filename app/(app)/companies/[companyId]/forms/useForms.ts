@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
-import { FormJob, FormJobStatus } from "@/types";
+import { CreateFormJobRequest, FormJob, FormJobStatus } from "@/types";
 import JSZip from "jszip";
 
 export const useForms = (companyId?: string) => {
@@ -32,19 +32,29 @@ export const useForms = (companyId?: string) => {
   }, [companyId]);
 
   const createFormJob = useCallback(
-    async (file: File, name: string, description: string) => {
+    async (
+      file: File,
+      name: string,
+      description: string,
+      projectId: string
+    ) => {
       if (!companyId) return;
 
       setLoading(true);
 
       try {
-        const request = {
+        const request: CreateFormJobRequest = {
           company_id: companyId,
           name,
           description,
           filename: file.name,
           content_type: file.type
         }
+
+        if (projectId) {
+          request.project_id = projectId;
+        }
+
         const createResponse = await api.createFormJob(request);
 
         const uploadResponse = await fetch(createResponse.upload_url, {
