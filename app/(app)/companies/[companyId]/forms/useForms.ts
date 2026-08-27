@@ -141,6 +141,7 @@ export const useForms = (companyId?: string) => {
 
       if (response) {
         const { files } = response;
+        const link = document.createElement("a");
 
         if (!fileId) {
           const zip = new JSZip();
@@ -167,32 +168,22 @@ export const useForms = (companyId?: string) => {
 
           const url = URL.createObjectURL(zipBlob);
 
-          const link = document.createElement("a");
+
           link.href = url;
           link.download = `${formJob.name.replace(/ /g, "_").replace(/[()]/g, "")}.zip`;
-
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          URL.revokeObjectURL(url);
         } else {
           const file = files.find((f) => f.id === fileId);
-          if (!file) {
-            throw new Error();
-          }
-
-          const link = document.createElement("a");
+          if (!file) throw new Error();
 
           link.href = file.download_url;
           link.download = file.filename;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
         }
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(link.href);
       }
     } catch (e) {
       showModal({
