@@ -171,11 +171,15 @@ const Row: FC<RowProps> = ({ label, value, hideLabel }) => (
           </div>
           <div style={{ color: fontColor1 }}>
             {Array.isArray(value) ? (
-              <ul className="list-disc pl-5">
-                {value.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
+              value.length > 1 ? (
+                <ul className="list-disc pl-5">
+                  {value.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                value[0]
+              )
             ) : (
               value
             )}
