@@ -3,7 +3,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import { Download, Form, Trash } from "@/app/ui/Icons";
-import { errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
+import { bgColor5, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { FormJob, FormJobFile } from "@/types";
 import Divider from "@/app/ui/Divider";
 
@@ -73,7 +73,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
       onClose={onClose}
       title={title}
     >
-      <div className="my-4">
+      <div className="my-8">
         {showDownloadAll && (
           <Button
             variant="tertiary"
@@ -89,32 +89,37 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
             iconOnlyMobile
           />
         )}
-        {files.map((file) => (
-          <>
-            <Divider />
-            <div
-              className="flex justify-between items-center md:px-3"
-              style={{ height: 50 }}
-            >
-              <div className="flex gap-3">
-                <Form />
-                <div>
-                  {file.filename}
+        <div
+          className="border rounded-xl"
+          style={{ borderColor: bgColor5 }}
+        >
+          {files.map((file, i) => (
+            <>
+              {i > 0 && <Divider />}
+              <div
+                className="flex justify-between items-center md:px-3"
+                style={{ height: 50 }}
+              >
+                <div className="flex gap-3">
+                  <Form />
+                  <div>
+                    {file.filename}
+                  </div>
                 </div>
+                {!file.is_input && (
+                  <div
+                    className="cursor-pointer hover:opacity-50"
+                    onClick={() => {
+                      onDownload([file]);
+                    }}
+                  >
+                    <Download />
+                  </div>
+                )}
               </div>
-              {!file.is_input && (
-                <div
-                  className="cursor-pointer hover:opacity-50"
-                  onClick={() => {
-                    onDownload([file]);
-                  }}
-                >
-                  <Download />
-                </div>
-              )}
-            </div>
-          </>
-        ))}
+            </>
+          ))}
+        </div>
         <Row label={t("description")} value={description} />
         <Row label={t("status")} value={status} />
         {!!summary && (
@@ -126,6 +131,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
         {!!recommendations.length && (
           <Row label={t("recommendations")} value={recommendations} />
         )}
+        <Divider />
       </div>
       <Button
         variant="secondary"
@@ -146,7 +152,6 @@ interface RowProps {
 
 const Row: FC<RowProps> = ({ label, value }) => (
   <>
-    <Divider />
     <div
       className="flex flex-1 items-center"
       style={{ minHeight: 50 }}
@@ -175,6 +180,7 @@ const Row: FC<RowProps> = ({ label, value }) => (
         </div>
       </div>
     </div>
+    <Divider />
   </>
 );
 
