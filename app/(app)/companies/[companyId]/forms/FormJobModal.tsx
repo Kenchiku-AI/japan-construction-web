@@ -55,15 +55,17 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
     setShowDownloadAll(completedFiles.length > 1);
     setFiles(completedFiles.length ? completedFiles : formJob.files);
 
-    const {
-      summary,
-      missing_data,
-      recommendations
-    } = formJob.result_json.output;
+    if (formJob.result_json?.output) {
+      const {
+        summary,
+        missing_data,
+        recommendations
+      } = formJob.result_json.output;
 
-    setSummary(summary ?? "");
-    setMissingData(missing_data ?? []);
-    setRecommendations(recommendations ?? []);
+      setSummary(summary ?? "");
+      setMissingData(missing_data ?? []);
+      setRecommendations(recommendations ?? []);
+    }
   }, [formJob]);
 
   return (
