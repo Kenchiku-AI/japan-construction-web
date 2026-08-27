@@ -12,7 +12,7 @@ interface CreateFormJobModalProps {
   formJob?: FormJob
   isOpen: boolean;
   onClose: () => void;
-  onDownload: () => void;
+  onDownload: (fileId?: string) => void;
   onDelete: () => void;
 }
 
@@ -107,7 +107,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
                   <div
                     className="cursor-pointer hover:opacity-50"
                     onClick={() => {
-                      onDownload([file]);
+                      onDownload(file.id);
                     }}
                   >
                     <Download />

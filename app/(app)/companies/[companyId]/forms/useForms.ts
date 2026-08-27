@@ -57,8 +57,6 @@ export const useForms = (companyId?: string) => {
 
         if (!uploadResponse.ok) throw new Error();
 
-        console.log("CREATE RESPONSE ID", createResponse.id);
-
         pollFormJob(createResponse.id);
       } catch (err) {
         showModal({
@@ -135,7 +133,7 @@ export const useForms = (companyId?: string) => {
     }
   };
 
-  const downloadFiles = async (formJob: FormJob) => {
+  const downloadFiles = async (formJob: FormJob, fileId?: string) => {
     setLoading(true);
 
     try {
@@ -144,7 +142,7 @@ export const useForms = (companyId?: string) => {
       if (response) {
         const { files } = response;
 
-        if (files.length > 1) {
+        if (!fileId) {
           const zip = new JSZip();
 
           await Promise.all(
@@ -179,7 +177,11 @@ export const useForms = (companyId?: string) => {
 
           URL.revokeObjectURL(url);
         } else {
-          const file = files[0];
+          const file = files.find((f) => f.id === fileId);
+          if (!file) {
+            throw new Error();
+          }
+
           const link = document.createElement("a");
 
           link.href = file.download_url;

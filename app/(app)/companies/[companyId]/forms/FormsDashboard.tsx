@@ -15,7 +15,6 @@ import CreateFormJobModal from "./CreateFormJobModal";
 import FormJobModal from "./FormJobModal";
 import DeleteFormJobModal from "./DeleteFormJobModal";
 import { Loader } from "@/app/ui/Loader";
-import JSZip from "jszip";
 
 interface FormsDashboardProps {
   companyId: string;
@@ -81,10 +80,10 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
         onClose={() => {
           setShowFormJob(undefined);
         }}
-        onDownload={() => {
+        onDownload={(fileId) => {
           if (!showFormJob) return;
 
-          downloadFiles(showFormJob.id);
+          downloadFiles(showFormJob, fileId);
         }}
         onDelete={() => {
           if (!showFormJob) return;
