@@ -133,14 +133,16 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
           <Row label={t("recommendations")} value={recommendations} />
         )}
       </div>
-      <Button
-        variant="secondary"
-        iconLeft={() => <Trash />}
-        style={{ borderColor: errorColor1, height: 60, width: "100%" }}
-        textStyle={{ color: errorColor1 }}
-        label={t("delete")}
-        onClick={onDelete}
-      />
+      <div className="mt-4">
+        <Button
+          variant="secondary"
+          iconLeft={() => <Trash />}
+          style={{ borderColor: errorColor1, height: 60, width: "100%" }}
+          textStyle={{ color: errorColor1 }}
+          label={t("delete")}
+          onClick={onDelete}
+        />
+      </div>
     </Modal>
   );
 };
