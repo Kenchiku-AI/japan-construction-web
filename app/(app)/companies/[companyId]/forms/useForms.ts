@@ -5,6 +5,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
 import { FormJob, FormJobStatus } from "@/types";
+import JSZip from "jszip";
 
 export const useForms = (companyId?: string) => {
   const [loading, setLoading] = useState(false);
@@ -134,10 +135,78 @@ export const useForms = (companyId?: string) => {
     }
   };
 
+  const downloadFiles = async (formJob: FormJob) => {
+    setLoading(true);
+
+    try {
+      const response = await api.downloadFormJobFiles(formJob.id);
+
+      if (response) {
+        const { files } = response;
+
+        if (files.length > 1) {
+          const zip = new JSZip();
+
+          await Promise.all(
+            response.files.map(async (file) => {
+              const response = await fetch(file.download_url);
+
+              if (!response.ok) {
+                throw new Error(
+                  `Failed to download ${file.filename}: ${response.status}`
+                );
+              }
+
+              const blob = await response.blob();
+
+              zip.file(file.filename, blob);
+            })
+          );
+
+          const zipBlob = await zip.generateAsync({
+            type: "blob",
+          });
+
+          const url = URL.createObjectURL(zipBlob);
+
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `${formJob.name.replace(/ /g, "_").replace(/[()]/g, "")}.zip`;
+
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          URL.revokeObjectURL(url);
+        } else {
+          const file = files[0];
+          const link = document.createElement("a");
+
+          link.href = file.download_url;
+          link.download = file.filename;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      }
+    } catch (e) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
   return {
     loading,
     formJobs,
     createFormJob,
-    deleteFormJob
+    deleteFormJob,
+    downloadFiles
   };
 };

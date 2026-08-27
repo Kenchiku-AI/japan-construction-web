@@ -62,3 +62,15 @@ export type CreateFormJobResponse = {
   filename: string;
   created_at: string;
 }
+
+export type FormJobDownloadFile = {
+  id: string;
+  filename: string;
+  content_type: string;
+  download_url: string;
+}
+
+export type FormJobDownloadResponse = {
+  form_job_id: string;
+  files: FormJobDownloadFile[];
+}

@@ -67,6 +67,7 @@ import {
   FormJob,
   CreateFormJobRequest,
   CreateFormJobResponse,
+  FormJobDownloadResponse,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -604,6 +605,10 @@ export const useApiData = () => {
     async deleteFormJob(formJobId: string) {
       const url = `/form-jobs/${formJobId}`;
       return call(() => http.delete(url));
+    },
+    async downloadFormJobFiles(formJobId: string) {
+      const url = `/form-jobs/${formJobId}/download`;
+      return call(() => http.get<FormJobDownloadResponse>(url));
     },
   };
 

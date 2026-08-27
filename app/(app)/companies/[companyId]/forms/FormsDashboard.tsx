@@ -6,7 +6,7 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { Plus } from "@/app/ui/Icons";
 import { useApi } from "@/lib/api/ApiContext";
-import { FormJob, UserRole } from "@/types";
+import { FormJob, FormJobDownloadFile, UserRole } from "@/types";
 import FormsList from "./FormsList";
 import { redirect } from "next/navigation";
 import { cardClass } from "@/lib/constants";
@@ -15,6 +15,7 @@ import CreateFormJobModal from "./CreateFormJobModal";
 import FormJobModal from "./FormJobModal";
 import DeleteFormJobModal from "./DeleteFormJobModal";
 import { Loader } from "@/app/ui/Loader";
+import JSZip from "jszip";
 
 interface FormsDashboardProps {
   companyId: string;
@@ -23,7 +24,13 @@ interface FormsDashboardProps {
 const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
-  const { loading, formJobs, createFormJob, deleteFormJob } = useForms(companyId);
+  const {
+    loading,
+    formJobs,
+    createFormJob,
+    deleteFormJob,
+    downloadFiles
+  } = useForms(companyId);
   const [isCreateFormModalShown, setIsCreateFormModalShown] = useState(false);
   const [showFormJob, setShowFormJob] = useState<FormJob>();
   const [jobToDelete, setJobToDelete] = useState<FormJob>();
@@ -74,8 +81,10 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
         onClose={() => {
           setShowFormJob(undefined);
         }}
-        onDownload={(files) => {
+        onDownload={() => {
+          if (!showFormJob) return;
 
+          downloadFiles(showFormJob.id);
         }}
         onDelete={() => {
           if (!showFormJob) return;

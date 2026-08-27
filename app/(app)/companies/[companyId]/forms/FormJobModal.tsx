@@ -5,13 +5,14 @@ import Modal from "@/app/ui/Modal";
 import { Download, Form, Trash } from "@/app/ui/Icons";
 import { bgColor5, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { FormJob, FormJobFile } from "@/types";
+
 import Divider from "@/app/ui/Divider";
 
 interface CreateFormJobModalProps {
   formJob?: FormJob
   isOpen: boolean;
   onClose: () => void;
-  onDownload: (files: FormJobFile[]) => void;
+  onDownload: () => void;
   onDelete: () => void;
 }
 
@@ -65,9 +66,6 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
     setRecommendations(recommendations ?? []);
   }, [formJob]);
 
-  console.log("missing data", missingData);
-  console.log("recommendations", recommendations);
-
   return (
     <Modal
       isOpen={isOpen}
@@ -80,9 +78,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
             variant="tertiary"
             label={t("download_all")}
             iconLeft={() => <Download />}
-            onClick={() => {
-              onDownload(files);
-            }}
+            onClick={onDownload}
             style={{ height: "auto" }}
             textStyle={{
               fontWeight: "300",
