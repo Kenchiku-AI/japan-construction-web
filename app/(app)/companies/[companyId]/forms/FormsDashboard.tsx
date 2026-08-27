@@ -69,8 +69,18 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
         onClose={() => {
           setIsCreateFormModalShown(false);
         }}
-        onSubmit={(file, name, description) => {
-          createFormJob(file, name, description);
+        onSubmit={(
+          file,
+          name,
+          description,
+          projectId
+        ) => {
+          createFormJob(
+            file,
+            name,
+            description,
+            projectId
+          );
           setIsCreateFormModalShown(false);
         }}
       />

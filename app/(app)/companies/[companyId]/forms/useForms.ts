@@ -36,7 +36,7 @@ export const useForms = (companyId?: string) => {
       file: File,
       name: string,
       description: string,
-      projectId: string
+      projectId?: string
     ) => {
       if (!companyId) return;
 
