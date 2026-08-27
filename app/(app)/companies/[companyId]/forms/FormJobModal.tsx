@@ -98,8 +98,8 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
             <>
               {i > 0 && <Divider />}
               <div
-                className="flex justify-between items-center px-4"
-                style={{ height: 60 }}
+                className="flex justify-between items-center px-5"
+                style={{ minHeight: 60 }}
               >
                 <div className="flex gap-3">
                   <Form />
@@ -152,6 +152,7 @@ interface RowProps {
 
 const Row: FC<RowProps> = ({ label, value }) => (
   <>
+    <Divider />
     <div
       className="flex flex-1 items-center"
       style={{ minHeight: 50 }}
@@ -180,7 +181,6 @@ const Row: FC<RowProps> = ({ label, value }) => (
         </div>
       </div>
     </div>
-    <Divider />
   </>
 );
 
