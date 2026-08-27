@@ -74,7 +74,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
       onClose={onClose}
       title={title}
     >
-      <div className="my-8">
+      <div className="mt-6 mb-8">
         {showDownloadAll && (
           <Button
             variant="tertiary"
