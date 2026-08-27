@@ -24,9 +24,12 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [files, setFiles] = useState<FormJobFile[]>([]);
   const [status, setStatus] = useState("");
-  const [description, setDescription] = useState("");
+  const [summary, setSummary] = useState<string>("");
+  const [missingData, setMissingData] = useState<string[]>([]);
+  const [recommendations, setRecommendations] = useState<string[]>([]);
 
   const [showDownloadAll, setShowDownloadAll] = useState(false);
 
@@ -36,20 +39,30 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
         setTitle("");
         setFiles([]);
         setStatus("");
+        setSummary("");
+        setMissingData([]);
+        setRecommendations([]);
       }, 500);
       return;
     }
 
     setTitle(formJob.name);
     setStatus(t(formJob.status));
-
+    setDescription(formJob.description ?? "");
 
     const completedFiles = formJob.files.filter((f) => !f.is_input);
     setShowDownloadAll(completedFiles.length > 1);
     setFiles(completedFiles.length ? completedFiles : formJob.files);
-  }, [formJob]);
 
-  console.log("FORM JOB", formJob);
+    const {
+      summary,
+      missing_data,
+      recommendations
+    } = formJob.result_json.output;
+    setSummary(summary);
+    setMissingData(missing_data);
+    setRecommendations(recommendations);
+  }, [formJob]);
 
   return (
     <Modal
@@ -100,10 +113,19 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
           </>
         ))}
         <Divider />
-        <Row label={t("status")} value={status} />
-        <Divider />
         <Row label={t("description")} value={description} />
         <Divider />
+        <Row label={t("status")} value={status} />
+        <Divider />
+        {!!summary && (
+          <Row label={t("summary")} value={summary} />
+        )}
+        {!!missingData.length && (
+          <Row label={t("missing_data")} value={missingData} />
+        )}
+        {!!recommendations.length && (
+          <Row label={t("recommendations")} value={recommendations} />
+        )}
       </div>
       <Button
         variant="secondary"
@@ -119,7 +141,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
 
 interface RowProps {
   label: string;
-  value: string;
+  value: string | string[];
 }
 
 const Row: FC<RowProps> = ({ label, value }) => (
@@ -138,7 +160,15 @@ const Row: FC<RowProps> = ({ label, value }) => (
           {label}
         </div>
         <div style={{ color: fontColor1 }}>
-          {value}
+          {Array.isArray(value) ? (
+            <ul className="list-disc pl-5">
+              {value.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            value
+          )}
         </div>
       </div>
     </div>

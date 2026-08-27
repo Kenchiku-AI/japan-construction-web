@@ -30,8 +30,19 @@ export type FormJob = {
   origin: FormJobOrigin;
   error?: string;
   files: FormJobFile[];
+  result_json: FormJobResult;
   created_at: string;
   updated_at: string;
+}
+
+export type FormJobResult = {
+  output: FormJobResultOutput
+}
+
+export type FormJobResultOutput = {
+  summary: string;
+  missing_data: string[];
+  recommendations: string[];
 }
 
 export type CreateFormJobRequest = {
