@@ -51,7 +51,7 @@ export const useForms = (companyId?: string) => {
           content_type: file.type
         }
 
-        if (projectId) {
+        if (projectId && projectId !== "none") {
           request.project_id = projectId;
         }
 
