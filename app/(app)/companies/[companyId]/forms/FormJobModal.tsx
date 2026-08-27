@@ -59,9 +59,10 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
       missing_data,
       recommendations
     } = formJob.result_json.output;
-    setSummary(summary);
-    setMissingData(missing_data);
-    setRecommendations(recommendations);
+
+    setSummary(summary ?? "");
+    setMissingData(missing_data ?? []);
+    setRecommendations(recommendations ?? []);
   }, [formJob]);
 
   console.log("missing data", missingData);
