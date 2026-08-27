@@ -65,6 +65,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
   }, [formJob]);
 
   console.log("missing data", missingData);
+  console.log("recommendations", recommendations);
 
   return (
     <Modal
@@ -122,10 +123,10 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
         {!!summary && (
           <Row label={t("summary")} value={summary} />
         )}
-        {/* {!!missingData.length && (
+        {!!missingData.length && (
           <Row label={t("missing_data")} value={missingData} />
         )}
-        {!!recommendations.length && (
+        {/* {!!recommendations.length && (
           <Row label={t("recommendations")} value={recommendations} />
         )} */}
       </div>
