@@ -91,7 +91,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
           />
         )}
         <div
-          className="border rounded-xl"
+          className="border rounded-xl mb-6"
           style={{ borderColor: bgColor5 }}
         >
           {files.map((file, i) => (
@@ -99,7 +99,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
               {i > 0 && <Divider />}
               <div
                 className="flex justify-between items-center md:px-3"
-                style={{ height: 50 }}
+                style={{ height: 60 }}
               >
                 <div className="flex gap-3">
                   <Form />
@@ -132,7 +132,6 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
         {!!recommendations.length && (
           <Row label={t("recommendations")} value={recommendations} />
         )}
-        <Divider />
       </div>
       <Button
         variant="secondary"
