@@ -64,6 +64,8 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
     setRecommendations(recommendations);
   }, [formJob]);
 
+  console.log("missing data", missingData);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -120,12 +122,12 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
         {!!summary && (
           <Row label={t("summary")} value={summary} />
         )}
-        {!!missingData.length && (
+        {/* {!!missingData.length && (
           <Row label={t("missing_data")} value={missingData} />
         )}
         {!!recommendations.length && (
           <Row label={t("recommendations")} value={recommendations} />
-        )}
+        )} */}
       </div>
       <Button
         variant="secondary"
