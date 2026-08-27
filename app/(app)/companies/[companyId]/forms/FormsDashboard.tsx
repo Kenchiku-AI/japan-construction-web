@@ -14,6 +14,7 @@ import { useForms } from "./useForms";
 import CreateFormJobModal from "./CreateFormJobModal";
 import FormJobModal from "./FormJobModal";
 import DeleteFormJobModal from "./DeleteFormJobModal";
+import { Loader } from "@/app/ui/Loader";
 
 interface FormsDashboardProps {
   companyId: string;
@@ -94,6 +95,7 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
           setJobToDelete(undefined);
         }}
       />
+      {loading && <Loader />}
     </>
   );
 };
