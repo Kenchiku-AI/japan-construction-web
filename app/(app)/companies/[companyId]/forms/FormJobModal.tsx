@@ -115,20 +115,17 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
             </div>
           </>
         ))}
-        <Divider />
         <Row label={t("description")} value={description} />
-        <Divider />
         <Row label={t("status")} value={status} />
-        <Divider />
         {!!summary && (
           <Row label={t("summary")} value={summary} />
         )}
         {!!missingData.length && (
           <Row label={t("missing_data")} value={missingData} />
         )}
-        {/* {!!recommendations.length && (
+        {!!recommendations.length && (
           <Row label={t("recommendations")} value={recommendations} />
-        )} */}
+        )}
       </div>
       <Button
         variant="secondary"
@@ -148,34 +145,37 @@ interface RowProps {
 }
 
 const Row: FC<RowProps> = ({ label, value }) => (
-  <div
-    className="flex flex-1 items-center"
-    style={{ minHeight: 50 }}
-  >
-    <div className="md:px-3 flex flex-1">
-      <div>
-        <div
-          style={{
-            color: fontColor2,
-            fontSize: 12
-          }}
-        >
-          {label}
-        </div>
-        <div style={{ color: fontColor1 }}>
-          {Array.isArray(value) ? (
-            <ul className="list-disc pl-5">
-              {value.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          ) : (
-            value
-          )}
+  <>
+    <Divider />
+    <div
+      className="flex flex-1 items-center"
+      style={{ minHeight: 50 }}
+    >
+      <div className="md:px-3 flex flex-1">
+        <div>
+          <div
+            style={{
+              color: fontColor2,
+              fontSize: 12
+            }}
+          >
+            {label}
+          </div>
+          <div style={{ color: fontColor1 }}>
+            {Array.isArray(value) ? (
+              <ul className="list-disc pl-5">
+                {value.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              value
+            )}
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </>
 );
 
 export default FormJobModal;
