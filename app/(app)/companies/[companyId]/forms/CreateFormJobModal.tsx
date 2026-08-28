@@ -48,16 +48,6 @@ const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
     ]
   }, [currentUser?.projects]);
 
-
-  const reset = () => {
-    setTimeout(() => {
-      setFile(null);
-      setName("");
-      setDescription("");
-      setProjectId("");
-    }, 500);
-  };
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
 
@@ -86,13 +76,24 @@ const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
     return `${(size / (1024 * 1024)).toFixed(1)} MB`;
   };
 
+  const reset = () => {
+    setTimeout(() => {
+      removeFile();
+      setName("");
+      setDescription("");
+      setProjectId("");
+    }, 500);
+  };
+
+  const closeAndReset = () => {
+    onClose();
+    reset();
+  };
+
   return (
     <Modal
       isOpen={isOpen}
-      onClose={() => {
-        onClose();
-        reset();
-      }}
+      onClose={closeAndReset}
       title={t("upload_form")}
       subtitle={t("upload_form_description")}
       width={640}
@@ -176,12 +177,10 @@ const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
         disabled={!file || !name || !description}
         label={t("upload")}
         onClick={() => {
-          if (!file) {
-            return;
-          }
+          if (!file) return;
 
-          reset();
           onSubmit(file, name, description, projectId);
+          closeAndReset();
         }}
       />
     </Modal>
