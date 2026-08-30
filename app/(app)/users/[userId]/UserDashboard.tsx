@@ -51,7 +51,10 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const isEditDisabled = useMemo(() => {
     if (!user || !currentUser) return true;
 
-    if (currentUser.role === UserRole.Admin) return false;
+    if (
+      currentUser.role === UserRole.Admin ||
+      currentUser.role === UserRole.Manager
+    ) return false;
 
     return currentUser.id !== userId;
   }, [user, currentUser]);
