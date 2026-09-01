@@ -97,16 +97,14 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
         >
           {files.map((file, i) => (
             <>
-              {i > 0 && <Divider />}
+              {i > 0 && <Divider style={{ margin: 0 }} />}
               <div
                 className="flex justify-between items-center px-5"
                 style={{ minHeight: 60 }}
               >
-                <div className="flex gap-3">
+                <div className="flex gap-3 items-center">
                   <Form />
-                  <div>
-                    {file.filename}
-                  </div>
+                  {file.filename}
                 </div>
                 {!file.is_input && (
                   <div
