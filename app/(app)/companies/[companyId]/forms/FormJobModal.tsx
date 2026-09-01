@@ -169,7 +169,12 @@ const Row: FC<RowProps> = ({ label, value, hideLabel }) => (
           >
             {label}
           </div>
-          <div style={{ color: fontColor1 }}>
+          <div
+            style={{
+              color: fontColor1,
+              fontSize: 16
+            }}
+          >
             {Array.isArray(value) ? (
               value.length > 1 ? (
                 <ul className="list-disc pl-5">
