@@ -77,7 +77,7 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
     >
       <div className="mt-6 mb-8">
         {showDownloadAll && (
-          <div className="flex justify-end mb-3">
+          <div className="flex justify-end pb-4 pr-2">
             <Button
               variant="tertiary"
               label={t("download_all")}
