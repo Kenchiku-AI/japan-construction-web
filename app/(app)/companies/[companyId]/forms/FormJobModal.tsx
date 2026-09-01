@@ -77,17 +77,19 @@ const FormJobModal: FC<CreateFormJobModalProps> = ({
     >
       <div className="mt-6 mb-8">
         {showDownloadAll && (
-          <Button
-            variant="tertiary"
-            label={t("download_all")}
-            iconLeft={() => <Download />}
-            onClick={onDownload}
-            style={{ height: "auto" }}
-            textStyle={{
-              fontWeight: "300",
-            }}
-            iconOnlyMobile
-          />
+          <div className="flex justify-end mb-3">
+            <Button
+              variant="tertiary"
+              label={t("download_all")}
+              iconLeft={() => <Download />}
+              onClick={onDownload}
+              style={{ height: "auto" }}
+              textStyle={{
+                fontWeight: "300",
+              }}
+              iconOnlyMobile
+            />
+          </div>
         )}
         <div
           className="border rounded-xl mb-6"
