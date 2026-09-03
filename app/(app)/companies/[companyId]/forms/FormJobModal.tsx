@@ -80,7 +80,7 @@ const FormJobModal: FC<FormJobModalProps> = ({
       setMissingData(missing_data ?? []);
       setRecommendations(recommendations ?? []);
     }
-  }, [formJob, currentUser]);
+  }, [formJob, currentUser?.projects]);
 
   return (
     <Modal
