@@ -145,30 +145,40 @@ const CustomFieldDefinitionsListCell: FC<CustomFieldDefinitionsListCellProps> = 
           <div
             {...attributes}
             {...listeners}
-            className="cursor-grab active:cursor-grabbing md:mx-3 px-3 py-2 flex-1"
+            className="cursor-grab active:cursor-grabbing md:mx-3 px-3 py-2 flex-1 min-w-0"
           >
-            <div className="flex items-center justify-between">
-              <div
-                style={{ minHeight: 60, minWidth: 0 }}
-                className="flex items-center gap-3"
-              >
-                <div style={{ minWidth: 0 }}>
-                  <div className="flex items-center gap-3">
-                    <div style={{ color: fontColor1 }}>{item.name}</div>
-                    {fieldTypeLabel && (
-                      <>
-                        <div className={styles.subtitle}>•</div>
-                        <div className={styles.subtitle}>{fieldTypeLabel}</div>
-                      </>
-                    )}
+            <div
+              style={{ minHeight: 60 }}
+              className="flex items-center min-w-0"
+            >
+              <div className="min-w-0 w-full">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div
+                    className="truncate min-w-0"
+                    style={{ color: fontColor1 }}
+                  >
+                    {item.name}
                   </div>
-                  <div className={styles.subtitle}>{item.description}</div>
+
+                  {fieldTypeLabel && (
+                    <>
+                      <div className={`${styles.subtitle} shrink-0`}>•</div>
+                      <div className={`${styles.subtitle} truncate`}>
+                        {fieldTypeLabel}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <div className={`${styles.subtitle} truncate`}>
+                  {item.description}
                 </div>
               </div>
             </div>
           </div>
+
           <div
-            className="flex gap-4 items-center"
+            className="flex gap-4 items-center shrink-0"
             style={{ paddingRight: 20 }}
           >
             <div
@@ -177,7 +187,10 @@ const CustomFieldDefinitionsListCell: FC<CustomFieldDefinitionsListCellProps> = 
             >
               <Edit />
             </div>
-            <div className="cursor-pointer" onClick={onDelete}>
+            <div
+              className="cursor-pointer"
+              onClick={onDelete}
+            >
               <Trash />
             </div>
           </div>

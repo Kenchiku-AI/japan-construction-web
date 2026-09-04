@@ -134,7 +134,7 @@ const FormJobModal: FC<FormJobModalProps> = ({
             </>
           ))}
         </div>
-        <Row label={t("description")} value={description} hideLabel />
+        <Row label={t("description")} value={description} hideDivider />
         {!!projectName && (
           <Row label={t("project")} value={projectName} />
         )}
@@ -166,12 +166,12 @@ const FormJobModal: FC<FormJobModalProps> = ({
 interface RowProps {
   label: string;
   value: string | string[];
-  hideLabel?: boolean;
+  hideDivider?: boolean;
 }
 
-const Row: FC<RowProps> = ({ label, value, hideLabel }) => (
+const Row: FC<RowProps> = ({ label, value, hideDivider }) => (
   <>
-    {!hideLabel && <Divider />}
+    {!hideDivider && <Divider />}
     <div
       className="flex flex-1 items-center"
       style={{ minHeight: 50 }}
