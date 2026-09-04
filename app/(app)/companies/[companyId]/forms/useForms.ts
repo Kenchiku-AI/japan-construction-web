@@ -10,7 +10,7 @@ import JSZip from "jszip";
 export const useForms = (companyId?: string) => {
   const [loading, setLoading] = useState(false);
   const [formJobs, setFormJobs] = useState<FormJob[]>();
-  const { currentUser, ...api } = useApi();
+  const api = useApi();
   const { showModal } = useModal();
   const { t } = useTranslation();
 
