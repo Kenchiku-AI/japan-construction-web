@@ -9,6 +9,8 @@ import { CSSProperties, FC, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Multiselect.module.css";
 import { createPortal } from "react-dom";
 import { t } from "i18next";
+import { Button } from "../Button/Button";
+import { Edit } from "../Icons";
 
 interface MultiselectOption {
   value?: string | number;
@@ -23,6 +25,7 @@ interface MultiselectProps {
   error?: boolean;
   style?: CSSProperties;
   disabled?: boolean;
+  onEdit?: (value?: string | number) => void;
 }
 
 const Multiselect: FC<MultiselectProps> = ({
@@ -33,6 +36,7 @@ const Multiselect: FC<MultiselectProps> = ({
   error,
   style,
   disabled,
+  onEdit,
 }) => {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -219,19 +223,34 @@ const Multiselect: FC<MultiselectProps> = ({
             }}
           >
             {availableOptions.map((option, index) => (
-              <li
+              <div
                 key={option.value ?? `select_option_${index}`}
-                className="px-3 py-2 cursor-pointer text-sm hover:bg-black/5 rounded"
-                style={{
-                  color: option.value ? fontColor1 : fontColor2,
-                }}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  handleSelect(option);
-                }}
+                className="flex justify-between items-center"
               >
-                {option.label}
-              </li>
+                <li
+                  className="px-3 py-2 cursor-pointer text-sm hover:bg-black/5 rounded w-full"
+                  style={{
+                    color: option.value ? fontColor1 : fontColor2,
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleSelect(option);
+                  }}
+                >
+                  {option.label}
+
+                </li>
+                {!!onEdit && (
+                  <Button
+                    style={{ paddingLeft: 10, paddingRight: 10 }}
+                    variant="tertiary"
+                    iconLeft={() => <Edit />}
+                    onClick={() => {
+                      onEdit(option.value);
+                    }}
+                  />
+                )}
+              </div>
             ))}
 
             {availableOptions.length === 0 && (

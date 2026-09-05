@@ -1,12 +1,12 @@
 "use client";
 
 import { FC, useMemo, useState } from "react";
-import { Check, Close, Edit } from "../Icons";
+import { Check, Close, Edit, Plus } from "../Icons";
 import { errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
 import { Button } from "../Button/Button";
 import { FieldsListInput, FieldsListInputProps } from "@/app/(app)/custom-objects/[customObjectDefinitionId]/FieldsListInput";
-import { CustomFieldDataType, CustomFieldEntityType } from "@/types";
+import { CustomFieldDataType, CustomFieldEntityType, CustomRelationshipDefinition } from "@/types";
 
 type CustomFieldListCellProps = FieldsListInputProps & {
   onSubmit: () => void;
@@ -34,6 +34,9 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({
           onCancel={() => {
             setShowEdit(false);
             onCancel();
+          }}
+          onCreate={() => {
+
           }}
         />
       ) : (
@@ -142,11 +145,37 @@ const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
   )
 }
 
-const EditCustomFieldListCell: FC<CustomFieldListCellProps> = ({ onSubmit, onCancel, ...props }) => {
+type EditCustomFieldListCellProps = CustomFieldListCellProps & {
+  onCreate: () => void;
+}
+
+
+const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({ onSubmit, onCancel, onCreate, ...props }) => {
   const { t } = useTranslation();
+  const { definition } = props;
+
+  const isRelationshipWithObject = useMemo(() => {
+    const isRelationship = "target_entity_type" in definition;
+    if (!isRelationship) return false;
+
+    const relDef = (props.definition as CustomRelationshipDefinition);
+    return !!relDef.target_custom_object_definition_id;
+  }, [props.definition]);
 
   return (
     <div className="flex flex-col flex-1 h-full">
+      {isRelationshipWithObject &&
+        <div className="pb-3 pr-3 flex justify-end">
+          <Button
+            variant="tertiary"
+            label={t("create_object", { name: props.definition.name })}
+            iconLeft={() => <Plus />}
+            onClick={onCreate}
+            style={{ height: "auto" }}
+            iconOnlyMobile
+          />
+        </div>
+      }
       <FieldsListInput
         {...props}
       />

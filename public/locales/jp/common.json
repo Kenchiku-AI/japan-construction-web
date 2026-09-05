@@ -82,6 +82,7 @@
   "create_custom_user_field": "カスタムユーザー項目を作成",
   "create_field": "項目を作成",
   "create_new_guest": "新しいゲストを作成",
+  "create_object": "{{name}}を作成",
   "create_project": "新規プロジェクトを作成",
   "create_project_description": "新規プロジェクトを作成するために、プロジェクト名とプロジェクト詳細を入力してください。",
   "create_project_error_description": "プロジェクトの作成中にエラーが発生しました。",
