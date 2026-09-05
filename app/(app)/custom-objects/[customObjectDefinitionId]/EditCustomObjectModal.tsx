@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import {
   CustomFieldDataType,
+  CustomFieldEntityType,
   CustomObject,
   CustomObjectDefinitionDetail,
   CustomObjectsByDefinition,
@@ -20,6 +21,7 @@ interface EditCustomObjectModalProps {
   object?: CustomObject;
   projects: Project[];
   users: UserOrGuest[];
+  customObjects: CustomObject[];
   customObjectsByDefinition: CustomObjectsByDefinition;
   isOpen: boolean;
   onClose: () => void;
@@ -32,6 +34,7 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
   object,
   projects,
   users,
+  customObjects,
   customObjectsByDefinition,
   isOpen,
   onClose,
@@ -52,15 +55,52 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
     );
   }, [definition]);
 
-  useEffect(() => {
-    if (!object) return;
+  const getLabelValue = useCallback((object: CustomObject) => {
+    const labelRelationships = object.relationships.sort((a, b) => (
+      a.definition.sort_order - b.definition.sort_order
+    ));
+    const relationshipIndex = labelRelationships?.[0].definition.sort_order ?? 99999;
 
     const labelFields = object.fields?.filter((f) => (
-      f.definition.data_type === CustomFieldDataType.Text
+      f.definition.data_type !== CustomFieldDataType.Boolean
     )).sort((a, b) => (
       a.definition.sort_order - b.definition.sort_order
     ));
-    const labelValue = labelFields?.[0]?.value;
+    const fieldIndex = labelFields?.[0].definition.sort_order ?? 99999;
+
+    if (fieldIndex < relationshipIndex) {
+      return labelFields[0].value;
+    }
+
+    const relationship = labelRelationships[0];
+    const entityType = relationship.definition.target_entity_type;
+
+    if (entityType === CustomFieldEntityType.Project) {
+      const project = projects.find((p) => p.id === relationship.target_entity_id);
+      return project?.name;
+    }
+
+    if (entityType === CustomFieldEntityType.User) {
+      const user = users.find((u) => u.id === relationship.target_entity_id);
+      if (!user) return '';
+
+      return `${user.last_name} ${user.first_name}`;
+    }
+
+    if (entityType === CustomFieldEntityType.CustomObject) {
+      const customObject = customObjects.find((c) => c.id === relationship.target_entity_id);
+      if (!customObject) return '';
+
+      return getLabelValue(customObject);
+    }
+
+    return '';
+  }, [customObjects, projects, users]);
+
+  useEffect(() => {
+    if (!object) return;
+
+    const labelValue = getLabelValue(object);
     const name = labelValue ?? object.definition.name;
     setTitle(t("edit_custom_object_modal_title", { name }));
 

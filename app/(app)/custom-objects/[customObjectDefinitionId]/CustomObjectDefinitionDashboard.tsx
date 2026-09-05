@@ -374,6 +374,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
         object={editObject}
         projects={projects}
         users={users}
+        customObjects={customObjects}
         customObjectsByDefinition={customObjectsByDefinition}
         isOpen={!!editObject}
         onClose={() => {
