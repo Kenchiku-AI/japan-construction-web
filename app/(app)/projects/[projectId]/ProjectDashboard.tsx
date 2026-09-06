@@ -284,7 +284,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
 
                   }}
                   onEditRelationshipObject={(value) => {
-
+                    const objects = Object.values(customObjectsByDefinition).map((o) => o.objects).flat();
+                    console.log("OBJECTS", objects);
                   }}
                   isEditable={isEditable}
                 />
