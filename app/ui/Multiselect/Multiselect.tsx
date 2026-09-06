@@ -226,6 +226,9 @@ const Multiselect: FC<MultiselectProps> = ({
               <div
                 key={option.value ?? `select_option_${index}`}
                 className="flex justify-between items-center"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                }}
               >
                 <li
                   className="px-3 py-2 cursor-pointer text-sm hover:bg-black/5 rounded w-full"
@@ -233,12 +236,10 @@ const Multiselect: FC<MultiselectProps> = ({
                     color: option.value ? fontColor1 : fontColor2,
                   }}
                   onMouseDown={(e) => {
-                    e.preventDefault();
                     handleSelect(option);
                   }}
                 >
                   {option.label}
-
                 </li>
                 {!!onEdit && (
                   <Button
