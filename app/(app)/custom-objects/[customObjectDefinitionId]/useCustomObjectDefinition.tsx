@@ -62,12 +62,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     const needsUsers = !users.length && relationships.find((r) => (
       r.target_entity_type === CustomFieldEntityType.User
     ));
-    if (needsUsers) {
-      getUsers();
-    }
-
-    console.log("relationshipsRef", relationshipsRef.current);
-    console.log("RELATIONSHIPS", relationships);
+    if (needsUsers) getUsers();
 
     const needsObjects = relationshipsRef.current.length < relationships.length;
     if (needsObjects) {
