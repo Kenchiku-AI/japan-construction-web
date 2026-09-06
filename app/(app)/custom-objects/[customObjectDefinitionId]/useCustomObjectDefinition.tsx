@@ -197,7 +197,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
   }, [customObjectDefinition?.company_id]);
 
   const getCustomObjectsByDefinitionId = useCallback(async () => {
-    console.log("getting custom object definitions by id");
+    console.log("getting custom objects for definition...", customObjectDefinition);
     const company_id = customObjectDefinition?.company_id;
     if (!company_id) return;
 
