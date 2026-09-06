@@ -42,6 +42,10 @@ export const useCompany = (companyId: string) => {
 
     const targetIds = relationshipDefs.map((r) => r.target_custom_object_definition_id);
     const definitionIds = targetIds.filter((id) => id != null);
+
+    console.log("relationship defs", relationshipDefs);
+    console.log("DEFINITION IDS", definitionIds);
+
     if (!!definitionIds.length) {
       getCustomObjectsByDefinitionId(company.id, definitionIds);
     }
