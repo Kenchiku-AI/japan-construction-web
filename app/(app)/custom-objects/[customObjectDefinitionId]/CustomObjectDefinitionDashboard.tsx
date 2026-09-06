@@ -95,8 +95,8 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
         ) : (
           <div>
             {customObjects.map((object, i) => {
-              const objects = customObjectsByDefinition[object.definition.id].objects;
-              const labelValue = objects.find((o) => o.id === object.id)?.name;
+              const objects = customObjectsByDefinition?.[object.definition.id].objects;
+              const labelValue = objects?.find((o) => o.id === object.id)?.name;
               const label = labelValue ?? object.definition.name;
 
               return (
