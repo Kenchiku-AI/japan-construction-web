@@ -197,17 +197,18 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
   }, [customObjectDefinition?.company_id]);
 
   const getCustomObjectsByDefinitionId = useCallback(async () => {
-    console.log("getting custom objects for definition...", customObjectDefinition);
     const company_id = customObjectDefinition?.company_id;
     if (!company_id) return;
 
     const targetIds = customObjectDefinition.relationships.map((r) => r.target_custom_object_definition_id);
-    const definition_ids = targetIds.filter((id) => id != null);
+    let definition_ids = targetIds.filter((id) => id != null);
 
-    console.log("target ids", targetIds);
-    console.log("definition ids", definition_ids);
-
-    if (!definition_ids.length) return;
+    if (!definition_ids.includes(customObjectDefinition.id)) {
+      definition_ids = [
+        ...definition_ids,
+        customObjectDefinition.id
+      ];
+    }
 
     try {
       const request = { company_id, definition_ids };
