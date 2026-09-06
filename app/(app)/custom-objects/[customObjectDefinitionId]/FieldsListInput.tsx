@@ -13,7 +13,7 @@ export interface FieldsListInputProps {
   customObjectsByDefinition: CustomObjectsByDefinition;
   onFieldChange: (value: string) => void;
   onRelationshipChange: (values: string[]) => void;
-  onRelationshipEdit?: (value: string) => void;
+  onEditRelationshipObject?: (value: string) => void;
 }
 
 export const FieldsListInput: FC<FieldsListInputProps> = ({
@@ -25,7 +25,7 @@ export const FieldsListInput: FC<FieldsListInputProps> = ({
   customObjectsByDefinition,
   onFieldChange,
   onRelationshipChange,
-  onRelationshipEdit
+  onEditRelationshipObject
 }) => {
   if ("target_entity_type" in definition) {
     return (
@@ -36,7 +36,7 @@ export const FieldsListInput: FC<FieldsListInputProps> = ({
         customObjectsByDefinition={customObjectsByDefinition}
         value={relationships?.[definition.id]}
         onChange={onRelationshipChange}
-        onEdit={onRelationshipEdit}
+        onEdit={onEditRelationshipObject}
       />
     )
   }

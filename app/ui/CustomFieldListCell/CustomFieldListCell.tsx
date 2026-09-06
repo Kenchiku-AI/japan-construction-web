@@ -11,12 +11,16 @@ import { CustomFieldDataType, CustomFieldEntityType, CustomRelationshipDefinitio
 type CustomFieldListCellProps = FieldsListInputProps & {
   onSubmit: () => void;
   onCancel: () => void;
+  onCreateRelationshipObject?: () => void;
+  onEditRelationshipObject?: (value: string) => void;
   isEditable?: boolean;
 }
 
 const CustomFieldListCell: FC<CustomFieldListCellProps> = ({
   onSubmit,
   onCancel,
+  onCreateRelationshipObject,
+  onEditRelationshipObject,
   isEditable = true,
   ...props
 }) => {
@@ -35,9 +39,8 @@ const CustomFieldListCell: FC<CustomFieldListCellProps> = ({
             setShowEdit(false);
             onCancel();
           }}
-          onCreate={() => {
-
-          }}
+          onCreateRelationshipObject={onCreateRelationshipObject}
+          onEditRelationshipObject={onEditRelationshipObject}
         />
       ) : (
         <CustomFieldListLabel
@@ -146,11 +149,18 @@ const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
 }
 
 type EditCustomFieldListCellProps = CustomFieldListCellProps & {
-  onCreate: () => void;
+  onCreateRelationshipObject?: () => void;
+  onEditRelationshipObject?: (value: string) => void;
 }
 
 
-const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({ onSubmit, onCancel, onCreate, ...props }) => {
+const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({
+  onSubmit,
+  onCancel,
+  onCreateRelationshipObject,
+  onEditRelationshipObject,
+  ...props
+}) => {
   const { t } = useTranslation();
   const { definition } = props;
 
@@ -170,7 +180,7 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({ onSubmit, o
             variant="tertiary"
             label={t("create_object", { name: props.definition.name })}
             iconLeft={() => <Plus />}
-            onClick={onCreate}
+            onClick={onCreateRelationshipObject}
             style={{ height: "auto" }}
             iconOnlyMobile
           />
@@ -178,9 +188,7 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({ onSubmit, o
       }
       <FieldsListInput
         {...props}
-        onRelationshipEdit={() => {
-
-        }}
+        onEditRelationshipObject={onEditRelationshipObject}
       />
       <div
         style={{

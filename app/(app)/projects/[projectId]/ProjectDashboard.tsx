@@ -276,6 +276,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   onSubmit={() => {
                     updateCustomField(item.id);
                   }}
+                  onCreateRelationshipObject={() => {
+
+                  }}
+                  onEditRelationshipObject={(value) => {
+                    console.log("EDIT RELATIONSHIP", value);
+                  }}
                   isEditable={isEditable}
                 />
               </div>
