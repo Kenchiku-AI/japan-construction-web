@@ -54,7 +54,7 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
   useEffect(() => {
     if (!object) return;
 
-    const objects = customObjectsByDefinition?.[object.definition.id].objects;
+    const objects = customObjectsByDefinition?.[object.definition.id]?.objects;
     const labelValue = objects?.find((o) => o.id === object.id)?.name;
     const name = labelValue ?? object.definition.name;
     setTitle(t("edit_custom_object_modal_title", { name }));
