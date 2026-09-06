@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CustomObjectDefinition } from "@/types";
 import styles from "./page.module.css";
-import { Cube, Cubes, DownChevron, RightChevron, UpChevron } from "@/app/ui/Icons";
+import { Cube, DownChevron, RightChevron, UpChevron } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
 import { Button } from "@/app/ui/Button/Button";
 import { buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
@@ -55,7 +55,7 @@ const CustomObjectsList: FC<CustomObjectsListProps> = ({
                     className="flex flex-1 items-center gap-4 py-1"
                   >
                     <div className="hidden md:block">
-                      <Cubes />
+                      <Cube />
                     </div>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ color: fontColor1 }}>{object.name}</div>

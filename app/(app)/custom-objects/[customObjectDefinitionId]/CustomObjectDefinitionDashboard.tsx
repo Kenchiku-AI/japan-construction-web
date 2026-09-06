@@ -82,12 +82,18 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
     ));
     const fieldIndex = labelFields?.[0].definition.sort_order ?? 99999;
 
+    console.log("RElationship index", relationshipIndex);
+    console.log("FIELD INDex", fieldIndex);
+
     if (fieldIndex < relationshipIndex) {
       return labelFields[0].value;
     }
 
     const relationship = labelRelationships[0];
     const entityType = relationship.definition.target_entity_type;
+
+    console.log("relationship", relationship);
+
 
     if (entityType === CustomFieldEntityType.Project) {
       const project = projects.find((p) => p.id === relationship.target_entity_id);
