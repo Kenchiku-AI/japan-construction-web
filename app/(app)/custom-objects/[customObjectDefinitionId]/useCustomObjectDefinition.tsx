@@ -67,6 +67,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
     }
 
     console.log("relationshipsRef", relationshipsRef.current);
+    console.log("RELATIONSHIPS", relationships);
 
     const needsObjects = relationshipsRef.current.length < relationships.length;
     if (needsObjects) {
