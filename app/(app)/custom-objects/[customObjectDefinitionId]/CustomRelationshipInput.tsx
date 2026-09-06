@@ -18,6 +18,7 @@ interface CustomRelationshipInputProps {
   customObjectsByDefinition: CustomObjectsByDefinition;
   value?: string[];
   onChange: (value: string[]) => void;
+  onEdit?: (value: string) => void;
 }
 
 const CustomRelationshipInput: FC<CustomRelationshipInputProps> = ({
@@ -26,7 +27,8 @@ const CustomRelationshipInput: FC<CustomRelationshipInputProps> = ({
   users,
   customObjectsByDefinition,
   value,
-  onChange
+  onChange,
+  onEdit
 }) => {
   const options = useMemo(() => {
     const entityType = definition.target_entity_type;
@@ -71,6 +73,7 @@ const CustomRelationshipInput: FC<CustomRelationshipInputProps> = ({
       values={value?.filter((v) => v != null) ?? []}
       options={options}
       onChange={onChange}
+      onEdit={onEdit}
     />
   )
 }

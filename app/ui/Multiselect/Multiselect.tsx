@@ -25,7 +25,7 @@ interface MultiselectProps {
   error?: boolean;
   style?: CSSProperties;
   disabled?: boolean;
-  onEdit?: (value?: string | number) => void;
+  onEdit?: (value: string) => void;
 }
 
 const Multiselect: FC<MultiselectProps> = ({
@@ -246,7 +246,7 @@ const Multiselect: FC<MultiselectProps> = ({
                     variant="tertiary"
                     iconLeft={() => <Edit />}
                     onClick={() => {
-                      onEdit(option.value);
+                      onEdit(option.value as string);
                     }}
                   />
                 )}

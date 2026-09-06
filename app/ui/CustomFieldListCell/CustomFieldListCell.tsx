@@ -178,6 +178,9 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({ onSubmit, o
       }
       <FieldsListInput
         {...props}
+        onRelationshipEdit={() => {
+
+        }}
       />
       <div
         style={{
