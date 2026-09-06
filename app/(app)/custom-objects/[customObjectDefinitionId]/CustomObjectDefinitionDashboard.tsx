@@ -96,8 +96,8 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           <div>
             {customObjects.map((object, i) => {
               const objects = customObjectsByDefinition?.[object.definition.id]?.objects;
-              const labelValue = objects?.find((o) => o.id === object.id)?.name;
-              const label = labelValue ?? object.definition.name;
+              const formattedObject = objects?.find((o) => o.id === object.id);
+              const label = formattedObject?.name ?? object.definition.name;
 
               return (
                 <div key={object.id}>
@@ -118,7 +118,10 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
                             <Cube />
                           </div>
                           <div style={{ minWidth: 0 }}>
-                            <div style={{ color: labelValue ? fontColor1 : fontColor2 }}>{label}</div>
+                            <div style={{ color: !formattedObject ? fontColor2 : fontColor1 }}>{label}</div>
+                            {!!formattedObject?.subtitle && (
+                              <div className={styles.subtitle}>{formattedObject.subtitle}</div>
+                            )}
                           </div>
                         </div>
                       </div>

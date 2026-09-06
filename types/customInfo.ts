@@ -118,6 +118,7 @@ export type CustomObject = {
 export interface CustomObjectListItem {
   id: string;
   name: string;
+  subtitle?: string;
 }
 
 export interface CustomObjectsByDefinitionItem {
