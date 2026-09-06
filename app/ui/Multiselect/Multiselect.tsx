@@ -248,6 +248,7 @@ const Multiselect: FC<MultiselectProps> = ({
                     iconLeft={() => <Edit />}
                     onClick={() => {
                       onEdit(option.value as string);
+                      setOpen(false);
                     }}
                   />
                 )}
