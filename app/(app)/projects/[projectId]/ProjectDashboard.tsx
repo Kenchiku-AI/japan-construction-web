@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { CompanyGuest, UserRole, Conversation, ConversationItem, CreateConversationItemRequest, ProjectStatus } from "@/types";
+import { CompanyGuest, UserRole, Conversation, ConversationItem, CreateConversationItemRequest, ProjectStatus, CustomObject } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Archive, Check, Close, Edit, Plus, Trash } from "@/app/ui/Icons";
@@ -32,6 +32,7 @@ import UnarchiveProjectModal from "./UnarchiveProjectModal";
 import ArchiveProjectModal from "./ArchiveProjectModal";
 import DeleteProjectModal from "./DeleteProjectModal";
 import CustomFieldListCell from "@/app/ui/CustomFieldListCell/CustomFieldListCell";
+import EditCustomObjectModal from "../../custom-objects/[customObjectDefinitionId]/EditCustomObjectModal";
 // import DownloadExcelModal from "../../reports/DownloadExcelModal";
 // import { useExport } from "../../reports/useExport";
 
@@ -70,6 +71,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     customObjectsByDefinition,
     updateCustomField,
     resetCustomField,
+    updateCustomObject,
     projects,
   } = useProject(projectId);
   const { conversationItemTypes } = useConversationItemTypes(project?.company_id);
@@ -83,6 +85,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [conversationCreatedCode, setConversationCreatedCode] = useState("");
   const [editConversation, setEditConversation] = useState<Conversation>();
   const [conversationToDelete, setConversationToDelete] = useState<Conversation>();
+  const [editObject, setEditObject] = useState<CustomObject>();
+  const [deleteObject, setDeleteObject] = useState<CustomObject>();
   const [showCreateConversationItem, setShowCreateConversationItem] = useState<{ id: string, name: string }>();
   const [editConversationItem, setEditConversationItem] = useState<{ item: ConversationItem, typeName: string }>();
   const [conversationItemToDelete, setConversationItemToDelete] = useState<ConversationItem>();
@@ -280,7 +284,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
 
                   }}
                   onEditRelationshipObject={(value) => {
-                    console.log("EDIT RELATIONSHIP", value);
+
                   }}
                   isEditable={isEditable}
                 />
@@ -514,6 +518,35 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
 
           removeGuest(guestToRemove);
           setGuestToRemove(undefined);
+        }}
+      />
+      <EditCustomObjectModal
+        definition={editObject?.definition}
+        object={editObject}
+        projects={projects}
+        users={[
+          ...companyUsers,
+          ...projectGuests
+        ]}
+        customObjectsByDefinition={customObjectsByDefinition}
+        isOpen={!!editObject}
+        onClose={() => {
+          setEditObject(undefined);
+        }}
+        onSubmit={(fields, relationships) => {
+          if (!editObject) return;
+
+          const request = {
+            custom_object_definition_id: editObject.definition.id,
+            fields,
+            relationships
+          };
+
+          updateCustomObject(editObject.id, request);
+        }}
+        onDelete={() => {
+          setDeleteObject(editObject);
+          setEditObject(undefined);
         }}
       />
       <CreateConversationItemModal

@@ -17,6 +17,7 @@ import {
   ProjectConversationItems,
   UpdateConversationItemRequest,
   UpdateConversationRequest,
+  UpdateCustomObjectRequest,
   UpdateProjectRequest,
   UserRole,
 } from "@/types";
@@ -392,6 +393,25 @@ export const useProject = (projectId: string) => {
     [api],
   );
 
+  const updateCustomObject = useCallback(async (objectId: string, request: UpdateCustomObjectRequest) => {
+    setLoading(true);
+
+    try {
+      const response = await api.updateCustomObject(objectId, request);
+
+      if (response) {
+        getProject(projectId);
+      }
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  }, [projectId]);
+
   const updateConversationItem = useCallback(
     async (conversationItemId: string, request: UpdateConversationItemRequest) => {
       setLoading(true);
@@ -643,6 +663,7 @@ export const useProject = (projectId: string) => {
     customObjectsByDefinition,
     updateCustomField,
     resetCustomField,
+    updateCustomObject,
     projects
   };
 };

@@ -15,7 +15,7 @@ import { Check, Trash } from "@/app/ui/Icons";
 import { FieldsListInput } from "./FieldsListInput";
 
 interface EditCustomObjectModalProps {
-  definition: CustomObjectDefinitionDetail;
+  definition?: CustomObjectDefinitionDetail;
   object?: CustomObject;
   projects: Project[];
   users: UserOrGuest[];
@@ -43,6 +43,8 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
   const [relationships, setRelationships] = useState<Record<string, string[]>>({});
 
   const fieldDefinitions = useMemo(() => {
+    if (!definition) return [];
+
     return [
       ...definition.fields,
       ...definition.relationships
@@ -61,16 +63,16 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
 
     const newFields: Record<string, string> = {};
     object.fields.forEach((f) => {
-      const definitionHasField = definition.fields.some((df) => df.id === f.definition.id);
-      if (definitionHasField && !!f.value) newFields[f.definition.id] = f.value;
+      const definitionHasField = definition?.fields.some((df) => df.id === f.definition.id);
+      if (!!definitionHasField && !!f.value) newFields[f.definition.id] = f.value;
     });
     setFields(newFields);
 
     const newRelationships: Record<string, string[]> = {};
     object.relationships.forEach((r) => {
-      const definitionHasRelationship = definition.relationships.some((dr) => dr.id === r.definition.id);
+      const definitionHasRelationship = definition?.relationships.some((dr) => dr.id === r.definition.id);
 
-      if (definitionHasRelationship) {
+      if (!!definitionHasRelationship) {
         newRelationships[r.definition.id] = [
           ...(newRelationships?.[r.definition.id] ?? []),
           r.target_entity_id as string
