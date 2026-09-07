@@ -71,10 +71,6 @@ export const useProject = (projectId: string) => {
 
     try {
       object = await api.getCustomObject(customObjectId);
-      if (!object) throw new Error();
-
-      const definition = await api.getCustomObjectDefinition(object.definition.id);
-      object.definition = definition;
     } catch (err) {
       showModal({
         title: t("error"),
