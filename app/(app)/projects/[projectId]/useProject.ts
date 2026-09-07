@@ -193,6 +193,9 @@ export const useProject = (projectId: string) => {
         r.target_entity_id as string
       ];
     });
+
+    console.log("setting relationships", newRelationships);
+
     setCustomRelationships(newRelationships);
   }, [project?.custom_fields, project?.custom_relationships]);
 
@@ -460,9 +463,6 @@ export const useProject = (projectId: string) => {
 
     try {
       const oldFields = { ...customFields };
-
-      console.log("OLD RELATIONSHIPS", customRelationships);
-
       const oldRelationships = { ...customRelationships };
       const response = await api.updateCustomObject(objectId, request);
 
@@ -471,6 +471,9 @@ export const useProject = (projectId: string) => {
 
         // Restore fields and relationships in case editing was in progress
         setCustomFields(oldFields);
+
+        console.log("OLD RELATIONSHIPS", oldRelationships);
+
         setCustomRelationships(oldRelationships);
       }
     } catch (err) {
