@@ -132,13 +132,6 @@ const Multiselect: FC<MultiselectProps> = ({
     onChange?.(values.filter((v) => v !== value));
   };
 
-  const getLabelColor = (value?: string | number) => {
-    const isSelected = selectedOptions.some((o) => o.value === value);
-    if (isSelected) return fontColor2;
-
-    return value ? fontColor1 : fontColor2;
-  };
-
   const hasValues = values.length > 0;
 
   return (
@@ -232,6 +225,8 @@ const Multiselect: FC<MultiselectProps> = ({
             }}
           >
             {availableOptions.map((option, index) => {
+              const isSelected = selectedOptions.some((o) => o.value === option.value);
+
               return (
                 <div
                   key={option.value ?? `select_option_${index}`}
@@ -241,9 +236,9 @@ const Multiselect: FC<MultiselectProps> = ({
                   }}
                 >
                   <li
-                    className="px-3 py-2 cursor-pointer text-sm hover:bg-black/5 rounded w-full"
+                    className={`px-3 py-2 text-sm rounded w-full ${isSelected ? "" : "cursor-pointer hover:bg-black/5"}`}
                     style={{
-                      color: getLabelColor(option.value),
+                      color: isSelected ? fontColor2 : (option.value ? fontColor1 : fontColor2),
                     }}
                     onMouseDown={(e) => {
                       handleSelect(option);
