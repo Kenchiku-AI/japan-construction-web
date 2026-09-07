@@ -12,6 +12,7 @@ import {
   CreateConversationRequest,
   CreateReportRequest,
   CustomFieldEntityType,
+  CustomObject,
   CustomObjectsByDefinition,
   Project,
   ProjectConversationItems,
@@ -63,6 +64,23 @@ export const useProject = (projectId: string) => {
       getCustomObjectsByDefinitionId(project.company_id, definitionIds);
     }
   }, [project?.custom_relationships]);
+
+  const getCustomObject = async (customObjectId: string) => {
+    let object: CustomObject | undefined;
+    setLoading(true);
+
+    try {
+      object = await api.getCustomObject(customObjectId);
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+    return object;
+  };
 
   const getCustomObjectsByDefinitionId = async (company_id: string, definition_ids: string[]) => {
     try {
@@ -654,6 +672,7 @@ export const useProject = (projectId: string) => {
     createConversationItem,
     updateConversationItem,
     deleteConversationItem,
+    getCustomObject,
     deleteProject,
     customFieldDefinitions,
     customFields,

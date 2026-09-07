@@ -54,6 +54,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     getCompanyGuests,
     companyUsers,
     getCompanyUsers,
+    getCustomObject,
     inviteGuest,
     removeGuest,
     createConversation,
@@ -283,9 +284,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   onCreateRelationshipObject={() => {
 
                   }}
-                  onEditRelationshipObject={(value) => {
-                    const objects = Object.values(customObjectsByDefinition).map((o) => o.objects).flat();
-                    console.log("OBJECTS", objects);
+                  onEditRelationshipObject={async (value) => {
+                    const object = await getCustomObject(value);
+                    setEditObject(object);
                   }}
                   isEditable={isEditable}
                 />
