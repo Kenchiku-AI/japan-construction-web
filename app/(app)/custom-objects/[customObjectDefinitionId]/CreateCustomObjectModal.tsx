@@ -57,7 +57,7 @@ const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={closeAndReset}
-      title={t("create_custom_object_modal_title", { name: definition.name })}
+      title={definition ? t("create_custom_object_modal_title", { name: definition.name }) : t("create")}
     >
       <div className="my-8 flex flex-col">
         {fieldDefinitions.map((definition, i) => (
