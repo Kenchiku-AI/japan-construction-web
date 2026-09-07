@@ -45,6 +45,7 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
   const fieldDefinitions = useMemo(() => {
     if (!definition) return [];
 
+
     return [
       ...definition.fields,
       ...definition.relationships
@@ -60,6 +61,8 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
     const labelValue = objects?.find((o) => o.id === object.id)?.name;
     const name = labelValue ?? object.definition.name;
     setTitle(t("edit_custom_object_modal_title", { name }));
+
+    console.log("OBJECT", object);
 
     const newFields: Record<string, string> = {};
     object.fields.forEach((f) => {

@@ -51,12 +51,14 @@ const Multiselect: FC<MultiselectProps> = ({
   }, [values, options]);
 
   const availableOptions = useMemo(() => {
+    if (!!onEdit) return options;
+
     return options.filter(
       (option) =>
         option.value === undefined ||
         !values.includes(String(option.value)),
     );
-  }, [values, options]);
+  }, [values, options, onEdit]);
 
   const backgroundColor = useMemo(() => {
     if (error) return errorColor2;
