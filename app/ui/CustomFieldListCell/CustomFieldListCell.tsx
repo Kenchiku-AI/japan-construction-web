@@ -11,8 +11,8 @@ import { CustomFieldDataType, CustomFieldEntityType, CustomRelationshipDefinitio
 type CustomFieldListCellProps = FieldsListInputProps & {
   onSubmit: () => void;
   onCancel: () => void;
-  onCreateRelationshipObject?: () => void;
-  onEditRelationshipObject?: (value: string) => void;
+  onCreateRelationshipObject?: (definitionId: string) => void;
+  onEditRelationshipObject?: (objectId: string) => void;
   isEditable?: boolean;
 }
 
@@ -149,8 +149,8 @@ const CustomFieldListLabel: FC<CustomFieldListLabelProps> = ({
 }
 
 type EditCustomFieldListCellProps = CustomFieldListCellProps & {
-  onCreateRelationshipObject?: () => void;
-  onEditRelationshipObject?: (value: string) => void;
+  onCreateRelationshipObject?: (definitionId: string) => void;
+  onEditRelationshipObject?: (objectId: string) => void;
 }
 
 
@@ -180,7 +180,9 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({
             variant="tertiary"
             label={t("create_object", { name: props.definition.name })}
             iconLeft={() => <Plus />}
-            onClick={onCreateRelationshipObject}
+            onClick={() => {
+              onCreateRelationshipObject?.(props.definition.id);
+            }}
             style={{ height: "auto" }}
             iconOnlyMobile
           />

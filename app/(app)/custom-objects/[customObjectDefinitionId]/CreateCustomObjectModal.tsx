@@ -12,7 +12,7 @@ import Divider from "@/app/ui/Divider";
 import { FieldsListInput } from "./FieldsListInput";
 
 interface CreateCustomObjectModalProps {
-  definition: CustomObjectDefinitionDetail;
+  definition?: CustomObjectDefinitionDetail;
   projects: Project[];
   users: UserOrGuest[];
   customObjectsByDefinition: CustomObjectsByDefinition;
@@ -35,6 +35,8 @@ const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
   const [relationships, setRelationships] = useState<Record<string, string[]>>({});
 
   const fieldDefinitions = useMemo(() => {
+    if (!definition) return [];
+
     return [
       ...definition.fields,
       ...definition.relationships

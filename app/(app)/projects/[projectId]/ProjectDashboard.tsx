@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { CompanyGuest, UserRole, Conversation, ConversationItem, CreateConversationItemRequest, ProjectStatus, CustomObject } from "@/types";
+import { CompanyGuest, UserRole, Conversation, ConversationItem, CreateConversationItemRequest, ProjectStatus, CustomObject, CustomObjectDefinition, CustomObjectDefinitionDetail } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProject } from "./useProject";
 import { Archive, Check, Close, Edit, Plus, Trash } from "@/app/ui/Icons";
@@ -33,6 +33,7 @@ import ArchiveProjectModal from "./ArchiveProjectModal";
 import DeleteProjectModal from "./DeleteProjectModal";
 import CustomFieldListCell from "@/app/ui/CustomFieldListCell/CustomFieldListCell";
 import EditCustomObjectModal from "../../custom-objects/[customObjectDefinitionId]/EditCustomObjectModal";
+import CreateCustomObjectModal from "../../custom-objects/[customObjectDefinitionId]/CreateCustomObjectModal";
 // import DownloadExcelModal from "../../reports/DownloadExcelModal";
 // import { useExport } from "../../reports/useExport";
 
@@ -54,7 +55,9 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     getCompanyGuests,
     companyUsers,
     getCompanyUsers,
+    createCustomObject,
     getCustomObject,
+    getCustomObjectDefinition,
     inviteGuest,
     removeGuest,
     createConversation,
@@ -79,6 +82,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const isLoaded = useRef(false);
   const searchParams = useSearchParams();
   const [showCreateReport, setShowCreateReport] = useState(false);
+  const [createObjectDefinition, setCreateObjectDefinition] = useState<CustomObjectDefinitionDetail>();
   const [description, setDescription] = useState("");
   const [showEditDescription, setShowEditDescription] = useState(false);
   const [showAddGuest, setShowAddGuest] = useState(false);
@@ -281,11 +285,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   onSubmit={() => {
                     updateCustomField(item.id);
                   }}
-                  onCreateRelationshipObject={() => {
-
+                  onCreateRelationshipObject={async (definitionId) => {
+                    const definition = await getCustomObjectDefinition(definitionId);
+                    setCreateObjectDefinition(definition);
                   }}
-                  onEditRelationshipObject={async (value) => {
-                    const object = await getCustomObject(value);
+                  onEditRelationshipObject={async (objectId) => {
+                    const object = await getCustomObject(objectId);
                     setEditObject(object);
                   }}
                   isEditable={isEditable}
@@ -520,6 +525,29 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
 
           removeGuest(guestToRemove);
           setGuestToRemove(undefined);
+        }}
+      />
+      <CreateCustomObjectModal
+        definition={createObjectDefinition}
+        projects={projects}
+        users={[
+          ...companyUsers,
+          ...projectGuests
+        ]}
+        customObjectsByDefinition={customObjectsByDefinition}
+        isOpen={!!createObjectDefinition}
+        onClose={() => {
+          setCreateObjectDefinition(undefined);
+        }}
+        onCreate={(fields, relationships) => {
+          if (!createObjectDefinition) return;
+
+          createCustomObject({
+            company_id: createObjectDefinition.company_id,
+            custom_object_definition_id: createObjectDefinition.id,
+            fields,
+            relationships
+          });
         }}
       />
       <EditCustomObjectModal

@@ -10,9 +10,11 @@ import {
   Conversation,
   CreateConversationItemRequest,
   CreateConversationRequest,
+  CreateCustomObjectRequest,
   CreateReportRequest,
   CustomFieldEntityType,
   CustomObject,
+  CustomObjectDefinition,
   CustomObjectsByDefinition,
   Project,
   ProjectConversationItems,
@@ -83,6 +85,39 @@ export const useProject = (projectId: string) => {
     setLoading(false);
     return object;
   };
+
+  const getCustomObjectDefinition = async (customObjectDefinitionId: string) => {
+    let objectDefition: CustomObjectDefinition | undefined;
+    setLoading(true);
+
+    try {
+      objectDefition = await api.getCustomObjectDefinition(customObjectDefinitionId);
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+    return objectDefition;
+  };
+
+  const createCustomObject = useCallback(async (request: CreateCustomObjectRequest) => {
+    setLoading(true);
+
+    try {
+      await api.createCustomObject(request);
+      await getProject(projectId);
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  }, [projectId]);
 
   const getCustomObjectsByDefinitionId = async (company_id: string, definition_ids: string[]) => {
     try {
@@ -674,7 +709,9 @@ export const useProject = (projectId: string) => {
     createConversationItem,
     updateConversationItem,
     deleteConversationItem,
+    createCustomObject,
     getCustomObject,
+    getCustomObjectDefinition,
     deleteProject,
     customFieldDefinitions,
     customFields,
