@@ -224,38 +224,47 @@ const Multiselect: FC<MultiselectProps> = ({
               borderBottomRightRadius: openUpwardRef.current ? 0 : undefined,
             }}
           >
-            {availableOptions.map((option, index) => (
-              <div
-                key={option.value ?? `select_option_${index}`}
-                className="flex justify-between items-center"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                }}
-              >
-                <li
-                  className="px-3 py-2 cursor-pointer text-sm hover:bg-black/5 rounded w-full"
-                  style={{
-                    color: option.value ? fontColor1 : fontColor2,
-                  }}
+            {availableOptions.map((option, index) => {
+              const labelColor = useMemo(() => {
+                const isSelected = selectedOptions.some((o) => o.value === option.value);
+                if (isSelected) return fontColor2;
+
+                return option.value ? fontColor1 : fontColor2;
+              }, [option.value, availableOptions, selectedOptions]);
+
+              return (
+                <div
+                  key={option.value ?? `select_option_${index}`}
+                  className="flex justify-between items-center"
                   onMouseDown={(e) => {
-                    handleSelect(option);
+                    e.preventDefault();
                   }}
                 >
-                  {option.label}
-                </li>
-                {!!onEdit && (
-                  <Button
-                    style={{ paddingLeft: 10, paddingRight: 10 }}
-                    variant="tertiary"
-                    iconLeft={() => <Edit size={18} />}
-                    onClick={() => {
-                      onEdit(option.value as string);
-                      setOpen(false);
+                  <li
+                    className="px-3 py-2 cursor-pointer text-sm hover:bg-black/5 rounded w-full"
+                    style={{
+                      color: labelColor,
                     }}
-                  />
-                )}
-              </div>
-            ))}
+                    onMouseDown={(e) => {
+                      handleSelect(option);
+                    }}
+                  >
+                    {option.label}
+                  </li>
+                  {!!onEdit && (
+                    <Button
+                      style={{ paddingLeft: 10, paddingRight: 10 }}
+                      variant="tertiary"
+                      iconLeft={() => <Edit size={18} />}
+                      onClick={() => {
+                        onEdit(option.value as string);
+                        setOpen(false);
+                      }}
+                    />
+                  )}
+                </div>
+              );
+            })}
 
             {availableOptions.length === 0 && (
               <li
