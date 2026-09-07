@@ -45,6 +45,7 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
   const fieldDefinitions = useMemo(() => {
     if (!definition) return [];
 
+    console.log("DEFINITION", definition);
 
     return [
       ...definition.fields,

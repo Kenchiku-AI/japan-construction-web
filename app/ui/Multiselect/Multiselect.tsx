@@ -247,7 +247,7 @@ const Multiselect: FC<MultiselectProps> = ({
                   <Button
                     style={{ paddingLeft: 10, paddingRight: 10 }}
                     variant="tertiary"
-                    iconLeft={() => <Edit />}
+                    iconLeft={() => <Edit size={18} />}
                     onClick={() => {
                       onEdit(option.value as string);
                       setOpen(false);
