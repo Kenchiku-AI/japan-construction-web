@@ -14,7 +14,7 @@ import {
   CreateReportRequest,
   CustomFieldEntityType,
   CustomObject,
-  CustomObjectDefinition,
+  CustomObjectDefinitionDetail,
   CustomObjectsByDefinition,
   Project,
   ProjectConversationItems,
@@ -87,7 +87,7 @@ export const useProject = (projectId: string) => {
   };
 
   const getCustomObjectDefinition = async (customObjectDefinitionId: string) => {
-    let objectDefition: CustomObjectDefinition | undefined;
+    let objectDefition: CustomObjectDefinitionDetail | undefined;
     setLoading(true);
 
     try {
@@ -107,8 +107,15 @@ export const useProject = (projectId: string) => {
     setLoading(true);
 
     try {
+      const oldFields = { ...customFields };
+      const oldRelationships = { ...customRelationships };
+
       await api.createCustomObject(request);
       await getProject(projectId);
+
+      // Restore fields and relationships in case editing was in progress
+      setCustomFields(oldFields);
+      setCustomRelationships(oldRelationships);
     } catch (err) {
       showModal({
         title: t("error"),
@@ -452,10 +459,16 @@ export const useProject = (projectId: string) => {
     setLoading(true);
 
     try {
+      const oldFields = { ...customFields };
+      const oldRelationships = { ...customRelationships };
       const response = await api.updateCustomObject(objectId, request);
 
       if (response) {
-        getProject(projectId);
+        await getProject(projectId);
+
+        // Restore fields and relationships in case editing was in progress
+        setCustomFields(oldFields);
+        setCustomRelationships(oldRelationships);
       }
     } catch (err) {
       showModal({
@@ -465,7 +478,7 @@ export const useProject = (projectId: string) => {
     }
 
     setLoading(false);
-  }, [projectId]);
+  }, [projectId, customFields, customRelationships]);
 
   const updateConversationItem = useCallback(
     async (conversationItemId: string, request: UpdateConversationItemRequest) => {
