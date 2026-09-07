@@ -460,6 +460,9 @@ export const useProject = (projectId: string) => {
 
     try {
       const oldFields = { ...customFields };
+
+      console.log("OLD RELATIONSHIPS", customRelationships);
+
       const oldRelationships = { ...customRelationships };
       const response = await api.updateCustomObject(objectId, request);
 
