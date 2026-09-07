@@ -107,15 +107,8 @@ export const useProject = (projectId: string) => {
     setLoading(true);
 
     try {
-      const oldFields = { ...customFields };
-      const oldRelationships = { ...customRelationships };
-
       await api.createCustomObject(request);
-      await getProject(projectId);
-
-      // Restore fields and relationships in case editing was in progress
-      setCustomFields(oldFields);
-      setCustomRelationships(oldRelationships);
+      refreshCustomObjectsByDefinition();
     } catch (err) {
       showModal({
         title: t("error"),
@@ -193,9 +186,6 @@ export const useProject = (projectId: string) => {
         r.target_entity_id as string
       ];
     });
-
-    console.log("setting relationships", newRelationships);
-
     setCustomRelationships(newRelationships);
   }, [project?.custom_fields, project?.custom_relationships]);
 
@@ -458,24 +448,23 @@ export const useProject = (projectId: string) => {
     [api],
   );
 
+  const refreshCustomObjectsByDefinition = useCallback(async () => {
+    if (!project) return;
+    const relationshipDefs = project.custom_relationships.map((r) => r.definition);
+    const targetIds = relationshipDefs.map((r) => r.target_custom_object_definition_id);
+    const definitionIds = targetIds.filter((id) => id != null);
+
+    if (!!definitionIds.length) {
+      getCustomObjectsByDefinitionId(project.company_id, definitionIds);
+    }
+  }, [project]);
+
   const updateCustomObject = useCallback(async (objectId: string, request: UpdateCustomObjectRequest) => {
     setLoading(true);
 
     try {
-      const oldFields = { ...customFields };
-      const oldRelationships = { ...customRelationships };
-      const response = await api.updateCustomObject(objectId, request);
-
-      if (response) {
-        await getProject(projectId);
-
-        // Restore fields and relationships in case editing was in progress
-        setCustomFields(oldFields);
-
-        console.log("OLD RELATIONSHIPS", oldRelationships);
-
-        setCustomRelationships(oldRelationships);
-      }
+      await api.updateCustomObject(objectId, request);
+      refreshCustomObjectsByDefinition();
     } catch (err) {
       showModal({
         title: t("error"),
@@ -484,7 +473,7 @@ export const useProject = (projectId: string) => {
     }
 
     setLoading(false);
-  }, [projectId, customFields, customRelationships]);
+  }, [project, customFields, customRelationships]);
 
   const updateConversationItem = useCallback(
     async (conversationItemId: string, request: UpdateConversationItemRequest) => {
