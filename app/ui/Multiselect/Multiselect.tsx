@@ -132,7 +132,7 @@ const Multiselect: FC<MultiselectProps> = ({
     onChange?.(values.filter((v) => v !== value));
   };
 
-  const getLabelColor = (value: string) => {
+  const getLabelColor = (value?: string | number) => {
     const isSelected = selectedOptions.some((o) => o.value === value);
     if (isSelected) return fontColor2;
 
