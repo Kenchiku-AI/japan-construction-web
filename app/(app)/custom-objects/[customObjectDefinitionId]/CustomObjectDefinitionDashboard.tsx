@@ -363,13 +363,21 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
         onClose={() => {
           setShowCreateField(false);
         }}
-        onCreate={async (name, description, fieldType, relationshipType, relationshipTarget) => {
+        onCreate={async (
+          name,
+          description,
+          fieldType,
+          relationshipType,
+          relationshipTarget,
+          isSourceOwner,
+        ) => {
           if (fieldType === "relationship") {
             createCustomRelationshipDefinition(
               name,
               description,
               relationshipTarget as CustomFieldEntityType,
-              relationshipType as CustomRelationshipType
+              relationshipType as CustomRelationshipType,
+              isSourceOwner ?? false
             );
           } else {
             createCustomFieldDefinition(

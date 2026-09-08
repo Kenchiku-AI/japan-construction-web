@@ -18,7 +18,8 @@ interface CreateCustomFieldModalProps {
     description: string,
     fieldType: string,
     relationshipType?: string,
-    relationshipTarget?: string
+    relationshipTarget?: string,
+    isSourceOwner?: boolean,
   ) => void;
 }
 
@@ -182,7 +183,8 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
             description,
             fieldType,
             relationshipType,
-            relationshipTarget
+            relationshipTarget,
+            isSourceOwner
           );
         }}
       />

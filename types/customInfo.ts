@@ -87,6 +87,7 @@ export type CreateCustomRelationshipDefinitionRequest = {
   target_entity_type: CustomFieldEntityType;
   source_custom_object_definition_id?: string;
   target_custom_object_definition_id?: string;
+  is_source_owner?: boolean;
 }
 
 

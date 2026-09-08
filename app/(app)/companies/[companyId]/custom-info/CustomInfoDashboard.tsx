@@ -217,7 +217,14 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
         onClose={() => {
           setCreateCustomFieldType("");
         }}
-        onCreate={async (name, description, fieldType, relationshipType, relationshipTarget) => {
+        onCreate={async (
+          name,
+          description,
+          fieldType,
+          relationshipType,
+          relationshipTarget,
+          isSourceOwner
+        ) => {
           if (fieldType === "relationship") {
             const entityTypes: string[] = [
               CustomFieldEntityType.Company,
@@ -234,6 +241,7 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
               target_entity_type,
               target_custom_object_definition_id: isCustomObject ? relationshipTarget : undefined,
               cardinality: relationshipType as CustomRelationshipType,
+              is_source_owner: isSourceOwner,
               company_id: companyId
             });
           } else {

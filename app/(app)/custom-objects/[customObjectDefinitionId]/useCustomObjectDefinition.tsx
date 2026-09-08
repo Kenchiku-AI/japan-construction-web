@@ -291,7 +291,8 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
       name: string,
       description: string,
       target: string,
-      cardinality: CustomRelationshipType
+      cardinality: CustomRelationshipType,
+      isSourceOwner: boolean
     ) => {
       if (!customObjectDefinition) return;
 
@@ -314,6 +315,7 @@ export const useCustomObjectDefinition = (customObjectDefinitionId: string) => {
           target_entity_type,
           target_custom_object_definition_id: isCustomObject ? target : undefined,
           cardinality,
+          is_source_owner: isSourceOwner,
           company_id: customObjectDefinition.company_id
         }
         const response = await api.createCustomRelationshipDefinition(request);
