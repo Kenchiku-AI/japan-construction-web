@@ -2,12 +2,12 @@
 
 import React, { FC, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "./Button/Button";
 import { useApi } from "../../lib/api/ApiContext";
 import { UserRole } from "@/types";
 import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard, LineLogo, Info, DataFlow, Form } from "./Icons";
-import { bgColor4, bgColor5, buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
+import { bgColor4, bgColor5, buttonColor } from "@/lib/constants";
 import Divider from "./Divider";
 import Link from "next/link";
 import { useFeatures } from "@/lib/useFeatures";
@@ -203,34 +203,6 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
       </li>
       <Divider style={{ margin: "5px 0" }} />
     </>
-  );
-};
-
-const LinkSidebarItem = ({ name, icon, path }: SidebarItemProps) => {
-  const currentPath = usePathname();
-  const router = useRouter();
-  const Icon = icon;
-  const style = currentPath === path ? "bg-base-300 rounded-md" : "";
-
-  return (
-    <Link href={path} onClick={() => {
-      const drawer = document.getElementById(
-        "docs-sidebar",
-      ) as HTMLInputElement | null;
-
-      if (drawer) {
-        drawer.checked = false;
-      }
-    }}>
-      <li className={`mb-4 ${style}`}>
-        <div
-          className="active:bg-base-300 active:opacity-40 active:text-black gap-3"
-        >
-          <Icon />
-          <span>{name}</span>
-        </div>
-      </li>
-    </Link >
   );
 };
 
