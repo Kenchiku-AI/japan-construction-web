@@ -468,9 +468,13 @@ export const useProject = (projectId: string) => {
   );
 
   const refreshCustomObjectsByDefinition = useCallback(async () => {
+    console.log("has proj?", project);
+
     if (!project) return;
 
     const relationshipDefs = project.custom_relationships.map((r) => r.definition);
+
+
     const targetIds = relationshipDefs.map((r) => r.target_custom_object_definition_id);
     const definitionIds = targetIds.filter((id) => id != null);
 
