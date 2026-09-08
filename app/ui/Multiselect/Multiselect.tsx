@@ -177,7 +177,7 @@ const Multiselect: FC<MultiselectProps> = ({
                 }}
               >
                 <div
-                  className={!!onEdit ? "hover:opacity-50" : ""}
+                  className={!!onEdit ? "cursor-pointer hover:opacity-50" : ""}
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
