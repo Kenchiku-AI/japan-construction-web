@@ -103,14 +103,11 @@ export const useProject = (projectId: string) => {
     return objectDefition;
   };
 
-  const createCustomObject = useCallback(async (request: CreateCustomObjectRequest) => {
+  const createCustomObject = async (request: CreateCustomObjectRequest) => {
     setLoading(true);
 
     try {
       await api.createCustomObject(request);
-
-      console.log("creating custom object")
-
       refreshCustomObjectsByDefinition();
     } catch (err) {
       showModal({
@@ -120,7 +117,7 @@ export const useProject = (projectId: string) => {
     }
 
     setLoading(false);
-  }, [projectId]);
+  };
 
   const deleteCustomObject = async (objectId: string) => {
     setLoading(true);
@@ -485,7 +482,7 @@ export const useProject = (projectId: string) => {
     }
   }, [project]);
 
-  const updateCustomObject = useCallback(async (objectId: string, request: UpdateCustomObjectRequest) => {
+  const updateCustomObject = async (objectId: string, request: UpdateCustomObjectRequest) => {
     setLoading(true);
 
     try {
@@ -499,7 +496,7 @@ export const useProject = (projectId: string) => {
     }
 
     setLoading(false);
-  }, [project, customFields, customRelationships]);
+  };
 
   const updateConversationItem = useCallback(
     async (conversationItemId: string, request: UpdateConversationItemRequest) => {
