@@ -61,6 +61,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     customObjectsByDefinition,
     updateCustomField,
     resetCustomField,
+    createCustomObject,
+    updateCustomObject,
+    deleteCustomObject,
     guests
   } = useCompany(companyId);
   const searchParams = useSearchParams();
