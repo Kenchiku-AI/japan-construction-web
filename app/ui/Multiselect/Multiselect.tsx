@@ -26,6 +26,7 @@ interface MultiselectProps {
   error?: boolean;
   style?: CSSProperties;
   disabled?: boolean;
+  disableDropdown?: boolean;
   onEdit?: (value: string) => void;
 }
 
@@ -37,6 +38,7 @@ const Multiselect: FC<MultiselectProps> = ({
   error,
   style,
   disabled,
+  disableDropdown,
   onEdit,
 }) => {
   const [open, setOpen] = useState(false);
@@ -144,8 +146,12 @@ const Multiselect: FC<MultiselectProps> = ({
       <div
         tabIndex={0}
         ref={triggerRef}
-        className="select w-full flex items-center !h-auto"
-        onClick={() => !disabled && setOpen((o) => !o)}
+        className={`select w-full flex items-center !h-auto ${disableDropdown ? styles.hideCaret : ""}`}
+        onClick={() => {
+          if (disabled || disableDropdown) return;
+
+          setOpen((o) => !o);
+        }}
         onBlur={() => setOpen(false)}
         style={{
           backgroundColor,
@@ -195,17 +201,19 @@ const Multiselect: FC<MultiselectProps> = ({
                 >
                   {option.label}
                 </div>
-                <button
-                  type="button"
-                  style={{ color: buttonColor }}
-                  className="cursor-pointer leading-none hover:opacity-50"
-                  onClick={(e) => {
-                    handleRemove(value);
-                  }}
-                  aria-label={`Remove ${option.label}`}
-                >
-                  ×
-                </button>
+                {!disableDropdown && (
+                  <button
+                    type="button"
+                    style={{ color: buttonColor }}
+                    className="cursor-pointer leading-none hover:opacity-50"
+                    onClick={(e) => {
+                      handleRemove(value);
+                    }}
+                    aria-label={`Remove ${option.label}`}
+                  >
+                    ×
+                  </button>
+                )}
               </span>
             );
           })}
