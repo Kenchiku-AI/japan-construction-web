@@ -21,6 +21,7 @@ import {
   UpdateConversationItemRequest,
   UpdateConversationRequest,
   UpdateCustomObjectRequest,
+  UpdateCustomRelationshipRequest,
   UpdateProjectRequest,
   UserRole,
 } from "@/types";
@@ -254,47 +255,51 @@ export const useProject = (projectId: string) => {
         target_entity_ids: customRelationships[itemId].filter(Boolean)
       };
 
-      try {
-        const response = await api.updateCustomRelationship(itemId, request);
-
-        if (response) {
-          setProject((prev) => {
-            if (!prev) return prev;
-
-            const otherRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
-            const newRelationships = response;
-
-            if (!newRelationships.length) {
-              const definition = prev.custom_relationships.find((r) => r.definition.id === itemId)?.definition;
-
-              if (definition) {
-                newRelationships.push(
-                  {
-                    source_entity_id: projectId,
-                    definition
-                  }
-                )
-              }
-            }
-
-            return {
-              ...prev,
-              custom_relationships: [
-                ...otherRelationships,
-                ...newRelationships
-              ]
-            }
-          });
-        }
-      } catch (e) {
-        showModal({
-          title: t("error"),
-          subtitle: t("error_description"),
-        });
-        resetCustomField(itemId);
-      }
+      updateCustomRelationship(request, itemId);
     }
   }, [project, customFields, customRelationships]);
+
+  const updateCustomRelationship = async (request: UpdateCustomRelationshipRequest, itemId: string) => {
+    try {
+      const response = await api.updateCustomRelationship(itemId, request);
+
+      if (response) {
+        setProject((prev) => {
+          if (!prev) return prev;
+
+          const otherRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
+          const newRelationships = response;
+
+          if (!newRelationships.length) {
+            const definition = prev.custom_relationships.find((r) => r.definition.id === itemId)?.definition;
+
+            if (definition) {
+              newRelationships.push(
+                {
+                  source_entity_id: projectId,
+                  definition
+                }
+              )
+            }
+          }
+
+          return {
+            ...prev,
+            custom_relationships: [
+              ...otherRelationships,
+              ...newRelationships
+            ]
+          }
+        });
+      }
+    } catch (e) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+      resetCustomField(itemId);
+    }
+  };
 
   const resetCustomField = useCallback((itemId: string) => {
     if (!project) return;

@@ -88,7 +88,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [editObject, setEditObject] = useState<CustomObject>();
   const [deleteObject, setDeleteObject] = useState<CustomObject>();
   const [createObjectDefinition, setCreateObjectDefinition] = useState<CustomObjectDefinitionDetail>();
-  const addObjectToCustomFieldId = useRef("");
+  const fieldIdToUpdate = useRef("");
   const {
     tags,
     updateTag,
@@ -192,11 +192,12 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     onCreateRelationshipObject={async (definitionId) => {
                       const definition = await getCustomObjectDefinition(definitionId);
                       setCreateObjectDefinition(definition);
-                      addObjectToCustomFieldId.current = item.id;
+                      fieldIdToUpdate.current = item.id;
                     }}
                     onEditRelationshipObject={async (objectId) => {
                       const object = await getCustomObject(objectId);
                       setEditObject(object);
+                      fieldIdToUpdate.current = item.id;
                     }}
                     isEditable={isAdminOrManager}
                   />
@@ -543,7 +544,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         isOpen={!!createObjectDefinition}
         onClose={() => {
           setCreateObjectDefinition(undefined);
-          addObjectToCustomFieldId.current = "";
+          fieldIdToUpdate.current = "";
         }}
         onCreate={(fields, relationships) => {
           if (!createObjectDefinition) return;
@@ -555,7 +556,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
               fields,
               relationships
             },
-            addObjectToCustomFieldId.current
+            fieldIdToUpdate.current
           );
         }}
       />
@@ -571,6 +572,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         isOpen={!!editObject}
         onClose={() => {
           setEditObject(undefined);
+          fieldIdToUpdate.current = "";
         }}
         onSubmit={(fields, relationships) => {
           if (!editObject) return;
@@ -592,12 +594,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         isOpen={!!deleteObject}
         onClose={() => {
           setDeleteObject(undefined);
+          fieldIdToUpdate.current = "";
         }}
         onDelete={() => {
           if (!deleteObject) return;
 
-          deleteCustomObject(deleteObject.id);
+          deleteCustomObject(deleteObject.id, fieldIdToUpdate.current);
           setDeleteObject(undefined);
+          fieldIdToUpdate.current = "";
         }}
       />
       {(showLoader || companyLoading) && <Loader />}
