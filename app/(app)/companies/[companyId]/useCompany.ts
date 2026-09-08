@@ -6,7 +6,7 @@ import { Company, CompanyGuest } from "@/types/companies";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { CustomFieldEntityType, CustomObjectsByDefinition, ReportTemplate, ReportTemplateRequest } from "@/types";
+import { CreateCustomObjectRequest, CustomFieldEntityType, CustomObject, CustomObjectDefinitionDetail, CustomObjectsByDefinition, ReportTemplate, ReportTemplateRequest, UpdateCustomObjectRequest } from "@/types";
 
 export const useCompany = (companyId: string) => {
   const [loading, setLoading] = useState(false);
@@ -440,7 +440,101 @@ export const useCompany = (companyId: string) => {
     [currentUser],
   );
 
+  const getCustomObject = async (customObjectId: string) => {
+    let object: CustomObject | undefined;
+    setLoading(true);
 
+    try {
+      object = await api.getCustomObject(customObjectId);
+
+      console.log("object response", object);
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+    return object;
+  };
+
+  const refreshCustomObjectsByDefinition = useCallback(async () => {
+    if (!company) return;
+
+    const relationshipDefs = company.custom_relationships.map((r) => r.definition);
+    const targetIds = relationshipDefs.map((r) => r.target_custom_object_definition_id);
+    const definitionIds = targetIds.filter((id) => id != null);
+
+    if (!!definitionIds.length) {
+      getCustomObjectsByDefinitionId(companyId, definitionIds);
+    }
+  }, [company]);
+
+  const getCustomObjectDefinition = async (customObjectDefinitionId: string) => {
+    let objectDefition: CustomObjectDefinitionDetail | undefined;
+    setLoading(true);
+
+    try {
+      objectDefition = await api.getCustomObjectDefinition(customObjectDefinitionId);
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+    return objectDefition;
+  };
+
+  const createCustomObject = async (request: CreateCustomObjectRequest) => {
+    setLoading(true);
+
+    try {
+      await api.createCustomObject(request);
+      refreshCustomObjectsByDefinition();
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const updateCustomObject = async (objectId: string, request: UpdateCustomObjectRequest) => {
+    setLoading(true);
+
+    try {
+      await api.updateCustomObject(objectId, request);
+      refreshCustomObjectsByDefinition();
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const deleteCustomObject = async (objectId: string) => {
+    setLoading(true);
+
+    try {
+      await api.deleteCustomObject(objectId);
+      refreshCustomObjectsByDefinition();
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
 
   return {
     loading,
@@ -464,5 +558,10 @@ export const useCompany = (companyId: string) => {
     updateCustomField,
     resetCustomField,
     guests,
+    getCustomObject,
+    getCustomObjectDefinition,
+    createCustomObject,
+    updateCustomObject,
+    deleteCustomObject,
   };
 };

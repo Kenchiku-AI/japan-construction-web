@@ -5,7 +5,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/lib/api/ApiContext";
-import { Company, ImageTag, UserRole } from "@/types";
+import { Company, CustomObject, CustomObjectDefinitionDetail, ImageTag, UserRole } from "@/types";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
 import { Alert, Close, CreditCard, CreditCardPlus, Edit, LineLogo, Plus } from "@/app/ui/Icons";
@@ -31,6 +31,9 @@ import Select from "@/app/ui/Select/Select";
 import { BillingPlan } from "@/types/billingPlans";
 import UpdateBillingPlanModal from "./UpdateBillingPlanModal";
 import CustomFieldListCell from "@/app/ui/CustomFieldListCell/CustomFieldListCell";
+import ConfirmDeleteModal from "../../projects/[projectId]/ConfirmDeleteModal";
+import EditCustomObjectModal from "../../custom-objects/[customObjectDefinitionId]/EditCustomObjectModal";
+import CreateCustomObjectModal from "../../custom-objects/[customObjectDefinitionId]/CreateCustomObjectModal";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -77,6 +80,9 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const { showModal } = useModal();
   const { billingPlans } = useBillingPlans();
   const [billingPlanIdToUpdate, setBillingPlanIdToUpdate] = useState("");
+  const [editObject, setEditObject] = useState<CustomObject>();
+  const [deleteObject, setDeleteObject] = useState<CustomObject>();
+  const [createObjectDefinition, setCreateObjectDefinition] = useState<CustomObjectDefinitionDetail>();
   const {
     tags,
     updateTag,
@@ -509,6 +515,70 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         onConfirm={() => {
           updateBillingPlan(billingPlanIdToUpdate);
           setBillingPlanIdToUpdate("");
+        }}
+      />
+      <CreateCustomObjectModal
+        definition={createObjectDefinition}
+        projects={company?.projects ?? []}
+        users={[
+          ...(company?.users ?? []),
+          ...(guests ?? [])
+        ]}
+        customObjectsByDefinition={customObjectsByDefinition}
+        isOpen={!!createObjectDefinition}
+        onClose={() => {
+          setCreateObjectDefinition(undefined);
+        }}
+        onCreate={(fields, relationships) => {
+          if (!createObjectDefinition) return;
+
+          createCustomObject({
+            company_id: createObjectDefinition.company_id,
+            custom_object_definition_id: createObjectDefinition.id,
+            fields,
+            relationships
+          });
+        }}
+      />
+      <EditCustomObjectModal
+        definition={editObject?.definition}
+        object={editObject}
+        projects={company?.projects ?? []}
+        users={[
+          ...(company?.users ?? []),
+          ...(guests ?? [])
+        ]}
+        customObjectsByDefinition={customObjectsByDefinition}
+        isOpen={!!editObject}
+        onClose={() => {
+          setEditObject(undefined);
+        }}
+        onSubmit={(fields, relationships) => {
+          if (!editObject) return;
+
+          const request = {
+            custom_object_definition_id: editObject.definition.id,
+            fields,
+            relationships
+          };
+
+          updateCustomObject(editObject.id, request);
+        }}
+        onDelete={() => {
+          setDeleteObject(editObject);
+          setEditObject(undefined);
+        }}
+      />
+      <ConfirmDeleteModal
+        isOpen={!!deleteObject}
+        onClose={() => {
+          setDeleteObject(undefined);
+        }}
+        onDelete={() => {
+          if (!deleteObject) return;
+
+          deleteCustomObject(deleteObject.id);
+          setDeleteObject(undefined);
         }}
       />
       {(showLoader || companyLoading) && <Loader />}
