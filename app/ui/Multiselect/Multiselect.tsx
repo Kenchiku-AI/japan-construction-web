@@ -146,7 +146,7 @@ const Multiselect: FC<MultiselectProps> = ({
       <div
         tabIndex={0}
         ref={triggerRef}
-        className={`select w-full flex items-center !h-auto ${disableDropdown ? styles.hideCaret : ""}`}
+        className={`${disableDropdown ? "rounded-[10px]" : "select"} w-full flex items-center !h-auto`}
         onClick={() => {
           if (disabled || disableDropdown) return;
 
