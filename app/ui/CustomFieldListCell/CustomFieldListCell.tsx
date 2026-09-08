@@ -168,23 +168,32 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({
     const isRelationship = "target_entity_type" in definition;
     if (!isRelationship) return false;
 
-    const relDef = (props.definition as CustomRelationshipDefinition);
+    const relDef = (definition as CustomRelationshipDefinition);
     return !!relDef.target_custom_object_definition_id;
   }, [props.definition]);
 
+  const isSourceOwner = useMemo(() => {
+    if (!isRelationshipWithObject) return false;
+
+    const relDef = (definition as CustomRelationshipDefinition);
+    return !!relDef.is_source_owner;
+  }, [isRelationshipWithObject]);
+
+  const createObject = () => {
+    const relDef = (props.definition as CustomRelationshipDefinition);
+    const definitionId = relDef.target_custom_object_definition_id as string;
+    onCreateRelationshipObject?.(definitionId);
+  }
+
   return (
     <div className="flex flex-col flex-1 h-full">
-      {isRelationshipWithObject &&
+      {(isRelationshipWithObject && !isSourceOwner) &&
         <div className="pb-3 pr-2 flex justify-end">
           <Button
             variant="tertiary"
             label={t("create_object", { name: props.definition.name })}
             iconLeft={() => <Plus />}
-            onClick={() => {
-              const relDef = (props.definition as CustomRelationshipDefinition);
-              const definitionId = relDef.target_custom_object_definition_id as string;
-              onCreateRelationshipObject?.(definitionId);
-            }}
+            onClick={createObject}
             style={{ height: "auto" }}
           />
         </div>
@@ -202,13 +211,23 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({
           gap: 24,
         }}
       >
-        <Button
-          variant="tertiary"
-          iconLeft={() => <Check />}
-          style={{ height: "auto" }}
-          label={t("update")}
-          onClick={onSubmit}
-        />
+        {isSourceOwner ? (
+          <Button
+            variant="tertiary"
+            label={t("create_object", { name: props.definition.name })}
+            iconLeft={() => <Plus />}
+            onClick={createObject}
+            style={{ height: "auto" }}
+          />
+        ) : (
+          <Button
+            variant="tertiary"
+            iconLeft={() => <Check />}
+            style={{ height: "auto" }}
+            label={t("update")}
+            onClick={onSubmit}
+          />
+        )}
         <Button
           variant="tertiary"
           iconLeft={() => (
@@ -217,7 +236,7 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({
             </div>
           )}
           style={{ height: "auto" }}
-          label={t("cancel")}
+          label={t(isSourceOwner ? "close" : "cancel")}
           onClick={onCancel}
           textStyle={{ color: errorColor1 }}
         />
