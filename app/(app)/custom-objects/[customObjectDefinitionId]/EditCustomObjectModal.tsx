@@ -3,6 +3,7 @@ import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import {
+  CustomFieldDefinitionListItem,
   CustomObject,
   CustomObjectDefinitionDetail,
   CustomObjectsByDefinition,
@@ -41,16 +42,19 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
   const [title, setTitle] = useState("");
   const [fields, setFields] = useState<Record<string, string>>({});
   const [relationships, setRelationships] = useState<Record<string, string[]>>({});
+  const [fieldDefinitions, setFieldDefinitions] = useState<CustomFieldDefinitionListItem[]>([]);
 
-  const fieldDefinitions = useMemo(() => {
-    if (!definition) return [];
+  useEffect(() => {
+    if (!definition) return;
 
-    return [
+    const defs = [
       ...definition.fields,
       ...definition.relationships
     ].sort(
       (a, b) => a.sort_order - b.sort_order
     );
+
+    setFieldDefinitions(defs);
   }, [definition]);
 
   useEffect(() => {
