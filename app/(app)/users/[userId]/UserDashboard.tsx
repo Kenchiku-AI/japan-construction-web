@@ -94,6 +94,10 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
     userRef.current = user;
   }, [user]);
 
+  const fullName = useMemo(() => (
+    `${user?.last_name ?? ""} ${user?.first_name ?? ""}`
+  ), [user?.last_name, user?.first_name]);
+
   if (
     user &&
     currentUser &&
@@ -106,7 +110,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   return (
     <>
       <div className="flex justify-between items-end">
-        <Heading title={t("user")} />
+        <Heading title={fullName} />
         {userId === currentUser?.id && (
           <Button
             variant="tertiary"
