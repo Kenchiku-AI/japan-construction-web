@@ -179,17 +179,23 @@ const Multiselect: FC<MultiselectProps> = ({
                   e.stopPropagation();
                   e.preventDefault();
                 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
               >
                 <div
                   className={!!onEdit ? "cursor-pointer hover:opacity-50" : ""}
-                  onMouseDown={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-
+                  onClick={(e) => {
+                    // e.stopPropagation();
                     if (!disabled) {
                       onEdit?.(option.value as string);
                     }
                   }}
+                // onMouseDown={(e) => {
+                //   e.stopPropagation();
+                //   e.preventDefault();
+                // }}
                 >
                   {option.label}
                 </div>
@@ -197,12 +203,12 @@ const Multiselect: FC<MultiselectProps> = ({
                   type="button"
                   style={{ color: buttonColor }}
                   className="cursor-pointer leading-none hover:opacity-50"
-                  onMouseDown={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                  }}
+                  // onMouseDown={(e) => {
+                  //   e.stopPropagation();
+                  //   e.preventDefault();
+                  // }}
                   onClick={(e) => {
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     handleRemove(value);
                   }}
                   aria-label={`Remove ${option.label}`}
