@@ -6,7 +6,6 @@ import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Select from "@/app/ui/Select/Select";
 import { CustomObjectDefinition } from "@/types";
-import styles from "./page.module.css";
 import { fontColor2 } from "@/lib/constants";
 
 interface CreateCustomFieldModalProps {
@@ -51,14 +50,16 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
   }, [fieldType]);
 
   const showIsSourceOwner = useMemo(() => {
+    const nativeTypes = ["company", "project", "user"];
+
+    if (nativeTypes.includes(ownerType ?? '')) return false;
+
     if (fieldType !== "relationship") return false;
 
-    if (["project", "user"].includes(relationshipTarget)) {
-      return false;
-    }
+    if (nativeTypes.includes(relationshipTarget)) return false;
 
     return relationshipType === "many";
-  }, [fieldType, relationshipType, relationshipTarget]);
+  }, [ownerType, fieldType, relationshipType, relationshipTarget]);
 
   const relationshipTargetOptions = useMemo(() => {
     const options = [
