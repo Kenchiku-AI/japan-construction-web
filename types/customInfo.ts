@@ -69,6 +69,7 @@ export type CustomRelationshipDefinition = {
   target_entity_type: CustomFieldEntityType;
   target_custom_object_definition_id?: string;
   cardinality: CustomRelationshipType;
+  is_source_owner: boolean;
 }
 
 export type CustomRelationship = {

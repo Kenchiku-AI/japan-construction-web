@@ -74,6 +74,7 @@ const CustomRelationshipInput: FC<CustomRelationshipInputProps> = ({
       options={options}
       onChange={onChange}
       onEdit={onEdit}
+      disableDropdown={definition.is_source_owner}
     />
   )
 }
