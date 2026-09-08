@@ -91,13 +91,17 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
     setRelationships(newRelationships);
   }, [object, definition]);
 
-  const closeAndReset = useCallback(() => {
-    onClose();
+  const reset = () => {
     setTimeout(() => {
       setTitle("");
       setFields({});
       setRelationships({});
     }, 500);
+  };
+
+  const closeAndReset = useCallback(() => {
+    onClose();
+    reset();
   }, [onClose]);
 
   return (
@@ -150,7 +154,7 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
           label={t("delete")}
           onClick={() => {
             onDelete();
-            closeAndReset();
+            reset();
           }}
         />
       </div>
