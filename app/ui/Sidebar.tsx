@@ -79,7 +79,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 {currentUser.company && (
                   <SidebarItem
                     name={t("forms")}
-                    icon={() => <User size={18} />}
+                    icon={() => <User size={24} />}
                     path={`/companies/${currentUser.company.id}/users`}
                   />
                 )}
