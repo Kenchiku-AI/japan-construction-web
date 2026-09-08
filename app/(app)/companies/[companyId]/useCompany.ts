@@ -450,8 +450,6 @@ export const useCompany = (companyId: string) => {
 
     try {
       object = await api.getCustomObject(customObjectId);
-
-      console.log("object response", object);
     } catch (err) {
       showModal({
         title: t("error"),
@@ -549,8 +547,12 @@ export const useCompany = (companyId: string) => {
           })
         };
 
+        console.log("request", request);
+
         await updateCustomRelationship(fieldId, request);
       }
+
+      console.log("successfully updated relationship");
 
       await api.deleteCustomObject(objectId);
     } catch (err) {

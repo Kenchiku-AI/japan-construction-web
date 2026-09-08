@@ -310,8 +310,6 @@ export const useUser = (userId: string) => {
 
     try {
       object = await api.getCustomObject(customObjectId);
-
-      console.log("object response", object);
     } catch (err) {
       showModal({
         title: t("error"),

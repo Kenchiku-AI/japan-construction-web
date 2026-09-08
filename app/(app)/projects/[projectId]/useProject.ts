@@ -74,8 +74,6 @@ export const useProject = (projectId: string) => {
 
     try {
       object = await api.getCustomObject(customObjectId);
-
-      console.log("object response", object);
     } catch (err) {
       showModal({
         title: t("error"),
