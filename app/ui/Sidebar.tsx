@@ -56,7 +56,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 <div className="flex justify-center pb-2 md:pt-3">
                   <Logo size={24} />
                 </div>
-                <Divider />
+                <Divider style={{ margin: "10px 0 5px 0" }} />
                 {isAdmin && (
                   <SidebarItem
                     name={t("companies")}
@@ -176,7 +176,6 @@ interface SidebarItemProps {
 }
 
 const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
-  const currentPath = usePathname();
   const router = useRouter();
   const Icon = icon;
 
