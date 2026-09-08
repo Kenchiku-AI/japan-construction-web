@@ -64,6 +64,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     createCustomObject,
     updateCustomObject,
     deleteCustomObject,
+    getCustomObject,
+    getCustomObjectDefinition,
     guests
   } = useCompany(companyId);
   const searchParams = useSearchParams();
@@ -185,6 +187,14 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     }}
                     onSubmit={() => {
                       updateCustomField(item.id);
+                    }}
+                    onCreateRelationshipObject={async (definitionId) => {
+                      const definition = await getCustomObjectDefinition(definitionId);
+                      setCreateObjectDefinition(definition);
+                    }}
+                    onEditRelationshipObject={async (objectId) => {
+                      const object = await getCustomObject(objectId);
+                      setEditObject(object);
                     }}
                     isEditable={isAdminOrManager}
                   />
