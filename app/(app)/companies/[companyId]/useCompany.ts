@@ -541,8 +541,6 @@ export const useCompany = (companyId: string) => {
     setLoading(true);
 
     try {
-      await api.deleteCustomObject(objectId);
-
       if (company) {
         const request = {
           source_entity_id: company.id,
@@ -551,9 +549,10 @@ export const useCompany = (companyId: string) => {
           })
         };
 
-        updateCustomRelationship(fieldId, request);
+        await updateCustomRelationship(fieldId, request);
       }
 
+      await api.deleteCustomObject(objectId);
     } catch (err) {
       showModal({
         title: t("error"),
