@@ -56,8 +56,8 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
       return false;
     }
 
-    return true;
-  }, [fieldType, relationshipTarget]);
+    return relationshipType === "many";
+  }, [fieldType, relationshipType, relationshipTarget]);
 
   const relationshipTargetOptions = useMemo(() => {
     const options = [
@@ -160,6 +160,7 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
           <div className="flex flex-row gap-4 items-center">
             <input
               type="checkbox"
+              className="checkbox checkbox-neutral"
               checked={isSourceOwner}
               onChange={(e) => setIsSourceOwner(e.target.checked)}
             />
