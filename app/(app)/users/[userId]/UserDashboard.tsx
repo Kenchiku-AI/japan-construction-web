@@ -307,7 +307,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
           deleteCustomObject(deleteObject.id);
           setDeleteObject(undefined);
         }}
-      />x
+      />
       {loading && <Loader />}
     </>
   );
