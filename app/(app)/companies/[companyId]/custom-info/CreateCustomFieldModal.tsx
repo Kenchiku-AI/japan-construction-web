@@ -157,14 +157,13 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
             transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
           }}
         >
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-row gap-4 items-center">
             <input
               type="checkbox"
-              className="toggle toggle-md"
               checked={isSourceOwner}
               onChange={(e) => setIsSourceOwner(e.target.checked)}
             />
-            <div>
+            <div className="min-w-0">
               <div>{t("is_source_owner")}</div>
               <div className={styles.subtitle}>
                 {t("is_source_owner_description")}
