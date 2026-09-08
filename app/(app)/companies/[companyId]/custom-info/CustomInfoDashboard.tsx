@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -8,7 +8,6 @@ import { Plus } from "@/app/ui/Icons";
 import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
-import { useFeatures } from "@/lib/useFeatures";
 import { cardClass } from "@/lib/constants";
 import CustomFieldDefinitionsList from "../../../custom-objects/[customObjectDefinitionId]/CustomFieldDefinitionsList";
 import { useCustomInfo } from "./useCustomInfo";
@@ -30,7 +29,6 @@ type EditCustomFieldDefinitionListItem = CustomFieldDefinitionListItem & {
 const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { isFormsEnabled } = useFeatures();
   const { currentUser } = useApi();
   const {
     companyItems,
@@ -53,12 +51,6 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
   const [createCustomFieldType, setCreateCustomFieldType] = useState("");
   const [editCustomField, setEditCustomField] = useState<EditCustomFieldDefinitionListItem>();
   const [deleteCustomField, setDeleteCustomField] = useState<EditCustomFieldDefinitionListItem>();
-
-  useEffect(() => {
-    if (!isFormsEnabled) {
-      router.push("/home");
-    }
-  }, [isFormsEnabled]);
 
   return !currentUser ? null : (
     <>

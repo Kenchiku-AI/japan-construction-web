@@ -9,14 +9,12 @@ import { UserRole } from "@/types";
 import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard, LineLogo, Info, DataFlow, Form } from "./Icons";
 import { bgColor4, bgColor5, buttonColor } from "@/lib/constants";
 import Divider from "./Divider";
-import { useFeatures } from "@/lib/useFeatures";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { currentUser } = useApi();
   const isAdmin = currentUser?.role === UserRole.Admin;
-  const { isFormsEnabled } = useFeatures();
 
   return !currentUser ? null : (
     <div className="drawer md:drawer-open min-h-screen" style={{ background: bgColor4 }}>
@@ -99,7 +97,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                       icon={() => <Tag size={22} />}
                       path={"/tags"}
                     />
-                    {isFormsEnabled && currentUser.company && (
+                    {currentUser.company && (
                       <>
                         <SidebarItem
                           name={t("forms")}
