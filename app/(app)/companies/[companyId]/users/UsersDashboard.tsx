@@ -14,6 +14,7 @@ import { useModal } from "@/lib/modal/ModalContext";
 import RemoveUserModal from "../RemoveUserModal";
 import { Loader } from "@/app/ui/Loader";
 import { cardClass } from "@/lib/constants";
+import { Heading } from "@/app/ui/Heading/Heading";
 
 interface UsersDashboardProps {
   companyId: string;
@@ -42,38 +43,30 @@ const UsersDashboard: FC<UsersDashboardProps> = ({ companyId }) => {
 
   return (
     <>
+      <div className="flex justify-between items-end">
+        <Heading title={t("users")} />
+        <Button
+          variant="tertiary"
+          style={{ height: "auto" }}
+          label={t("invite_user")}
+          iconLeft={() => <Plus />}
+          onClick={() => {
+            setShowInviteUser(true);
+          }}
+          iconOnlyMobile
+        />
+      </div>
       {company && (
-        <>
-          <div className="flex flex-col">
-
-            <div>
-              <div className="flex justify-between mt-12">
-                <div className="self-end">{t("users")}</div>
-                {isAdminOrManager && (
-                  <Button
-                    variant="tertiary"
-                    label={t("invite_user")}
-                    iconLeft={() => <Plus />}
-                    onClick={() => {
-                      setShowInviteUser(true);
-                    }}
-                    style={{ height: "auto" }}
-                    iconOnlyMobile
-                  />
-                )}
-              </div>
-              <div className={cardClass}>
-                <CompanyUsersList
-                  users={company.users}
-                  onRemove={(userId) => setUserIdToRemove(userId)}
-                  onClickUser={() => {
-                    setShowLoader(true);
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </>
+        <div className={cardClass}>
+          <CompanyUsersList
+            users={company.users}
+            onRemove={(userId) => setUserIdToRemove(userId)}
+            onClickUser={() => {
+              setShowLoader(true);
+            }}
+            forceShowAll
+          />
+        </div>
       )}
       <InviteUserModal
         isOpen={showInviteUser}
