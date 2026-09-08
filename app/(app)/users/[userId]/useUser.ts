@@ -5,7 +5,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { CreateCustomObjectRequest, CustomFieldEntityType, CustomObjectDefinitionDetail, CustomObjectsByDefinition, Project, UpdateCustomObjectRequest, UpdateUserRequest, User, UserOrGuest } from "@/types";
+import { CreateCustomObjectRequest, CustomFieldEntityType, CustomObject, CustomObjectDefinitionDetail, CustomObjectsByDefinition, Project, UpdateCustomObjectRequest, UpdateUserRequest, User, UserOrGuest } from "@/types";
 
 export const useUser = (userId: string) => {
   const [loading, setLoading] = useState(true);
