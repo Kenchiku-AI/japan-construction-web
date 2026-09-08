@@ -152,14 +152,14 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
         </div>
         <div
           style={{
-            paddingTop: showIsSourceOwner ? 20 : 0,
+            paddingTop: showIsSourceOwner ? 24 : 0,
             height: showIsSourceOwner ? "auto" : 0,
             opacity: showIsSourceOwner ? 1 : 0,
             pointerEvents: showIsSourceOwner ? undefined : "none",
             transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
           }}
         >
-          <div className="flex flex-row px-4 gap-4">
+          <div className="flex flex-row px-3 gap-4">
             <input
               type="checkbox"
               className="checkbox checkbox-neutral"
