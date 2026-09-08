@@ -125,8 +125,9 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
           />
         </div>
         <div
-          className="flex flex-col gap-3 pt-3"
+          className="flex flex-col gap-3"
           style={{
+            paddingTop: showIsSourceOwner ? 12 : 0,
             height: showRelationshipConfig ? 144 : 0,
             opacity: showRelationshipConfig ? 1 : 0,
             pointerEvents: showRelationshipConfig ? undefined : "none",
@@ -150,9 +151,9 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
           />
         </div>
         <div
-          className="pt-3"
           style={{
-            height: showIsSourceOwner ? 72 : 0,
+            paddingTop: showIsSourceOwner ? 12 : 0,
+            height: showIsSourceOwner ? "auto" : 0,
             opacity: showIsSourceOwner ? 1 : 0,
             pointerEvents: showIsSourceOwner ? undefined : "none",
             transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
