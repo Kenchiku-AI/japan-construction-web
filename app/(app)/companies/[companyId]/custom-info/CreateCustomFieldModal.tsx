@@ -6,6 +6,7 @@ import Modal from "@/app/ui/Modal";
 import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Select from "@/app/ui/Select/Select";
 import { CustomObjectDefinition } from "@/types";
+import styles from "./page.module.css";
 
 interface CreateCustomFieldModalProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
   const [fieldType, setFieldType] = useState("text");
   const [relationshipType, setRelationshipType] = useState("one");
   const [relationshipTarget, setRelationshipTarget] = useState("project");
+  const [isSourceOwner, setIsSourceOwner] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -45,6 +47,16 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
   const showRelationshipConfig = useMemo(() => {
     return fieldType === "relationship";
   }, [fieldType]);
+
+  const showIsSourceOwner = useMemo(() => {
+    if (fieldType !== "relationship") return false;
+
+    if (["project", "user"].includes(relationshipTarget)) {
+      return false;
+    }
+
+    return true;
+  }, [fieldType, relationshipTarget]);
 
   const relationshipTargetOptions = useMemo(() => {
     const options = [
@@ -76,6 +88,7 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
       setRelationshipType("one");
       setRelationshipTarget("project");
       setTitle(`create_field`);
+      setIsSourceOwner(false);
     }, 500);
   };
 
@@ -134,7 +147,30 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
             options={relationshipTargetOptions}
           />
         </div>
-
+        <div
+          className="pt-3"
+          style={{
+            height: showIsSourceOwner ? 72 : 0,
+            opacity: showIsSourceOwner ? 1 : 0,
+            pointerEvents: showIsSourceOwner ? undefined : "none",
+            transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
+          }}
+        >
+          <div className="flex flex-row gap-4">
+            <input
+              type="checkbox"
+              className="toggle toggle-md"
+              checked={isSourceOwner}
+              onChange={(e) => setIsSourceOwner(e.target.checked)}
+            />
+            <div>
+              <div>{t("is_source_owner")}</div>
+              <div className={styles.subtitle}>
+                {t("is_source_owner_description")}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <Button
         disabled={!name || !description}

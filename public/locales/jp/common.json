@@ -234,6 +234,8 @@
   "invite": "招待する",
   "invite_user": "ユーザーを招待",
   "invite_user_description": "ユーザーを招待するには、メールアドレスを入力し、権限を選択してください。",
+  "is_source_owner": "元オブジェクトが所有者となる",
+  "is_source_owner_description": "この関連を通じて作成された関連先オブジェクトは、元オブジェクト専用となり、他のオブジェクトや関連からはアクセス・管理できなくなります。",
   "last_message": "最新のメッセージ",
   "last_name": "姓",
   "line_channel_secret": "LINE Channel Secret",
