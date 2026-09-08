@@ -56,6 +56,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const [role, setRole] = useState("");
   const [editObject, setEditObject] = useState<CustomObject>();
   const [deleteObject, setDeleteObject] = useState<CustomObject>();
+  const fieldIdToUpdate = useRef("");
   const [createObjectDefinition, setCreateObjectDefinition] = useState<CustomObjectDefinitionDetail>();
   const [isConfirmLogoutShown, setIsConfirmLogoutShown] = useState(false);
 
@@ -221,10 +222,12 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                     onCreateRelationshipObject={async (definitionId) => {
                       const definition = await getCustomObjectDefinition(definitionId);
                       setCreateObjectDefinition(definition);
+                      fieldIdToUpdate.current = item.id;
                     }}
                     onEditRelationshipObject={async (objectId) => {
                       const object = await getCustomObject(objectId);
                       setEditObject(object);
+                      fieldIdToUpdate.current = item.id;
                     }}
                     isEditable={!isEditDisabled}
                   />
@@ -258,16 +261,20 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
         isOpen={!!createObjectDefinition}
         onClose={() => {
           setCreateObjectDefinition(undefined);
+          fieldIdToUpdate.current = "";
         }}
         onCreate={(fields, relationships) => {
           if (!createObjectDefinition) return;
 
-          createCustomObject({
-            company_id: createObjectDefinition.company_id,
-            custom_object_definition_id: createObjectDefinition.id,
-            fields,
-            relationships
-          });
+          createCustomObject(
+            {
+              company_id: createObjectDefinition.company_id,
+              custom_object_definition_id: createObjectDefinition.id,
+              fields,
+              relationships
+            },
+            fieldIdToUpdate.current
+          );
         }}
       />
       <EditCustomObjectModal
@@ -279,6 +286,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
         isOpen={!!editObject}
         onClose={() => {
           setEditObject(undefined);
+          fieldIdToUpdate.current = "";
         }}
         onSubmit={(fields, relationships) => {
           if (!editObject) return;
@@ -300,12 +308,14 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
         isOpen={!!deleteObject}
         onClose={() => {
           setDeleteObject(undefined);
+          fieldIdToUpdate.current = "";
         }}
         onDelete={() => {
           if (!deleteObject) return;
 
-          deleteCustomObject(deleteObject.id);
+          deleteCustomObject(deleteObject.id, fieldIdToUpdate.current);
           setDeleteObject(undefined);
+          fieldIdToUpdate.current = "";
         }}
       />
       {loading && <Loader />}

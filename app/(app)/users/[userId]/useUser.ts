@@ -5,7 +5,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { CreateCustomObjectRequest, CustomFieldEntityType, CustomObject, CustomObjectDefinitionDetail, CustomObjectsByDefinition, Project, UpdateCustomObjectRequest, UpdateUserRequest, User, UserOrGuest } from "@/types";
+import { CreateCustomObjectRequest, CustomFieldEntityType, CustomObject, CustomObjectDefinitionDetail, CustomObjectsByDefinition, Project, UpdateCustomObjectRequest, UpdateCustomRelationshipRequest, UpdateUserRequest, User, UserOrGuest } from "@/types";
 
 export const useUser = (userId: string) => {
   const [loading, setLoading] = useState(true);
@@ -185,47 +185,51 @@ export const useUser = (userId: string) => {
         target_entity_ids: customRelationships[itemId].filter(Boolean)
       };
 
-      try {
-        const response = await api.updateCustomRelationship(itemId, request);
-
-        if (response) {
-          setUser((prev) => {
-            if (!prev) return prev;
-
-            const otherRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
-            const newRelationships = response;
-
-            if (!newRelationships.length) {
-              const definition = prev.custom_relationships.find((r) => r.definition.id === itemId)?.definition;
-
-              if (definition) {
-                newRelationships.push(
-                  {
-                    source_entity_id: userId,
-                    definition
-                  }
-                )
-              }
-            }
-
-            return {
-              ...prev,
-              custom_relationships: [
-                ...otherRelationships,
-                ...newRelationships
-              ]
-            }
-          });
-        }
-      } catch (e) {
-        showModal({
-          title: t("error"),
-          subtitle: t("error_description"),
-        });
-        resetCustomField(itemId);
-      }
+      updateCustomRelationship(itemId, request)
     }
   }, [user, customFields, customRelationships]);
+
+  const updateCustomRelationship = async (itemId: string, request: UpdateCustomRelationshipRequest) => {
+    try {
+      const response = await api.updateCustomRelationship(itemId, request);
+
+      if (response) {
+        setUser((prev) => {
+          if (!prev) return prev;
+
+          const otherRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
+          const newRelationships = response;
+
+          if (!newRelationships.length) {
+            const definition = prev.custom_relationships.find((r) => r.definition.id === itemId)?.definition;
+
+            if (definition) {
+              newRelationships.push(
+                {
+                  source_entity_id: userId,
+                  definition
+                }
+              )
+            }
+          }
+
+          return {
+            ...prev,
+            custom_relationships: [
+              ...otherRelationships,
+              ...newRelationships
+            ]
+          }
+        });
+      }
+    } catch (e) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+      resetCustomField(itemId);
+    }
+  };
 
   const resetCustomField = useCallback((itemId: string) => {
     if (!user) return;
@@ -350,11 +354,24 @@ export const useUser = (userId: string) => {
     return objectDefition;
   };
 
-  const createCustomObject = async (request: CreateCustomObjectRequest) => {
+  const createCustomObject = useCallback(async (request: CreateCustomObjectRequest, fieldId: string) => {
     setLoading(true);
 
     try {
-      await api.createCustomObject(request);
+      const response = await api.createCustomObject(request);
+
+      if (response) {
+        const request = {
+          source_entity_id: userId,
+          target_entity_ids: [
+            ...customRelationships[fieldId].filter(Boolean),
+            response.id
+          ]
+        };
+
+        updateCustomRelationship(fieldId, request);
+      }
+
       refreshCustomObjectsByDefinition();
     } catch (err) {
       showModal({
@@ -364,7 +381,7 @@ export const useUser = (userId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [userId, customRelationships]);
 
   const updateCustomObject = async (objectId: string, request: UpdateCustomObjectRequest) => {
     setLoading(true);
@@ -382,12 +399,20 @@ export const useUser = (userId: string) => {
     setLoading(false);
   };
 
-  const deleteCustomObject = async (objectId: string) => {
+  const deleteCustomObject = useCallback(async (objectId: string, fieldId: string) => {
     setLoading(true);
 
     try {
+      const request = {
+        source_entity_id: userId,
+        target_entity_ids: customRelationships[fieldId].filter((id) => {
+          return !id ? false : id !== objectId;
+        })
+      };
+
+      await updateCustomRelationship(fieldId, request);
+
       await api.deleteCustomObject(objectId);
-      refreshCustomObjectsByDefinition();
     } catch (err) {
       showModal({
         title: t("error"),
@@ -396,7 +421,7 @@ export const useUser = (userId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [userId, customRelationships]);
 
   return {
     loading,

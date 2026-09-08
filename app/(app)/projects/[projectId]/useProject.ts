@@ -135,16 +135,14 @@ export const useProject = (projectId: string) => {
     setLoading(true);
 
     try {
-      if (project) {
-        const request = {
-          source_entity_id: project.company_id,
-          target_entity_ids: customRelationships[fieldId].filter((id) => {
-            return !id ? false : id !== objectId;
-          })
-        };
+      const request = {
+        source_entity_id: projectId,
+        target_entity_ids: customRelationships[fieldId].filter((id) => {
+          return !id ? false : id !== objectId;
+        })
+      };
 
-        await updateCustomRelationship(fieldId, request);
-      }
+      await updateCustomRelationship(fieldId, request);
 
       await api.deleteCustomObject(objectId);
     } catch (err) {
@@ -155,7 +153,7 @@ export const useProject = (projectId: string) => {
     }
 
     setLoading(false);
-  }, [project, customRelationships]);
+  }, [projectId, customRelationships]);
 
   const getCustomObjectsByDefinitionId = async (company_id: string, definition_ids: string[]) => {
     try {
