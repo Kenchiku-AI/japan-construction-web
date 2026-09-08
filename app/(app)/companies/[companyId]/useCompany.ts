@@ -507,7 +507,7 @@ export const useCompany = (companyId: string) => {
           ]
         };
 
-        updateCustomField(fieldId);
+        updateCustomRelationship(fieldId, request);
       }
 
       refreshCustomObjectsByDefinition();
