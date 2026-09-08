@@ -5,7 +5,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { CustomFieldEntityType, CustomObjectsByDefinition, Project, UpdateUserRequest, User, UserOrGuest } from "@/types";
+import { CreateCustomObjectRequest, CustomFieldEntityType, CustomObjectDefinitionDetail, CustomObjectsByDefinition, Project, UpdateCustomObjectRequest, UpdateUserRequest, User, UserOrGuest } from "@/types";
 
 export const useUser = (userId: string) => {
   const [loading, setLoading] = useState(true);
@@ -256,7 +256,6 @@ export const useUser = (userId: string) => {
     }
   }, [user]);
 
-
   const getUser = useCallback(
     async (userId: string) => {
       try {
@@ -305,6 +304,102 @@ export const useUser = (userId: string) => {
     [userId, currentUser],
   );
 
+  const getCustomObject = async (customObjectId: string) => {
+    let object: CustomObject | undefined;
+    setLoading(true);
+
+    try {
+      object = await api.getCustomObject(customObjectId);
+
+      console.log("object response", object);
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+    return object;
+  };
+
+  const refreshCustomObjectsByDefinition = useCallback(async () => {
+    if (!user?.company_id) return;
+
+    const relationshipDefs = user.custom_relationships.map((r) => r.definition);
+    const targetIds = relationshipDefs.map((r) => r.target_custom_object_definition_id);
+    const definitionIds = targetIds.filter((id) => id != null);
+
+    if (!!definitionIds.length) {
+      getCustomObjectsByDefinitionId(user.company_id, definitionIds);
+    }
+  }, [user]);
+
+  const getCustomObjectDefinition = async (customObjectDefinitionId: string) => {
+    let objectDefition: CustomObjectDefinitionDetail | undefined;
+    setLoading(true);
+
+    try {
+      objectDefition = await api.getCustomObjectDefinition(customObjectDefinitionId);
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+    return objectDefition;
+  };
+
+  const createCustomObject = async (request: CreateCustomObjectRequest) => {
+    setLoading(true);
+
+    try {
+      await api.createCustomObject(request);
+      refreshCustomObjectsByDefinition();
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const updateCustomObject = async (objectId: string, request: UpdateCustomObjectRequest) => {
+    setLoading(true);
+
+    try {
+      await api.updateCustomObject(objectId, request);
+      refreshCustomObjectsByDefinition();
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const deleteCustomObject = async (objectId: string) => {
+    setLoading(true);
+
+    try {
+      await api.deleteCustomObject(objectId);
+      refreshCustomObjectsByDefinition();
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
   return {
     loading,
     user,
@@ -318,6 +413,11 @@ export const useUser = (userId: string) => {
     updateCustomField,
     resetCustomField,
     projects,
-    users
+    users,
+    getCustomObject,
+    createCustomObject,
+    updateCustomObject,
+    deleteCustomObject,
+    getCustomObjectDefinition,
   };
 };

@@ -8,7 +8,7 @@ import Modal from "@/app/ui/Modal";
 import { useApi } from "@/lib/api/ApiContext";
 import { cardClass, emailRegex, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { useModal } from "@/lib/modal/ModalContext";
-import { UserRole } from "@/types";
+import { CustomObject, CustomObjectDefinitionDetail, UserRole } from "@/types";
 import { redirect } from "next/navigation";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,9 @@ import { Loader } from "@/app/ui/Loader";
 import Select from "@/app/ui/Select/Select";
 import Divider from "@/app/ui/Divider";
 import CustomFieldListCell from "@/app/ui/CustomFieldListCell/CustomFieldListCell";
+import ConfirmDeleteModal from "../../projects/[projectId]/ConfirmDeleteModal";
+import EditCustomObjectModal from "../../custom-objects/[customObjectDefinitionId]/EditCustomObjectModal";
+import CreateCustomObjectModal from "../../custom-objects/[customObjectDefinitionId]/CreateCustomObjectModal";
 
 interface UserDashboardProps {
   userId: string;
@@ -38,6 +41,11 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
     users,
     resetCustomField,
     updateCustomField,
+    createCustomObject,
+    getCustomObject,
+    getCustomObjectDefinition,
+    deleteCustomObject,
+    updateCustomObject
   } = useUser(userId);
   const userRef = useRef(user);
   const { currentUser, logout } = useApi();
@@ -46,6 +54,9 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
+  const [editObject, setEditObject] = useState<CustomObject>();
+  const [deleteObject, setDeleteObject] = useState<CustomObject>();
+  const [createObjectDefinition, setCreateObjectDefinition] = useState<CustomObjectDefinitionDetail>();
   const [isConfirmLogoutShown, setIsConfirmLogoutShown] = useState(false);
 
   const isEditDisabled = useMemo(() => {
@@ -207,6 +218,14 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                     onSubmit={() => {
                       updateCustomField(item.id);
                     }}
+                    onCreateRelationshipObject={async (definitionId) => {
+                      const definition = await getCustomObjectDefinition(definitionId);
+                      setCreateObjectDefinition(definition);
+                    }}
+                    onEditRelationshipObject={async (objectId) => {
+                      const object = await getCustomObject(objectId);
+                      setEditObject(object);
+                    }}
                     isEditable={!isEditDisabled}
                   />
                 </div>
@@ -231,6 +250,64 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
           />
         </div>
       </Modal>
+      <CreateCustomObjectModal
+        definition={createObjectDefinition}
+        projects={projects}
+        users={users}
+        customObjectsByDefinition={customObjectsByDefinition}
+        isOpen={!!createObjectDefinition}
+        onClose={() => {
+          setCreateObjectDefinition(undefined);
+        }}
+        onCreate={(fields, relationships) => {
+          if (!createObjectDefinition) return;
+
+          createCustomObject({
+            company_id: createObjectDefinition.company_id,
+            custom_object_definition_id: createObjectDefinition.id,
+            fields,
+            relationships
+          });
+        }}
+      />
+      <EditCustomObjectModal
+        definition={editObject?.definition}
+        object={editObject}
+        projects={projects}
+        users={users}
+        customObjectsByDefinition={customObjectsByDefinition}
+        isOpen={!!editObject}
+        onClose={() => {
+          setEditObject(undefined);
+        }}
+        onSubmit={(fields, relationships) => {
+          if (!editObject) return;
+
+          const request = {
+            custom_object_definition_id: editObject.definition.id,
+            fields,
+            relationships
+          };
+
+          updateCustomObject(editObject.id, request);
+        }}
+        onDelete={() => {
+          setDeleteObject(editObject);
+          setEditObject(undefined);
+        }}
+      />
+      <ConfirmDeleteModal
+        isOpen={!!deleteObject}
+        onClose={() => {
+          setDeleteObject(undefined);
+        }}
+        onDelete={() => {
+          if (!deleteObject) return;
+
+          deleteCustomObject(deleteObject.id);
+          setDeleteObject(undefined);
+        }}
+      />x
       {loading && <Loader />}
     </>
   );
