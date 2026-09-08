@@ -488,11 +488,28 @@ export const useCompany = (companyId: string) => {
     return objectDefition;
   };
 
-  const createCustomObject = async (request: CreateCustomObjectRequest) => {
+  const createCustomObject = async (request: CreateCustomObjectRequest, fieldId: string) => {
     setLoading(true);
 
     try {
-      await api.createCustomObject(request);
+      const response = await api.createCustomObject(request);
+
+      if (response) {
+        setCustomRelationships((prev) => {
+          const oldIds = prev[fieldId];
+
+          return {
+            ...prev,
+            [fieldId]: [
+              ...oldIds,
+              response.id
+            ]
+          }
+        });
+
+        updateCustomField(fieldId);
+      }
+
       refreshCustomObjectsByDefinition();
     } catch (err) {
       showModal({

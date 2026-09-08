@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useMemo, useState } from "react";
+import { FC, useMemo, useState, useRef } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -88,6 +88,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [editObject, setEditObject] = useState<CustomObject>();
   const [deleteObject, setDeleteObject] = useState<CustomObject>();
   const [createObjectDefinition, setCreateObjectDefinition] = useState<CustomObjectDefinitionDetail>();
+  const addObjectToCustomFieldId = useRef("");
   const {
     tags,
     updateTag,
@@ -191,6 +192,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                     onCreateRelationshipObject={async (definitionId) => {
                       const definition = await getCustomObjectDefinition(definitionId);
                       setCreateObjectDefinition(definition);
+                      addObjectToCustomFieldId.current = item.id;
                     }}
                     onEditRelationshipObject={async (objectId) => {
                       const object = await getCustomObject(objectId);
@@ -541,16 +543,20 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
         isOpen={!!createObjectDefinition}
         onClose={() => {
           setCreateObjectDefinition(undefined);
+          addObjectToCustomFieldId.current = "";
         }}
         onCreate={(fields, relationships) => {
           if (!createObjectDefinition) return;
 
-          createCustomObject({
-            company_id: createObjectDefinition.company_id,
-            custom_object_definition_id: createObjectDefinition.id,
-            fields,
-            relationships
-          });
+          createCustomObject(
+            {
+              company_id: createObjectDefinition.company_id,
+              custom_object_definition_id: createObjectDefinition.id,
+              fields,
+              relationships
+            },
+            addObjectToCustomFieldId.current
+          );
         }}
       />
       <EditCustomObjectModal
