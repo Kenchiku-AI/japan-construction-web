@@ -52,7 +52,7 @@ const Multiselect: FC<MultiselectProps> = ({
   }, [values, options]);
 
   const availableOptions = useMemo(() => {
-    if (!!onEdit) return options;
+    // if (!!onEdit) return options;
 
     return options.filter(
       (option) =>
@@ -144,7 +144,7 @@ const Multiselect: FC<MultiselectProps> = ({
       <div
         tabIndex={0}
         ref={triggerRef}
-        className="select w-full cursor-pointer flex items-center focus:outline focus:outline-2 !h-auto"
+        className="select w-full flex items-center !h-auto"
         onClick={() => !disabled && setOpen((o) => !o)}
         onBlur={() => setOpen(false)}
         style={{
