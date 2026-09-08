@@ -52,7 +52,7 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
   const showIsSourceOwner = useMemo(() => {
     const nativeTypes = ["company", "project", "user"];
 
-    if (nativeTypes.includes(ownerType ?? '')) return false;
+    if (!nativeTypes.includes(ownerType ?? '')) return false;
 
     if (fieldType !== "relationship") return false;
 
