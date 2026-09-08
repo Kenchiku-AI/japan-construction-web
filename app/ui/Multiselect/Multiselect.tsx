@@ -1,6 +1,7 @@
 import {
   bgColor2,
   bgColor3,
+  buttonColor,
   errorColor2,
   fontColor1,
   fontColor2,
@@ -176,16 +177,18 @@ const Multiselect: FC<MultiselectProps> = ({
                 }}
               >
                 <div
-                // onMouseDown={(e) => {
-                //   e.stopPropagation();
-                //   e.preventDefault();
-                //   handleRemove(value);
-                // }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    onEdit?.(option.value as string);
+                  }}
                 >
                   {option.label}
                 </div>
                 <button
                   type="button"
+                  style={{ color: buttonColor }}
                   className="cursor-pointer leading-none opacity-60 hover:opacity-100"
                   onMouseDown={(e) => {
                     e.stopPropagation();
