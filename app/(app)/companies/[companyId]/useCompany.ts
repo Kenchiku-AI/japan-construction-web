@@ -540,7 +540,7 @@ export const useCompany = (companyId: string) => {
 
     try {
       if (company) {
-        console.log("hello?")
+        console.log("hello?", customRelationships, fieldId);
 
         const request = {
           source_entity_id: company.id,
