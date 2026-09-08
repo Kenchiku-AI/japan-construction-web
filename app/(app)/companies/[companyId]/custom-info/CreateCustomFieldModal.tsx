@@ -7,6 +7,7 @@ import { TextArea } from "@/app/ui/TextArea/TextArea";
 import Select from "@/app/ui/Select/Select";
 import { CustomObjectDefinition } from "@/types";
 import styles from "./page.module.css";
+import { fontColor2 } from "@/lib/constants";
 
 interface CreateCustomFieldModalProps {
   isOpen: boolean;
@@ -164,9 +165,9 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
               checked={isSourceOwner}
               onChange={(e) => setIsSourceOwner(e.target.checked)}
             />
-            <div className="min-w-0">
+            <div>
               <div>{t("is_source_owner")}</div>
-              <div className={styles.subtitle}>
+              <div style={{ color: fontColor2, fontSize: 14 }}>
                 {t("is_source_owner_description")}
               </div>
             </div>
