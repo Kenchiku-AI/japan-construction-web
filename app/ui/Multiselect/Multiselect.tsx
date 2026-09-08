@@ -177,6 +177,7 @@ const Multiselect: FC<MultiselectProps> = ({
                 }}
               >
                 <div
+                  className={!!onEdit ? "hover:opacity-50" : ""}
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -189,7 +190,7 @@ const Multiselect: FC<MultiselectProps> = ({
                 <button
                   type="button"
                   style={{ color: buttonColor }}
-                  className="cursor-pointer leading-none opacity-60 hover:opacity-100"
+                  className="cursor-pointer leading-none hover:opacity-50"
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -214,7 +215,8 @@ const Multiselect: FC<MultiselectProps> = ({
         </div>
       </div>
 
-      {open &&
+      {
+        open &&
         !disabled &&
         typeof window !== "undefined" &&
         createPortal(
@@ -277,8 +279,9 @@ const Multiselect: FC<MultiselectProps> = ({
             )}
           </ul>,
           document.body,
-        )}
-    </div>
+        )
+      }
+    </div >
   );
 };
 
