@@ -175,7 +175,7 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({
   return (
     <div className="flex flex-col flex-1 h-full">
       {isRelationshipWithObject &&
-        <div className="pb-3 pr-3 flex justify-end">
+        <div className="pb-3 pr-2 flex justify-end">
           <Button
             variant="tertiary"
             label={t("create_object", { name: props.definition.name })}
@@ -186,7 +186,6 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({
               onCreateRelationshipObject?.(definitionId);
             }}
             style={{ height: "auto" }}
-            iconOnlyMobile
           />
         </div>
       }
