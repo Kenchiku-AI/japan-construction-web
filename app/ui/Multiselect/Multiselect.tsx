@@ -137,8 +137,6 @@ const Multiselect: FC<MultiselectProps> = ({
 
   const hasValues = values.length > 0;
 
-  console.log("values", values);
-
   return (
     <div className="relative flex">
       <div className={styles.label} style={{ opacity: !hasValues ? 0 : 1 }}>

@@ -537,12 +537,23 @@ export const useCompany = (companyId: string) => {
     setLoading(false);
   };
 
-  const deleteCustomObject = async (objectId: string) => {
+  const deleteCustomObject = useCallback(async (objectId: string, fieldId: string) => {
     setLoading(true);
 
     try {
       await api.deleteCustomObject(objectId);
-      refreshCustomObjectsByDefinition();
+
+      if (company) {
+        const request = {
+          source_entity_id: company.id,
+          target_entity_ids: customRelationships[fieldId].filter((id) => {
+            return !id ? false : id !== objectId;
+          })
+        };
+
+        updateCustomRelationship(fieldId, request);
+      }
+
     } catch (err) {
       showModal({
         title: t("error"),
@@ -551,7 +562,7 @@ export const useCompany = (companyId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [company]);
 
   return {
     loading,
