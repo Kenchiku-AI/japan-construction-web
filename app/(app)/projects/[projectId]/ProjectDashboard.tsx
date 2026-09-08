@@ -541,6 +541,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
           setCreateObjectDefinition(undefined);
         }}
         onCreate={(fields, relationships) => {
+          console.log("CREATE OBJECT DEF", createObjectDefinition);
+
           if (!createObjectDefinition) return;
 
           createCustomObject({

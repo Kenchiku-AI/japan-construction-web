@@ -108,6 +108,9 @@ export const useProject = (projectId: string) => {
 
     try {
       await api.createCustomObject(request);
+
+      console.log("creating custom object")
+
       refreshCustomObjectsByDefinition();
     } catch (err) {
       showModal({
