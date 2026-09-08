@@ -540,6 +540,8 @@ export const useCompany = (companyId: string) => {
 
     try {
       if (company) {
+        console.log("hello?")
+
         const request = {
           source_entity_id: company.id,
           target_entity_ids: customRelationships[fieldId].filter((id) => {
@@ -563,7 +565,7 @@ export const useCompany = (companyId: string) => {
     }
 
     setLoading(false);
-  }, [company]);
+  }, [company, customRelationships]);
 
   return {
     loading,
