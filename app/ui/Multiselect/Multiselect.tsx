@@ -200,6 +200,11 @@ const Multiselect: FC<MultiselectProps> = ({
                   }}
                 >
                   {option.label}
+                  {(!!disableDropdown && !!onEdit) && (
+                    <div className="ml-3">
+                      <Edit size={10} />
+                    </div>
+                  )}
                 </div>
                 {!disableDropdown && (
                   <button
