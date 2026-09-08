@@ -45,7 +45,12 @@ const EditCustomObjectModal: FC<EditCustomObjectModalProps> = ({
   const [fieldDefinitions, setFieldDefinitions] = useState<CustomFieldDefinitionListItem[]>([]);
 
   useEffect(() => {
-    if (!definition) return;
+    if (!definition) {
+      setTimeout(() => {
+        setFieldDefinitions([]);
+      }, 1000);
+      return;
+    }
 
     const defs = [
       ...definition.fields,

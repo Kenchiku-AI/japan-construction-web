@@ -57,6 +57,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
     getCompanyUsers,
     createCustomObject,
     getCustomObject,
+    deleteCustomObject,
     getCustomObjectDefinition,
     inviteGuest,
     removeGuest,
@@ -577,6 +578,18 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         onDelete={() => {
           setDeleteObject(editObject);
           setEditObject(undefined);
+        }}
+      />
+      <ConfirmDeleteModal
+        isOpen={!!deleteObject}
+        onClose={() => {
+          setDeleteObject(undefined);
+        }}
+        onDelete={() => {
+          if (!deleteObject) return;
+
+          deleteCustomObject(deleteObject.id);
+          setDeleteObject(undefined);
         }}
       />
       <CreateConversationItemModal

@@ -1,8 +1,9 @@
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import {
+  CustomFieldDefinitionListItem,
   CustomObjectDefinitionDetail,
   CustomObjectsByDefinition,
   Project,
@@ -33,16 +34,24 @@ const CreateCustomObjectModal: FC<CreateCustomObjectModalProps> = ({
   const { t } = useTranslation();
   const [fields, setFields] = useState<Record<string, string>>({});
   const [relationships, setRelationships] = useState<Record<string, string[]>>({});
+  const [fieldDefinitions, setFieldDefinitions] = useState<CustomFieldDefinitionListItem[]>([]);
 
-  const fieldDefinitions = useMemo(() => {
-    if (!definition) return [];
+  useEffect(() => {
+    if (!definition) {
+      setTimeout(() => {
+        setFieldDefinitions([]);
+      }, 1000);
+      return;
+    }
 
-    return [
+    const defs = [
       ...definition.fields,
       ...definition.relationships
     ].sort(
       (a, b) => a.sort_order - b.sort_order
     );
+
+    setFieldDefinitions(defs);
   }, [definition]);
 
   const closeAndReset = useCallback(() => {

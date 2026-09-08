@@ -119,6 +119,22 @@ export const useProject = (projectId: string) => {
     setLoading(false);
   }, [projectId]);
 
+  const deleteCustomObject = async (objectId: string) => {
+    setLoading(true);
+
+    try {
+      await api.deleteCustomObject(objectId);
+      refreshCustomObjectsByDefinition();
+    } catch (err) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+    }
+
+    setLoading(false);
+  };
+
   const getCustomObjectsByDefinitionId = async (company_id: string, definition_ids: string[]) => {
     try {
       const request = { company_id, definition_ids };
@@ -719,6 +735,8 @@ export const useProject = (projectId: string) => {
     deleteConversationItem,
     createCustomObject,
     getCustomObject,
+    updateCustomObject,
+    deleteCustomObject,
     getCustomObjectDefinition,
     deleteProject,
     customFieldDefinitions,
@@ -729,7 +747,6 @@ export const useProject = (projectId: string) => {
     customObjectsByDefinition,
     updateCustomField,
     resetCustomField,
-    updateCustomObject,
     projects
   };
 };
