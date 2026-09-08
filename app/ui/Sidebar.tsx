@@ -202,7 +202,7 @@ const SidebarItem = ({ name, icon, path }: SidebarItemProps) => {
           <span>{name}</span>
         </a>
       </li>
-      <Divider />
+      <Divider style={{ margin: "5px 0" }} />
     </>
   );
 };
