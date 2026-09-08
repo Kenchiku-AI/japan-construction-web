@@ -6,7 +6,7 @@ import { Company, CompanyGuest } from "@/types/companies";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
-import { CreateCustomObjectRequest, CustomFieldEntityType, CustomObject, CustomObjectDefinitionDetail, CustomObjectsByDefinition, ReportTemplate, ReportTemplateRequest, UpdateCustomObjectRequest } from "@/types";
+import { CreateCustomObjectRequest, CustomFieldEntityType, CustomObject, CustomObjectDefinitionDetail, CustomObjectsByDefinition, ReportTemplate, ReportTemplateRequest, UpdateCustomObjectRequest, UpdateCustomRelationshipRequest } from "@/types";
 
 export const useCompany = (companyId: string) => {
   const [loading, setLoading] = useState(false);
@@ -162,47 +162,51 @@ export const useCompany = (companyId: string) => {
         target_entity_ids: customRelationships[itemId].filter(Boolean)
       };
 
-      try {
-        const response = await api.updateCustomRelationship(itemId, request);
-
-        if (response) {
-          setCompany((prev) => {
-            if (!prev) return prev;
-
-            const otherRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
-            const newRelationships = response;
-
-            if (!newRelationships.length) {
-              const definition = prev.custom_relationships.find((r) => r.definition.id === itemId)?.definition;
-
-              if (definition) {
-                newRelationships.push(
-                  {
-                    source_entity_id: companyId,
-                    definition
-                  }
-                )
-              }
-            }
-
-            return {
-              ...prev,
-              custom_relationships: [
-                ...otherRelationships,
-                ...newRelationships
-              ]
-            }
-          });
-        }
-      } catch (e) {
-        showModal({
-          title: t("error"),
-          subtitle: t("error_description"),
-        });
-        resetCustomField(itemId);
-      }
+      updateCustomRelationship(itemId, request);
     }
   }, [company, customFields, customRelationships]);
+
+  const updateCustomRelationship = async (itemId: string, request: UpdateCustomRelationshipRequest) => {
+    try {
+      const response = await api.updateCustomRelationship(itemId, request);
+
+      if (response) {
+        setCompany((prev) => {
+          if (!prev) return prev;
+
+          const otherRelationships = prev.custom_relationships.filter((r) => r.definition.id !== itemId);
+          const newRelationships = response;
+
+          if (!newRelationships.length) {
+            const definition = prev.custom_relationships.find((r) => r.definition.id === itemId)?.definition;
+
+            if (definition) {
+              newRelationships.push(
+                {
+                  source_entity_id: companyId,
+                  definition
+                }
+              )
+            }
+          }
+
+          return {
+            ...prev,
+            custom_relationships: [
+              ...otherRelationships,
+              ...newRelationships
+            ]
+          }
+        });
+      }
+    } catch (e) {
+      showModal({
+        title: t("error"),
+        subtitle: t("error_description"),
+      });
+      resetCustomField(itemId);
+    }
+  }
 
   const resetCustomField = useCallback((itemId: string) => {
     if (!company) return;
@@ -488,24 +492,20 @@ export const useCompany = (companyId: string) => {
     return objectDefition;
   };
 
-  const createCustomObject = async (request: CreateCustomObjectRequest, fieldId: string) => {
+  const createCustomObject = useCallback(async (request: CreateCustomObjectRequest, fieldId: string) => {
     setLoading(true);
 
     try {
       const response = await api.createCustomObject(request);
 
-      if (response) {
-        setCustomRelationships((prev) => {
-          const oldIds = prev[fieldId];
-
-          return {
-            ...prev,
-            [fieldId]: [
-              ...oldIds,
-              response.id
-            ]
-          }
-        });
+      if (response && company) {
+        const request = {
+          source_entity_id: company.id,
+          target_entity_ids: [
+            ...customRelationships[fieldId].filter(Boolean),
+            response.id
+          ]
+        };
 
         updateCustomField(fieldId);
       }
@@ -519,7 +519,7 @@ export const useCompany = (companyId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [company, customRelationships]);
 
   const updateCustomObject = async (objectId: string, request: UpdateCustomObjectRequest) => {
     setLoading(true);
