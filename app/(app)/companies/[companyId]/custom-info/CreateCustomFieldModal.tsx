@@ -159,13 +159,15 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
             transition: "height 0.1s ease-in-out, opacity 0.1s ease-in-out",
           }}
         >
-          <div className="flex flex-row gap-4 items-center">
-            <input
-              type="checkbox"
-              className="checkbox checkbox-neutral"
-              checked={isSourceOwner}
-              onChange={(e) => setIsSourceOwner(e.target.checked)}
-            />
+          <div className="flex flex-row">
+            <div className="p-4">
+              <input
+                type="checkbox"
+                className="checkbox checkbox-neutral"
+                checked={isSourceOwner}
+                onChange={(e) => setIsSourceOwner(e.target.checked)}
+              />
+            </div>
             <div>
               <div>{t("is_source_owner")}</div>
               <div style={{ color: fontColor2, fontSize: 14 }}>
