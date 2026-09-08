@@ -127,7 +127,7 @@ const CreateCustomFieldModal: FC<CreateCustomFieldModalProps> = ({
         <div
           className="flex flex-col gap-3"
           style={{
-            paddingTop: showIsSourceOwner ? 12 : 0,
+            paddingTop: showRelationshipConfig ? 12 : 0,
             height: showRelationshipConfig ? 144 : 0,
             opacity: showRelationshipConfig ? 1 : 0,
             pointerEvents: showRelationshipConfig ? undefined : "none",
