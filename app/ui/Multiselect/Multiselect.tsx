@@ -191,7 +191,7 @@ const Multiselect: FC<MultiselectProps> = ({
                 }}
               >
                 <div
-                  className={!!onEdit ? "cursor-pointer hover:opacity-50 flex flex-row gap-3" : ""}
+                  className={!!onEdit ? "cursor-pointer hover:opacity-50 flex flex-row gap-2 items-center" : ""}
                   onClick={(e) => {
                     if (!disabled) {
                       setOpen(false);
@@ -201,7 +201,7 @@ const Multiselect: FC<MultiselectProps> = ({
                 >
                   {option.label}
                   {(!!disableDropdown && !!onEdit) && (
-                    <Edit size={12} />
+                    <Edit size={14} />
                   )}
                 </div>
                 {!disableDropdown && (
