@@ -187,15 +187,11 @@ const Multiselect: FC<MultiselectProps> = ({
                 <div
                   className={!!onEdit ? "cursor-pointer hover:opacity-50" : ""}
                   onClick={(e) => {
-                    // e.stopPropagation();
                     if (!disabled) {
+                      setOpen(false);
                       onEdit?.(option.value as string);
                     }
                   }}
-                // onMouseDown={(e) => {
-                //   e.stopPropagation();
-                //   e.preventDefault();
-                // }}
                 >
                   {option.label}
                 </div>
@@ -203,12 +199,7 @@ const Multiselect: FC<MultiselectProps> = ({
                   type="button"
                   style={{ color: buttonColor }}
                   className="cursor-pointer leading-none hover:opacity-50"
-                  // onMouseDown={(e) => {
-                  //   e.stopPropagation();
-                  //   e.preventDefault();
-                  // }}
                   onClick={(e) => {
-                    // e.stopPropagation();
                     handleRemove(value);
                   }}
                   aria-label={`Remove ${option.label}`}

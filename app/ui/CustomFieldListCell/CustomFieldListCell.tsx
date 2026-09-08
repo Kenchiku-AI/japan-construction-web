@@ -181,7 +181,9 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({
             label={t("create_object", { name: props.definition.name })}
             iconLeft={() => <Plus />}
             onClick={() => {
-              onCreateRelationshipObject?.(props.definition.id);
+              const relDef = (props.definition as CustomRelationshipDefinition);
+              const definitionId = relDef.target_custom_object_definition_id as string;
+              onCreateRelationshipObject?.(definitionId);
             }}
             style={{ height: "auto" }}
             iconOnlyMobile
