@@ -9,7 +9,6 @@ import { UserRole } from "@/types";
 import { Hardhat, Home, Paper, Papers, User, Users, Tag, Logo, CreditCard, LineLogo, Info, DataFlow, Form } from "./Icons";
 import { bgColor4, bgColor5, buttonColor } from "@/lib/constants";
 import Divider from "./Divider";
-import Link from "next/link";
 import { useFeatures } from "@/lib/useFeatures";
 
 const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {

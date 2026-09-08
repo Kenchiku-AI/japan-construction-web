@@ -25,6 +25,18 @@ export const useForms = (companyId?: string) => {
 
     try {
       const response = await api.getFormJobs(companyId);
+
+      response.forEach((job) => {
+        const statuses = [
+          FormJobStatus.Pending,
+          FormJobStatus.Processing,
+        ];
+
+        if (statuses.includes(job.status)) {
+          pollFormJob(job.id);
+        }
+      });
+
       setFormJobs(response);
     } finally {
       setLoading(false);
