@@ -71,18 +71,18 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                     path={"/home"}
                   />
                 )}
-                {currentUser.role === "manager" && (
-                  <SidebarItem
-                    name={t("line_integration")}
-                    icon={() => <LineLogo size={18} strokeWidth={1.5} />}
-                    path={"/line"}
-                  />
-                )}
                 <SidebarItem
                   name={t("projects")}
                   icon={() => <Hardhat size={24} />}
                   path={"/projects"}
                 />
+                {currentUser.company && (
+                  <SidebarItem
+                    name={t("forms")}
+                    icon={() => <User size={18} />}
+                    path={`/companies/${currentUser.company.id}/users`}
+                  />
+                )}
                 <SidebarItem
                   name={t("reports")}
                   icon={() => <Paper size={24} />}
@@ -114,6 +114,11 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                         />
                       </>
                     )}
+                    <SidebarItem
+                      name={t("line_integration")}
+                      icon={() => <LineLogo size={18} strokeWidth={1.5} />}
+                      path={"/line"}
+                    />
                     <SidebarItem
                       name={t("user_guide")}
                       icon={() => <Info color="black" size={18} strokeWidth={1.5} />}

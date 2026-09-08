@@ -5,7 +5,7 @@ import styles from "./page.module.css";
 import { UserRole } from "@/types";
 import { DownChevron, Trash, UpChevron, User } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { buttonColor, fontColor2 } from "@/lib/constants";
+import { buttonColor } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/lib/api/ApiContext";
@@ -14,17 +14,19 @@ interface CompanyUsersListProps {
   users: CompanyUser[];
   onRemove: (userId: string) => void;
   onClickUser: (user: CompanyUser) => void;
+  forceShowAll?: boolean;
 }
 
 const CompanyUsersList: FC<CompanyUsersListProps> = ({
   users,
   onRemove,
   onClickUser,
+  forceShowAll,
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { currentUser } = useApi();
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(!!forceShowAll);
 
   if (!users.length) {
     return <div className={styles.empty}>{t("empty_users_description")}</div>;
@@ -80,7 +82,7 @@ const CompanyUsersList: FC<CompanyUsersListProps> = ({
           </div>
         ))}
       </div>
-      {users.length > 5 && (
+      {(users.length > 5 && !forceShowAll) && (
         <>
           <Divider />
           <Button
