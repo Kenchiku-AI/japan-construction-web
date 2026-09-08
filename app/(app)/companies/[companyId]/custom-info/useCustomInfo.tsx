@@ -8,7 +8,6 @@ import {
   CreateCustomFieldDefinitionRequest,
   CreateCustomObjectDefinitionRequest,
   CreateCustomRelationshipDefinitionRequest,
-  CustomFieldDataType,
   CustomFieldDefinition,
   CustomFieldEntityType,
   CustomFieldDefinitionListItem,

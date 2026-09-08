@@ -93,6 +93,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const [conversationToDelete, setConversationToDelete] = useState<Conversation>();
   const [editObject, setEditObject] = useState<CustomObject>();
   const [deleteObject, setDeleteObject] = useState<CustomObject>();
+  const fieldIdToUpdate = useRef("");
   const [showCreateConversationItem, setShowCreateConversationItem] = useState<{ id: string, name: string }>();
   const [editConversationItem, setEditConversationItem] = useState<{ item: ConversationItem, typeName: string }>();
   const [conversationItemToDelete, setConversationItemToDelete] = useState<ConversationItem>();
@@ -289,10 +290,12 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
                   onCreateRelationshipObject={async (definitionId) => {
                     const definition = await getCustomObjectDefinition(definitionId);
                     setCreateObjectDefinition(definition);
+                    fieldIdToUpdate.current = item.id;
                   }}
                   onEditRelationshipObject={async (objectId) => {
                     const object = await getCustomObject(objectId);
                     setEditObject(object);
+                    fieldIdToUpdate.current = item.id;
                   }}
                   isEditable={isEditable}
                 />
@@ -539,16 +542,20 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         isOpen={!!createObjectDefinition}
         onClose={() => {
           setCreateObjectDefinition(undefined);
+          fieldIdToUpdate.current = "";
         }}
         onCreate={(fields, relationships) => {
           if (!createObjectDefinition) return;
 
-          createCustomObject({
-            company_id: createObjectDefinition.company_id,
-            custom_object_definition_id: createObjectDefinition.id,
-            fields,
-            relationships
-          });
+          createCustomObject(
+            {
+              company_id: createObjectDefinition.company_id,
+              custom_object_definition_id: createObjectDefinition.id,
+              fields,
+              relationships
+            },
+            fieldIdToUpdate.current
+          );
         }}
       />
       <EditCustomObjectModal
@@ -563,6 +570,7 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         isOpen={!!editObject}
         onClose={() => {
           setEditObject(undefined);
+          fieldIdToUpdate.current = "";
         }}
         onSubmit={(fields, relationships) => {
           if (!editObject) return;
@@ -584,12 +592,14 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
         isOpen={!!deleteObject}
         onClose={() => {
           setDeleteObject(undefined);
+          fieldIdToUpdate.current = "";
         }}
         onDelete={() => {
           if (!deleteObject) return;
 
-          deleteCustomObject(deleteObject.id);
+          deleteCustomObject(deleteObject.id, fieldIdToUpdate.current);
           setDeleteObject(undefined);
+          fieldIdToUpdate.current = "";
         }}
       />
       <CreateConversationItemModal

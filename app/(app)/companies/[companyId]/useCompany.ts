@@ -540,9 +540,6 @@ export const useCompany = (companyId: string) => {
 
     try {
       if (company) {
-        console.log("hello?", customRelationships);
-        console.log("hi", fieldId)
-
         const request = {
           source_entity_id: company.id,
           target_entity_ids: customRelationships[fieldId].filter((id) => {
@@ -550,12 +547,8 @@ export const useCompany = (companyId: string) => {
           })
         };
 
-        console.log("request", request);
-
         await updateCustomRelationship(fieldId, request);
       }
-
-      console.log("successfully updated relationship");
 
       await api.deleteCustomObject(objectId);
     } catch (err) {

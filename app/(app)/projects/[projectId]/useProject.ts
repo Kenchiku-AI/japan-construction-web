@@ -102,11 +102,24 @@ export const useProject = (projectId: string) => {
     return objectDefition;
   };
 
-  const createCustomObject = async (request: CreateCustomObjectRequest) => {
+  const createCustomObject = useCallback(async (request: CreateCustomObjectRequest, fieldId: string) => {
     setLoading(true);
 
     try {
-      await api.createCustomObject(request);
+      const response = await api.createCustomObject(request);
+
+      if (response && project) {
+        const request = {
+          source_entity_id: project.id,
+          target_entity_ids: [
+            ...customRelationships[fieldId].filter(Boolean),
+            response.id
+          ]
+        };
+
+        updateCustomRelationship(fieldId, request);
+      }
+
       refreshCustomObjectsByDefinition();
     } catch (err) {
       showModal({
@@ -116,14 +129,24 @@ export const useProject = (projectId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [project, customRelationships]);
 
-  const deleteCustomObject = async (objectId: string) => {
+  const deleteCustomObject = useCallback(async (objectId: string, fieldId: string) => {
     setLoading(true);
 
     try {
+      if (project) {
+        const request = {
+          source_entity_id: project.company_id,
+          target_entity_ids: customRelationships[fieldId].filter((id) => {
+            return !id ? false : id !== objectId;
+          })
+        };
+
+        await updateCustomRelationship(fieldId, request);
+      }
+
       await api.deleteCustomObject(objectId);
-      refreshCustomObjectsByDefinition();
     } catch (err) {
       showModal({
         title: t("error"),
@@ -132,7 +155,7 @@ export const useProject = (projectId: string) => {
     }
 
     setLoading(false);
-  };
+  }, [project, customRelationships]);
 
   const getCustomObjectsByDefinitionId = async (company_id: string, definition_ids: string[]) => {
     try {
@@ -253,11 +276,11 @@ export const useProject = (projectId: string) => {
         target_entity_ids: customRelationships[itemId].filter(Boolean)
       };
 
-      updateCustomRelationship(request, itemId);
+      updateCustomRelationship(itemId, request);
     }
   }, [project, customFields, customRelationships]);
 
-  const updateCustomRelationship = async (request: UpdateCustomRelationshipRequest, itemId: string) => {
+  const updateCustomRelationship = async (itemId: string, request: UpdateCustomRelationshipRequest) => {
     try {
       const response = await api.updateCustomRelationship(itemId, request);
 
