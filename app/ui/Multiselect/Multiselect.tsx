@@ -174,13 +174,16 @@ const Multiselect: FC<MultiselectProps> = ({
                   backgroundColor: "white",
                   color: fontColor1,
                 }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  handleRemove(value);
-                }}
               >
-                <span>{option.label}</span>
+                <div
+                // onMouseDown={(e) => {
+                //   e.stopPropagation();
+                //   e.preventDefault();
+                //   handleRemove(value);
+                // }}
+                >
+                  {option.label}
+                </div>
                 <button
                   type="button"
                   className="cursor-pointer leading-none opacity-60 hover:opacity-100"
