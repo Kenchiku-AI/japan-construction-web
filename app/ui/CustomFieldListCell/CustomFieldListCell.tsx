@@ -2,7 +2,7 @@
 
 import { FC, useMemo, useState } from "react";
 import { Check, Close, Edit, Plus } from "../Icons";
-import { errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
+import { buttonColor, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
 import { Button } from "../Button/Button";
 import { FieldsListInput, FieldsListInputProps } from "@/app/(app)/custom-objects/[customObjectDefinitionId]/FieldsListInput";
@@ -232,13 +232,13 @@ const EditCustomFieldListCell: FC<EditCustomFieldListCellProps> = ({
           variant="tertiary"
           iconLeft={() => (
             <div style={{ marginRight: -3 }}>
-              <Close color={errorColor1} />
+              <Close color={isSourceOwner ? buttonColor : errorColor1} />
             </div>
           )}
           style={{ height: "auto" }}
           label={t(isSourceOwner ? "close" : "cancel")}
           onClick={onCancel}
-          textStyle={{ color: errorColor1 }}
+          textStyle={{ color: isSourceOwner ? buttonColor : errorColor1 }}
         />
       </div>
     </div>
