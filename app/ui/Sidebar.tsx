@@ -75,7 +75,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                 />
                 {currentUser.company && (
                   <SidebarItem
-                    name={t("forms")}
+                    name={t("users")}
                     icon={() => <User size={24} />}
                     path={`/companies/${currentUser.company.id}/users`}
                   />
