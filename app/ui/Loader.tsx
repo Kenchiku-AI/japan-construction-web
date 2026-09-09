@@ -4,8 +4,9 @@ export const Loader = () => (
   <div
     style={{
       display: "flex",
-      position: "absolute",
+      position: "fixed",
       justifyContent: "center",
+      alignItems: "center",
       background: bgColor1,
       opacity: 0.7,
       top: 0,
