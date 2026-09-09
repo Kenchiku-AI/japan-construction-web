@@ -67,15 +67,17 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
           iconOnlyMobile
         />
       </div>
-      <div className={cardClass}>
-        <CustomObjectsList
-          objects={customObjectDefinitions}
-          isEmpty={customObjectDefinitions.length === 0 && !loading}
-          onClickObject={(o) => {
-            router.push(`/custom-objects/${o.id}`)
-          }}
-        />
-      </div>
+      {(customObjectDefinitions.length > 0 || !loading) && (
+        <div className={cardClass}>
+          <CustomObjectsList
+            objects={customObjectDefinitions}
+            isEmpty={customObjectDefinitions.length === 0 && !loading}
+            onClickObject={(o) => {
+              router.push(`/custom-objects/${o.id}`)
+            }}
+          />
+        </div>
+      )}
       <div>
         {/* Company */}
         <div className="flex justify-between mt-12">
@@ -91,28 +93,30 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
             iconOnlyMobile
           />
         </div>
-        <div className={cardClass}>
-          <CustomFieldDefinitionsList
-            items={companyItems}
-            customObjects={customObjectDefinitions}
-            isEmpty={companyItems.length === 0 && !loading}
-            onChangeOrder={(newItems) => {
-              onUpdateCompanyItemsOrder(newItems);
-            }}
-            onEdit={(i) => {
-              setEditCustomField({
-                ...i,
-                entityType: CustomFieldEntityType.Company
-              });
-            }}
-            onDelete={(i) => {
-              setDeleteCustomField({
-                ...i,
-                entityType: CustomFieldEntityType.Company
-              });
-            }}
-          />
-        </div>
+        {(companyItems.length > 0 || !loading) && (
+          <div className={cardClass}>
+            <CustomFieldDefinitionsList
+              items={companyItems}
+              customObjects={customObjectDefinitions}
+              isEmpty={companyItems.length === 0 && !loading}
+              onChangeOrder={(newItems) => {
+                onUpdateCompanyItemsOrder(newItems);
+              }}
+              onEdit={(i) => {
+                setEditCustomField({
+                  ...i,
+                  entityType: CustomFieldEntityType.Company
+                });
+              }}
+              onDelete={(i) => {
+                setDeleteCustomField({
+                  ...i,
+                  entityType: CustomFieldEntityType.Company
+                });
+              }}
+            />
+          </div>
+        )}
 
         {/* User */}
         <div className="flex justify-between mt-12">
@@ -128,28 +132,30 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
             iconOnlyMobile
           />
         </div>
-        <div className={cardClass}>
-          <CustomFieldDefinitionsList
-            items={userItems}
-            customObjects={customObjectDefinitions}
-            isEmpty={userItems.length === 0 && !loading}
-            onChangeOrder={(newItems) => {
-              onUpdateUserItemsOrder(newItems);
-            }}
-            onEdit={(i) => {
-              setEditCustomField({
-                ...i,
-                entityType: CustomFieldEntityType.User
-              });
-            }}
-            onDelete={(i) => {
-              setDeleteCustomField({
-                ...i,
-                entityType: CustomFieldEntityType.User
-              });
-            }}
-          />
-        </div>
+        {(userItems.length > 0 || !loading) && (
+          <div className={cardClass}>
+            <CustomFieldDefinitionsList
+              items={userItems}
+              customObjects={customObjectDefinitions}
+              isEmpty={userItems.length === 0 && !loading}
+              onChangeOrder={(newItems) => {
+                onUpdateUserItemsOrder(newItems);
+              }}
+              onEdit={(i) => {
+                setEditCustomField({
+                  ...i,
+                  entityType: CustomFieldEntityType.User
+                });
+              }}
+              onDelete={(i) => {
+                setDeleteCustomField({
+                  ...i,
+                  entityType: CustomFieldEntityType.User
+                });
+              }}
+            />
+          </div>
+        )}
 
         {/* Project */}
         <div className="flex justify-between mt-12">
@@ -165,28 +171,30 @@ const CustomInfoDashboard: FC<CustomInfoDashboardProps> = ({ companyId }) => {
             iconOnlyMobile
           />
         </div>
-        <div className={cardClass}>
-          <CustomFieldDefinitionsList
-            items={projectItems}
-            customObjects={customObjectDefinitions}
-            isEmpty={projectItems.length === 0 && !loading}
-            onChangeOrder={(newItems) => {
-              onUpdateProjectItemsOrder(newItems)
-            }}
-            onEdit={(i) => {
-              setEditCustomField({
-                ...i,
-                entityType: CustomFieldEntityType.Project
-              });
-            }}
-            onDelete={(i) => {
-              setDeleteCustomField({
-                ...i,
-                entityType: CustomFieldEntityType.Project
-              });
-            }}
-          />
-        </div>
+        {(projectItems.length > 0 || !loading) && (
+          <div className={cardClass}>
+            <CustomFieldDefinitionsList
+              items={projectItems}
+              customObjects={customObjectDefinitions}
+              isEmpty={projectItems.length === 0 && !loading}
+              onChangeOrder={(newItems) => {
+                onUpdateProjectItemsOrder(newItems)
+              }}
+              onEdit={(i) => {
+                setEditCustomField({
+                  ...i,
+                  entityType: CustomFieldEntityType.Project
+                });
+              }}
+              onDelete={(i) => {
+                setDeleteCustomField({
+                  ...i,
+                  entityType: CustomFieldEntityType.Project
+                });
+              }}
+            />
+          </div>
+        )}
       </div>
       <CreateCustomObjectDefinitionModal
         isOpen={showCreateCustomObject}
