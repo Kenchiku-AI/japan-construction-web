@@ -53,7 +53,7 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
           iconOnlyMobile
         />
       </div>
-      {!!formJobs && (
+      {((formJobs ?? []).length > 0 || !loading) && (
         <div className={cardClass}>
           <FormsList
             forms={formJobs ?? []}
