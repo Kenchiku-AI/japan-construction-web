@@ -610,6 +610,14 @@ export const useApiData = () => {
       const url = `/form-jobs/${formJobId}/download`;
       return call(() => http.get<FormJobDownloadResponse>(url));
     },
+    async getCompanyGraph(companyId: string, projectId?: string) {
+      const p = new URLSearchParams();
+      if (projectId) p.append("project_id", projectId);
+
+      const params = p.toString();
+      const url = `/companies/${companyId}/graph${params ? `?${params}` : ""}`;
+      return call(() => http.get<any>(url));
+    },
   };
 
   return {
