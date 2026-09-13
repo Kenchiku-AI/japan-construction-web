@@ -248,6 +248,7 @@
   "line_webhook": "LINE Webhook",
   "line_webhook_description": "以下のボタンから LINE Webhook URL をコピーしてください。その後、LINE Official Account Manager の「設定」→「Messaging API」に貼り付けて保存してください。また、LINE Developersコンソールのチャネル設定から更新することもできます。",
   "linked": "連携済み",
+  "list_of": "{{name}}一覧",
   "loading": "読み込み中",
   "login": "ログイン",
   "login_description": "ログインするには、メールアドレスとパスワードを入力してください。",

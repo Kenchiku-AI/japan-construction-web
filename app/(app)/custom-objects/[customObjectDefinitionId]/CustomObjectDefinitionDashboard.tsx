@@ -76,65 +76,6 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
           title={customObjectDefinition.name}
           topLabel={t("custom_object")}
         />
-        <Button
-          variant="tertiary"
-          label={t("create")}
-          iconLeft={() => <Plus />}
-          onClick={() => {
-            setShowCreateObject(true);
-          }}
-          style={{ height: "auto" }}
-          iconOnlyMobile
-        />
-      </div>
-      <div className={cardClass}>
-        {!customObjects.length ? (
-          <div className={styles.empty}>
-            {t("empty_description")}
-          </div>
-        ) : (
-          <div>
-            {customObjects.map((object, i) => {
-              const objects = customObjectsByDefinition?.[object.definition.id]?.objects;
-              const formattedObject = objects?.find((o) => o.id === object.id);
-              const label = formattedObject?.name ?? object.definition.name;
-
-              return (
-                <div key={object.id}>
-                  {i > 0 && <Divider />}
-                  <div
-                    onClick={() => {
-                      setEditObject(object);
-                    }}
-                    className="hover:opacity-50 cursor-pointer"
-                  >
-                    <div className="md:mx-3">
-                      <div className="flex items-center justify-between gap-4">
-                        <div
-                          style={{ minHeight: 60, minWidth: 0 }}
-                          className="flex flex-1 items-center gap-4 py-1"
-                        >
-                          <div className="hidden md:block">
-                            <Cube />
-                          </div>
-                          <div style={{ minWidth: 0 }}>
-                            <div style={{ color: !formattedObject ? fontColor2 : fontColor1 }}>{label}</div>
-                            {!!formattedObject?.subtitle && (
-                              <div className={styles.subtitle}>{formattedObject.subtitle}</div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
-      </div>
-      <div className="flex justify-between mt-12">
-        <div className="self-end">{t("custom_object_settings")}</div>
       </div>
       <div className={cardClass}>
         {showEditName ? (
@@ -312,6 +253,79 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
             setDeleteCustomField(f);
           }}
         />
+      </div>
+      <div className="flex justify-between mt-12">
+        <div className="self-end">{t("custom_object_fields")}</div>
+        <Button
+          variant="tertiary"
+          label={t("create_field")}
+          iconLeft={() => <Plus />}
+          onClick={() => {
+            setShowCreateField(true);
+          }}
+          style={{ height: "auto" }}
+          iconOnlyMobile
+        />
+      </div>
+
+      <div className="flex justify-between mt-12">
+        <div className="self-end">{t("list_of", { name })}</div>
+        <Button
+          variant="tertiary"
+          label={t("create")}
+          iconLeft={() => <Plus />}
+          onClick={() => {
+            setShowCreateObject(true);
+          }}
+          style={{ height: "auto" }}
+          iconOnlyMobile
+        />
+      </div>
+      <div className={cardClass}>
+        {!customObjects.length ? (
+          <div className={styles.empty}>
+            {t("empty_description")}
+          </div>
+        ) : (
+          <div>
+            {customObjects.map((object, i) => {
+              const objects = customObjectsByDefinition?.[object.definition.id]?.objects;
+              const formattedObject = objects?.find((o) => o.id === object.id);
+              const label = formattedObject?.name ?? object.definition.name;
+
+              return (
+                <div key={object.id}>
+                  {i > 0 && <Divider />}
+                  <div
+                    onClick={() => {
+                      setEditObject(object);
+                    }}
+                    className="hover:opacity-50 cursor-pointer"
+                  >
+                    <div className="md:mx-3">
+                      <div className="flex items-center justify-between gap-4">
+                        <div
+                          style={{ minHeight: 60, minWidth: 0 }}
+                          className="flex flex-1 items-center gap-4 py-1"
+                        >
+                          <div className="hidden md:block">
+                            <Cube />
+                          </div>
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ color: !formattedObject ? fontColor2 : fontColor1 }}>{label}</div>
+                            {!!formattedObject?.subtitle && (
+                              <div className={styles.subtitle}>{formattedObject.subtitle}</div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
       <CreateCustomObjectModal
         definition={customObjectDefinition}
