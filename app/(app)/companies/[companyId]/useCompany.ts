@@ -242,8 +242,8 @@ export const useCompany = (companyId: string) => {
       setLoading(true);
 
       try {
-        const graph = api.getCompanyGraph(companyId);
-        console.log("COMPANY GRAPH", graph);
+        // const graph = api.getCompanyGraph(companyId);
+        // console.log("COMPANY GRAPH", graph);
 
         const response = await api.getCompany(companyId);
         setCompany(response);
