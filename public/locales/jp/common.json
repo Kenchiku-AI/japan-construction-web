@@ -360,6 +360,7 @@
   "send_registration_link": "登録リンクを送信",
   "sent_at": "送信日時",
   "settings": "設定",
+  "settings_for": "{{name}}設定",
   "set_password": "パスワードを設定",
   "setup_guide": "設定ガイド",
   "show_qr_code": "QRコードを表示",

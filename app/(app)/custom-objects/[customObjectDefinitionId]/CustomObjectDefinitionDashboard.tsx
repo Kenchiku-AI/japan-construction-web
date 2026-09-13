@@ -73,8 +73,7 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
     <>
       <div className="flex justify-between items-end">
         <Heading
-          title={customObjectDefinition.name}
-          topLabel={t("custom_object")}
+          title={t("settings_for", { name: customObjectDefinition.name })}
         />
       </div>
       <div className={cardClass}>
