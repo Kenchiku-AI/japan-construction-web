@@ -255,20 +255,6 @@ const CustomObjectDefinitionDashboard: FC<CustomObjectDefinitionDashboardProps> 
         />
       </div>
       <div className="flex justify-between mt-12">
-        <div className="self-end">{t("custom_object_fields")}</div>
-        <Button
-          variant="tertiary"
-          label={t("create_field")}
-          iconLeft={() => <Plus />}
-          onClick={() => {
-            setShowCreateField(true);
-          }}
-          style={{ height: "auto" }}
-          iconOnlyMobile
-        />
-      </div>
-
-      <div className="flex justify-between mt-12">
         <div className="self-end">{t("list_of", { name })}</div>
         <Button
           variant="tertiary"
