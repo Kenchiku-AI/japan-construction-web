@@ -161,60 +161,84 @@ export const useForms = (companyId?: string) => {
     try {
       const response = await api.downloadFormJobFiles(formJob.id);
 
-      if (response) {
-        const { files } = response;
+      if (!response) return;
+
+      const { files } = response;
+
+      if (!fileId) {
+        const zip = new JSZip();
+
+        await Promise.all(
+          files.map(async (file) => {
+            const response = await fetch(file.download_url);
+
+            if (!response.ok) {
+              throw new Error(
+                `Failed to download ${file.filename}: ${response.status}`
+              );
+            }
+
+            const blob = await response.blob();
+            zip.file(file.filename, blob);
+          })
+        );
+
+        const zipBlob = await zip.generateAsync({
+          type: "blob",
+        });
+
+        const url = URL.createObjectURL(zipBlob);
         const link = document.createElement("a");
 
-        if (!fileId) {
-          const zip = new JSZip();
-
-          await Promise.all(
-            response.files.map(async (file) => {
-              const response = await fetch(file.download_url);
-
-              if (!response.ok) {
-                throw new Error(
-                  `Failed to download ${file.filename}: ${response.status}`
-                );
-              }
-
-              const blob = await response.blob();
-
-              zip.file(file.filename, blob);
-            })
-          );
-
-          const zipBlob = await zip.generateAsync({
-            type: "blob",
-          });
-
-          const url = URL.createObjectURL(zipBlob);
-
-
-          link.href = url;
-          link.download = `${formJob.name.replace(/ /g, "_").replace(/[()]/g, "")}.zip`;
-        } else {
-          const file = files.find((f) => f.id === fileId);
-          if (!file) throw new Error();
-
-          link.href = file.download_url;
-          link.download = file.filename;
-        }
+        link.href = url;
+        link.download = `${formJob.name
+          .replace(/ /g, "_")
+          .replace(/[()]/g, "")}.zip`;
 
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
+        link.remove();
 
-        URL.revokeObjectURL(link.href);
+        URL.revokeObjectURL(url);
+      } else {
+        const file = files.find((f) => f.id === fileId);
+
+        if (!file) {
+          throw new Error(`File not found: ${fileId}`);
+        }
+
+        // Fetch the actual file instead of navigating to the presigned URL
+        const response = await fetch(file.download_url);
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to download ${file.filename}: ${response.status}`
+          );
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = file.filename;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
       }
     } catch (e) {
+      console.error("Failed to download files:", e);
+
       showModal({
         title: t("error"),
         subtitle: t("error_description"),
       });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return {
