@@ -130,7 +130,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     if (!billingPlans) return [];
 
     return [
-      { label: t("none"), value: "none" },
+      { label: t("cancel_billing_plan"), value: "none" },
       ...billingPlans.map(b => ({
         label: `${b.name} (¥${b.amount_jpy}/${t("month")})`,
         value: b.id
