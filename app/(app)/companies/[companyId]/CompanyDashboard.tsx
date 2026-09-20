@@ -242,8 +242,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                       <Divider />
                     </>
                   )}
-                  <div className="flex flex-col md:flex-row w-full justify-between md:px-3">
-                    <div className="flex items-center" style={{ minHeight: 60 }}>
+                  <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                    <div className="flex items-center">
                       {!company.payment_method_name ? (
                         <Button
                           variant="tertiary"
@@ -273,7 +273,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                       )}
                     </div>
                     <MobileDivider />
-                    <div className="flex items-center" style={{ color: fontColor3, minHeight: 60 }}>
+                    <div className="flex items-center" style={{ color: fontColor3 }}>
                       <PaymentLabel company={company} billingPlan={selectedBillingPlan} />
                     </div>
                   </div>
