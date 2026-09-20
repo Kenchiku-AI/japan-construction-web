@@ -308,6 +308,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                           textStyle={{ color: errorColor1 }}
                         />
                       </div>
+                      <Divider />
                       <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
                         <Button
                           variant="tertiary"
