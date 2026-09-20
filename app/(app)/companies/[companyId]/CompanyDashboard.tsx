@@ -642,6 +642,14 @@ interface PaymentLabelProps {
 const PaymentLabel: FC<PaymentLabelProps> = ({ company, billingPlan }) => {
   const { t } = useTranslation();
 
+  if (!!company?.billing_exempt) {
+    return (
+      <>
+        {t("billing_exempt")}
+      </>
+    );
+  }
+
   if (company?.is_payment_method_valid === false) {
     return (
       <div className="flex gap-2 items-end" style={{ color: errorColor1 }}>
@@ -677,11 +685,7 @@ const PaymentLabel: FC<PaymentLabelProps> = ({ company, billingPlan }) => {
     )
   }
 
-  return (
-    <>
-      {t("billing_exempt")}
-    </>
-  )
+  return null;
 };
 
 export default CompanyDashboard;
