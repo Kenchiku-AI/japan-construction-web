@@ -105,7 +105,7 @@ const EditConversationItemModal: FC<EditConversationItemModalProps> = ({
       isOpen={isOpen}
       onClose={closeAndReset}
       title={title}
-      width={640}
+    // width={640}
     >
       <Divider />
       {showEditName ? (
