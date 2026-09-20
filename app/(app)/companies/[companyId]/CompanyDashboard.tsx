@@ -8,7 +8,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { Company, CustomObject, CustomObjectDefinitionDetail, ImageTag, UserRole } from "@/types";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
-import { Alert, Close, CreditCard, CreditCardPlus, Edit, LineLogo, Plus } from "@/app/ui/Icons";
+import { Alert, Close, CreditCard, CreditCardCheck, CreditCardPlus, CreditCardX, Edit, LineLogo, Plus } from "@/app/ui/Icons";
 import InviteUserModal from "./InviteUserModal";
 import CompanyUsersList from "./CompanyUsersList";
 import CreateProjectModal from "./CreateProjectModal";
@@ -50,6 +50,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     updateName,
     updateBillingPlan,
     updatePaidFeaturesDisabled,
+    updateBillingExempt,
     templates,
     createTemplate,
     removeUser,
@@ -305,6 +306,19 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
                           }}
                           style={{ height: 40 }}
                           textStyle={{ color: errorColor1 }}
+                        />
+                      </div>
+                      <div className="flex flex-col md:flex-row w-full justify-between py-1 md:px-3">
+                        <Button
+                          variant="tertiary"
+                          label={t(`${company.billing_exempt ? "resume" : "exempt"}_billing`)}
+                          iconLeft={() => (
+                            company.billing_exempt ? <CreditCardCheck /> : <CreditCardX />
+                          )}
+                          onClick={() => {
+                            updateBillingExempt(!company.billing_exempt);
+                          }}
+                          style={{ height: 40 }}
                         />
                       </div>
                     </>

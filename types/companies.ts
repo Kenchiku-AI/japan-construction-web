@@ -13,6 +13,7 @@ export type Company = {
   paid_features_force_disabled: boolean;
   free_trial_days_left?: number;
   billing_plan_id?: string;
+  billing_exempt?: boolean;
   users: CompanyUser[];
   projects: Project[];
   custom_fields: CustomField[];
@@ -35,6 +36,7 @@ export type UpdateCompanyRequest = {
   line_channel_secret?: string;
   line_channel_access_token?: string;
   billing_plan_id?: string | null;
+  billing_exempt?: boolean;
   paid_features_force_disabled?: boolean;
 };
 
@@ -45,6 +47,7 @@ export type UpdateCompanyResponse = {
   line_channel_access_token_last5?: string;
   line_channel_access_token_invalid: boolean;
   billing_plan_id?: string;
+  billing_exempt: boolean;
   paid_features_force_disabled: boolean;
 };
 
