@@ -96,7 +96,7 @@ const CreateFormJobModal: FC<CreateFormJobModalProps> = ({
       onClose={closeAndReset}
       title={t("upload_form")}
       subtitle={t("upload_form_description")}
-      width={640}
+    // width={640}
     >
       <div className="my-8 flex flex-col gap-4">
         <input
