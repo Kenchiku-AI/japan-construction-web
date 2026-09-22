@@ -87,7 +87,7 @@ const FormJobModal: FC<FormJobModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title={title}
-      width={640}
+    // width={640}
     >
       <div className="mt-6 mb-8">
         {showDownloadAll && (
