@@ -998,9 +998,8 @@ export default function LandingPage() {
 
             <nav className={styles.footerLinks}>
               <Link href="/docs">ご利用ガイド</Link>
-              <Link href="/docs/quick-start">クイックスタート</Link>
-              <Link href="/privacy">プライバシーポリシー</Link>
-              <Link href="/terms">利用規約</Link>
+              <Link href="/privacy-policy">プライバシーポリシー</Link>
+              <Link href="/terms-of-service">利用規約</Link>
               <Link href="/login">ログイン</Link>
             </nav>
 
