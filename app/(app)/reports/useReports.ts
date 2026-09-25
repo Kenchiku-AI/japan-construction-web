@@ -8,6 +8,7 @@ import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
 import debounce from "lodash.debounce";
 import { useBilling } from "@/lib/useBilling";
+import posthog from "posthog-js";
 
 export const useReports = () => {
   const [loading, setLoading] = useState(false);
@@ -40,6 +41,12 @@ export const useReports = () => {
         const response = await api.createReport(request);
 
         if (response) {
+          if (
+            process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+            process.env.NEXT_PUBLIC_POSTHOG_HOST
+          ) {
+            posthog.capture("report_created");
+          }
           router.push(`/reports/${response.id}?name=${response.name}`);
         }
       } catch (err) {

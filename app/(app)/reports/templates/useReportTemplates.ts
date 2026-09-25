@@ -7,6 +7,7 @@ import {
   ReportTemplate,
 } from "@/types/reports";
 import { useTranslation } from "react-i18next";
+import posthog from "posthog-js";
 
 export const useReportTemplates = () => {
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,12 @@ export const useReportTemplates = () => {
 
       try {
         await api.createReportTemplate(request);
+        if (
+          process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+          process.env.NEXT_PUBLIC_POSTHOG_HOST
+        ) {
+          posthog.capture("report_template_created");
+        }
         await getReportTemplates();
       } finally {
         setLoading(false);

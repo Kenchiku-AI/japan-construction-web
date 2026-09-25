@@ -8,6 +8,8 @@ import { useTranslation } from "react-i18next";
 import { useModal } from "@/lib/modal/ModalContext";
 import { UserRole } from "@/types";
 import { createCompanyInvitationIdKey, existingUserInvitationTokenKey } from "@/lib/constants";
+import posthog from "posthog-js";
+import { posthogLogger } from "@/lib/posthogLogger";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -41,7 +43,19 @@ export const useLogin = () => {
 
         // if (api.validateCurrentUser(user)) {
         api.setCurrentUser(user);
+        if (
+          process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+          process.env.NEXT_PUBLIC_POSTHOG_HOST
+        ) {
+          posthog.capture("user_logged_in", {
+            invitation_accepted: Boolean(token),
+          });
+        }
         const url = user.role === UserRole.Admin ? "/companies" : "/home";
+        posthogLogger.info("user login completed", {
+          invitation_accepted: Boolean(token),
+          destination: url,
+        });
         router.push(url);
         // }
       } catch (err) {
