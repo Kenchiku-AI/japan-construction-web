@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useApi } from "../../../lib/api/ApiContext";
 import { Company, CreateCompanyRequest } from "@/types/companies";
+import posthog from "posthog-js";
 
 export const useCompanies = () => {
   const [loading, setLoading] = useState(false);
@@ -30,6 +31,12 @@ export const useCompanies = () => {
 
       try {
         await api.createCompany(request);
+        if (
+          process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+          process.env.NEXT_PUBLIC_POSTHOG_HOST
+        ) {
+          posthog.capture("company_created");
+        }
         await getCompanies();
       } finally {
         setLoading(false);

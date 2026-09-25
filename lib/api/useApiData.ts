@@ -84,6 +84,7 @@ import { authRoutes, publicRoutes } from "../constants";
 import { useModal } from "../modal/ModalContext";
 import { useTranslation } from "react-i18next";
 import { BillingPlan, CreateBillingPlanRequest, UpdateBillingPlanRequest } from "@/types/billingPlans";
+import posthog from "posthog-js";
 
 export const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -98,9 +99,26 @@ let refreshPromise: Promise<void> | null = null;
 export const useApiData = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const [currentUser, setCurrentUser] = useState<CurrentUser>();
+  const [currentUser, setCurrentUserState] = useState<CurrentUser>();
   const { showModal } = useModal();
   const { t } = useTranslation();
+
+  const setCurrentUser = useCallback((user?: CurrentUser) => {
+    if (
+      user &&
+      process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+      process.env.NEXT_PUBLIC_POSTHOG_HOST
+    ) {
+      posthog.identify(user.id, {
+        email: user.email,
+        name: `${user.first_name} ${user.last_name}`,
+        role: user.role,
+        company_id: user.company?.id,
+      });
+    }
+
+    setCurrentUserState(user);
+  }, []);
 
   useEffect(() => {
     const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
@@ -146,6 +164,13 @@ export const useApiData = () => {
     try {
       await api.logout();
     } finally {
+      if (
+        process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+        process.env.NEXT_PUBLIC_POSTHOG_HOST
+      ) {
+        posthog.reset();
+      }
+
       setCurrentUser(undefined);
 
       const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));

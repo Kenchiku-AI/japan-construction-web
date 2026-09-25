@@ -9,6 +9,8 @@ import imageCompression from "browser-image-compression";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useBilling } from "@/lib/useBilling";
 import { Conversation } from "@/types";
+import posthog from "posthog-js";
+import { posthogLogger } from "@/lib/posthogLogger";
 
 export const useReport = (reportId: string) => {
   const [loading, setLoading] = useState(true);
@@ -157,6 +159,20 @@ export const useReport = (reportId: string) => {
             ...report,
             ...response
           });
+          if (
+            process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+            process.env.NEXT_PUBLIC_POSTHOG_HOST
+          ) {
+            posthog.capture("report_updated", {
+              update_type: request.status
+                ? "status"
+                : request.field_values
+                  ? "fields"
+                  : request.name
+                    ? "name"
+                    : "other",
+            });
+          }
         }
       } catch (err) {
         if (!silent && !isBillingError(err)) {
@@ -177,6 +193,9 @@ export const useReport = (reportId: string) => {
 
       try {
         response = await api.autofillReport(reportId, request);
+        posthogLogger.info("report autofill completed", {
+          image_sync_failed: response.image_sync_failed,
+        });
 
         if (response.image_sync_failed) {
           showModal({
@@ -204,6 +223,12 @@ export const useReport = (reportId: string) => {
 
     try {
       await api.deleteReport(reportId);
+      if (
+        process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+        process.env.NEXT_PUBLIC_POSTHOG_HOST
+      ) {
+        posthog.capture("report_deleted");
+      }
       router.replace("/reports");
     } catch (err) {
       if (!isBillingError(err)) {
@@ -385,6 +410,20 @@ export const useReport = (reportId: string) => {
           download_url: URL.createObjectURL(file),
         };
         setImages([...(images ?? []), newImage]);
+        if (
+          process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+          process.env.NEXT_PUBLIC_POSTHOG_HOST
+        ) {
+          posthog.capture("report_photo_uploaded", {
+            height: bitmap.height,
+            width: bitmap.width,
+          });
+        }
+
+        posthogLogger.info("report photo upload completed", {
+          height: bitmap.height,
+          width: bitmap.width,
+        });
 
         pollImageStatus(newImage.id);
       } catch (err) {

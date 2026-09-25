@@ -7,6 +7,7 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import posthog from "posthog-js";
 
 export const useSignup = () => {
   const router = useRouter();
@@ -40,6 +41,12 @@ export const useSignup = () => {
           invitation_token,
         });
         api.setCurrentUser(user);
+        if (
+          process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
+          process.env.NEXT_PUBLIC_POSTHOG_HOST
+        ) {
+          posthog.capture("user_signed_up");
+        }
         sessionStorage.removeItem(invitationTokenKey);
         sessionStorage.removeItem(createCompanyInvitationIdKey);
         router.push("/home");
