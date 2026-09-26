@@ -159,20 +159,16 @@ export const useReport = (reportId: string) => {
             ...report,
             ...response
           });
-          if (
-            process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
-            process.env.NEXT_PUBLIC_POSTHOG_HOST
-          ) {
-            posthog.capture("report_updated", {
-              update_type: request.status
-                ? "status"
-                : request.field_values
-                  ? "fields"
-                  : request.name
-                    ? "name"
-                    : "other",
-            });
-          }
+
+          posthog.capture("report_updated", {
+            update_type: request.status
+              ? "status"
+              : request.field_values
+                ? "fields"
+                : request.name
+                  ? "name"
+                  : "other",
+          });
         }
       } catch (err) {
         if (!silent && !isBillingError(err)) {
@@ -223,12 +219,9 @@ export const useReport = (reportId: string) => {
 
     try {
       await api.deleteReport(reportId);
-      if (
-        process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
-        process.env.NEXT_PUBLIC_POSTHOG_HOST
-      ) {
-        posthog.capture("report_deleted");
-      }
+
+      posthog.capture("report_deleted");
+
       router.replace("/reports");
     } catch (err) {
       if (!isBillingError(err)) {
@@ -410,15 +403,11 @@ export const useReport = (reportId: string) => {
           download_url: URL.createObjectURL(file),
         };
         setImages([...(images ?? []), newImage]);
-        if (
-          process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
-          process.env.NEXT_PUBLIC_POSTHOG_HOST
-        ) {
-          posthog.capture("report_photo_uploaded", {
-            height: bitmap.height,
-            width: bitmap.width,
-          });
-        }
+
+        posthog.capture("report_photo_uploaded", {
+          height: bitmap.height,
+          width: bitmap.width,
+        });
 
         posthogLogger.info("report photo upload completed", {
           height: bitmap.height,

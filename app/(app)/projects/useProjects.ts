@@ -62,14 +62,10 @@ export const useProjects = () => {
         throw Error();
       }
 
-      if (
-        process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
-        process.env.NEXT_PUBLIC_POSTHOG_HOST
-      ) {
-        posthog.capture("project_created", {
-          has_description: Boolean(description),
-        });
-      }
+      posthog.capture("project_created", {
+        has_description: Boolean(description),
+      });
+
       router.push(`/projects/${response.id}?name=${response.name}`);
     } catch (err) {
       setLoading(false);

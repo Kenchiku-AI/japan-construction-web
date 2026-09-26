@@ -35,12 +35,9 @@ export const useReportTemplates = () => {
 
       try {
         await api.createReportTemplate(request);
-        if (
-          process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
-          process.env.NEXT_PUBLIC_POSTHOG_HOST
-        ) {
-          posthog.capture("report_template_created");
-        }
+
+        posthog.capture("report_template_created");
+
         await getReportTemplates();
       } finally {
         setLoading(false);

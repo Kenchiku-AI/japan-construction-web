@@ -43,14 +43,11 @@ export const useLogin = () => {
 
         // if (api.validateCurrentUser(user)) {
         api.setCurrentUser(user);
-        if (
-          process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
-          process.env.NEXT_PUBLIC_POSTHOG_HOST
-        ) {
-          posthog.capture("user_logged_in", {
-            invitation_accepted: Boolean(token),
-          });
-        }
+
+        posthog.capture("user_logged_in", {
+          invitation_accepted: Boolean(token),
+        });
+
         const url = user.role === UserRole.Admin ? "/companies" : "/home";
         posthogLogger.info("user login completed", {
           invitation_accepted: Boolean(token),

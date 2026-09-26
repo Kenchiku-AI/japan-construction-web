@@ -11,6 +11,7 @@ import { emailRegex, invitationTokenKey } from "@/lib/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader } from "@/app/ui/Loader";
 import { Logo } from "@/app/ui/Icons";
+import posthog from "posthog-js";
 
 const Signup = () => {
   const searchParams = useSearchParams();
@@ -106,6 +107,8 @@ const Signup = () => {
               setIsPasswordInvalid(true);
               return;
             }
+
+            posthog.capture("signup_form_submitted");
 
             await signup(firstName, lastName, email, password);
           }}

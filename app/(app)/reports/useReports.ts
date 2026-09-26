@@ -41,12 +41,7 @@ export const useReports = () => {
         const response = await api.createReport(request);
 
         if (response) {
-          if (
-            process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
-            process.env.NEXT_PUBLIC_POSTHOG_HOST
-          ) {
-            posthog.capture("report_created");
-          }
+          posthog.capture("report_created");
           router.push(`/reports/${response.id}?name=${response.name}`);
         }
       } catch (err) {

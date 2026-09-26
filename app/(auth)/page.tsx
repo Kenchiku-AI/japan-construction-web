@@ -85,9 +85,8 @@ export default function LandingPage() {
   };
 
   const openSignupModal = (location: string) => {
-    posthog.capture("signup_cta_clicked", {
-      location,
-    });
+    posthog.capture("signup_cta_clicked", { location });
+
     setShowSignup(true);
   };
 
@@ -1017,6 +1016,7 @@ export default function LandingPage() {
         }}
         onSubmit={async (request) => {
           posthog.capture("signup_form_submitted");
+
           setShowSignup(false);
           setLoading(true);
 

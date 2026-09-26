@@ -41,12 +41,9 @@ export const useSignup = () => {
           invitation_token,
         });
         api.setCurrentUser(user);
-        if (
-          process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
-          process.env.NEXT_PUBLIC_POSTHOG_HOST
-        ) {
-          posthog.capture("signup_completed");
-        }
+
+        posthog.capture("signup_completed");
+
         sessionStorage.removeItem(invitationTokenKey);
         sessionStorage.removeItem(createCompanyInvitationIdKey);
         router.push("/home");
