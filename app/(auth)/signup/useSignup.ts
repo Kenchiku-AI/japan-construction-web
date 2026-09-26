@@ -45,7 +45,7 @@ export const useSignup = () => {
           process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN &&
           process.env.NEXT_PUBLIC_POSTHOG_HOST
         ) {
-          posthog.capture("user_signed_up");
+          posthog.capture("signup_completed");
         }
         sessionStorage.removeItem(invitationTokenKey);
         sessionStorage.removeItem(createCompanyInvitationIdKey);

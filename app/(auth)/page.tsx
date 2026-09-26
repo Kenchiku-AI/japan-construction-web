@@ -11,8 +11,9 @@ import { Loader } from "../ui/Loader";
 import { useApi } from "@/lib/api/ApiContext";
 import { useModal } from "@/lib/modal/ModalContext";
 import { useTranslation } from "react-i18next";
-import { androidUrl, buttonColor, createCompanyInvitationIdKey, iosUrl } from "@/lib/constants";
+import { androidUrl, createCompanyInvitationIdKey, iosUrl } from "@/lib/constants";
 import { useIsMobile } from "@/lib/useIsMobile";
+import posthog from "posthog-js";
 
 const structuredDataApp = {
   "@context": "https://schema.org",
@@ -83,6 +84,13 @@ export default function LandingPage() {
     setLoading(false);
   };
 
+  const openSignupModal = (location: string) => {
+    posthog.capture("signup_cta_clicked", {
+      location,
+    });
+    setShowSignup(true);
+  };
+
   return (
     <>
       <Script id="structured-data-app" type="application/ld+json"
@@ -120,9 +128,7 @@ export default function LandingPage() {
             </div>
           )}
           <div
-            onClick={() => {
-              setShowSignup(true);
-            }}
+            onClick={() => openSignupModal("navbar")}
             className={`${styles.btn} ${styles.btnPrimary}`}
           >
             無料で試してみる →
@@ -172,9 +178,7 @@ export default function LandingPage() {
                 </div>
               )}
               <div
-                onClick={() => {
-                  setShowSignup(true);
-                }}
+                onClick={() => openSignupModal("navbar_mobile")}
                 className={`${styles.btn} ${styles.btnPrimary}`}
               >
                 無料で試してみる →
@@ -227,9 +231,7 @@ export default function LandingPage() {
               )}
 
               <div
-                onClick={() => {
-                  setShowSignup(true);
-                }}
+                onClick={() => openSignupModal("hero")}
                 className={`${styles.btn} ${styles.btnPrimary}`}
               >
                 30日間無料で試す →
@@ -670,7 +672,7 @@ export default function LandingPage() {
                     if (invitationId) {
                       resendInvitation(invitationId);
                     } else {
-                      setShowSignup(true);
+                      openSignupModal("pricing");
                     }
                   }} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
                     {invitationId ? "メールを再送信する" : "30日間無料で試す →"}
@@ -795,9 +797,7 @@ export default function LandingPage() {
           </p>
           <div className={`${styles.btnGroup} ${styles.centered}`}>
             <div
-              onClick={() => {
-                setShowSignup(true);
-              }}
+              onClick={() => openSignupModal("bottom_cta")}
               className={`${styles.btn} ${styles.btnPrimary}`}
             >
               無料で試してみる →
@@ -1016,8 +1016,8 @@ export default function LandingPage() {
           setShowSignup(false);
         }}
         onSubmit={async (request) => {
+          posthog.capture("signup_form_submitted");
           setShowSignup(false);
-
           setLoading(true);
 
           try {
