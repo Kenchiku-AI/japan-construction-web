@@ -584,6 +584,25 @@ export const useCompany = (companyId: string) => {
     setLoading(false);
   }, [company, customRelationships]);
 
+  const deleteCompany = useCallback(
+    async () => {
+      setLoading(true);
+
+      try {
+        await api.deleteCompany(companyId);
+        router.replace("/companies");
+      } catch (err) {
+        setLoading(false);
+
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+    },
+    [companyId, api],
+  );
+
   return {
     loading,
     company,
@@ -612,5 +631,6 @@ export const useCompany = (companyId: string) => {
     createCustomObject,
     updateCustomObject,
     deleteCustomObject,
+    deleteCompany,
   };
 };

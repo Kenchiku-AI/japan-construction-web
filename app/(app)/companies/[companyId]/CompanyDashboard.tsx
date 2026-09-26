@@ -8,7 +8,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { Company, CustomObject, CustomObjectDefinitionDetail, ImageTag, UserRole } from "@/types";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useCompany } from "./useCompany";
-import { Alert, Close, CreditCard, CreditCardCheck, CreditCardPlus, CreditCardX, Edit, LineLogo, Plus } from "@/app/ui/Icons";
+import { Alert, Close, CreditCard, CreditCardCheck, CreditCardPlus, CreditCardX, Edit, LineLogo, Plus, Trash } from "@/app/ui/Icons";
 import InviteUserModal from "./InviteUserModal";
 import CompanyUsersList from "./CompanyUsersList";
 import CreateProjectModal from "./CreateProjectModal";
@@ -34,6 +34,7 @@ import CustomFieldListCell from "@/app/ui/CustomFieldListCell/CustomFieldListCel
 import ConfirmDeleteModal from "../../projects/[projectId]/ConfirmDeleteModal";
 import EditCustomObjectModal from "../../custom-objects/[customObjectDefinitionId]/EditCustomObjectModal";
 import CreateCustomObjectModal from "../../custom-objects/[customObjectDefinitionId]/CreateCustomObjectModal";
+import DeleteCompanyModal from "./DeleteCompanyModal";
 
 interface CompanyDashboardProps {
   companyId: string;
@@ -67,7 +68,8 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
     deleteCustomObject,
     getCustomObject,
     getCustomObjectDefinition,
-    guests
+    guests,
+    deleteCompany
   } = useCompany(companyId);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -90,6 +92,7 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
   const [deleteObject, setDeleteObject] = useState<CustomObject>();
   const [createObjectDefinition, setCreateObjectDefinition] = useState<CustomObjectDefinitionDetail>();
   const fieldIdToUpdate = useRef("");
+  const [showDeleteCompanyModal, setShowDeleteCompanyModal] = useState(false);
   const {
     tags,
     updateTag,
@@ -428,6 +431,23 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           </div>
         </>
       )}
+      {!!company && (
+        <div className="mt-10 flex flex-1 justify-end">
+          <div className="flex gap-8">
+            {isAdmin && (
+              <Button
+                variant="tertiary"
+                label={t("delete_project")}
+                iconLeft={() => <Trash />}
+                onClick={() => {
+                  setShowDeleteCompanyModal(true);
+                }}
+                textStyle={{ color: errorColor1 }}
+              />
+            )}
+          </div>
+        </div>
+      )}
       <InviteUserModal
         isOpen={showInviteUser}
         onClose={() => {
@@ -617,6 +637,16 @@ const CompanyDashboard: FC<CompanyDashboardProps> = ({ companyId }) => {
           deleteCustomObject(deleteObject.id, fieldIdToUpdate.current);
           setDeleteObject(undefined);
           fieldIdToUpdate.current = "";
+        }}
+      />
+      <DeleteCompanyModal
+        isOpen={showDeleteCompanyModal}
+        onClose={() => {
+          setShowDeleteCompanyModal(false);
+        }}
+        onDelete={() => {
+          setShowDeleteCompanyModal(false);
+          deleteCompany();
         }}
       />
       {(showLoader || companyLoading) && <Loader />}

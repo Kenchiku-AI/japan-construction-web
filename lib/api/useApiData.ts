@@ -287,6 +287,10 @@ export const useApiData = () => {
       const url = `/companies/${companyId}`;
       return call(() => http.patch<UpdateCompanyResponse>(url, request));
     },
+    async deleteCompany(companyId: string) {
+      const url = `/companies/${companyId}`;
+      return call(() => http.delete(url));
+    },
     async setupIntent(companyId: string) {
       const url = `/companies/${companyId}/billing/setup-intent`;
       return call(() => http.post<SetupIntentResponse>(url));
