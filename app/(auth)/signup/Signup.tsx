@@ -108,7 +108,7 @@ const Signup = () => {
               return;
             }
 
-            posthog.capture("signup_form_submitted");
+            posthog.capture("signup_user_form_submitted");
 
             await signup(firstName, lastName, email, password);
           }}

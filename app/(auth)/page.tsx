@@ -1015,7 +1015,7 @@ export default function LandingPage() {
           setShowSignup(false);
         }}
         onSubmit={async (request) => {
-          posthog.capture("signup_form_submitted");
+          posthog.capture("signup_email_form_submitted");
 
           setShowSignup(false);
           setLoading(true);
@@ -1035,6 +1035,8 @@ export default function LandingPage() {
               title: t("sign_up_email_sent"),
               subtitle: t("sign_up_email_sent_description"),
             });
+
+            posthog.capture("signup_email_sent");
           } catch (err) {
             setLoading(false);
             setShowSignup(false);
