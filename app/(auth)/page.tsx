@@ -922,7 +922,7 @@ export default function LandingPage() {
                 </a>
               </div>
               <p className={styles.contactSmall}>
-                1営業日以内にご返信いたします。
+                1営業日以内にご返信致します。
               </p>
             </div>
           </div>
