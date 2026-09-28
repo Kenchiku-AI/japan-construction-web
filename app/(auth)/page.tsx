@@ -643,13 +643,27 @@ export default function LandingPage() {
               {/* Left: plan details */}
               <div className={styles.pricingLeft}>
                 <div className={styles.pricingBadge}>30日間無料</div>
+
                 <h3 className={styles.pricingName}>スタータープラン</h3>
+
+                <p className={styles.pricingAudience}>
+                  小規模〜中規模の建設会社向け
+                </p>
+
                 <div className={styles.pricingPrice}>
                   <span className={styles.pricingCurrency}>¥</span>
                   <span className={styles.pricingAmount}>19,800</span>
                   <span className={styles.pricingPer}>/月（税込）</span>
                 </div>
-                <p className={styles.pricingTrialNote}>30日間無料でお試しいただけます</p>
+
+                <p className={styles.pricingTrialNote}>
+                  30日間無料でお試しいただけます
+                </p>
+
+                <p className={styles.pricingQualification}>
+                  ※従業員50名程度までの企業を対象としています。
+                  大規模企業・複数拠点での導入は個別にご案内します。
+                </p>
 
                 <div className={styles.pricingMeta}>
                   <span className={styles.pricingMetaItem}>
@@ -682,7 +696,7 @@ export default function LandingPage() {
                   <p className={styles.pricingEarlyAdopterTitle}>早期導入企業募集中</p>
                   <p className={styles.pricingEarlyAdopterDesc}>
                     現在、初期導入企業様と一緒にサービスを改善しています。
-                    スタータープランは小規模〜中規模の建設会社向けの特別価格です。
+                    スタータープランは小規模〜中規模の建設会社向けに設定した早期導入価格です。
                     早期導入企業様は現在の料金で継続してご利用いただけます。
                   </p>
                 </div>
