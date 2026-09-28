@@ -840,7 +840,7 @@ export default function LandingPage() {
           <div className={styles.contactGrid}>
 
             {/* Phone */}
-            <div className={styles.contactCard}>
+            {/* <div className={styles.contactCard}>
               <div className={styles.contactIcon}>📞</div>
 
               <h3>お電話でのお問い合わせ</h3>
@@ -855,7 +855,7 @@ export default function LandingPage() {
               <p className={styles.contactSmall}>
                 お気軽にお問い合わせください。
               </p>
-            </div>
+            </div> */}
 
             {/* LINE */}
             <div className={styles.contactCard}>
@@ -940,15 +940,6 @@ export default function LandingPage() {
                 <div className={styles.companyLabel}>代表者</div>
                 <div className={styles.companyValue}>
                   コスタンティーニ　留梨奈
-                </div>
-              </div>
-
-              <div className={styles.companyRow}>
-                <div className={styles.companyLabel}>電話番号</div>
-                <div className={styles.companyValue}>
-                  <a href="tel:+8170856886588">
-                    070-8568-6588
-                  </a>
                 </div>
               </div>
 

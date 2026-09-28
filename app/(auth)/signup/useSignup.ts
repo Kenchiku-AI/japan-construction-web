@@ -44,6 +44,10 @@ export const useSignup = () => {
 
         posthog.capture("signup_completed");
 
+        if (typeof window !== "undefined" && window.fbq) {
+          window.fbq("track", "CompleteRegistration");
+        }
+
         sessionStorage.removeItem(invitationTokenKey);
         sessionStorage.removeItem(createCompanyInvitationIdKey);
         router.push("/home");
