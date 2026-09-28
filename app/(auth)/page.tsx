@@ -660,11 +660,6 @@ export default function LandingPage() {
                   30日間無料でお試しいただけます
                 </p>
 
-                <p className={styles.pricingQualification}>
-                  ※従業員50名程度までの企業を対象としています。
-                  大規模企業・複数拠点での導入は個別にご案内します。
-                </p>
-
                 <div className={styles.pricingMeta}>
                   <span className={styles.pricingMetaItem}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -700,6 +695,11 @@ export default function LandingPage() {
                     早期導入企業様は現在の料金で継続してご利用いただけます。
                   </p>
                 </div>
+
+                <p className={styles.pricingQualification}>
+                  ※従業員50名程度までの企業を対象としています。
+                  大規模企業・複数拠点での導入は個別にご案内します。
+                </p>
               </div>
 
               {/* Divider */}
@@ -902,7 +902,7 @@ export default function LandingPage() {
 
                   <p className={styles.contactSmall}>
                     スマートフォンでQRコードを読み取り、
-                    友だち追加してください
+                    友だち追加してください。
                   </p>
                 </>
               )}
