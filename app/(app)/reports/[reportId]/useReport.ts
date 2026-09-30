@@ -151,8 +151,16 @@ export const useReport = (reportId: string) => {
 
   const updateReport = useCallback(
     async (request: ReportRequest, silent: boolean = false) => {
+      if (!silent) {
+        setLoading(true);
+      }
+
       try {
         const response = await api.updateReport(reportId, request);
+
+        if (!!request.field_values) {
+          getImages(reportId);
+        }
 
         if (response) {
           setReport({
@@ -178,6 +186,8 @@ export const useReport = (reportId: string) => {
           });
         }
       }
+
+      setLoading(false);
     },
     [setReport, report, reportId],
   );
