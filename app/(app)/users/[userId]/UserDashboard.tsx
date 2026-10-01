@@ -207,24 +207,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                 isDisabled={isRoleDisabled}
                 isRole
               />
-              {showCompanySelector && (
-                <>
-                  <div>
-                    {`${t("show_fields_for_company")}：`}
-                  </div>
-                  <Select
-                    options={companyOptions}
-                    value={selectedCompanyId || companyOptions?.[0].value}
-                    placeholder={t("company")}
-                    onChange={(id) => {
-                      const newCompanyId = id as string;
-                      setSelectedCompanyId(newCompanyId);
-                      getUser(userId, newCompanyId);
-                    }}
-                  />
-                </>
-              )}
-              {customFieldDefinitions.map((item) => (
+              {!showCompanySelector && customFieldDefinitions.map((item) => (
                 <div key={item.id}>
                   <Divider />
                   <CustomFieldListCell
@@ -270,6 +253,67 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
           </>
         )}
       </div>
+      {!!showCompanySelector && (
+        <>
+          <div className="flex justify-between mt-12">
+            <div className="self-end">{t("fields_by_company")}</div>
+          </div>
+          <div className={cardClass}>
+            <Select
+              options={companyOptions}
+              value={selectedCompanyId || companyOptions?.[0].value}
+              placeholder={t("company")}
+              onChange={(id) => {
+                const newCompanyId = id as string;
+                setSelectedCompanyId(newCompanyId);
+                getUser(userId, newCompanyId);
+              }}
+            />
+            {customFieldDefinitions.map((item) => (
+              <div key={item.id}>
+                <Divider />
+                <CustomFieldListCell
+                  fields={customFields}
+                  relationships={customRelationships}
+                  definition={item}
+                  projects={projects}
+                  users={users}
+                  customObjectsByDefinition={customObjectsByDefinition}
+                  onFieldChange={(value) => {
+                    setCustomFields((prev) => ({
+                      ...prev,
+                      [item.id]: value
+                    }));
+                  }}
+                  onRelationshipChange={(value) => {
+                    setCustomRelationships((prev) => ({
+                      ...prev,
+                      [item.id]: value
+                    }));
+                  }}
+                  onCancel={() => {
+                    resetCustomField(item.id);
+                  }}
+                  onSubmit={() => {
+                    updateCustomField(item.id);
+                  }}
+                  onCreateRelationshipObject={async (definitionId) => {
+                    const definition = await getCustomObjectDefinition(definitionId);
+                    setCreateObjectDefinition(definition);
+                    fieldIdToUpdate.current = item.id;
+                  }}
+                  onEditRelationshipObject={async (objectId) => {
+                    const object = await getCustomObject(objectId);
+                    setEditObject(object);
+                    fieldIdToUpdate.current = item.id;
+                  }}
+                  isEditable={!isEditDisabled}
+                />
+              </div>
+            ))}
+          </div>
+        </>
+      )}
       <Modal
         title={t("confirm_logout")}
         subtitle={t("confirm_logout_description")}
