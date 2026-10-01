@@ -203,12 +203,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     });
   }, [report?.fields]);
 
-  const shouldRedirect =
-    currentUser?.company &&
-    report?.company_id &&
-    currentUser.role !== UserRole.Admin &&
-    currentUser.company.id !== report.company_id;
-
   const hasTopRow = isReportClosed || (!isReportDisabled && !!conversations?.length);
 
   const ImageList = useMemo(
@@ -264,10 +258,6 @@ const ReportDashboard: FC<ReportDashboardProps> = ({ reportId }) => {
     }
     return width;
   };
-
-  if (shouldRedirect) {
-    redirect("/");
-  }
 
   return (
     <>
