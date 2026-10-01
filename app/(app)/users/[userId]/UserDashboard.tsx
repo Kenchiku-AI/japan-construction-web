@@ -30,6 +30,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const {
     loading,
     user,
+    getUser,
     updateUser,
     customFieldDefinitions,
     customFields,
@@ -213,7 +214,11 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                     options={companyOptions}
                     value={selectedCompanyId || companyOptions?.[0].value}
                     placeholder={t("company")}
-                    onChange={(id) => setSelectedCompanyId(id as string)}
+                    onChange={(id) => {
+                      const newCompanyId = id as string;
+                      setSelectedCompanyId(newCompanyId);
+                      getUser(userId, newCompanyId);
+                    }}
                   />
                 </>
               )}
