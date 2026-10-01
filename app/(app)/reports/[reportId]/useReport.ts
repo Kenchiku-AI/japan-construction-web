@@ -119,6 +119,8 @@ export const useReport = (reportId: string) => {
           subtitle: t("get_report_error_description"),
         });
 
+        console.log("ERROR GETTING REPORT", err);
+
         router.replace("/");
       }
 
