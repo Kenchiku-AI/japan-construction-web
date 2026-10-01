@@ -261,9 +261,9 @@ export const useUser = (userId: string) => {
   }, [user]);
 
   const getUser = useCallback(
-    async (userId: string) => {
+    async (userId: string, companyId?: string) => {
       try {
-        const response = await api.getUser(userId);
+        const response = await api.getUser(userId, companyId);
         setUser(response);
       } catch (err) {
         showModal({
@@ -426,6 +426,7 @@ export const useUser = (userId: string) => {
   return {
     loading,
     user,
+    getUser,
     updateUser,
     customFieldDefinitions,
     customFields,

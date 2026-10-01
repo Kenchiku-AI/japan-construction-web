@@ -29,6 +29,11 @@ export type ResetPasswordRequest = {
   new_password: string;
 };
 
+export type CompanyListItem = {
+  id: string;
+  name: string;
+}
+
 export type User = {
   id: string;
   first_name?: string;
@@ -38,6 +43,7 @@ export type User = {
   role: UserRole;
   custom_fields: CustomField[];
   custom_relationships: CustomRelationship[];
+  companies: CompanyListItem[];
 };
 
 export type UpdateUserRequest = {

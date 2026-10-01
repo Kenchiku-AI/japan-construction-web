@@ -59,6 +59,17 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
   const fieldIdToUpdate = useRef("");
   const [createObjectDefinition, setCreateObjectDefinition] = useState<CustomObjectDefinitionDetail>();
   const [isConfirmLogoutShown, setIsConfirmLogoutShown] = useState(false);
+  const [selectedCompanyId, setSelectedCompanyId] = useState("");
+  const showCompanySelector = (userId === currentUser?.id || user?.role === UserRole.Admin) && (user?.companies?.length ?? 0) > 1;
+
+  const companyOptions = useMemo(() => {
+    if (!user?.companies.length) return [];
+
+    return user.companies.map((c) => ({
+      label: c.name,
+      value: c.id
+    }))
+  }, [user?.companies]);
 
   const isEditDisabled = useMemo(() => {
     if (!user || !currentUser) return true;
@@ -195,6 +206,17 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
                 isDisabled={isRoleDisabled}
                 isRole
               />
+              {showCompanySelector && (
+                <>
+                  <Divider />
+                  <Select
+                    options={companyOptions}
+                    value={selectedCompanyId || companyOptions?.[0].value}
+                    placeholder={t("company")}
+                    onChange={(id) => setSelectedCompanyId(id as string)}
+                  />
+                </>
+              )}
               {customFieldDefinitions.map((item) => (
                 <div key={item.id}>
                   <Divider />
