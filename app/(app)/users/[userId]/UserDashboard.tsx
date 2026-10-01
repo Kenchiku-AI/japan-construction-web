@@ -210,7 +210,7 @@ const UserDashboard: FC<UserDashboardProps> = ({ userId }) => {
               {showCompanySelector && (
                 <>
                   <div>
-                    {t("show_fields_for_company")}
+                    {`${t("show_fields_for_company")}：`}
                   </div>
                   <Select
                     options={companyOptions}
