@@ -252,7 +252,7 @@ export const useApiData = () => {
       return call(() => http.get<CurrentUser>(url));
     },
     async getUser(userId: string, companyId?: string) {
-      const url = `/users/${userId}${!companyId ? '' : `company_id=${companyId}`}`;
+      const url = `/users/${userId}${!companyId ? '' : `?company_id=${companyId}`}`;
       return call(() => http.get<User>(url));
     },
     async updateUser(userId: string, request: UpdateUserRequest) {
