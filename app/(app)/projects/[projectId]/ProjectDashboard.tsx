@@ -126,7 +126,8 @@ const ProjectDashboard: FC<ProjectDashboardProps> = ({ projectId }) => {
   const isEditable = useMemo(() => {
     if (currentUser?.role === UserRole.Admin) return true;
     if (project?.status !== "active") return false;
-    return currentUser?.role === UserRole.Manager;
+
+    return true;
   }, [project?.status, currentUser?.role]);
 
   const topLabel = useMemo(() => {
