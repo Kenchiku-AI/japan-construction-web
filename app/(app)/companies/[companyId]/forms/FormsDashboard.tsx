@@ -9,7 +9,7 @@ import { useApi } from "@/lib/api/ApiContext";
 import { FormJob, FormJobDownloadFile, UserRole } from "@/types";
 import FormsList from "./FormsList";
 import { redirect } from "next/navigation";
-import { cardClass } from "@/lib/constants";
+import { cardClass, inProgressColor1, inProgressColor2 } from "@/lib/constants";
 import { useForms } from "./useForms";
 import CreateFormJobModal from "./CreateFormJobModal";
 import FormJobModal from "./FormJobModal";
@@ -41,7 +41,20 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
   return (
     <>
       <div className="flex justify-between items-end">
-        <Heading title={t("forms")} />
+        <div>
+          <Heading title={t("forms")} />
+          <div
+            className="flex items-center px-2"
+            style={{
+              padding: "5px 10px",
+              borderRadius: 18,
+              color: inProgressColor1,
+              background: inProgressColor2
+            }}
+          >
+            {t("beta")}
+          </div>
+        </div>
         <Button
           variant="tertiary"
           style={{ height: "auto" }}
