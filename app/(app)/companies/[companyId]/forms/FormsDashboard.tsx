@@ -41,11 +41,12 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
   return (
     <>
       <div className="flex justify-between items-end">
-        <div>
+        <div className="flex flex-row items-end gap-3">
           <Heading title={t("forms")} />
           <div
             className="flex items-center px-2"
             style={{
+              fontSize: 12,
               padding: "5px 10px",
               borderRadius: 18,
               color: inProgressColor1,
