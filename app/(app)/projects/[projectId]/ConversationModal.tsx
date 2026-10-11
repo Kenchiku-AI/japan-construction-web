@@ -83,7 +83,7 @@ const ConversationModal: FC<ConversationModalProps> = ({
                 <div className="mx-3">
                   <Button
                     variant="tertiary"
-                    label={hideQRCode ? t("show_qr_code") : t("hide_qr_code")}
+                    label={t("view_conversation_messages")}
                     onClick={() => {
                       router.push(`/conversations/${conversation.id}/messages`);
                     }}
