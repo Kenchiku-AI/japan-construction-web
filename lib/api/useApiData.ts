@@ -68,6 +68,7 @@ import {
   CreateFormJobRequest,
   CreateFormJobResponse,
   FormJobDownloadResponse,
+  ConversationMessage,
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -375,6 +376,10 @@ export const useApiData = () => {
       const url = `/conversation-items/${conversationItemId}`;
       return call(() => http.delete(url));
     },
+    async getConversationInfo(conversationId: string) {
+      const url = `/conversations/${conversationId}/info`;
+      return call(() => http.get<Conversation>(url));
+    },
     async createConversation(request: CreateConversationRequest) {
       const url = "/conversations";
       return call(() => http.post<Conversation>(url, request));
@@ -386,6 +391,10 @@ export const useApiData = () => {
     async deleteConversation(conversationId: string) {
       const url = `/conversations/${conversationId}`;
       return call(() => http.delete(url));
+    },
+    async getConversationMessages(conversationId: string) {
+      const url = `/conversations/${conversationId}/messages`;
+      return call(() => http.get<ConversationMessage[]>(url));
     },
     async getConversationItemTypes(companyId: string) {
       const url = `/companies/${companyId}/conversation-item-types`;

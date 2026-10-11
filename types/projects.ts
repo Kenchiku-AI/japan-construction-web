@@ -116,3 +116,17 @@ export type ConversationItemTypeRequest = {
   name: string;
   description: string;
 }
+
+export type ConversationMessage = {
+  id: string;
+  line_platform_message_id: string;
+  message_type: string;
+  text?: string;
+  sender_line_user_id: string;
+  sender_number: number;
+  line_user_id?: string;
+  line_chat_id?: string;
+  line_chat_type?: string;
+  line_timestamp?: string;
+  created_at?: string;
+}
