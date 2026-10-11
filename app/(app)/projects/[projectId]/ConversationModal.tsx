@@ -6,11 +6,12 @@ import Modal from "@/app/ui/Modal";
 import { Conversation, ConversationItemType } from "@/types";
 import Divider from "@/app/ui/Divider";
 import { bgColor3, bgColor4, bgColor5, buttonColor, errorColor1, errorColor2, fontColor1, fontColor2, fontColor3, hideQRCodeKey } from "@/lib/constants";
-import { Check, DownChevron, Info, Trash, UpChevron } from "@/app/ui/Icons";
+import { Chat, Check, DownChevron, Info, Trash, UpChevron } from "@/app/ui/Icons";
 import LineLinkCodeButton from "@/app/ui/LineLinkCodeButton";
 import QRCode from "react-qr-code";
 import Link from "next/link";
 import { useIsMobile } from "@/lib/useIsMobile";
+import { useRouter } from "next/navigation";
 
 interface ConversationModalProps {
   conversation?: Conversation;
@@ -34,6 +35,7 @@ const ConversationModal: FC<ConversationModalProps> = ({
   const [hideQRCode, setHideQRCode] = useState(false);
   const { isMobile } = useIsMobile();
   const { t } = useTranslation();
+  const router = useRouter();
 
   const reset = () => {
     setTimeout(() => {
@@ -75,6 +77,21 @@ const ConversationModal: FC<ConversationModalProps> = ({
         />
         {!!conversation && (
           <>
+            {!!conversation.line_chat_id && (
+              <>
+                <Divider />
+                <div className="mx-3">
+                  <Button
+                    variant="tertiary"
+                    label={hideQRCode ? t("show_qr_code") : t("hide_qr_code")}
+                    onClick={() => {
+                      router.push(`/conversations/${conversation.id}/messages`);
+                    }}
+                    iconLeft={() => <Chat color={buttonColor} />}
+                  />
+                </div>
+              </>
+            )}
             <Divider />
             <div className="mx-3">
               <LineLinkCodeButton
