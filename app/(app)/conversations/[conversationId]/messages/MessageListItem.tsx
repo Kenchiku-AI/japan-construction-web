@@ -1,12 +1,15 @@
 import { LineUserAvatar } from "@/app/ui/LineUserAvatar";
 import { ConversationMessage } from "@/types";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 type MessageListItemProps = {
   message: ConversationMessage;
 };
 
 export function MessageListItem({ message }: MessageListItemProps) {
+  const { t } = useTranslation();
+
   if (message.message_type !== "text" || !message.text?.trim()) {
     return null;
   }
@@ -31,7 +34,7 @@ export function MessageListItem({ message }: MessageListItemProps) {
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex flex-wrap items-baseline gap-x-2 gap-y-1">
           <span className="text-sm font-semibold">
-            User {message.sender_number}
+            {`${t("user")}${message.sender_number}`}
           </span>
 
           {formattedTime && (
