@@ -3,6 +3,10 @@ import type { NextRequest } from "next/server";
 import { accessTokenKey, authRoutes, publicRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
+  if (process.env.NEXT_PUBLIC_CLIENT_NAME === "eiwa") {
+    return NextResponse.next();
+  }
+
   const token = req.cookies.get(accessTokenKey);
   const { pathname } = req.nextUrl;
 
@@ -10,12 +14,6 @@ export function middleware(req: NextRequest) {
 
   if (isPublicRoute) {
     return NextResponse.next();
-  }
-
-  const isEiwa = process.env.NEXT_PUBLIC_CLIENT_NAME === "eiwa";
-
-  if (isEiwa && pathname === "/" && !token) {
-    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   const isAuthRoute = pathname === "/" || authRoutes.some((r) => pathname.startsWith(r));
