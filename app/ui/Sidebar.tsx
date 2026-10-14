@@ -15,6 +15,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const router = useRouter();
   const { currentUser } = useApi();
   const isAdmin = currentUser?.role === UserRole.Admin;
+  const clientName = process.env.NEXT_PUBLIC_CLIENT_NAME;
 
   return !currentUser ? null : (
     <div className="drawer md:drawer-open min-h-screen" style={{ background: bgColor4 }}>
@@ -49,92 +50,107 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
 
           {currentUser && (
             <div className="flex flex-col flex-1">
-              <div className="space-y-2">
-                <div className="flex justify-center pb-2 md:pt-3">
-                  <Logo size={24} />
-                </div>
-                <Divider style={{ margin: "10px 0 5px 0" }} />
-                {isAdmin && (
+              {clientName === "eiwa" ? (
+                <div className="space-y-2">
                   <SidebarItem
-                    name={t("companies")}
+                    name={t("catalog")}
                     icon={() => <Users size={24} />}
-                    path={"/companies"}
+                    path={"/catalog"}
                   />
-                )}
-                {!!currentUser.company && (
                   <SidebarItem
-                    name={t("home")}
-                    icon={() => <Home size={24} />}
-                    path={"/home"}
+                    name={t("estimates")}
+                    icon={() => <Users size={24} />}
+                    path={"/estimates"}
                   />
-                )}
-                <SidebarItem
-                  name={t("projects")}
-                  icon={() => <Hardhat size={24} />}
-                  path={"/projects"}
-                />
-                {currentUser.company && (
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex justify-center pb-2 md:pt-3">
+                    <Logo size={24} />
+                  </div>
+                  <Divider style={{ margin: "10px 0 5px 0" }} />
+                  {isAdmin && (
+                    <SidebarItem
+                      name={t("companies")}
+                      icon={() => <Users size={24} />}
+                      path={"/companies"}
+                    />
+                  )}
+                  {!!currentUser.company && (
+                    <SidebarItem
+                      name={t("home")}
+                      icon={() => <Home size={24} />}
+                      path={"/home"}
+                    />
+                  )}
                   <SidebarItem
-                    name={t("users")}
-                    icon={() => <User size={24} />}
-                    path={`/companies/${currentUser.company.id}/users`}
+                    name={t("projects")}
+                    icon={() => <Hardhat size={24} />}
+                    path={"/projects"}
                   />
-                )}
-                <SidebarItem
-                  name={t("reports")}
-                  icon={() => <Paper size={24} />}
-                  path={"/reports"}
-                />
-                {currentUser.role === "manager" && (
-                  <>
+                  {currentUser.company && (
                     <SidebarItem
-                      name={t("report_templates")}
-                      icon={() => <Papers size={24} />}
-                      path={"/reports/templates"}
+                      name={t("users")}
+                      icon={() => <User size={24} />}
+                      path={`/companies/${currentUser.company.id}/users`}
                     />
-                    <SidebarItem
-                      name={t("tags")}
-                      icon={() => <Tag size={22} />}
-                      path={"/tags"}
-                    />
-                    {currentUser.company && (
-                      <>
-                        <SidebarItem
-                          name={t("forms")}
-                          icon={() => <Form size={18} />}
-                          path={`/companies/${currentUser.company.id}/forms`}
-                        />
-                        <SidebarItem
-                          name={t("custom_info")}
-                          icon={() => <DataFlow size={18} />}
-                          path={`/companies/${currentUser.company.id}/custom-info`}
-                        />
-                      </>
-                    )}
-                    <SidebarItem
-                      name={t("line_integration")}
-                      icon={() => <LineLogo size={18} strokeWidth={1.5} />}
-                      path={"/line"}
-                    />
-                    <SidebarItem
-                      name={t("user_guide")}
-                      icon={() => <Info color="black" size={18} strokeWidth={1.5} />}
-                      path="/docs"
-                    />
-                  </>
-                )}
-                {isAdmin && (
+                  )}
                   <SidebarItem
-                    name={t("billing_plans")}
-                    icon={() => (
-                      <div style={{ paddingLeft: 5, paddingRight: 5 }}>
-                        <CreditCard size={18} color="black" strokeWidth={0.85} />
-                      </div>
-                    )}
-                    path={"/billing-plans"}
+                    name={t("reports")}
+                    icon={() => <Paper size={24} />}
+                    path={"/reports"}
                   />
-                )}
-              </div>
+                  {currentUser.role === "manager" && (
+                    <>
+                      <SidebarItem
+                        name={t("report_templates")}
+                        icon={() => <Papers size={24} />}
+                        path={"/reports/templates"}
+                      />
+                      <SidebarItem
+                        name={t("tags")}
+                        icon={() => <Tag size={22} />}
+                        path={"/tags"}
+                      />
+                      {currentUser.company && (
+                        <>
+                          <SidebarItem
+                            name={t("forms")}
+                            icon={() => <Form size={18} />}
+                            path={`/companies/${currentUser.company.id}/forms`}
+                          />
+                          <SidebarItem
+                            name={t("custom_info")}
+                            icon={() => <DataFlow size={18} />}
+                            path={`/companies/${currentUser.company.id}/custom-info`}
+                          />
+                        </>
+                      )}
+                      <SidebarItem
+                        name={t("line_integration")}
+                        icon={() => <LineLogo size={18} strokeWidth={1.5} />}
+                        path={"/line"}
+                      />
+                      <SidebarItem
+                        name={t("user_guide")}
+                        icon={() => <Info color="black" size={18} strokeWidth={1.5} />}
+                        path="/docs"
+                      />
+                    </>
+                  )}
+                  {isAdmin && (
+                    <SidebarItem
+                      name={t("billing_plans")}
+                      icon={() => (
+                        <div style={{ paddingLeft: 5, paddingRight: 5 }}>
+                          <CreditCard size={18} color="black" strokeWidth={0.85} />
+                        </div>
+                      )}
+                      path={"/billing-plans"}
+                    />
+                  )}
+                </div>
+              )}
               <div className="mt-auto">
                 <Button
                   variant="tertiary"
