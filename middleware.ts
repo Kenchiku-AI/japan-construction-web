@@ -3,30 +3,30 @@ import type { NextRequest } from "next/server";
 import { accessTokenKey, authRoutes, publicRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get(accessTokenKey);
-  const { pathname } = req.nextUrl;
+  // const token = req.cookies.get(accessTokenKey);
+  // const { pathname } = req.nextUrl;
 
-  const isPublicRoute = publicRoutes.some((r) => pathname.startsWith(r));
+  // const isPublicRoute = publicRoutes.some((r) => pathname.startsWith(r));
 
-  if (isPublicRoute) {
-    return NextResponse.next();
-  }
+  // if (isPublicRoute) {
+  //   return NextResponse.next();
+  // }
 
-  const isEiwa = process.env.NEXT_PUBLIC_CLIENT_NAME === "eiwa";
+  // const isEiwa = process.env.NEXT_PUBLIC_CLIENT_NAME === "eiwa";
 
-  if (isEiwa && pathname === "/" && !token) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
+  // if (isEiwa && pathname === "/" && !token) {
+  //   return NextResponse.redirect(new URL("/login", req.url));
+  // }
 
-  const isAuthRoute = pathname === "/" || authRoutes.some((r) => pathname.startsWith(r));
+  // const isAuthRoute = pathname === "/" || authRoutes.some((r) => pathname.startsWith(r));
 
-  if (!token && !isAuthRoute) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
+  // if (!token && !isAuthRoute) {
+  //   return NextResponse.redirect(new URL("/login", req.url));
+  // }
 
-  if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL("/home", req.url));
-  }
+  // if (token && isAuthRoute) {
+  //   return NextResponse.redirect(new URL("/home", req.url));
+  // }
 
   return NextResponse.next();
 }
