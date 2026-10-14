@@ -52,6 +52,13 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
             <div className="flex flex-col flex-1">
               {clientName === "eiwa" ? (
                 <div className="space-y-2">
+                  {isAdmin && (
+                    <SidebarItem
+                      name={t("companies")}
+                      icon={() => <Users size={24} />}
+                      path={"/companies"}
+                    />
+                  )}
                   <SidebarItem
                     name={t("catalog")}
                     icon={() => <Users size={24} />}

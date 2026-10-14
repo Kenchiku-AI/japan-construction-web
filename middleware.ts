@@ -12,6 +12,12 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  const isEiwa = process.env.NEXT_PUBLIC_CLIENT_NAME === "eiwa";
+
+  if (isEiwa && pathname === "/" && !token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
   const isAuthRoute = pathname === "/" || authRoutes.some((r) => pathname.startsWith(r));
 
   if (!token && !isAuthRoute) {
