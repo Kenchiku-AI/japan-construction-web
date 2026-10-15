@@ -11,6 +11,10 @@ export function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
+  if (clientName && !token && pathname === "/") {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
   const isPublicRoute = publicRoutes.some((r) =>
     pathname.startsWith(r),
   );
