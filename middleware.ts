@@ -3,10 +3,6 @@ import type { NextRequest } from "next/server";
 import { accessTokenKey, authRoutes, publicRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
-  if (process.env.NEXT_PUBLIC_CLIENT_NAME === "eiwa") {
-    return NextResponse.next();
-  }
-
   const token = req.cookies.get(accessTokenKey);
   const { pathname } = req.nextUrl;
 
