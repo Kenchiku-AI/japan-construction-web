@@ -229,9 +229,10 @@ export const useApiData = () => {
 
   const api = {
     async login(request: LoginRequest) {
-      const url = process.env.NEXT_PUBLIC_CLIENT_NAME
-        ? `${window.location.origin}/api/auth/login`
-        : "/auth/login";
+      // const url = process.env.NEXT_PUBLIC_CLIENT_NAME
+      //   ? `${window.location.origin}/api/auth/login`
+      //   : "/auth/login";
+      const url = "/auth/login";
 
       return handleResponse(() => http.post<CurrentUser>(url, request));
     },
