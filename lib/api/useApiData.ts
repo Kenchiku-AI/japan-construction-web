@@ -163,6 +163,7 @@ export const useApiData = () => {
 
   const logout = useCallback(async () => {
     try {
+      document.cookie = "session=; Path=/; Max-Age=0; SameSite=Lax";
       await api.logout();
     } finally {
       if (
