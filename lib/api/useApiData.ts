@@ -229,18 +229,8 @@ export const useApiData = () => {
 
   const api = {
     async login(request: LoginRequest) {
-      // const url = process.env.NEXT_PUBLIC_CLIENT_NAME
-      //   ? `${window.location.origin}/api/auth/login`
-      //   : "/auth/login";
       const url = "/auth/login";
-
       return handleResponse(() => http.post<CurrentUser>(url, request));
-    },
-    async logout() {
-      const url = process.env.NEXT_PUBLIC_CLIENT_NAME
-        ? `${window.location.origin}/api/auth/logout`
-        : "/auth/logout";
-      return call(() => http.post(url));
     },
     async signup(request: SignupRequest) {
       const url = "/auth/signup";
@@ -253,6 +243,10 @@ export const useApiData = () => {
     async resetPassword(request: ResetPasswordRequest) {
       const url = "/auth/reset-password";
       return handleResponse(() => http.post(url, request));
+    },
+    async logout() {
+      const url = "/auth/logout";
+      return call(() => http.post(url));
     },
     async getCurrentUser() {
       const url = "/users/me";
