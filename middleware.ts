@@ -4,10 +4,14 @@ import { accessTokenKey, authRoutes, publicRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
   const clientName = process.env.NEXT_PUBLIC_CLIENT_NAME;
-  const isLoggedIn = req.cookies.get("session");
+
+  const token = clientName
+    ? req.cookies.get("session")
+    : req.cookies.get(accessTokenKey);
+
   const { pathname } = req.nextUrl;
 
-  if (clientName && !isLoggedIn && pathname === "/") {
+  if (clientName && !token && pathname === "/") {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -23,11 +27,11 @@ export function middleware(req: NextRequest) {
     pathname === "/" ||
     authRoutes.some((r) => pathname.startsWith(r));
 
-  if (!isLoggedIn && !isAuthRoute) {
+  if (!token && !isAuthRoute) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (isLoggedIn && isAuthRoute) {
+  if (token && isAuthRoute) {
     return NextResponse.redirect(new URL("/home", req.url));
   }
 

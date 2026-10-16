@@ -27,13 +27,15 @@ export const useLogin = () => {
       try {
         let user = await api.login({ email, password });
 
-        document.cookie = [
-          "session=1",
-          "Path=/",
-          "Max-Age=3600",
-          "SameSite=Lax",
-          ...(window.location.protocol === "https:" ? ["Secure"] : []),
-        ].join("; ");
+        if (process.env.NEXT_PUBLIC_CLIENT_NAME) {
+          document.cookie = [
+            "session=1",
+            "Path=/",
+            "Max-Age=3600",
+            "SameSite=Lax",
+            ...(window.location.protocol === "https:" ? ["Secure"] : []),
+          ].join("; ");
+        }
 
         if (token) {
           await api.acceptInvitation({ token });
