@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { accessTokenKey, authRoutes, publicRoutes } from "./lib/constants";
+import { authRoutes, publicRoutes } from "./lib/constants";
 
 export function middleware(req: NextRequest) {
   const clientName = process.env.NEXT_PUBLIC_CLIENT_NAME;
-
-  const token = clientName
-    ? req.cookies.get("session")
-    : req.cookies.get(accessTokenKey);
-
+  const isLoggedIn = req.cookies.get("session");
   const { pathname } = req.nextUrl;
 
-  if (clientName && !token && pathname === "/") {
+  if (clientName && !isLoggedIn && pathname === "/") {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -27,11 +23,11 @@ export function middleware(req: NextRequest) {
     pathname === "/" ||
     authRoutes.some((r) => pathname.startsWith(r));
 
-  if (!token && !isAuthRoute) {
+  if (!isLoggedIn && !isAuthRoute) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (token && isAuthRoute) {
+  if (isLoggedIn && isAuthRoute) {
     return NextResponse.redirect(new URL("/home", req.url));
   }
 
