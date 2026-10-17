@@ -38,7 +38,7 @@ export const useCatalogItems = (companyId?: string) => {
       setLoading(true);
 
       try {
-        await api.createCatalogItem(companyId, request);
+        await api.createCatalogItem(request);
         await getCatalogItems();
       } catch (err) {
         showModal({
