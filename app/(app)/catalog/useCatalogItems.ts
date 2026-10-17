@@ -15,6 +15,8 @@ export const useCatalogItems = (companyId?: string) => {
   const { t } = useTranslation();
 
   useEffect(() => {
+    console.log("Company ID", companyId);
+
     if (companyId) {
       getCatalogItems(companyId);
     }
