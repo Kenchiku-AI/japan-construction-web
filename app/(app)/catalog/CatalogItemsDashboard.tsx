@@ -87,7 +87,7 @@ const CatalogItemsDashboard: FC<CatalogItemsDashboardProps> = ({ companyId }) =>
         <div
           className="cursor-pointer"
           onClick={() => {
-            getCatalogItems();
+            getCatalogItems(companyId);
             setShowSearch(false);
           }}
         >

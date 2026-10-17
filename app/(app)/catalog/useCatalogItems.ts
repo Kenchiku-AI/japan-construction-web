@@ -15,12 +15,12 @@ export const useCatalogItems = (companyId?: string) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    getCatalogItems();
+    if (companyId) {
+      getCatalogItems(companyId);
+    }
   }, [companyId]);
 
-  const getCatalogItems = useCallback(async () => {
-    if (!companyId) return;
-
+  const getCatalogItems = async (companyId: string) => {
     setLoading(true);
 
     try {
@@ -29,7 +29,7 @@ export const useCatalogItems = (companyId?: string) => {
     } finally {
       setLoading(false);
     }
-  }, [companyId]);
+  };
 
   const createCatalogItem = useCallback(
     async (request: CreateCatalogItemRequest) => {
@@ -39,7 +39,7 @@ export const useCatalogItems = (companyId?: string) => {
 
       try {
         await api.createCatalogItem(request);
-        await getCatalogItems();
+        await getCatalogItems(companyId);
       } catch (err) {
         showModal({
           title: t("error"),
@@ -60,7 +60,7 @@ export const useCatalogItems = (companyId?: string) => {
 
       try {
         await api.updateCatalogItem(catalogItemId, request);
-        await getCatalogItems();
+        await getCatalogItems(companyId);
       } catch (err) {
         showModal({
           title: t("error"),
@@ -81,7 +81,7 @@ export const useCatalogItems = (companyId?: string) => {
 
       try {
         await api.deleteCatalogItem(itemId);
-        await getCatalogItems();
+        await getCatalogItems(companyId);
       } catch (err) {
         showModal({
           title: t("error"),
