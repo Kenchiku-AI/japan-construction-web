@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
-import { Close, Plus } from "@/app/ui/Icons";
+import { Close, Plus, Search } from "@/app/ui/Icons";
 import { useApi } from "@/lib/api/ApiContext";
 import { CatalogItem, FormJob, UserRole } from "@/types";
 import CatalogItemsList from "./CatalogItemsList";
@@ -32,14 +32,14 @@ const CatalogItemsPage = () => {
     getCatalogItems,
     deleteCatalogItem,
     search,
-    loading
+    loading: catalogItemsLoading
   } = useCatalogItems();
   const {
     formJobs,
     createFormJob,
     deleteFormJob,
-    downloadFiles
-  } = useFormJobs(companyId);
+    loading: formJobsLoading
+  } = useFormJobs(companyId, "catalog_items");
   const [showCreateItem, setShowCreateItem] = useState(false);
   const [showCreateUpload, setShowCreateUpload] = useState(false);
   const [editingItem, setEditingItem] = useState<CatalogItem>();
@@ -92,22 +92,36 @@ const CatalogItemsPage = () => {
       </div>
       <div className="flex justify-between items-end">
         <Heading title={t("catalog_items")} />
-        <Button
-          variant="tertiary"
-          style={{ height: "auto" }}
-          label={t("create_item")}
-          iconLeft={() => <Plus />}
-          onClick={() => {
-            setShowCreateItem(true);
-          }}
-          iconOnlyMobile
-        />
+        <div className="flex gap-5 md:gap-8">
+          {!!catalogItems?.length && (
+            <Button
+              variant="tertiary"
+              style={{ height: "auto" }}
+              label={t("search")}
+              iconLeft={() => <Search />}
+              onClick={() => {
+                setShowSearch(true);
+              }}
+              iconOnlyMobile
+            />
+          )}
+          <Button
+            variant="tertiary"
+            style={{ height: "auto" }}
+            label={t("create_item")}
+            iconLeft={() => <Plus />}
+            onClick={() => {
+              setShowCreateItem(true);
+            }}
+            iconOnlyMobile
+          />
+        </div>
       </div>
-      {!!catalogItems && (
+      {((catalogItems ?? []).length > 0 || !catalogItemsLoading) && (
         <div className={cardClass}>
           <CatalogItemsList
-            catalogItems={catalogItems}
-            isEmpty={!loading && catalogItems.length === 0}
+            catalogItems={catalogItems ?? []}
+            isEmpty={!catalogItemsLoading && catalogItems?.length === 0}
             onEdit={(i) => setEditingItem(i)}
             onDelete={(i) => setDeletingItem(i)}
           />
@@ -126,14 +140,16 @@ const CatalogItemsPage = () => {
           iconOnlyMobile
         />
       </div>
-      {((formJobs ?? []).length > 0 || !loading) && (
+      {((formJobs ?? []).length > 0 || !formJobsLoading) && (
         <div className={cardClass}>
           <FormsList
             forms={formJobs ?? []}
-            isEmpty={!loading && formJobs?.length === 0}
+            isEmpty={!formJobsLoading && formJobs?.length === 0}
             onClick={(formJob) => {
               setShowFormJob(formJob);
             }}
+            isCollapsible
+            hideFilename
           />
         </div>
       )}

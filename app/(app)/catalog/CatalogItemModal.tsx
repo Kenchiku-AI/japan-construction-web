@@ -78,7 +78,29 @@ const CatalogItemModal: FC<CatalogItemModalProps> = ({
       title={t(catalogItem ? "update_item" : "create_item")}
     >
       <div className="my-8 flex flex-col gap-3">
+        <Input value={code} placeholder={t("code")} onChange={setCode} />
         <Input value={name} placeholder={t("name")} onChange={setName} />
+        <Input value={nameKana} placeholder={t("name_kana")} onChange={setNameKana} />
+        <Input value={unit} placeholder={t("unit")} onChange={setUnit} />
+        <Input value={supplierCode} placeholder={t("supplier_code")} onChange={setSupplierCode} />
+        <Input value={supplierName} placeholder={t("supplier_name")} onChange={setSupplierName} />
+        <Input
+          value={`${listPrice}`}
+          type="number"
+          placeholder={t("list_price")}
+          onChange={(t) => {
+            setListPrice(+t);
+          }}
+        />
+        <Input
+          value={`${unitCost}`}
+          type="number"
+          placeholder={t("unit_cost")}
+          onChange={(t) => {
+            setUnitCost(+t);
+          }}
+        />
+        <Input value={sourceUpdatedAt} placeholder={t("updated_at")} onChange={setSourceUpdatedAt} />
       </div>
       <Button
         disabled={!name || !nameKana || !code}

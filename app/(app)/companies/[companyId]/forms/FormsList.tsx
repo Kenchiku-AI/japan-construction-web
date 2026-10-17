@@ -1,22 +1,28 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormJob, FormJobStatus } from "@/types";
 import styles from "./page.module.css";
 import Divider from "@/app/ui/Divider";
-import { Form } from "@/app/ui/Icons";
-import { doneColor1, doneColor2, errorColor1, errorColor2, fontColor1, inProgressColor1, inProgressColor2 } from "@/lib/constants";
+import { DownChevron, Form, UpChevron } from "@/app/ui/Icons";
+import { buttonColor, doneColor1, doneColor2, errorColor1, errorColor2, fontColor1, inProgressColor1, inProgressColor2 } from "@/lib/constants";
+import { Button } from "@/app/ui/Button/Button";
 
 interface FormsListProps {
   forms: FormJob[];
   isEmpty?: boolean;
+  isCollapsible?: boolean;
+  hideFilename?: boolean;
   onClick: (form: FormJob) => void;
 }
 
 const FormsList: FC<FormsListProps> = ({
   forms,
   isEmpty,
+  isCollapsible,
+  hideFilename,
   onClick,
 }) => {
+  const [showAll, setShowAll] = useState(!isCollapsible);
   const { t } = useTranslation();
 
   if (isEmpty) {
@@ -70,7 +76,9 @@ const FormsList: FC<FormsListProps> = ({
                     </div>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ color: fontColor1 }}>{form.name}</div>
-                      <div className={styles.subtitle}>{file?.filename ?? ""}</div>
+                      {!hideFilename && (
+                        <div className={styles.subtitle}>{file?.filename ?? ""}</div>
+                      )}
                     </div>
                   </div>
                   <div className="hidden md:flex flex-col items-end gap-2">
@@ -92,6 +100,20 @@ const FormsList: FC<FormsListProps> = ({
           </div>
         );
       })}
+      {isCollapsible && forms.length > 5 && (
+        <>
+          <Divider />
+          <Button
+            variant="tertiary"
+            style={{ marginLeft: 10 }}
+            label={showAll ? t("show_less") : t("show_more")}
+            iconLeft={() => showAll ? <UpChevron color={buttonColor} /> : <DownChevron color={buttonColor} />}
+            onClick={() => {
+              setShowAll(!showAll);
+            }}
+          />
+        </>
+      )}
     </>
   );
 };
