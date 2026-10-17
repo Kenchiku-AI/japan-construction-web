@@ -20,6 +20,7 @@ import UploadModal from "./UploadModal";
 import FormsList from "../companies/[companyId]/forms/FormsList";
 import CreateUploadModal from "./CreateUploadModal";
 import DeleteUploadModal from "./DeleteUploadModal";
+import { Loader } from "@/app/ui/Loader";
 
 interface CatalogItemsDashboardProps {
   companyId: string;
@@ -36,7 +37,7 @@ const CatalogItemsDashboard: FC<CatalogItemsDashboardProps> = ({ companyId }) =>
     deleteCatalogItem,
     search,
     loading: catalogItemsLoading
-  } = useCatalogItems();
+  } = useCatalogItems(companyId);
   const {
     formJobs,
     createFormJob,
@@ -120,16 +121,14 @@ const CatalogItemsDashboard: FC<CatalogItemsDashboardProps> = ({ companyId }) =>
           />
         </div>
       </div>
-      {((catalogItems ?? []).length > 0 || !catalogItemsLoading) && (
-        <div className={cardClass}>
-          <CatalogItemsList
-            catalogItems={catalogItems ?? []}
-            isEmpty={!catalogItemsLoading && catalogItems?.length === 0}
-            onEdit={(i) => setEditingItem(i)}
-            onDelete={(i) => setDeletingItem(i)}
-          />
-        </div>
-      )}
+      <div className={cardClass}>
+        <CatalogItemsList
+          catalogItems={catalogItems ?? []}
+          isEmpty={!catalogItems?.length}
+          onEdit={(i) => setEditingItem(i)}
+          onDelete={(i) => setDeletingItem(i)}
+        />
+      </div>
       <div className="flex justify-between mt-12">
         <div className="self-end">{t("uploads")}</div>
         <Button
@@ -143,19 +142,17 @@ const CatalogItemsDashboard: FC<CatalogItemsDashboardProps> = ({ companyId }) =>
           iconOnlyMobile
         />
       </div>
-      {((formJobs ?? []).length > 0 || !formJobsLoading) && (
-        <div className={cardClass}>
-          <FormsList
-            forms={formJobs ?? []}
-            isEmpty={!formJobsLoading && formJobs?.length === 0}
-            onClick={(formJob) => {
-              setShowFormJob(formJob);
-            }}
-            isCollapsible
-            hideFilename
-          />
-        </div>
-      )}
+      <div className={cardClass}>
+        <FormsList
+          forms={formJobs ?? []}
+          isEmpty={!formJobs?.length}
+          onClick={(formJob) => {
+            setShowFormJob(formJob);
+          }}
+          isCollapsible
+          hideFilename
+        />
+      </div>
       <CatalogItemModal
         isOpen={!!editingItem || showCreateItem}
         catalogItem={editingItem}
@@ -229,6 +226,7 @@ const CatalogItemsDashboard: FC<CatalogItemsDashboardProps> = ({ companyId }) =>
           setJobToDelete(undefined);
         }}
       />
+      {(catalogItemsLoading || formJobsLoading) && <Loader />}
     </>
   );
 };
