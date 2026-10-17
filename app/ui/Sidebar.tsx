@@ -65,12 +65,12 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
                       <SidebarItem
                         name={t("catalog")}
                         icon={() => <Users size={24} />}
-                        path={`/catalog&companyId=${companyId}`}
+                        path={`/catalog?companyId=${companyId}`}
                       />
                       <SidebarItem
                         name={t("estimates")}
                         icon={() => <Users size={24} />}
-                        path={`/catalog&companyId=${companyId}`}
+                        path={`/estimates?companyId=${companyId}`}
                       />
                     </>
                   )}
