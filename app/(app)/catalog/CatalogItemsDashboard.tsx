@@ -21,11 +21,10 @@ import FormsList from "../companies/[companyId]/forms/FormsList";
 import CreateUploadModal from "./CreateUploadModal";
 import DeleteUploadModal from "./DeleteUploadModal";
 
-const CatalogItemsPage = () => {
+const CatalogItemsDashboard = (companyId: string) => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
   const { isMobile } = useIsMobile();
-  const companyId = currentUser?.company?.id;
   const {
     catalogItems,
     setCatalogItems,
@@ -230,4 +229,4 @@ const CatalogItemsPage = () => {
   );
 };
 
-export default CatalogItemsPage;
+export default CatalogItemsDashboard;
