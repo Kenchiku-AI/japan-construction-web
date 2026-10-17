@@ -15,6 +15,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const router = useRouter();
   const { currentUser } = useApi();
   const isAdmin = currentUser?.role === UserRole.Admin;
+  const companyId = currentUser?.company?.id;
   const clientName = process.env.NEXT_PUBLIC_CLIENT_NAME;
 
   return !currentUser ? null : (
@@ -52,23 +53,24 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
             <div className="flex flex-col flex-1">
               {clientName === "Eiwa" ? (
                 <div className="space-y-2">
-                  {isAdmin ? (
+                  {isAdmin && (
                     <SidebarItem
                       name={t("companies")}
                       icon={() => <Users size={24} />}
                       path={"/companies"}
                     />
-                  ) : (
+                  )}
+                  {companyId && (
                     <>
                       <SidebarItem
                         name={t("catalog")}
                         icon={() => <Users size={24} />}
-                        path={`/catalog&companyId=${currentUser.company?.id}`}
+                        path={`/catalog&companyId=${companyId}`}
                       />
                       <SidebarItem
                         name={t("estimates")}
                         icon={() => <Users size={24} />}
-                        path={"/estimates"}
+                        path={`/catalog&companyId=${companyId}`}
                       />
                     </>
                   )}
