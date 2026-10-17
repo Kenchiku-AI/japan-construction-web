@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import debounce from "lodash.debounce";
 
 export const useCatalogItems = (companyId?: string) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>();
   const { currentUser, ...api } = useApi();
   const { showModal } = useModal();
@@ -16,7 +16,7 @@ export const useCatalogItems = (companyId?: string) => {
 
   useEffect(() => {
     getCatalogItems();
-  }, []);
+  }, [companyId]);
 
   const getCatalogItems = useCallback(async () => {
     if (!companyId) return;
