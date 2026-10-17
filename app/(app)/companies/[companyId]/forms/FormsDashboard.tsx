@@ -6,11 +6,11 @@ import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
 import { Plus } from "@/app/ui/Icons";
 import { useApi } from "@/lib/api/ApiContext";
-import { FormJob, FormJobDownloadFile, UserRole } from "@/types";
+import { FormJob, UserRole } from "@/types";
 import FormsList from "./FormsList";
 import { redirect } from "next/navigation";
 import { cardClass, inProgressColor1, inProgressColor2 } from "@/lib/constants";
-import { useForms } from "./useForms";
+import { useFormJobs } from "./useFormJobs";
 import CreateFormJobModal from "./CreateFormJobModal";
 import FormJobModal from "./FormJobModal";
 import DeleteFormJobModal from "./DeleteFormJobModal";
@@ -29,7 +29,7 @@ const FormsDashboard: FC<FormsDashboardProps> = ({ companyId }) => {
     createFormJob,
     deleteFormJob,
     downloadFiles
-  } = useForms(companyId);
+  } = useFormJobs(companyId);
   const [isCreateFormModalShown, setIsCreateFormModalShown] = useState(false);
   const [showFormJob, setShowFormJob] = useState<FormJob>();
   const [jobToDelete, setJobToDelete] = useState<FormJob>();

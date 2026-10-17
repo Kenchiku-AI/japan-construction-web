@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { CreateFormJobRequest, FormJob, FormJobStatus } from "@/types";
 import JSZip from "jszip";
 
-export const useForms = (companyId?: string) => {
+export const useFormJobs = (companyId?: string, jobType?: string) => {
   const [loading, setLoading] = useState(false);
   const [formJobs, setFormJobs] = useState<FormJob[]>();
   const api = useApi();
@@ -24,7 +24,7 @@ export const useForms = (companyId?: string) => {
     setLoading(true);
 
     try {
-      const response = await api.getFormJobs(companyId);
+      const response = await api.getFormJobs(companyId, jobType);
 
       response.forEach((job) => {
         const statuses = [
@@ -47,7 +47,7 @@ export const useForms = (companyId?: string) => {
     async (
       file: File,
       name: string,
-      description: string,
+      description?: string,
       projectId?: string
     ) => {
       if (!companyId) return;

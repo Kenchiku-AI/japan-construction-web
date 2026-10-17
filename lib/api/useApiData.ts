@@ -69,6 +69,9 @@ import {
   CreateFormJobResponse,
   FormJobDownloadResponse,
   ConversationMessage,
+  CatalogItem,
+  CreateCatalogItemRequest,
+  UpdateCatalogItemRequest
 } from "../../types";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -629,8 +632,9 @@ export const useApiData = () => {
       const url = `/custom-relationships?custom_relationship_definition_id=${definitionId}`;
       return call(() => http.patch<CustomRelationship[]>(url, request));
     },
-    async getFormJobs(companyId: string) {
-      const url = `/form-jobs?company_id=${companyId}`;
+    async getFormJobs(companyId: string, jobType?: string) {
+      let url = `/form-jobs?company_id=${companyId}`;
+      if (jobType) url += `&job_type=${jobType}`;
       return call(() => http.get<FormJob[]>(url));
     },
     async createFormJob(request: CreateFormJobRequest) {
@@ -656,6 +660,23 @@ export const useApiData = () => {
       const params = p.toString();
       const url = `/companies/${companyId}/graph${params ? `?${params}` : ""}`;
       return call(() => http.get<any>(url));
+    },
+    async getCatalogItems(companyId: string, query?: string) {
+      let url = `/catalog-items?company_id=${companyId}`;
+      if (query) url += `&q=${query}`;
+      return call(() => http.get<CatalogItem[]>(url));
+    },
+    async createCatalogItem(request: CreateCatalogItemRequest) {
+      const url = `/catalog-items`;
+      return call(() => http.post<CatalogItem>(url, request));
+    },
+    async updateCatalogItem(itemId: string, request: UpdateCatalogItemRequest) {
+      const url = `/catalog-items/${itemId}`;
+      return call(() => http.patch<CatalogItem>(url, request));
+    },
+    async deleteCatalogItem(itemId: string) {
+      const url = `/catalog-items/${itemId}`;
+      return call(() => http.delete(url));
     },
   };
 

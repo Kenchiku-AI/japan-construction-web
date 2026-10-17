@@ -1,0 +1,126 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useApi } from "@/lib/api/ApiContext";
+import { CatalogItem, CreateCatalogItemRequest, UpdateCatalogItemRequest } from "@/types/catalog";
+import { useModal } from "@/lib/modal/ModalContext";
+import { useTranslation } from "react-i18next";
+import debounce from "lodash.debounce";
+
+export const useCatalogItems = (companyId?: string) => {
+  const [loading, setLoading] = useState(false);
+  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>();
+  const { currentUser, ...api } = useApi();
+  const { showModal } = useModal();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    getCatalogItems();
+  }, []);
+
+  const getCatalogItems = useCallback(async () => {
+    if (!companyId) return;
+
+    setLoading(true);
+
+    try {
+      const response = await api.getCatalogItems(companyId);
+      setCatalogItems(response);
+    } finally {
+      setLoading(false);
+    }
+  }, [companyId]);
+
+  const createCatalogItem = useCallback(
+    async (request: CreateCatalogItemRequest) => {
+      if (!companyId) return;
+
+      setLoading(true);
+
+      try {
+        await api.createCatalogItem(companyId, request);
+        await getCatalogItems();
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+
+      setLoading(false);
+    },
+    [companyId],
+  );
+
+  const updateCatalogItem = useCallback(
+    async (catalogItemId: string, request: UpdateCatalogItemRequest) => {
+      if (!companyId) return;
+
+      setLoading(true);
+
+      try {
+        await api.updateCatalogItem(catalogItemId, request);
+        await getCatalogItems();
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+
+      setLoading(false);
+    },
+    [companyId],
+  );
+
+  const deleteCatalogItem = useCallback(
+    async (itemId: string) => {
+      if (!companyId) return;
+
+      setLoading(true);
+
+      try {
+        await api.deleteCatalogItem(itemId);
+        await getCatalogItems();
+      } catch (err) {
+        showModal({
+          title: t("error"),
+          subtitle: t("error_description"),
+        });
+      }
+
+      setLoading(false);
+    },
+    [companyId],
+  );
+
+  const search = useMemo(() =>
+    debounce(async (query: string) => {
+      if (!companyId) return;
+
+      if (query.length < 1) {
+        setCatalogItems([]);
+        return;
+      }
+
+      try {
+        const response = await api.getCatalogItems(companyId, query);
+        setCatalogItems(response ?? []);
+      } finally {
+      }
+    }, 400)
+    ,
+    [companyId],
+  );
+
+  return {
+    loading,
+    catalogItems,
+    setCatalogItems,
+    getCatalogItems,
+    createCatalogItem,
+    updateCatalogItem,
+    deleteCatalogItem,
+    search
+  };
+};

@@ -48,10 +48,11 @@ export type FormJobResultOutput = {
 export type CreateFormJobRequest = {
   company_id: string;
   name: string;
-  description: string;
+  description?: string;
   project_id?: string;
   filename: string;
   content_type: string;
+  job_type?: string;
 }
 
 export type CreateFormJobResponse = {

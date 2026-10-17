@@ -50,7 +50,7 @@ const Sidebar: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
 
           {currentUser && (
             <div className="flex flex-col flex-1">
-              {clientName === "eiwa" ? (
+              {clientName === "Eiwa" ? (
                 <div className="space-y-2">
                   {isAdmin && (
                     <SidebarItem

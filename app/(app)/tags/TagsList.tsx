@@ -4,7 +4,7 @@ import { ImageTag } from "@/types";
 import styles from "./page.module.css";
 import { DownChevron, Edit, Tag, Trash, UpChevron } from "@/app/ui/Icons";
 import Divider from "@/app/ui/Divider";
-import { buttonColor, fontColor1, fontColor2 } from "@/lib/constants";
+import { buttonColor, fontColor1 } from "@/lib/constants";
 import { Button } from "@/app/ui/Button/Button";
 
 interface TagsListProps {

@@ -355,10 +355,6 @@ export const useProject = (projectId: string) => {
 
       try {
         const response = await api.getProject(projectId);
-
-        // const graph = api.getCompanyGraph(response.company_id, projectId);
-        // console.log("COMPANY GRAPH FOR PROJECT ID...", projectId, graph);
-
         setProject(response);
       } catch (err) {
         showModal({

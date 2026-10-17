@@ -6,6 +6,7 @@ export * from "./projects";
 export * from "./companies";
 export * from "./customInfo";
 export * from "./forms";
+export * from "./catalog";
 
 export type ModalContent = {
   title?: string;

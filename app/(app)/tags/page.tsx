@@ -13,7 +13,6 @@ import { useTags } from "./useTags";
 import CreateTagModal from "./CreateTagModal";
 import UpdateTagModal from "./UpdateTagModal";
 import DeleteTagModal from "./DeleteTagModal";
-import Divider from "@/app/ui/Divider";
 import { cardClass } from "@/lib/constants";
 
 const TagsPage = () => {

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Modal from "@/app/ui/Modal";
 import { Download, Form, Trash } from "@/app/ui/Icons";
 import { bgColor5, errorColor1, fontColor1, fontColor2 } from "@/lib/constants";
-import { FormJob, FormJobFile, Project, ProjectStatus } from "@/types";
+import { FormJob, FormJobFile } from "@/types";
 
 import Divider from "@/app/ui/Divider";
 import { useApi } from "@/lib/api/ApiContext";

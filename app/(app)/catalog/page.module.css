@@ -1,0 +1,17 @@
+.title {
+  font-size: 32px;
+}
+
+.subtitle {
+  color: var(--text-color-2);
+  font-size: 14px;
+}
+
+.empty {
+  font-size: 14px;
+  color: var(--text-color-2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+}
