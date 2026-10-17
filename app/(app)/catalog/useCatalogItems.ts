@@ -21,6 +21,8 @@ export const useCatalogItems = (companyId?: string) => {
   }, [companyId]);
 
   const getCatalogItems = async (companyId: string) => {
+    console.log("Company ID", companyId);
+
     setLoading(true);
 
     try {
