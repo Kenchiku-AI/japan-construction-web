@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Button } from "@/app/ui/Button/Button";
 import { Heading } from "@/app/ui/Heading/Heading";
 import { useTranslation } from "react-i18next";
@@ -21,7 +21,11 @@ import FormsList from "../companies/[companyId]/forms/FormsList";
 import CreateUploadModal from "./CreateUploadModal";
 import DeleteUploadModal from "./DeleteUploadModal";
 
-const CatalogItemsDashboard = (companyId: string) => {
+interface CatalogItemsDashboardProps {
+  companyId: string;
+}
+
+const CatalogItemsDashboard: FC<CatalogItemsDashboardProps> = ({ companyId }) => {
   const { t } = useTranslation();
   const { currentUser } = useApi();
   const { isMobile } = useIsMobile();
