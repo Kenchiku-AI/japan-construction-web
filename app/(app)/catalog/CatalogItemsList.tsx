@@ -59,7 +59,7 @@ const CatalogItemsList: FC<CatalogItemsListProps> = ({
                     </div>
                   )}
                   {onDelete && (
-                    <div className="cursor-pointer" onClick={() => onDelete(t)}>
+                    <div className="cursor-pointer" onClick={() => onDelete(c)}>
                       <Trash />
                     </div>
                   )}
